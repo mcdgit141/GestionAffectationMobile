@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="CompilerConfiguration">
+    <annotationProcessing>
+      <profile name="Maven default annotation processors profile" enabled="true">
+        <sourceOutputDir name="target/generated-sources/annotations" />
+        <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
+        <outputRelativeToContentRoot value="true" />
+        <module name="exposition" />
+        <module name="domain" />
+        <module name="application" />
+        <module name="infrastructure" />
+      </profile>
+    </annotationProcessing>
+    <bytecodeTargetLevel>
+      <module name="application" target="1.8" />
+      <module name="domain" target="1.8" />
+      <module name="exposition" target="1.8" />
+      <module name="GestionAffectationMobile" target="1.8" />
+      <module name="infrastructure" target="1.8" />
+    </bytecodeTargetLevel>
+  </component>
+</project>
