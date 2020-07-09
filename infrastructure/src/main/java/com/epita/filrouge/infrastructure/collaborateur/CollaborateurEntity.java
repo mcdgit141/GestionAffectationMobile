@@ -21,4 +21,20 @@ public class CollaborateurEntity {
 
     @OneToMany(mappedBy = "collaborateur")
     private List<AffectationEntity> affectationCollaborateur;
+
+    public String getUid() {
+        return uid;
+    }
+
+    public String getNom() {
+        return nom;
+    }
+
+    public String getPrenom() {
+        return prenom;
+    }
+
+    public List<AffectationEntity> getAffectationCollaborateur() {
+        return affectationCollaborateur;
+    }
 }
