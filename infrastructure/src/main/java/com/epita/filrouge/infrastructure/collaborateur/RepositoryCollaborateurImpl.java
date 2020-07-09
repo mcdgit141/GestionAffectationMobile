@@ -9,7 +9,7 @@ import org.springframework.stereotype.Repository;
 public class RepositoryCollaborateurImpl implements IRepositoryCalloborateur {
 
     @Autowired
-    IRepositoryJpaCollaborateur repositoryJpaCollaborateur;
+    private IRepositoryJpaCollaborateur repositoryJpaCollaborateur;
 
 
     @Override
@@ -19,7 +19,7 @@ public class RepositoryCollaborateurImpl implements IRepositoryCalloborateur {
         CollaborateurEntity collaborateurEntity =  repositoryJpaCollaborateur.getOne(uid);
 
         return new Collaborateur(collaborateurEntity.getUid(), collaborateurEntity.getPrenom(), collaborateurEntity.getNom());
-
+//        return null ;
 
     }
 }

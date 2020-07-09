@@ -12,6 +12,7 @@ import java.util.Date;
 @IdClass(AffectationId.class)
 public class AffectationEntity {
 
+//    @Id
     private Long numeroAffectation;
     private Date dateAttribution;
     private Date dateRenouvellementPrevue;
@@ -20,8 +21,10 @@ public class AffectationEntity {
     private String motifFin;
 
     @Id
-    private Collaborateur collaborateur;
+    private String uid;
+//    private Collaborateur collaborateur;
 
     @Id
-    private Iphone iphone;
+    private String numeroSerie;
+//    private Iphone iphone;
 }

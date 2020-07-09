@@ -7,12 +7,12 @@ import javax.persistence.Id;
 import java.io.Serializable;
 
 public class AffectationId implements Serializable {
-    private Collaborateur collaborateur;
+    private String uid;
 
-    private Iphone iphone;
+    private String numeroSerie;
 
-    public AffectationId(Collaborateur collaborateur, Iphone iphone) {
-        this.collaborateur = collaborateur;
-        this.iphone = iphone;
+    public AffectationId(String uid, String numeroSerie) {
+        this.uid = uid;
+        this.numeroSerie = numeroSerie;
     }
 }

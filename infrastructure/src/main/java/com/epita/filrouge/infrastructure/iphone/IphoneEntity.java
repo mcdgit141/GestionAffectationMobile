@@ -22,6 +22,6 @@ public class IphoneEntity {
     @Enumerated(EnumType.STRING)
     private EtatIphoneEnum etatIphone;
 
-    @OneToMany(mappedBy = "iphone" )
-    private List<AffectationEntity> affectationIphone;
+//    @OneToMany(mappedBy = "iphone" )
+//    private List<AffectationEntity> affectationIphone;
 }
