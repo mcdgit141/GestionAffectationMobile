@@ -6,22 +6,28 @@ import com.epita.filrouge.infrastructure.affectation.AffectationEntity;
 
 import javax.persistence.*;
 import java.util.List;
-
+@Entity
 public class IphoneEntity {
 
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long iphoneId;
+
+
     private String numeroSerie;
 
-    private String numeroLigne;
-
-    @ElementCollection
+//    @ElementCollection
     @Enumerated(EnumType.STRING)
     private ModeleEnum modele;
 
-    @ElementCollection
+//    @ElementCollection
     @Enumerated(EnumType.STRING)
     private EtatIphoneEnum etatIphone;
 
-//    @OneToMany(mappedBy = "iphone" )
-//    private List<AffectationEntity> affectationIphone;
+    @OneToMany(mappedBy = "iphone" )
+    private List<AffectationEntity> affectationIphone;
+
+    public IphoneEntity () {
+
+    }
 }

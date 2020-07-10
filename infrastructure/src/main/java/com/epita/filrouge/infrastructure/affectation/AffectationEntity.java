@@ -2,29 +2,35 @@ package com.epita.filrouge.infrastructure.affectation;
 
 import com.epita.filrouge.domain.collaborateur.Collaborateur;
 import com.epita.filrouge.domain.iphone.Iphone;
+import com.epita.filrouge.infrastructure.collaborateur.CollaborateurEntity;
+import com.epita.filrouge.infrastructure.iphone.IphoneEntity;
 
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.IdClass;
+import javax.persistence.*;
 import java.util.Date;
 
 @Entity
-@IdClass(AffectationId.class)
 public class AffectationEntity {
 
-//    @Id
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long Id;
+
     private Long numeroAffectation;
     private Date dateAttribution;
     private Date dateRenouvellementPrevue;
-    private Date dateRenouvellementEffective;
+    private Date dateFin;
     private String commentaire;
     private String motifFin;
 
-    @Id
-    private String uid;
-//    private Collaborateur collaborateur;
+    @ManyToOne
+    @JoinColumn(name = "collaborateurId")
+    private CollaborateurEntity collaborateur;
 
-    @Id
-    private String numeroSerie;
-//    private Iphone iphone;
+    @ManyToOne
+    @JoinColumn(name = "iphoneId")
+    private IphoneEntity iphone;
+
+    public AffectationEntity() {
+
+    }
 }

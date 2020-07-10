@@ -10,14 +10,19 @@ public class Collaborateur {
     private String uid;
     private String nom;
     private String prenom;
+    private String numeroLigne;
 
-//    private List<Affectation> affectationCollaborateur;
+    private List<Affectation> affectationCollaborateur;
 
     public Collaborateur(String uid, String nom, String prenom) {
         this.uid = uid;
         this.nom = nom;
         this.prenom = prenom;
-//        this.affectationCollaborateur = new ArrayList<Affectation>();
+        this.affectationCollaborateur = new ArrayList<Affectation>();
+    }
+
+    public void setNumeroLigne(String numeroLigne) {
+        this.numeroLigne = numeroLigne;
     }
 
     public String getUid() {
@@ -32,7 +37,11 @@ public class Collaborateur {
         return prenom;
     }
 
-//    public List<Affectation> getAffectation() {
-//        return affectationCollaborateur;
-//    }
+    public String getNumeroLigne() {
+        return numeroLigne;
+    }
+
+    public List<Affectation> getAffectation() {
+        return affectationCollaborateur;
+    }
 }

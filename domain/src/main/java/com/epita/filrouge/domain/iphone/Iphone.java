@@ -8,15 +8,13 @@ import java.util.List;
 public class Iphone {
 
     private String numeroSerie;
-    private String numeroLigne;
     private ModeleEnum modele;
     private EtatIphoneEnum etatIphone;
 
     private List<Affectation> affectationIphone;
 
-    public Iphone(String numeroSerie, String numeroLigne, ModeleEnum modele, EtatIphoneEnum etatIphone) {
+    public Iphone(String numeroSerie, ModeleEnum modele, EtatIphoneEnum etatIphone) {
         this.numeroSerie = numeroSerie;
-        this.numeroLigne = numeroLigne;
         this.modele = modele;
         this.etatIphone = etatIphone;
         this.affectationIphone = new ArrayList<Affectation>();
@@ -24,10 +22,6 @@ public class Iphone {
 
     public String getNumeroSerie() {
         return numeroSerie;
-    }
-
-    public String getNumeroLigne() {
-        return numeroLigne;
     }
 
     public ModeleEnum getModele() {
