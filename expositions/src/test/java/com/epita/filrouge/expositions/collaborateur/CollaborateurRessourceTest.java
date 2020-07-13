@@ -6,6 +6,7 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
+import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.http.MediaType;
@@ -23,22 +24,27 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @WebMvcTest(CollaborateurRessource.class)
 class CollaborateurRessourceTest {
 
-
     @Autowired
     private MockMvc mockMvc;
 
     @MockBean
-    private ICollaborateurManagement collaborateurManagement;
+    private ICollaborateurManagement collaborateurManagement; //Mockito cree cette instance, rend un objet interface
+
+  //  private CollaborateurRessource collaborateurRessource; //ce que l'on veut tester
 
     @Test
     void DoitRetournerInformationsCollaborateur_SurSaisieUid () throws Exception {
         // Given
+       // collaborateurRessource = new CollaborateurRessource();
+     //   collaborateurRessource.setCollaborateurManagement(collaborateurManagement);
+
         Collaborateur collaborateurRetour = new Collaborateur("425895", "Vivier", "D");
-//        when(collaborateurManagement.findByUid("425895")).thenReturn(collaborateurRetour);
-        when(collaborateurManagement.findByUid(any(String.class))).thenReturn(collaborateurRetour);
+        when(collaborateurManagement.findByUid("425895")).thenReturn(collaborateurRetour);
+
+      //  when(collaborateurManagement.findByUid(any(String.class))).thenReturn(collaborateurRetour);
 
         // When
-        final String result = mockMvc.perform(get("/GestAffectation/collaborateur/{uid}", "425895")
+        final String result = mockMvc.perform(get("/gestaffectation/collaborateur/{uid}", "425895")
                                 .accept(MediaType.APPLICATION_JSON))
                                 .andExpect(status().isOk()).andReturn().getResponse().getContentAsString();
 
