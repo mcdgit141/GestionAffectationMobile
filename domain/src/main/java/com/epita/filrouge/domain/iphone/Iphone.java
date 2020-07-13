@@ -8,31 +8,42 @@ import java.util.List;
 public class Iphone {
 
     private String numeroSerie;
-    private ModeleEnum modele;
+    private double prixIphone;
+
+    private ModeleIphone modeleIphone;
+
     private EtatIphoneEnum etatIphone;
 
     private List<Affectation> affectationIphone;
 
-    public Iphone(String numeroSerie, ModeleEnum modele, EtatIphoneEnum etatIphone) {
+    public Iphone(String numeroSerie, double prixIphone, ModeleIphone modeleIphone, EtatIphoneEnum etatIphone) {
         this.numeroSerie = numeroSerie;
-        this.modele = modele;
+        this.prixIphone = prixIphone;
+        this.modeleIphone = modeleIphone;
         this.etatIphone = etatIphone;
         this.affectationIphone = new ArrayList<Affectation>();
+    }
+
+    public Iphone() {
     }
 
     public String getNumeroSerie() {
         return numeroSerie;
     }
 
-    public ModeleEnum getModele() {
-        return modele;
-    }
-
-    public EtatIphoneEnum getEtatIphone() {
+   public EtatIphoneEnum getEtatIphone() {
         return etatIphone;
     }
 
     public List<Affectation> getAffectationIphone() {
         return affectationIphone;
+    }
+
+    public double getPrixIphone() {
+        return prixIphone;
+    }
+
+    public ModeleIphone getModeleIphone() {
+        return modeleIphone;
     }
 }

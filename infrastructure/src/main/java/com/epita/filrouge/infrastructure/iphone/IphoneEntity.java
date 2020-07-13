@@ -1,7 +1,6 @@
 package com.epita.filrouge.infrastructure.iphone;
 
 import com.epita.filrouge.domain.iphone.EtatIphoneEnum;
-import com.epita.filrouge.domain.iphone.ModeleEnum;
 import com.epita.filrouge.infrastructure.affectation.AffectationEntity;
 
 import javax.persistence.*;
@@ -17,9 +16,9 @@ public class IphoneEntity {
     private String numeroSerie;
     private double prixIphone;
 
-//    @ElementCollection
-    @Enumerated(EnumType.STRING)
-    private ModeleEnum modele;
+    @ManyToOne
+    @JoinColumn(name = "modeleId")
+    private ModeleIphone modeleIphone;
 
 //    @ElementCollection
     @Enumerated(EnumType.STRING)
@@ -44,9 +43,6 @@ public class IphoneEntity {
         this.prixIphone = prixIphone;
     }
 
-    public void setModele(ModeleEnum modele) {
-        this.modele = modele;
-    }
 
     public void setEtatIphone(EtatIphoneEnum etatIphone) {
         this.etatIphone = etatIphone;
@@ -54,5 +50,33 @@ public class IphoneEntity {
 
     public void setAffectationIphone(List<AffectationEntity> affectationIphone) {
         this.affectationIphone = affectationIphone;
+    }
+
+    public ModeleIphone getModeleIphone() {
+        return modeleIphone;
+    }
+
+    public void setModeleIphone(ModeleIphone modeleIphone) {
+        this.modeleIphone = modeleIphone;
+    }
+
+    public Long getIphoneId() {
+        return iphoneId;
+    }
+
+    public String getNumeroSerie() {
+        return numeroSerie;
+    }
+
+    public double getPrixIphone() {
+        return prixIphone;
+    }
+
+    public EtatIphoneEnum getEtatIphone() {
+        return etatIphone;
+    }
+
+    public List<AffectationEntity> getAffectationIphone() {
+        return affectationIphone;
     }
 }

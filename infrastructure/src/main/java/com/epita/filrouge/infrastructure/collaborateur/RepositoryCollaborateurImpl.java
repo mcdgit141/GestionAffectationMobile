@@ -11,8 +11,6 @@ public class RepositoryCollaborateurImpl implements IRepositoryCollaborateur {
     @Autowired
     private IRepositoryJpaCollaborateur repositoryJpaCollaborateur;
 
-
-
     @Override
     public Collaborateur findByUid(String uid) {
 
