@@ -1,0 +1,20 @@
+
+I
+java:S1068"3Remove this unused "dateAttribution" private field.(¸ä¼š
+W
+java:S1068"<Remove this unused "dateRenouvellementPrevue" private field.(°›¡Ÿýÿÿÿÿ
+E
+java:S1068"/Remove this unused "commentaire" private field.(±¿í
+B
+java:S1068",Remove this unused "motifFin" private field.(ÿÐ³¼
+K
+java:S1068"5Remove this unused "numeroAffectation" private field.(º½ŠÒ
+t
+java:S1128"RRemove this unused import 'com.epita.filrouge.domain.collaborateur.Collaborateur'.(âˆíÒúÿÿÿÿ8š–Õ“´.
+f
+java:S1128"DRemove this unused import 'com.epita.filrouge.domain.iphone.Iphone'.(¢Ìò‹úÿÿÿÿ8š–Õ“´.
+£
+java:S1186!"€Add a nested comment explaining why this method is empty, throw an UnsupportedOperationException or complete the implementation.(åç¾¤úÿÿÿÿ8š–Õ“´.
+i	java:S116"MRename this field "Id" to match the regular expression '^[a-z][a-zA-Z0-9]*$'.(´ÕÛ”8š–Õ“´.
+H
+java:S1068"+Remove this unused "dateFin" private field.(ƒ½’ª8š–Õ“´.

@@ -15,6 +15,7 @@ public class IphoneEntity {
 
 
     private String numeroSerie;
+    private double prixIphone;
 
 //    @ElementCollection
     @Enumerated(EnumType.STRING)
@@ -29,5 +30,29 @@ public class IphoneEntity {
 
     public IphoneEntity () {
 
+    }
+
+    public void setIphoneId(Long iphoneId) {
+        this.iphoneId = iphoneId;
+    }
+
+    public void setNumeroSerie(String numeroSerie) {
+        this.numeroSerie = numeroSerie;
+    }
+
+    public void setPrixIphone(double prixIphone) {
+        this.prixIphone = prixIphone;
+    }
+
+    public void setModele(ModeleEnum modele) {
+        this.modele = modele;
+    }
+
+    public void setEtatIphone(EtatIphoneEnum etatIphone) {
+        this.etatIphone = etatIphone;
+    }
+
+    public void setAffectationIphone(List<AffectationEntity> affectationIphone) {
+        this.affectationIphone = affectationIphone;
     }
 }
