@@ -14,10 +14,12 @@ public class Collaborateur {
 
     private List<Affectation> affectationCollaborateur;
 
-    public Collaborateur(String uid, String nom, String prenom) {
+    public Collaborateur(String uid, String nom, String prenom, String numeroLigne) {
         this.uid = uid;
         this.nom = nom;
         this.prenom = prenom;
+        this.numeroLigne = numeroLigne;
+
         this.affectationCollaborateur = new ArrayList<Affectation>();
     }
 

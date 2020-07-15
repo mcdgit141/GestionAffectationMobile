@@ -30,15 +30,10 @@ class CollaborateurRessourceTest {
     @MockBean
     private ICollaborateurManagement collaborateurManagement; //Mockito cree cette instance, rend un objet interface
 
-  //  private CollaborateurRessource collaborateurRessource; //ce que l'on veut tester
-
     @Test
     void DoitRetournerInformationsCollaborateur_SurSaisieUid () throws Exception {
         // Given
-       // collaborateurRessource = new CollaborateurRessource();
-     //   collaborateurRessource.setCollaborateurManagement(collaborateurManagement);
-
-        Collaborateur collaborateurRetour = new Collaborateur("425895", "Vivier", "D");
+        Collaborateur collaborateurRetour = new Collaborateur("425895", "Vivier", "D","0606060606");
         when(collaborateurManagement.findByUid("425895")).thenReturn(collaborateurRetour);
 
       //  when(collaborateurManagement.findByUid(any(String.class))).thenReturn(collaborateurRetour);
@@ -49,7 +44,7 @@ class CollaborateurRessourceTest {
                                 .andExpect(status().isOk()).andReturn().getResponse().getContentAsString();
 
         // Then
-        assertThat(result).isEqualTo("{\"uid\":\"425895\",\"nom\":\"Vivier\",\"prenom\":\"D\"}");
+        assertThat(result).isEqualTo("{\"uid\":\"425895\",\"nom\":\"Vivier\",\"prenom\":\"D\",\"numeroLigne\":\"0606060606\"}");
     }
 
 }

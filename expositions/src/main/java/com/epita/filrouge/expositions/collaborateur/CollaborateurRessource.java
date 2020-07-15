@@ -1,6 +1,5 @@
 package com.epita.filrouge.expositions.collaborateur;
 
-import com.epita.filrouge.application.collaborateur.CollaborateurManagementImpl;
 import com.epita.filrouge.application.collaborateur.ICollaborateurManagement;
 import com.epita.filrouge.domain.collaborateur.Collaborateur;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -10,8 +9,6 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-
-import javax.validation.constraints.NotNull;
 
 @RestController
 @RequestMapping("/gestaffectation")
@@ -35,7 +32,7 @@ public class CollaborateurRessource {
 
         final CollaborateurFullDTO collaborateurFullDTO = new CollaborateurFullDTO();
         collaborateurFullDTO.setNom(collaborateur.getNom());
-        collaborateurFullDTO.setPrenom(collaborateur.getNom());
+        collaborateurFullDTO.setPrenom(collaborateur.getPrenom());
         collaborateurFullDTO.setUid(collaborateur.getUid());
         collaborateurFullDTO.setNumeroLigne(collaborateur.getNumeroLigne());
 

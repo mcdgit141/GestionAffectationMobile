@@ -12,13 +12,12 @@ public class IphoneEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long iphoneId;
 
-
     private String numeroSerie;
     private double prixIphone;
 
     @ManyToOne
     @JoinColumn(name = "modeleId")
-    private ModeleIphone modeleIphone;
+    private ModeleIphoneEntity modeleIphoneEntity;
 
 //    @ElementCollection
     @Enumerated(EnumType.STRING)
@@ -52,12 +51,12 @@ public class IphoneEntity {
         this.affectationIphone = affectationIphone;
     }
 
-    public ModeleIphone getModeleIphone() {
-        return modeleIphone;
+    public ModeleIphoneEntity getModeleIphoneEntity() {
+        return modeleIphoneEntity;
     }
 
-    public void setModeleIphone(ModeleIphone modeleIphone) {
-        this.modeleIphone = modeleIphone;
+    public void setModeleIphoneEntity(ModeleIphoneEntity modeleIphoneEntity) {
+        this.modeleIphoneEntity = modeleIphoneEntity;
     }
 
     public Long getIphoneId() {

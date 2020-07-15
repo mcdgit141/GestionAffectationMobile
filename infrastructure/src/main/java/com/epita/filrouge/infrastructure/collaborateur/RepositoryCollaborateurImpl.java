@@ -17,7 +17,7 @@ public class RepositoryCollaborateurImpl implements IRepositoryCollaborateur {
 
         CollaborateurEntity collaborateurEntity =  repositoryJpaCollaborateur.findByUid(uid);
 
-        Collaborateur collaborateur = new Collaborateur(collaborateurEntity.getUid(), collaborateurEntity.getNom(), collaborateurEntity.getPrenom());
+        Collaborateur collaborateur = new Collaborateur(collaborateurEntity.getUid(), collaborateurEntity.getNom(), collaborateurEntity.getPrenom(),collaborateurEntity.getNumeroLigne());
         collaborateur.setNumeroLigne(collaborateurEntity.getNumeroLigne());
 
         return collaborateur;
@@ -28,7 +28,7 @@ public class RepositoryCollaborateurImpl implements IRepositoryCollaborateur {
     public Collaborateur findByNumeroLigne(String numeroLigne) {
         CollaborateurEntity collaborateurEntity =  repositoryJpaCollaborateur.findByNumeroLigne(numeroLigne);
 
-        return new Collaborateur(collaborateurEntity.getUid(), collaborateurEntity.getNom(), collaborateurEntity.getPrenom());
+        return new Collaborateur(collaborateurEntity.getUid(), collaborateurEntity.getNom(), collaborateurEntity.getPrenom(),collaborateurEntity.getNumeroLigne());
 
     }
 }

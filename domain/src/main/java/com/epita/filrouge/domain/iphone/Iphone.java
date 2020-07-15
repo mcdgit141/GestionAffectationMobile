@@ -7,6 +7,7 @@ import java.util.List;
 
 public class Iphone {
 
+    private Long iphoneId;
     private String numeroSerie;
     private double prixIphone;
 
@@ -16,7 +17,8 @@ public class Iphone {
 
     private List<Affectation> affectationIphone;
 
-    public Iphone(String numeroSerie, double prixIphone, ModeleIphone modeleIphone, EtatIphoneEnum etatIphone) {
+    public Iphone(Long iphoneId, String numeroSerie, double prixIphone, ModeleIphone modeleIphone, EtatIphoneEnum etatIphone) {
+        this.iphoneId = iphoneId;
         this.numeroSerie = numeroSerie;
         this.prixIphone = prixIphone;
         this.modeleIphone = modeleIphone;
@@ -25,6 +27,10 @@ public class Iphone {
     }
 
     public Iphone() {
+    }
+
+    public Long getIphoneId() {
+        return iphoneId;
     }
 
     public String getNumeroSerie() {

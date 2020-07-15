@@ -1,7 +1,5 @@
 package com.epita.filrouge.infrastructure.affectation;
 
-import com.epita.filrouge.domain.collaborateur.Collaborateur;
-import com.epita.filrouge.domain.iphone.Iphone;
 import com.epita.filrouge.infrastructure.collaborateur.CollaborateurEntity;
 import com.epita.filrouge.infrastructure.iphone.IphoneEntity;
 
@@ -13,7 +11,7 @@ public class AffectationEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long Id;
+    private Long id;
 
     private Long numeroAffectation;
     private Date dateAttribution;
