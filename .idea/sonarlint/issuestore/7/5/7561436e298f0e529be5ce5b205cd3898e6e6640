@@ -1,9 +1,0 @@
-
-\
-java:S1128"ARemove this unused import 'javax.validation.constraints.NotNull'.(áç¥ãüÿÿÿÿ
-{
-java:S1128"eRemove this unused import 'com.epita.filrouge.application.collaborateur.CollaborateurManagementImpl'.(‹Ï“Å
-M	java:S106"9Replace this use of System.out or System.err by a logger.(Åğ‹~
-{
-java:S2293,"YReplace the type specification in this constructor call with the diamond operator ("<>").(Å‡øÿÿÿÿ8¶¿ª¿´.
-]	java:S125*"<This block of commented-out lines of code should be removed.(ÍÉğİúÿÿÿÿ8âåüÑ³.
