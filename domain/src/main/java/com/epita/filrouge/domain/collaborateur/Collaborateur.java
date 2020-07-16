@@ -7,6 +7,8 @@ import java.util.List;
 
 public class Collaborateur {
 
+    private Long id;
+
     private String uid;
     private String nom;
     private String prenom;
@@ -26,7 +28,6 @@ public class Collaborateur {
     public void setNumeroLigne(String numeroLigne) {
         this.numeroLigne = numeroLigne;
     }
-
     public String getUid() {
         return uid;
     }
@@ -45,5 +46,13 @@ public class Collaborateur {
 
     public List<Affectation> getAffectation() {
         return affectationCollaborateur;
+    }
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
     }
 }

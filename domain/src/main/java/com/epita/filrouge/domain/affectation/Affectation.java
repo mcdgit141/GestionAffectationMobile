@@ -3,27 +3,24 @@ package com.epita.filrouge.domain.affectation;
 import com.epita.filrouge.domain.collaborateur.Collaborateur;
 import com.epita.filrouge.domain.iphone.Iphone;
 
-import java.util.Date;
+import java.time.LocalDate;
 
 public class Affectation {
 
     private Long numeroAffectation;
-    private Date dateAttribution;
-    private Date dateRenouvellementPrevue;
-    private Date dateRenouvellementEffective;
+    private LocalDate dateAttribution;
+    private LocalDate dateRenouvellementPrevue;
+    private LocalDate dateRenouvellementEffective;
     private String commentaire;
     private String motifFin;
 
     private Collaborateur collaborateur;
     private Iphone iphone;
 
-    public Affectation(Long numeroAffectation, Date dateAttribution, Date dateRenouvellementPrevue, Date dateRenouvellementEffective, String commentaire, String motifFin, Collaborateur collaborateur, Iphone iphone) {
+    public Affectation(Long numeroAffectation, LocalDate dateAttribution, String commentaire, Collaborateur collaborateur, Iphone iphone) {
         this.numeroAffectation = numeroAffectation;
         this.dateAttribution = dateAttribution;
-        this.dateRenouvellementPrevue = dateRenouvellementPrevue;
-        this.dateRenouvellementEffective = dateRenouvellementEffective;
         this.commentaire = commentaire;
-        this.motifFin = motifFin;
         this.collaborateur = collaborateur;
         this.iphone = iphone;
     }
@@ -32,15 +29,15 @@ public class Affectation {
         return numeroAffectation;
     }
 
-    public Date getDateAttribution() {
+    public LocalDate getDateAttribution() {
         return dateAttribution;
     }
 
-    public Date getDateRenouvellementPrevue() {
+    public LocalDate getDateRenouvellementPrevue() {
         return dateRenouvellementPrevue;
     }
 
-    public Date getDateRenouvellementEffective() {
+    public LocalDate getDateRenouvellementEffective() {
         return dateRenouvellementEffective;
     }
 

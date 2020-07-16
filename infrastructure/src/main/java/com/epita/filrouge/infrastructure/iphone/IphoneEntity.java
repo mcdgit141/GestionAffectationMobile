@@ -15,8 +15,8 @@ public class IphoneEntity {
     private String numeroSerie;
     private double prixIphone;
 
-    @ManyToOne
-    @JoinColumn(name = "modeleId")
+    @ManyToOne(fetch = FetchType.LAZY  )
+    @JoinColumn(name = "modeleId", nullable = false)
     private ModeleIphoneEntity modeleIphoneEntity;
 
 //    @ElementCollection

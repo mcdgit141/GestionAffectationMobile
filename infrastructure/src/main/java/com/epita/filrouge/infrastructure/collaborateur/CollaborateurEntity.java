@@ -61,7 +61,16 @@ public class CollaborateurEntity {
         return prenom;
     }
 
-//    public List<AffectationEntity> getAffectationCollaborateur() {
-//        return affectationCollaborateur;
-//    }
+    public List<AffectationEntity> getAffectationCollaborateur() {
+        return affectationCollaborateur;
+    }
+
+
+    public Long getCollaborateurId() {
+        return collaborateurId;
+    }
+
+    public void setCollaborateurId(Long collaborateurId) {
+        this.collaborateurId = collaborateurId;
+    }
 }
