@@ -37,4 +37,10 @@ public class RepositoryIphoneImpl implements IRepositoryIphone {
        /*   ModeleIphone modeleIphone = new ModeleIphone(modeleIphoneEntity.getModeleId(), modeleIphoneEntity.getNomModele() ); //creation de l'objet ModelIphone de la couche domain
         return new Iphone(iphoneEntity.getIphoneId(),iphoneEntity.getNumeroSerie(),iphoneEntity.getPrixIphone(),modeleIphone,iphoneEntity.getEtatIphone());*/ //creation de l'objet Iphone de la couche domain
     }
+
+
+    @Override
+    public Iphone findBynumeroSerie(String iPhoneNumeroSerie) {
+        return null;
+    }
 }

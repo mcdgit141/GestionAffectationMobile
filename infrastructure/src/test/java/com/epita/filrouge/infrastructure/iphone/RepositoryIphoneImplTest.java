@@ -6,6 +6,7 @@ import com.epita.filrouge.domain.iphone.Iphone;
 import com.epita.filrouge.infrastructure.collaborateur.CollaborateurEntity;
 import com.epita.filrouge.infrastructure.collaborateur.RepositoryCollaborateurImpl;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -84,5 +85,11 @@ public class RepositoryIphoneImplTest {
         assertThat(iphoneRetour.getNumeroSerie()).isEqualTo("010205");
         assertThat(iphoneRetour.getModeleIphone().getNomModele()).isEqualTo("Iphone10");
         assertThat(iphoneRetour.getEtatIphone()).isEqualTo(EtatIphoneEnum.DISPONIBLE);
+    }
+
+    @Test
+    @Disabled("Test à implémenter")
+    void shouldReturnAnIphone_WhenFindByNumeroSerie() {
+
     }
 }
