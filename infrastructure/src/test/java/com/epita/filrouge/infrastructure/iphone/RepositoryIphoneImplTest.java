@@ -3,11 +3,13 @@ package com.epita.filrouge.infrastructure.iphone;
 import com.epita.filrouge.domain.collaborateur.Collaborateur;
 import com.epita.filrouge.domain.iphone.EtatIphoneEnum;
 import com.epita.filrouge.domain.iphone.Iphone;
+import com.epita.filrouge.domain.iphone.ModeleIphone;
 import com.epita.filrouge.infrastructure.collaborateur.CollaborateurEntity;
 import com.epita.filrouge.infrastructure.collaborateur.RepositoryCollaborateurImpl;
 import javafx.beans.binding.When;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Disabled;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,6 +25,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 @DataJpaTest
 public class RepositoryIphoneImplTest {
 
+    private IphoneEntity iphoneEntity3persiste;
     @Autowired
     RepositoryIphoneImpl repositoryIphoneImpl;
 
@@ -58,6 +61,16 @@ public class RepositoryIphoneImplTest {
         iphoneEntity2.setModeleIphoneEntity(modeleIphone10Entity);
         entityManager.persistAndFlush(iphoneEntity2);
 
+        ModeleIphoneEntity modeleIphone9Entity = new ModeleIphoneEntity();
+        modeleIphone9Entity.setNomModele("Iphone9");
+        entityManager.persistAndFlush(modeleIphone9Entity);
+
+        IphoneEntity iphoneEntity3 = new IphoneEntity();
+        iphoneEntity3.setNumeroSerie("010206");
+        iphoneEntity3.setEtatIphone(EtatIphoneEnum.DISPONIBLE);
+        iphoneEntity3.setModeleIphoneEntity(modeleIphone9Entity);
+        iphoneEntity3persiste = entityManager.persistAndFlush(iphoneEntity3);
+
     }
 
     @Test
@@ -75,7 +88,7 @@ public class RepositoryIphoneImplTest {
          }
 
     @Test
-    void shouldReturnAnIphoneModele10 () {
+    void shouldReturnAnIphoneModele10() {
 
         // Given
 
@@ -100,5 +113,24 @@ public class RepositoryIphoneImplTest {
         assertThat(iphoneRetour.getModeleIphone().getNomModele()).isEqualTo("Iphone8");
         assertThat(iphoneRetour.getEtatIphone()).isEqualTo(EtatIphoneEnum.DISPONIBLE);
 
+    }
+
+    @Test
+    @DisplayName("Actualisation l'état de l'iphone après affectation, qui passe de l'état DISPONIBLE à AFFECTE")
+    public void should_update_etatIphone_when_affecterIscalled(){
+        //given
+
+        System.out.println("Hello dans should_update_etatIphone_when_affecterIscalled");
+        ModeleIphone modeleIphone9 = new ModeleIphone(3L, "Iphone9");
+        Iphone iphone = new Iphone(4L,"010206", 1400.00, modeleIphone9,EtatIphoneEnum.DISPONIBLE);
+        String iPhoneNumeroSerie = "010206";
+
+        //when
+        repositoryIphoneImpl.miseAJourEtatIphone(iphone, iPhoneNumeroSerie);
+
+        //then
+        IphoneEntity iphoneEntityLu = entityManager.find(IphoneEntity.class,iphoneEntity3persiste.getIphoneId());
+        System.out.println("iphoneEntityLu: "+ iphoneEntityLu.toString());
+        assertThat(iphoneEntityLu.getEtatIphone()).isEqualTo(EtatIphoneEnum.AFFECTE);
     }
 }

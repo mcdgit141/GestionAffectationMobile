@@ -44,14 +44,17 @@ public class AffectationManagementImpl implements IAffectationManagement {
 
         repositoryAffectation.affecter(affectationACreer);
 
-//        repositoryCollaborateur.miseAJourCollaborateur(collaborateur, numeroLigne);
+        repositoryCollaborateur.miseAJourCollaborateur(collaborateur, numeroLigne);
+
+        repositoryIphone.miseAJourEtatIphone(iPhone, iPhoneNumeroSerie);
 
         return affectationACreer;
 
     }
 
     private static Long genererNumeroAffectation() {
-        final Random random = new Random();
+       final Random random = new Random();
         return random.nextLong();
+
     }
 }
