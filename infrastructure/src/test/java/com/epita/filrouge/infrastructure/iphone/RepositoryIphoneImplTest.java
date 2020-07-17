@@ -29,7 +29,7 @@ public class RepositoryIphoneImplTest {
     @Autowired
     TestEntityManager entityManager;
 
-    @BeforeEach
+    @BeforeEach // pour créer en base de donnée H2 suite au positionnement de DataJpaTest
     public void init() {
 
         ModeleIphoneEntity modeleIphone8Entity = new ModeleIphoneEntity();
