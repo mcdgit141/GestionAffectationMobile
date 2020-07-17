@@ -19,13 +19,13 @@ import java.util.Random;
 public class AffectationManagementImpl implements IAffectationManagement {
 
     @Autowired
-    IRepositoryAffectation repositoryAffectation;
+    private IRepositoryAffectation repositoryAffectation;
 
     @Autowired
-    IRepositoryCollaborateur repositoryCollaborateur;
+    private IRepositoryCollaborateur repositoryCollaborateur;
 
     @Autowired
-    IRepositoryIphone repositoryIphone;
+    private IRepositoryIphone repositoryIphone;
 
     @Override
     public void save(String collaborateurUiD, String iPhoneNumeroSerie, LocalDate dateAffectation, String numeroLigne, String commentaire) {

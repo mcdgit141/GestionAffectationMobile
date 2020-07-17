@@ -3,7 +3,6 @@ package com.epita.filrouge.infrastructure.affectation;
 import com.epita.filrouge.domain.affectation.Affectation;
 import com.epita.filrouge.domain.affectation.IRepositoryAffectation;
 import com.epita.filrouge.domain.collaborateur.Collaborateur;
-import com.epita.filrouge.domain.iphone.EtatIphoneEnum;
 import com.epita.filrouge.domain.iphone.Iphone;
 import com.epita.filrouge.domain.iphone.ModeleIphone;
 import com.epita.filrouge.infrastructure.collaborateur.CollaborateurEntity;
@@ -56,9 +55,9 @@ public class RepositoryAffectationImpl implements IRepositoryAffectation {
         AffectationEntity affectationEntity = new AffectationEntity();
 
         affectationEntity.setNumeroAffectation(affectationACreer.getNumeroAffectation());
-        affectationEntity.setDateAttribution(affectationACreer.getDateAttribution());
-        affectationEntity.setDateRenouvellementPrevue(affectationACreer.getDateAttribution());
-        affectationEntity.setDateFin(affectationACreer.getDateAttribution());
+        affectationEntity.setDateAffectation(affectationACreer.getDateAffectation());
+        affectationEntity.setDateRenouvellementPrevue(affectationACreer.getDateAffectation());
+        affectationEntity.setDateFin(affectationACreer.getDateAffectation());
         affectationEntity.setCommentaire(affectationACreer.getCommentaire());
         affectationEntity.setMotifFin(affectationACreer.getMotifFin());
         affectationEntity.setCollaborateur(collaborateurEntity);

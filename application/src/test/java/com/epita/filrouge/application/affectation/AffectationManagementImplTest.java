@@ -10,12 +10,15 @@ import com.epita.filrouge.domain.iphone.Iphone;
 import com.epita.filrouge.domain.iphone.ModeleIphone;
 
 import org.junit.jupiter.api.Test;
+
 import org.junit.jupiter.api.extension.ExtendWith;
+
 import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
+import org.springframework.test.context.junit4.SpringRunner;
 
 import java.time.LocalDate;
 
@@ -25,7 +28,7 @@ import static org.mockito.Mockito.when;
 import static org.junit.jupiter.api.Assertions.*;
 
 @ExtendWith(SpringExtension.class)
-@SpringBootTest(classes={AffectationManagementImpl.class})
+@SpringBootTest(classes = { AffectationManagementImpl.class } )
 public class AffectationManagementImplTest {
 
     private static final Long COLLABORATEUR_ID = 1L;
@@ -47,16 +50,16 @@ public class AffectationManagementImplTest {
     private static final String AFFECTATION_COMMENTAIRE = "Premeire affectation";
 
     @Autowired
-    AffectationManagementImpl affectationManagementImpl;
+    private IAffectationManagement affectationManagementImpl;
 
     @MockBean
-    IRepositoryCollaborateur repositoryCollaborateur;
+    private IRepositoryCollaborateur repositoryCollaborateur;
 
     @MockBean
-    IRepositoryIphone repositoryIphone;
+    private IRepositoryIphone repositoryIphone;
 
     @MockBean
-    IRepositoryAffectation repositoryAffectation;
+    private IRepositoryAffectation repositoryAffectation;
 
     @Test
     void ShouldCallFindByUid_And_FindByNumeroSerie_And_repositoryAffectationSave() {

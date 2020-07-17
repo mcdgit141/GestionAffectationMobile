@@ -5,7 +5,6 @@ import com.epita.filrouge.infrastructure.iphone.IphoneEntity;
 
 import javax.persistence.*;
 import java.time.LocalDate;
-import java.util.Date;
 
 @Entity
 public class AffectationEntity {
@@ -15,7 +14,7 @@ public class AffectationEntity {
     private Long id;
 
     private Long numeroAffectation;
-    private LocalDate dateAttribution;
+    private LocalDate dateAffectation;
     private LocalDate dateRenouvellementPrevue;
     private LocalDate dateFin;
     private String commentaire;
@@ -49,12 +48,12 @@ public class AffectationEntity {
         this.numeroAffectation = numeroAffectation;
     }
 
-    public LocalDate getDateAttribution() {
-        return dateAttribution;
+    public LocalDate getDateAffectation() {
+        return dateAffectation;
     }
 
-    public void setDateAttribution(LocalDate dateAttribution) {
-        this.dateAttribution = dateAttribution;
+    public void setDateAffectation(LocalDate dateAffectation) {
+        this.dateAffectation = dateAffectation;
     }
 
     public LocalDate getDateRenouvellementPrevue() {
