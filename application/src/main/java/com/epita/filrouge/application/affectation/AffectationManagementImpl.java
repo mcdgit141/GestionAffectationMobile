@@ -28,18 +28,24 @@ public class AffectationManagementImpl implements IAffectationManagement {
     private IRepositoryIphone repositoryIphone;
 
     @Override
-    public void save(String collaborateurUiD, String iPhoneNumeroSerie, LocalDate dateAffectation, String numeroLigne, String commentaire) {
-        Collaborateur collaborateur = repositoryCollaborateur.findByUid(collaborateurUiD);
+    public Affectation save(String collaborateurUid, String iPhoneNumeroSerie, LocalDate dateAffectation, String numeroLigne, String commentaire) {
+
+        Collaborateur collaborateur = repositoryCollaborateur.findByUid(collaborateurUid);
+        System.out.println("application collaborateur.getPrenom() = " + collaborateur.getPrenom());
+        System.out.println("application collaborateur.getPrenom() = " + collaborateur.getId());
 //        if (user == null) {
 //            throw new NotFoundException(USER_NOT_FOUND, "Email " + userName + " not found");
 //        }
 
-        Iphone iPhone = repositoryIphone.findBynumeroSerie(iPhoneNumeroSerie);
+        Iphone iPhone = repositoryIphone.findByNumeroSerie(iPhoneNumeroSerie);
+        System.out.println("application iPhone.getIphoneId() = " + iPhone.getIphoneId());
 //      test existence Iphone
         Long numeroAffectation = genererNumeroAffectation();
         Affectation affectationACreer = new Affectation(numeroAffectation, dateAffectation, commentaire,collaborateur, iPhone);
 
         repositoryAffectation.save(affectationACreer);
+
+        return affectationACreer;
 
     }
 

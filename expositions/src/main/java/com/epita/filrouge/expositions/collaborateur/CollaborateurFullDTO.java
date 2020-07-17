@@ -13,17 +13,8 @@ public class CollaborateurFullDTO {
 
 //    private List<Affectation> affectationCollaborateur;
 
-    public CollaborateurFullDTO(String uid, String nom, String prenom, String numeroLigne) {
-        this.uid = uid;
-        this.nom = nom;
-        this.prenom = prenom;
-        this.numeroLigne = numeroLigne;
-//        this.affectationCollaborateur = affectationCollaborateur;
-    }
 
-    public CollaborateurFullDTO() {
 
-    }
 
     public void setUid(String uid) {
         this.uid = uid;

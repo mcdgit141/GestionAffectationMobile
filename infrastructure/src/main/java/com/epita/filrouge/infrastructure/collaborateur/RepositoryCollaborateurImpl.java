@@ -19,6 +19,7 @@ public class RepositoryCollaborateurImpl implements IRepositoryCollaborateur {
 
         Collaborateur collaborateur = new Collaborateur(collaborateurEntity.getUid(), collaborateurEntity.getNom(), collaborateurEntity.getPrenom(),collaborateurEntity.getNumeroLigne());
         collaborateur.setNumeroLigne(collaborateurEntity.getNumeroLigne());
+        collaborateur.setId(collaborateurEntity.getCollaborateurId());
 
         return collaborateur;
 

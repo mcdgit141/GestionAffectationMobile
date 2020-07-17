@@ -40,7 +40,14 @@ public class RepositoryIphoneImpl implements IRepositoryIphone {
 
 
     @Override
-    public Iphone findBynumeroSerie(String iPhoneNumeroSerie) {
-        return null;
+    public Iphone findByNumeroSerie(String iPhoneNumeroSerie) {
+        IphoneEntity iphoneEntity = repositoryJpaIphone.findByNumeroSerie(iPhoneNumeroSerie);
+        ModeleIphoneEntity modeleIphoneEntity = iphoneEntity.getModeleIphoneEntity();
+        ModeleIphone modeleIphone = new ModeleIphone(modeleIphoneEntity.getModeleId(),modeleIphoneEntity.getNomModele());
+
+        return new Iphone(iphoneEntity.getIphoneId(), iphoneEntity.getNumeroSerie(), iphoneEntity.getPrixIphone(), modeleIphone, iphoneEntity.getEtatIphone());
+
+
+
     }
 }

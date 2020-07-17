@@ -4,5 +4,5 @@ public interface IRepositoryIphone {
 
     public Iphone findByNomModele (String nomModele);
 
-    public Iphone findBynumeroSerie(String iPhoneNumeroSerie);
+    public Iphone findByNumeroSerie(String iPhoneNumeroSerie);
 }

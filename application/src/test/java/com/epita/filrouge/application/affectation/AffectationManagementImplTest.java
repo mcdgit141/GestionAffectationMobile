@@ -71,14 +71,14 @@ public class AffectationManagementImplTest {
         Iphone iphone = new Iphone(1L, IPHONE_NUMEROSERIE, IPHONE_PRIX, modeleIphone, IPHONE_ETAT);
 
         when(repositoryCollaborateur.findByUid(COLLABORATEUR_UID)).thenReturn(collaborateur);
-        when(repositoryIphone.findBynumeroSerie(IPHONE_NUMEROSERIE)).thenReturn(iphone);
+        when(repositoryIphone.findByNumeroSerie(IPHONE_NUMEROSERIE)).thenReturn(iphone);
 
         //When
         affectationManagementImpl.save(COLLABORATEUR_UID,IPHONE_NUMEROSERIE,AFFECTATION_DATE,COLLABORATEUR_NUMEROLIGNE,AFFECTATION_COMMENTAIRE);
 
         //Then
         verify(repositoryCollaborateur, Mockito.times(1)).findByUid(COLLABORATEUR_UID);
-        verify(repositoryIphone,Mockito.times(1)).findBynumeroSerie(IPHONE_NUMEROSERIE);
+        verify(repositoryIphone,Mockito.times(1)).findByNumeroSerie(IPHONE_NUMEROSERIE);
         verify(repositoryAffectation,Mockito.times(1)).save(any(Affectation.class));
     }
 }

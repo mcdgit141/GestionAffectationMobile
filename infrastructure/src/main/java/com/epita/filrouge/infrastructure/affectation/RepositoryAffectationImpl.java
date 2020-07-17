@@ -28,11 +28,11 @@ public class RepositoryAffectationImpl implements IRepositoryAffectation {
         collaborateurEntity.setPrenom(collaborateur.getPrenom());
         collaborateurEntity.setNumeroLigne(collaborateur.getNumeroLigne());
 
-//        System.out.println("collaborateurEntity.getCollaborateurId() = " + collaborateurEntity.getCollaborateurId());
-//        System.out.println("collaborateurEntity.getUid() = " + collaborateurEntity.getUid());
-//        System.out.println("collaborateurEntity.getNom() = " + collaborateurEntity.getNom());
-//        System.out.println("collaborateurEntity.getPrenom() = " + collaborateurEntity.getPrenom());
-//        System.out.println("collaborateurEntity.getCollaborateurId() = " + collaborateurEntity.getCollaborateurId());
+        System.out.println("collaborateurEntity.getCollaborateurId() = " + collaborateurEntity.getCollaborateurId());
+        System.out.println("collaborateurEntity.getUid() = " + collaborateurEntity.getUid());
+        System.out.println("collaborateurEntity.getNom() = " + collaborateurEntity.getNom());
+        System.out.println("collaborateurEntity.getPrenom() = " + collaborateurEntity.getPrenom());
+        System.out.println("collaborateurEntity.getCollaborateurId() = " + collaborateurEntity.getCollaborateurId());
 
         Iphone iPhone = affectationACreer.getIphone();
         ModeleIphone modeleIphone = iPhone.getModeleIphone();
@@ -40,17 +40,18 @@ public class RepositoryAffectationImpl implements IRepositoryAffectation {
         ModeleIphoneEntity modeleIphoneEntity = new ModeleIphoneEntity();
         modeleIphoneEntity.setNomModele(modeleIphone.getNomModele());
         modeleIphoneEntity.setModeleId(modeleIphone.getModeleID());
-//        System.out.println("modeleIphoneEntity.getModeleId() = " + modeleIphoneEntity.getModeleId());
-//        System.out.println("modeleIphoneEntity.getNomModele() = " + modeleIphoneEntity.getNomModele());
+        System.out.println("infra modeleIphoneEntity.getModeleId() = " + modeleIphoneEntity.getModeleId());
+        System.out.println("infra modeleIphoneEntity.getNomModele() = " + modeleIphoneEntity.getNomModele());
+
 
         IphoneEntity iphoneEntity = new IphoneEntity();
         iphoneEntity.setIphoneId(iPhone.getIphoneId());
         iphoneEntity.setNumeroSerie(iPhone.getNumeroSerie());
         iphoneEntity.setEtatIphone(iPhone.getEtatIphone());
         iphoneEntity.setModeleIphoneEntity(modeleIphoneEntity);
-//        System.out.println("iphoneEntity.getIphoneId() = " + iphoneEntity.getIphoneId());
-//        System.out.println("iphoneEntity.getEtatIphone() = " + iphoneEntity.getEtatIphone());
-//        System.out.println("iphoneEntity.getNumeroSerie() = " + iphoneEntity.getNumeroSerie());
+        System.out.println("iphoneEntity.getIphoneId() = " + iphoneEntity.getIphoneId());
+        System.out.println("iphoneEntity.getEtatIphone() = " + iphoneEntity.getEtatIphone());
+        System.out.println("iphoneEntity.getNumeroSerie() = " + iphoneEntity.getNumeroSerie());
 
         AffectationEntity affectationEntity = new AffectationEntity();
 

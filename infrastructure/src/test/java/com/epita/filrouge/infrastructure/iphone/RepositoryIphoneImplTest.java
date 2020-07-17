@@ -5,6 +5,7 @@ import com.epita.filrouge.domain.iphone.EtatIphoneEnum;
 import com.epita.filrouge.domain.iphone.Iphone;
 import com.epita.filrouge.infrastructure.collaborateur.CollaborateurEntity;
 import com.epita.filrouge.infrastructure.collaborateur.RepositoryCollaborateurImpl;
+import javafx.beans.binding.When;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
@@ -31,30 +32,30 @@ public class RepositoryIphoneImplTest {
     @BeforeEach
     public void init() {
 
-        ModeleIphoneEntity modeleIphoneEntity = new ModeleIphoneEntity();
-        modeleIphoneEntity.setNomModele("Iphone8");
-        entityManager.persistAndFlush(modeleIphoneEntity);
+        ModeleIphoneEntity modeleIphone8Entity = new ModeleIphoneEntity();
+        modeleIphone8Entity.setNomModele("Iphone8");
+        entityManager.persistAndFlush(modeleIphone8Entity);
 
         IphoneEntity iphoneEntity = new IphoneEntity();
         iphoneEntity.setNumeroSerie("010203");
         iphoneEntity.setEtatIphone(EtatIphoneEnum.DISPONIBLE);
-        iphoneEntity.setModeleIphoneEntity(modeleIphoneEntity);
+        iphoneEntity.setModeleIphoneEntity(modeleIphone8Entity);
         entityManager.persistAndFlush(iphoneEntity);
 
         IphoneEntity iphoneEntity1 = new IphoneEntity();
         iphoneEntity1.setNumeroSerie("010204");
         iphoneEntity1.setEtatIphone(EtatIphoneEnum.DISPONIBLE);
-        iphoneEntity1.setModeleIphoneEntity(modeleIphoneEntity);
+        iphoneEntity1.setModeleIphoneEntity(modeleIphone8Entity);
         entityManager.persistAndFlush(iphoneEntity1);
 
-        ModeleIphoneEntity modeleIphoneEntity2 = new ModeleIphoneEntity();
-        modeleIphoneEntity2.setNomModele("Iphone10");
-        entityManager.persistAndFlush(modeleIphoneEntity2);
+        ModeleIphoneEntity modeleIphone10Entity = new ModeleIphoneEntity();
+        modeleIphone10Entity.setNomModele("Iphone10");
+        entityManager.persistAndFlush(modeleIphone10Entity);
 
         IphoneEntity iphoneEntity2 = new IphoneEntity();
         iphoneEntity2.setNumeroSerie("010205");
         iphoneEntity2.setEtatIphone(EtatIphoneEnum.DISPONIBLE);
-        iphoneEntity2.setModeleIphoneEntity(modeleIphoneEntity2);
+        iphoneEntity2.setModeleIphoneEntity(modeleIphone10Entity);
         entityManager.persistAndFlush(iphoneEntity2);
 
     }
@@ -88,8 +89,16 @@ public class RepositoryIphoneImplTest {
     }
 
     @Test
-    @Disabled("Test à implémenter")
     void shouldReturnAnIphone_WhenFindByNumeroSerie() {
+        //Given
+
+        //When
+        Iphone iphoneRetour = repositoryIphoneImpl.findByNumeroSerie("010204");
+
+        //then
+        assertThat(iphoneRetour.getNumeroSerie()).isEqualTo("010204");
+        assertThat(iphoneRetour.getModeleIphone().getNomModele()).isEqualTo("Iphone8");
+        assertThat(iphoneRetour.getEtatIphone()).isEqualTo(EtatIphoneEnum.DISPONIBLE);
 
     }
 }
