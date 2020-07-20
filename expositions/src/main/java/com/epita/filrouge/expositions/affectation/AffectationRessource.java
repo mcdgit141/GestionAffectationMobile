@@ -20,7 +20,7 @@ public class AffectationRessource {
     public void saveAffectation(@NotNull @RequestBody final AffectationDTO affectationDTO) {
 
         System.out.println("DV  -  dans le post  mapping");
-        affectationManagement.save(affectationDTO.getCollaborateurUid(),affectationDTO.getIphoneNumeroSerie(),
+        affectationManagement.creerAffectation(affectationDTO.getCollaborateurUid(),affectationDTO.getIphoneNumeroSerie(),
                                    affectationDTO.getAffectationDate(),affectationDTO.getCollaborateurNumeroLigne(),
                                    affectationDTO.getAffectationCommentaire());
 

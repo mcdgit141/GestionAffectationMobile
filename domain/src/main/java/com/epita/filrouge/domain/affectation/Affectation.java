@@ -61,4 +61,5 @@ public class Affectation {
     private void calculDateRenouvellement () {
         dateRenouvellementPrevue =  dateAffectation.plusYears(2);
     }
+
 }

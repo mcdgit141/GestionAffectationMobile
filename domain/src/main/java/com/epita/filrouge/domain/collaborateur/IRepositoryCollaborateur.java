@@ -6,5 +6,7 @@ public interface IRepositoryCollaborateur {
 
     public Collaborateur findByNumeroLigne (String numeroLigne);
 
+    public void miseAJourCollaborateur(Collaborateur collaborateur, String numLigne);
+
 
 }

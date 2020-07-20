@@ -1,6 +1,5 @@
 package com.epita.filrouge.application.affectation;
 
-import com.epita.filrouge.application.collaborateur.CollaborateurManagementImpl;
 import com.epita.filrouge.domain.affectation.Affectation;
 import com.epita.filrouge.domain.affectation.IRepositoryAffectation;
 import com.epita.filrouge.domain.collaborateur.Collaborateur;
@@ -13,7 +12,6 @@ import org.springframework.stereotype.Service;
 import java.util.Random;
 
 import java.time.LocalDate;
-import java.util.Random;
 
 @Service
 public class AffectationManagementImpl implements IAffectationManagement {
@@ -28,9 +26,10 @@ public class AffectationManagementImpl implements IAffectationManagement {
     private IRepositoryIphone repositoryIphone;
 
     @Override
-    public Affectation save(String collaborateurUid, String iPhoneNumeroSerie, LocalDate dateAffectation, String numeroLigne, String commentaire) {
+    public Affectation creerAffectation(String collaborateurUid, String iPhoneNumeroSerie, LocalDate dateAffectation, String numeroLigne, String commentaire) {
 
         Collaborateur collaborateur = repositoryCollaborateur.findByUid(collaborateurUid);
+
         System.out.println("application collaborateur.getPrenom() = " + collaborateur.getPrenom());
         System.out.println("application collaborateur.getPrenom() = " + collaborateur.getId());
 //        if (user == null) {
@@ -43,7 +42,9 @@ public class AffectationManagementImpl implements IAffectationManagement {
         Long numeroAffectation = genererNumeroAffectation();
         Affectation affectationACreer = new Affectation(numeroAffectation, dateAffectation, commentaire,collaborateur, iPhone);
 
-        repositoryAffectation.save(affectationACreer);
+        repositoryAffectation.affecter(affectationACreer);
+
+//        repositoryCollaborateur.miseAJourCollaborateur(collaborateur, numeroLigne);
 
         return affectationACreer;
 

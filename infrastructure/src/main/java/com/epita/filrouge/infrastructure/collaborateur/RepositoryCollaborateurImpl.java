@@ -32,4 +32,21 @@ public class RepositoryCollaborateurImpl implements IRepositoryCollaborateur {
         return new Collaborateur(collaborateurEntity.getUid(), collaborateurEntity.getNom(), collaborateurEntity.getPrenom(),collaborateurEntity.getNumeroLigne());
 
     }
+
+    @Override
+    public void miseAJourCollaborateur(Collaborateur collaborateur, String numLigne) {
+        // maj du numero de ligne du collaborateur avec celui fourni
+        if (collaborateur.getNumeroLigne() != numLigne) {
+            collaborateur.setNumeroLigne(numLigne);
+            CollaborateurEntity monCollaborateurEntity = new CollaborateurEntity();
+
+            monCollaborateurEntity.setNom(collaborateur.getNom());
+            monCollaborateurEntity.setNumeroLigne(collaborateur.getNumeroLigne());
+            monCollaborateurEntity.setPrenom(collaborateur.getNom());
+            monCollaborateurEntity.setUid(collaborateur.getUid());
+
+            repositoryJpaCollaborateur.save(monCollaborateurEntity);
+        }
+
+    }
 }

@@ -7,5 +7,5 @@ import java.time.LocalDate;
 
 public interface IAffectationManagement {
 
-    public Affectation save(String collaborateurUid, String iPhoneNumeroSerie, LocalDate dateAffectation, String numeroLigne, String commentaire);
+    public Affectation creerAffectation(String collaborateurUid, String iPhoneNumeroSerie, LocalDate dateAffectation, String numeroLigne, String commentaire);
 }

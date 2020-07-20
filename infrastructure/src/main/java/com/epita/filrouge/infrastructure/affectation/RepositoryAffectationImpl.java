@@ -18,7 +18,7 @@ public class RepositoryAffectationImpl implements IRepositoryAffectation {
     IRepositoryJpaAffectation iRepositoryJpaAffectation;
 
     @Override
-    public void save(Affectation affectationACreer) {
+    public void affecter(Affectation affectationACreer) {
 
         Collaborateur collaborateur = affectationACreer.getCollaborateur();
         CollaborateurEntity collaborateurEntity = new CollaborateurEntity();
@@ -57,7 +57,7 @@ public class RepositoryAffectationImpl implements IRepositoryAffectation {
 
         affectationEntity.setNumeroAffectation(affectationACreer.getNumeroAffectation());
         affectationEntity.setDateAffectation(affectationACreer.getDateAffectation());
-        affectationEntity.setDateRenouvellementPrevue(affectationACreer.getDateAffectation());
+        affectationEntity.setDateRenouvellementPrevue(affectationACreer.getDateRenouvellementPrevue());
         affectationEntity.setDateFin(affectationACreer.getDateAffectation());
         affectationEntity.setCommentaire(affectationACreer.getCommentaire());
         affectationEntity.setMotifFin(affectationACreer.getMotifFin());

@@ -18,14 +18,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
-import org.springframework.test.context.junit4.SpringRunner;
 
 import java.time.LocalDate;
 
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
-import static org.junit.jupiter.api.Assertions.*;
 
 @ExtendWith(SpringExtension.class)
 @SpringBootTest(classes = { AffectationManagementImpl.class } )
@@ -74,11 +72,11 @@ public class AffectationManagementImplTest {
         when(repositoryIphone.findByNumeroSerie(IPHONE_NUMEROSERIE)).thenReturn(iphone);
 
         //When
-        affectationManagementImpl.save(COLLABORATEUR_UID,IPHONE_NUMEROSERIE,AFFECTATION_DATE,COLLABORATEUR_NUMEROLIGNE,AFFECTATION_COMMENTAIRE);
+        affectationManagementImpl.creerAffectation(COLLABORATEUR_UID,IPHONE_NUMEROSERIE,AFFECTATION_DATE,COLLABORATEUR_NUMEROLIGNE,AFFECTATION_COMMENTAIRE);
 
         //Then
         verify(repositoryCollaborateur, Mockito.times(1)).findByUid(COLLABORATEUR_UID);
         verify(repositoryIphone,Mockito.times(1)).findByNumeroSerie(IPHONE_NUMEROSERIE);
-        verify(repositoryAffectation,Mockito.times(1)).save(any(Affectation.class));
+        verify(repositoryAffectation,Mockito.times(1)).affecter(any(Affectation.class));
     }
 }

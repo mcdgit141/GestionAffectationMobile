@@ -23,7 +23,6 @@ import java.time.LocalDate;
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.jupiter.api.Assertions.*;
 
 @ExtendWith(SpringExtension.class)
 @DataJpaTest
@@ -97,7 +96,7 @@ class RepositoryAffectationImplTest {
         Affectation affectationACreer = new Affectation(AFFECTATION_NUMERO, AFFECTATION_DATE, AFFECTATION_COMMENTAIRE, collaborateur, iphone);
 
 ////        //When
-        repositoryAffectation.save(affectationACreer);
+        repositoryAffectation.affecter(affectationACreer);
 ////        //Then
         final List<?> affectationRecues = entityManager.getEntityManager()
                 .createQuery("select o from AffectationEntity o where o.numeroAffectation = :numeroAffectation")
