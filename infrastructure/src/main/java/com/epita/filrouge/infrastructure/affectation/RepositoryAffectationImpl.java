@@ -20,6 +20,7 @@ public class RepositoryAffectationImpl implements IRepositoryAffectation {
     @Override
     public void affecter(Affectation affectationACreer) {
 
+        System.out.println("affectationACreer = " + affectationACreer);
         Collaborateur collaborateur = affectationACreer.getCollaborateur();
         CollaborateurEntity collaborateurEntity = new CollaborateurEntity();
         collaborateurEntity.setCollaborateurId(collaborateur.getId());

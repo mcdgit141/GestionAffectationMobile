@@ -4,6 +4,7 @@ import com.epita.filrouge.domain.collaborateur.Collaborateur;
 import com.epita.filrouge.domain.iphone.Iphone;
 
 import java.time.LocalDate;
+import java.time.Year;
 
 public class Affectation {
 
@@ -17,9 +18,9 @@ public class Affectation {
     private Collaborateur collaborateur;
     private Iphone iphone;
 
-    public Affectation(Long numeroAffectation, LocalDate dateAffectation, String commentaire, Collaborateur collaborateur, Iphone iphone) {
+    public Affectation(Long numeroAffectation, LocalDate dateAttribution, String commentaire, Collaborateur collaborateur, Iphone iphone) {
         this.numeroAffectation = numeroAffectation;
-        this.dateAffectation = dateAffectation;
+        this.dateAffectation = dateAttribution;
         this.commentaire = commentaire;
         this.collaborateur = collaborateur;
         this.iphone = iphone;
@@ -61,5 +62,6 @@ public class Affectation {
     private void calculDateRenouvellement () {
         dateRenouvellementPrevue =  dateAffectation.plusYears(2);
     }
+
 
 }
