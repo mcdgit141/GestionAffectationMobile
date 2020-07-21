@@ -78,5 +78,6 @@ public class AffectationManagementImplTest {
         verify(repositoryCollaborateur, Mockito.times(1)).findByUid(COLLABORATEUR_UID);
         verify(repositoryIphone,Mockito.times(1)).findByNumeroSerie(IPHONE_NUMEROSERIE);
         verify(repositoryAffectation,Mockito.times(1)).affecter(any(Affectation.class));
+        verify(repositoryCollaborateur, Mockito.times(1)).miseAJourCollaborateur(collaborateur,COLLABORATEUR_NUMEROLIGNE);
     }
 }

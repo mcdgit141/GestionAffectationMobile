@@ -114,11 +114,8 @@ class RepositoryAffectationImplTest {
                 .getResultList();
         assertThat(colloaborateursRecus.size()).isEqualTo(1);
 
-
-
-
-
     }
+
 
 
 
