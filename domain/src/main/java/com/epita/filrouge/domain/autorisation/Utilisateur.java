@@ -1,19 +1,20 @@
 package com.epita.filrouge.domain.autorisation;
 
-public class User {
+public class Utilisateur {
 
     private String uid;
     private String nom;
     private String prenom;
     private String login;
     private String password;
-    private UserRoleEnum userRole;
 
-    public User(String uid, String login) {
+    private UtilisateurRoleEnum userRole;
+
+    public Utilisateur(String uid, String login) {
         this.uid = uid;
         this.login = login;
         password = "defaultPassword";
-        userRole=UserRoleEnum.USER_TYPE_1;
+        userRole= UtilisateurRoleEnum.ROLE_TYPE1;
     }
 
     public String getUid() {
@@ -36,7 +37,7 @@ public class User {
         return password;
     }
 
-    public UserRoleEnum getUserRole() {
+    public UtilisateurRoleEnum getUserRole() {
         return userRole;
     }
 
@@ -52,7 +53,7 @@ public class User {
         this.password = password;
     }
 
-    public void setUserRole(UserRoleEnum userRole) {
+    public void setUserRole(UtilisateurRoleEnum userRole) {
         this.userRole = userRole;
     }
 }

@@ -17,7 +17,7 @@ public class UserRoleEntity {
     private Boolean admin;
 
     @OneToMany(mappedBy = "userRole")
-    private List<UserEntity> users = new ArrayList<>();
+    private List<UtilisateurEntity> users = new ArrayList<>();
 
     public UserRoleEntity() {
     }
@@ -70,11 +70,11 @@ public class UserRoleEntity {
         this.admin = admin;
     }
 
-    public List<UserEntity> getUsers() {
+    public List<UtilisateurEntity> getUsers() {
         return users;
     }
 
-    public void setUsers(List<UserEntity> users) {
+    public void setUsers(List<UtilisateurEntity> users) {
         this.users = users;
     }
 }

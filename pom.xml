@@ -29,12 +29,19 @@
         <version-springcontext>5.2.6.RELEASE</version-springcontext>
         <version-commons-lang3>3.0</version-commons-lang3>
         <jacoco-maven-plugin.version>0.7.4.201502262128</jacoco-maven-plugin.version>
+        <version-springsecu>2.3.1.RELEASE</version-springsecu>
     </properties>
 
     <dependencyManagement>
         <dependencies>
 
             <!-- dépendences techniques pour les couches applicatives-->
+
+            <dependency>
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-starter-security</artifactId>
+                <version>${version-springsecu}</version>
+            </dependency>
 
             <dependency>
                 <groupId>org.springframework.boot</groupId>
@@ -51,11 +58,7 @@
                 <artifactId>spring-boot-starter-data-jpa</artifactId>
                 <version>${version-springboot}</version>
             </dependency>
-            <dependency>
-                <groupId>org.springframework.boot</groupId>
-                <artifactId>spring-boot-starter-security</artifactId>
-                <version>${version-springboot}</version>
-            </dependency>
+
 
             <dependency>
                 <groupId>org.springframework.boot</groupId>
