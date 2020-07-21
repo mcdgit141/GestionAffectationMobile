@@ -1,5 +1,7 @@
 package com.epita.filrouge.infrastructure.autorisation;
 
+import com.epita.filrouge.domain.autorisation.UserRoleEnum;
+
 import javax.persistence.*;
 
 @Entity
@@ -15,12 +17,13 @@ public class UserEntity {
     private String login;
     private String password;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "users",nullable = false)
-    private UserRoleEntity userRole;
+//    @ManyToOne(fetch = FetchType.LAZY)
+//    @JoinColumn(name = "users",nullable = false)
+    private UserRoleEnum userRole;
 
 
     public UserEntity() {
+        // constructeur par defaut, indispensable pour hibernate
     }
 
     public long getId() {
@@ -71,11 +74,11 @@ public class UserEntity {
         this.password = password;
     }
 
-    public UserRoleEntity getUserRole() {
+    public UserRoleEnum getUserRole() {
         return userRole;
     }
 
-    public void setUserRole(UserRoleEntity userRole) {
+    public void setUserRole(UserRoleEnum userRole) {
         this.userRole = userRole;
     }
 }

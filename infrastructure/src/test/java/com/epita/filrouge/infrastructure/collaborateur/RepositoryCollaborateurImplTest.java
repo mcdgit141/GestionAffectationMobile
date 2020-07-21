@@ -75,6 +75,8 @@ class RepositoryCollaborateurImplTest {
 
         //then
         CollaborateurEntity collaborateurEntityLu = entityManager.find(CollaborateurEntity.class,1L);
-        assertThat(collaborateurEntityLu.getNumeroLigne()).isEqualTo(numeroLigne);
+        if (collaborateurEntityLu != null) {
+            assertThat(collaborateurEntityLu.getNumeroLigne()).isEqualTo(numeroLigne);
+        }
     }
 }
