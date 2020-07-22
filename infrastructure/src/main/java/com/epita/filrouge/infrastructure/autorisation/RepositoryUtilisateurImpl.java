@@ -5,6 +5,7 @@ import com.epita.filrouge.domain.autorisation.Utilisateur;
 import com.epita.filrouge.domain.autorisation.UtilisateurRoleEnum;
 import com.epita.filrouge.infrastructure.collaborateur.CollaborateurEntity;
 import com.epita.filrouge.infrastructure.collaborateur.IRepositoryJpaCollaborateur;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
@@ -12,8 +13,10 @@ import java.util.List;
 @Repository
 public class RepositoryUtilisateurImpl implements IRepositoryUtilisateur {
 
+    @Autowired
     private IRepositoryJpaUtilisateur userJpaRepository;
 
+    @Autowired
     private IRepositoryJpaCollaborateur collaborateurJpaRepository;
 
     @Override

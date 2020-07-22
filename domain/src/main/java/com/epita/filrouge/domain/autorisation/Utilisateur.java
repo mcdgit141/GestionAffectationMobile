@@ -13,7 +13,7 @@ public class Utilisateur {
     public Utilisateur(String uid, String login) {
         this.uid = uid;
         this.login = login;
-        password = "defaultPassword";
+        password = "password";
         userRole= UtilisateurRoleEnum.ROLE_TYPE1;
     }
 
