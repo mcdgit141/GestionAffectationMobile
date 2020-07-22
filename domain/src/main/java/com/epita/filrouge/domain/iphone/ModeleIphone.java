@@ -18,4 +18,5 @@ public class ModeleIphone {
     public String getNomModele() {
         return nomModele;
     }
+
 }

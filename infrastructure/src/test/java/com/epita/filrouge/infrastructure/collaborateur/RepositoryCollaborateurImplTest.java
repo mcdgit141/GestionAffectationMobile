@@ -7,7 +7,6 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import static org.assertj.core.api.Assertions.assertThat;
-import org.junit.runner.RunWith;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.boot.test.autoconfigure.orm.jpa.TestEntityManager;
@@ -17,16 +16,16 @@ import org.springframework.test.context.junit4.SpringRunner;
 import static org.junit.jupiter.api.Assertions.*;
 
 @ExtendWith(SpringExtension.class)
-@DataJpaTest
+@DataJpaTest // permet de dire que l'on utilise h2 si trouve le package h2 dans le pom
 class RepositoryCollaborateurImplTest {
+
+    private CollaborateurEntity monCollaborateurPersiste;
 
     @Autowired
     RepositoryCollaborateurImpl repositoryCollaborateurImpl;
 
     @Autowired
     private TestEntityManager entityManager;
-
-    private CollaborateurEntity monCollaborateurPersiste;
 
     @BeforeEach
     public void init() {
@@ -76,9 +75,8 @@ class RepositoryCollaborateurImplTest {
         repositoryCollaborateurImpl.miseAJourCollaborateur(monCollaborateur, numeroLigne);
 
         //then
-        CollaborateurEntity collaborateurEntityLu = entityManager.find(CollaborateurEntity.class,entityManager.getId(monCollaborateurPersiste));
-        if (collaborateurEntityLu != null) {
-            assertThat(collaborateurEntityLu.getNumeroLigne()).isEqualTo(numeroLigne);
-        }
+        CollaborateurEntity collaborateurEntityLu = entityManager.find(CollaborateurEntity.class,monCollaborateurPersiste.getCollaborateurId());
+        if (collaborateurEntityLu != null)
+             {assertThat(collaborateurEntityLu.getNumeroLigne()).isEqualTo(numeroLigne);}
     }
 }

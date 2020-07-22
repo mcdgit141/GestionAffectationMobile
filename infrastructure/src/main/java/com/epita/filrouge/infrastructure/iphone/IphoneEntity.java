@@ -78,4 +78,14 @@ public class IphoneEntity {
     public List<AffectationEntity> getAffectationIphone() {
         return affectationIphone;
     }
+
+    @Override
+    public String toString() {
+        return "\n---------------\nEtat: "+ this.getEtatIphone().toString() +"\n"
+                + "Id: " + this.getIphoneId()  +"\n"
+                + "NumeroSerie: " + this.getNumeroSerie()  +"\n"
+                + "AffecationIphone: " + this.getAffectationIphone()  +"\n"
+                + "ModeleEntityIphone: " + this.getModeleIphoneEntity()  +"\n"
+                + "PrixIphone: " + this.getPrixIphone();
+    }
 }

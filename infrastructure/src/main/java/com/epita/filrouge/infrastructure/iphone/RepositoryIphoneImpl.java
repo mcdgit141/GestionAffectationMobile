@@ -38,7 +38,6 @@ public class RepositoryIphoneImpl implements IRepositoryIphone {
         return new Iphone(iphoneEntity.getIphoneId(),iphoneEntity.getNumeroSerie(),iphoneEntity.getPrixIphone(),modeleIphone,iphoneEntity.getEtatIphone());*/ //creation de l'objet Iphone de la couche domain
     }
 
-
     @Override
     public Iphone findByNumeroSerie(String iPhoneNumeroSerie) {
         IphoneEntity iphoneEntity = repositoryJpaIphone.findByNumeroSerie(iPhoneNumeroSerie);
@@ -46,8 +45,16 @@ public class RepositoryIphoneImpl implements IRepositoryIphone {
         ModeleIphone modeleIphone = new ModeleIphone(modeleIphoneEntity.getModeleId(),modeleIphoneEntity.getNomModele());
 
         return new Iphone(iphoneEntity.getIphoneId(), iphoneEntity.getNumeroSerie(), iphoneEntity.getPrixIphone(), modeleIphone, iphoneEntity.getEtatIphone());
+    }
 
+    @Override
+    // mise à jour de l'état de l'Iphone suite à une affectation. Pas besoin de retester l'état car seul le premier disponible est remonté
+    public void miseAJourEtatIphone(Iphone iPhone, String iPhoneNumeroSerie){
+        System.out.println("Appel méthode----" + iPhoneNumeroSerie);
 
+        IphoneEntity iphoneEntity = repositoryJpaIphone.findByNumeroSerie(iPhoneNumeroSerie);
+        iphoneEntity.setEtatIphone(EtatIphoneEnum.AFFECTE);
 
+        repositoryJpaIphone.save(iphoneEntity);
     }
 }
