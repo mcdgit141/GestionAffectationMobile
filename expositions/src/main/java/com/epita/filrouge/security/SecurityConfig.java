@@ -12,7 +12,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
+import org.springframework.security.web.authentication.Http403ForbiddenEntryPoint;
 import org.springframework.security.web.authentication.SimpleUrlAuthenticationFailureHandler;
 import org.springframework.security.web.authentication.SimpleUrlAuthenticationSuccessHandler;
 import org.springframework.security.web.authentication.logout.SimpleUrlLogoutSuccessHandler;
@@ -40,7 +40,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         http.csrf().disable()
                 .formLogin()
                 .loginProcessingUrl("/login").successHandler(new AuthentificationLoginSuccessHandler())
-                .failureForwardUrl(new SimpleUrlAuthentificationFailureHandler())
+                .failureHandler(new SimpleUrlAuthenticationFailureHandler())
                 .and()
                 .logout()
                 .logoutUrl("/logout").logoutSuccessHandler(new AuthentificationLogoutSuccessHandler())
@@ -49,7 +49,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .authorizeRequests().antMatchers("/login").permitAll()
                 .antMatchers("/logout").permitAll()
                 .antMatchers("/api/**").authenticated().anyRequest().permitAll()
-                .and().exceptionHandling().authenticationEntryPoint(new http403ForbiddenEntryPoint() {});
+                .and().exceptionHandling().authenticationEntryPoint(new Http403ForbiddenEntryPoint() {});
     }
 
     private class AuthentificationLoginSuccessHandler extends SimpleUrlAuthenticationSuccessHandler {

@@ -26,6 +26,8 @@ class RepositoryCollaborateurImplTest {
     @Autowired
     private TestEntityManager entityManager;
 
+    private CollaborateurEntity monCollaborateurPersiste;
+
     @BeforeEach
     public void init() {
         CollaborateurEntity collaborateurEntity = new CollaborateurEntity();
@@ -33,7 +35,7 @@ class RepositoryCollaborateurImplTest {
         collaborateurEntity.setNom("Vivier");
         collaborateurEntity.setPrenom("D");
         collaborateurEntity.setNumeroLigne("0612345678");
-        entityManager.persist(collaborateurEntity);
+        monCollaborateurPersiste = entityManager.persist(collaborateurEntity);
     }
 
     @Test
@@ -74,7 +76,7 @@ class RepositoryCollaborateurImplTest {
         repositoryCollaborateurImpl.miseAJourCollaborateur(monCollaborateur, numeroLigne);
 
         //then
-        CollaborateurEntity collaborateurEntityLu = entityManager.find(CollaborateurEntity.class,1L);
+        CollaborateurEntity collaborateurEntityLu = entityManager.find(CollaborateurEntity.class,entityManager.getId(monCollaborateurPersiste));
         if (collaborateurEntityLu != null) {
             assertThat(collaborateurEntityLu.getNumeroLigne()).isEqualTo(numeroLigne);
         }
