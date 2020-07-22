@@ -44,7 +44,7 @@ public class AffectationManagementImpl implements IAffectationManagement {
 
         repositoryAffectation.affecter(affectationACreer);
 
-//        repositoryCollaborateur.miseAJourCollaborateur(collaborateur, numeroLigne);
+        repositoryCollaborateur.miseAJourCollaborateur(collaborateur, numeroLigne);
 
         return affectationACreer;
 

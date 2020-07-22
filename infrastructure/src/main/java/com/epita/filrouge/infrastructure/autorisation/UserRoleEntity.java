@@ -4,11 +4,11 @@ import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.List;
 
-@Entity
+//@Entity
 public class UserRoleEntity {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+//    @Id
+//    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private String typeRole;
     private Boolean consultation;
@@ -16,7 +16,7 @@ public class UserRoleEntity {
     private Boolean suppression;
     private Boolean admin;
 
-    @OneToMany(mappedBy = "userRole")
+//    @OneToMany(mappedBy = "userRole")
     private List<UtilisateurEntity> users = new ArrayList<>();
 
     public UserRoleEntity() {
