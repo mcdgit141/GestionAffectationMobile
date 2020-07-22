@@ -6,5 +6,5 @@ public interface IRepositoryIphone {
 
     public Iphone findByNumeroSerie(String iPhoneNumeroSerie);
 
-    void miseAJourEtatIphone(Iphone iPhone, String iphoneNumeroSerie);
+    public void miseAJourEtatIphone(Iphone iPhone, String iphoneNumeroSerie);
 }
