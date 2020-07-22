@@ -36,12 +36,11 @@ public class RepositoryCollaborateurImpl implements IRepositoryCollaborateur {
     @Override
     public void miseAJourCollaborateur(Collaborateur collaborateur, String numLigne) {
         // maj du numero de ligne du collaborateur avec celui fourni
+        CollaborateurEntity monCollaborateurEntity = repositoryJpaCollaborateur.findByUid(collaborateur.getUid());
 
-        CollaborateurEntity collaborateurEntity = repositoryJpaCollaborateur.findByUid(collaborateur.getUid());
-
-        if (collaborateurEntity.getNumeroLigne() != numLigne) {
-            collaborateurEntity.setNumeroLigne(numLigne);
-               repositoryJpaCollaborateur.save(collaborateurEntity);
+        if (monCollaborateurEntity.getNumeroLigne() != numLigne) {
+            monCollaborateurEntity.setNumeroLigne(numLigne);
+            repositoryJpaCollaborateur.save(monCollaborateurEntity);
         }
 
     }

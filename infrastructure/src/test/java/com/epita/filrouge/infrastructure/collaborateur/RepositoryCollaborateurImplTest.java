@@ -62,7 +62,21 @@ class RepositoryCollaborateurImplTest {
         assertThat(collaborateurRetour.getPrenom()).isEqualTo("D");
         assertThat(collaborateurRetour.getUid()).isEqualTo("425895");
 
+    }
 
+    @Test
+    @DisplayName("Actualisation du numéro de ligne sur le collaborateur après affectation")
+    public void should_update_collaborateur_with_numLigne_given_if_different(){
+        //given
+        Collaborateur monCollaborateur = new Collaborateur("425895", "Vivier", "D","0612345678");
+        String numeroLigne = "0670588845";
+
+        //when
+        repositoryCollaborateurImpl.miseAJourCollaborateur(monCollaborateur, numeroLigne);
+
+        //then
+        CollaborateurEntity collaborateurEntityLu = entityManager.find(CollaborateurEntity.class,1L);
+        assertThat(collaborateurEntityLu.getNumeroLigne()).isEqualTo(numeroLigne);
     }
 
     @Test
