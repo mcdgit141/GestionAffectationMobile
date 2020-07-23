@@ -46,6 +46,8 @@ public class AffectationManagementImpl implements IAffectationManagement {
 
         repositoryCollaborateur.miseAJourCollaborateur(collaborateur, numeroLigne);
 
+        repositoryIphone.miseAJourEtatIphone(iPhone, iPhoneNumeroSerie);
+
         return affectationACreer;
 
     }
