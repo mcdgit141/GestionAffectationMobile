@@ -5,6 +5,8 @@ import com.epita.filrouge.domain.collaborateur.Collaborateur;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.annotation.Secured;
+import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -12,6 +14,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequestMapping("/gestaffectation")
+@Secured("ROLE_ADMIN")
 public class CollaborateurRessource {
 
     @Autowired
@@ -22,6 +25,7 @@ public class CollaborateurRessource {
         return "ok";
     }
 
+    @Secured("ROLE_TYPE1")
     @GetMapping(value = "/collaborateur/{uid}" , produces = {"application/json"})
     public ResponseEntity<CollaborateurFullDTO> rechercheCollaborateurParUid (@PathVariable("uid") String uid) {
 
