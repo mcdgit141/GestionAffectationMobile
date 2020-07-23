@@ -56,4 +56,10 @@ public class Utilisateur {
     public void setUserRole(UtilisateurRoleEnum userRole) {
         this.userRole = userRole;
     }
+
+    public void setPassword(String password) {
+        this.password = password;
+    }
+
+
 }

@@ -32,4 +32,6 @@ public enum UtilisateurRoleEnum {
     public Boolean getAdmin() {
         return admin;
     }
+
+
 }

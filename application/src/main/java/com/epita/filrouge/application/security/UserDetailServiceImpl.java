@@ -1,4 +1,4 @@
-package com.epita.filrouge.security;
+package com.epita.filrouge.application.security;
 
 import com.epita.filrouge.domain.autorisation.IRepositoryUtilisateur;
 import com.epita.filrouge.domain.autorisation.Utilisateur;
@@ -22,14 +22,24 @@ public class UserDetailServiceImpl implements UserDetailsService {
     @Override
     public UserDetails loadUserByUsername(String login) throws UsernameNotFoundException {
         Utilisateur myUtilisateur = myUtilisateurRepository.rechercherUser(login);
-        User monUser = new User(myUtilisateur.getLogin(),myUtilisateur.getPassword(),getAuthorities(myUtilisateur));
-        return monUser;
+
+        if (myUtilisateur == null) {
+            throw new UsernameNotFoundException("login non trouvé " + login );
+        } else {
+            User monUser = new User(myUtilisateur.getLogin(), myUtilisateur.getPassword(), getAuthorities(myUtilisateur));
+            System.out.println("****USERNAME : ****** " + monUser.getUsername());
+            System.out.println("****PASSWORD : ****** " + monUser.getPassword());
+            System.out.println("****AUTHORITIES : ****** " + monUser.getAuthorities());
+            return monUser;
+        }
     }
 
     private static Collection<? extends GrantedAuthority> getAuthorities(Utilisateur myUtilisateur) {
 //        final String[] userRoles = customer.getRoles().stream().map((role) -> role.name()).toArray(String[]::new);
         String[] userRoles = new String[1];
-        userRoles[1] = myUtilisateur.getUserRole().toString();
+        userRoles[0] = myUtilisateur.getUserRole().name();
+//        userRoles[1] = myUtilisateur.getUserRole().toString();
+        System.out.println("**** TO STRING ENUM ***** " + myUtilisateur.getUserRole().name());
         final Collection<GrantedAuthority> authorities = AuthorityUtils.createAuthorityList(userRoles);
         return authorities;
     }

@@ -18,6 +18,8 @@ public class UtilisateurMapper {
         Utilisateur monUtilisateur = new Utilisateur(utilisateurEntity.getUid(), utilisateurEntity.getLogin());
         monUtilisateur.setNom(utilisateurEntity.getNom());
         monUtilisateur.setPrenom(utilisateurEntity.getPrenom());
+        monUtilisateur.setPassword(utilisateurEntity.getPassword());
+        monUtilisateur.setUserRole(utilisateurEntity.getUserRole());
 
         return monUtilisateur;
     }

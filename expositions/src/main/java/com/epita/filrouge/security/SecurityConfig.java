@@ -30,12 +30,12 @@ import java.io.IOException;
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Autowired
-    private UserDetailsService monUserDetailsService;
+    private UserDetailsService userDetailServiceImpl;
 
 
     @Override
     protected void configure(AuthenticationManagerBuilder auth) throws Exception {
-        auth.userDetailsService(monUserDetailsService).passwordEncoder(passwordEncoder());
+        auth.userDetailsService(userDetailServiceImpl).passwordEncoder(passwordEncoder());
         System.out.println("******* AUTHENTIFICATION ********");
     }
 
@@ -46,6 +46,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers("/login").permitAll()
                 .antMatchers("/logout").permitAll()
                 .antMatchers("/gestaffectation/**").authenticated().anyRequest().permitAll()
+//                .antMatchers("/gestaffectation/**").permitAll()
             .and()
             .formLogin()
                 .loginProcessingUrl("/login").successHandler(new AuthentificationLoginSuccessHandler())
