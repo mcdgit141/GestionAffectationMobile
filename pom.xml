@@ -30,13 +30,20 @@
         <version-commons-lang3>3.0</version-commons-lang3>
         <jacoco-maven-plugin.version>0.7.4.201502262128</jacoco-maven-plugin.version>
         <version-springsecu>2.3.1.RELEASE</version-springsecu>
+        <version-springsecutest>5.3.3.RELEASE</version-springsecutest>
     </properties>
 
     <dependencyManagement>
         <dependencies>
 
-            <!-- dépendences techniques pour les couches applicatives-->
+            <!-- https://mvnrepository.com/artifact/org.springframework.security/spring-security-test -->
+            <dependency>
+                <groupId>org.springframework.security</groupId>
+                <artifactId>spring-security-test</artifactId>
+                <version>${version-springsecutest}</version>
+            </dependency>
 
+            <!-- dépendences techniques pour les couches applicatives-->
             <dependency>
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-starter-security</artifactId>

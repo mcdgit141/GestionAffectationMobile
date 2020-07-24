@@ -1,9 +1,9 @@
-package com.epita.filrouge.domain.autorisation;
+package com.epita.filrouge.domain.utilisateur;
 
 import java.util.List;
 
 public interface IRepositoryUtilisateur {
-    Utilisateur creerUser(Utilisateur utilisateur);
+    void creerUser(Utilisateur utilisateur);
 
      Utilisateur rechercherUser(String login);
 

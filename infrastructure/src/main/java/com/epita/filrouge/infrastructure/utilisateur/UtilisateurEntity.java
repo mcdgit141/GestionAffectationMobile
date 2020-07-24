@@ -1,6 +1,6 @@
-package com.epita.filrouge.infrastructure.autorisation;
+package com.epita.filrouge.infrastructure.utilisateur;
 
-import com.epita.filrouge.domain.autorisation.UtilisateurRoleEnum;
+import com.epita.filrouge.domain.utilisateur.UtilisateurRoleEnum;
 
 import javax.persistence.*;
 

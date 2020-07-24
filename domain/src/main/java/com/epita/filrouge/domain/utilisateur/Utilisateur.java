@@ -1,4 +1,4 @@
-package com.epita.filrouge.domain.autorisation;
+package com.epita.filrouge.domain.utilisateur;
 
 public class Utilisateur {
 
@@ -10,9 +10,11 @@ public class Utilisateur {
 
     private UtilisateurRoleEnum userRole;
 
-    public Utilisateur(String uid, String login) {
+    public Utilisateur(String uid,String nom, String prenom) {
         this.uid = uid;
-        this.login = login;
+        this.nom= nom;
+        this.prenom = prenom;
+        login = prenom + "." + nom + "@entreprise.com";
         password = "password";
         userRole= UtilisateurRoleEnum.ROLE_TYPE1;
     }

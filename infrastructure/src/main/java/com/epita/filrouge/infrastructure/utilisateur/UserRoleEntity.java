@@ -1,6 +1,5 @@
-package com.epita.filrouge.infrastructure.autorisation;
+package com.epita.filrouge.infrastructure.utilisateur;
 
-import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.List;
 

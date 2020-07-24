@@ -1,7 +1,7 @@
 package com.epita.filrouge.application.security;
 
-import com.epita.filrouge.domain.autorisation.IRepositoryUtilisateur;
-import com.epita.filrouge.domain.autorisation.Utilisateur;
+import com.epita.filrouge.domain.utilisateur.IRepositoryUtilisateur;
+import com.epita.filrouge.domain.utilisateur.Utilisateur;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.AuthorityUtils;

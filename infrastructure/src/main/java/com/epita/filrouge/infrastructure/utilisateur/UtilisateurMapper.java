@@ -1,6 +1,6 @@
-package com.epita.filrouge.infrastructure.autorisation;
+package com.epita.filrouge.infrastructure.utilisateur;
 
-import com.epita.filrouge.domain.autorisation.Utilisateur;
+import com.epita.filrouge.domain.utilisateur.Utilisateur;
 
 public class UtilisateurMapper {
 
@@ -15,9 +15,7 @@ public class UtilisateurMapper {
     }
 
     public static Utilisateur mapToDomain(UtilisateurEntity utilisateurEntity) {
-        Utilisateur monUtilisateur = new Utilisateur(utilisateurEntity.getUid(), utilisateurEntity.getLogin());
-        monUtilisateur.setNom(utilisateurEntity.getNom());
-        monUtilisateur.setPrenom(utilisateurEntity.getPrenom());
+        Utilisateur monUtilisateur = new Utilisateur(utilisateurEntity.getUid(), utilisateurEntity.getNom(), utilisateurEntity.getPrenom());
         monUtilisateur.setPassword(utilisateurEntity.getPassword());
         monUtilisateur.setUserRole(utilisateurEntity.getUserRole());
 

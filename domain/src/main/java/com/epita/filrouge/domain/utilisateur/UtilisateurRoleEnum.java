@@ -1,4 +1,4 @@
-package com.epita.filrouge.domain.autorisation;
+package com.epita.filrouge.domain.utilisateur;
 
 public enum UtilisateurRoleEnum {
     ROLE_TYPE1(true,false,false,false),
