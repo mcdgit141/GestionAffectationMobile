@@ -1,6 +1,6 @@
-package com.epita.filrouge.infrastructure.autorisation;
+package com.epita.filrouge.infrastructure.utilisateur;
 
-import com.epita.filrouge.domain.autorisation.UtilisateurRoleEnum;
+import com.epita.filrouge.domain.utilisateur.UtilisateurRoleEnum;
 
 import javax.persistence.*;
 
@@ -25,11 +25,11 @@ public class UtilisateurEntity {
         // constructeur par defaut, indispensable pour hibernate
     }
 
-    public long getId() {
+    public Long getId() {
         return id;
     }
 
-    public void setId(long id) {
+    public void setId(Long id) {
         this.id = id;
     }
 

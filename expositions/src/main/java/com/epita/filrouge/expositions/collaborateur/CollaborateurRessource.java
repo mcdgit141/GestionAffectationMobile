@@ -14,7 +14,6 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequestMapping("/gestaffectation")
-//@Secured("ROLE_ADMIN")
 public class CollaborateurRessource {
 
     @Autowired

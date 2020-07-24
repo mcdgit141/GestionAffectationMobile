@@ -1,8 +1,8 @@
-package com.epita.filrouge.infrastructure.autorisation;
+package com.epita.filrouge.infrastructure.utilisateur;
 
-import com.epita.filrouge.domain.autorisation.IRepositoryUtilisateur;
-import com.epita.filrouge.domain.autorisation.Utilisateur;
-import com.epita.filrouge.domain.autorisation.UtilisateurRoleEnum;
+import com.epita.filrouge.domain.utilisateur.IRepositoryUtilisateur;
+import com.epita.filrouge.domain.utilisateur.Utilisateur;
+import com.epita.filrouge.domain.utilisateur.UtilisateurRoleEnum;
 import com.epita.filrouge.infrastructure.collaborateur.CollaborateurEntity;
 import com.epita.filrouge.infrastructure.collaborateur.IRepositoryJpaCollaborateur;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,22 +16,16 @@ public class RepositoryUtilisateurImpl implements IRepositoryUtilisateur {
     @Autowired
     private IRepositoryJpaUtilisateur userJpaRepository;
 
-    @Autowired
-    private IRepositoryJpaCollaborateur collaborateurJpaRepository;
-
     @Override
-    public Utilisateur creerUser(Utilisateur utilisateur) {
+    public void creerUser(Utilisateur utilisateur) {
 
-        CollaborateurEntity collabo = collaborateurJpaRepository.findByUid(utilisateur.getUid());
-        Utilisateur utilisateurEnrichi = new Utilisateur(utilisateur.getUid(), utilisateur.getLogin());
-        utilisateurEnrichi.setNom(collabo.getNom());
-        utilisateurEnrichi.setPrenom(collabo.getPrenom());
-        UtilisateurEntity monUtilisateurEntity = UtilisateurMapper.mapToInfra(utilisateurEnrichi);
+        UtilisateurEntity monUtilisateurEntity = UtilisateurMapper.mapToInfra(utilisateur);
 
         userJpaRepository.save(monUtilisateurEntity);
-
-        return UtilisateurMapper.mapToDomain(monUtilisateurEntity);
     }
+
+
+
 
     @Override
     public Utilisateur rechercherUser(String login) {

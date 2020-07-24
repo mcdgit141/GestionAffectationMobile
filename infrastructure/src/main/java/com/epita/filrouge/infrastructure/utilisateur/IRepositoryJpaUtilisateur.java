@@ -1,4 +1,4 @@
-package com.epita.filrouge.infrastructure.autorisation;
+package com.epita.filrouge.infrastructure.utilisateur;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 

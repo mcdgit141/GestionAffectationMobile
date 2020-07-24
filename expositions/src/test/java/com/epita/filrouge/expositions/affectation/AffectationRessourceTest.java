@@ -17,6 +17,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
+import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.web.servlet.MockMvc;
 
@@ -31,7 +32,6 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 @ExtendWith(SpringExtension.class)
 @WebMvcTest(AffectationRessource.class)
-@Disabled
 class AffectationRessourceTest {
     private static final Long COLLABORATEUR_ID = 1L;
     private static final String COLLABORATEUR_UID = "666999";
@@ -55,15 +55,16 @@ class AffectationRessourceTest {
     private MockMvc mockMvc;
 
     @MockBean
-    IAffectationManagement affectationManagement;
+    private IAffectationManagement affectationManagement;
 
     @Autowired
     private ObjectMapper objectMapper;
 
     @Test
 //    @Disabled("En attendant")
+    @WithMockUser(roles = {"TYPE2","ADMIN"})  // controle de l'AUTHENTIFICATION (Spring security), l'anotation @Secured est non indispensable dans le controller
     @DisplayName("Doit appeler le saveAffectation de la couche application avec les bons paramètres")
-    void doitAppelerSaveDeCoucheApplication() throws Exception {
+    void role_type2_et_admin_doitAppelerSaveDeCoucheApplication() throws Exception {
 
         // Given
         AffectationDTO affectationDTO = new AffectationDTO();
@@ -80,7 +81,31 @@ class AffectationRessourceTest {
                 .content(monObjetMapper) //
                 .contentType(MediaType.APPLICATION_JSON))
          // Then
-                .andExpect(status().isCreated());
+                .andExpect(status().isCreated());    // controle de l'AUTORISATION (spring security)
+    }
+
+    @Test
+//    @Disabled("En attendant")
+    @WithMockUser(roles = {"TYPE1"})
+    @DisplayName("Interdiction creation affectation pour role TYPE1")
+    void role_type1_ne_peux_pas_creer_affectation() throws Exception {
+
+        // Given
+        AffectationDTO affectationDTO = new AffectationDTO();
+        affectationDTO.setCollaborateurUid(COLLABORATEUR_UID);
+        affectationDTO.setIphoneNumeroSerie(IPHONE_NUMEROSERIE);
+        affectationDTO.setAffectationDate(AFFECTATION_DATE);
+        affectationDTO.setCollaborateurNumeroLigne(COLLABORATEUR_NUMEROLIGNE);
+        affectationDTO.setAffectationCommentaire(AFFECTATION_COMMENTAIRE);
+
+        String monObjetMapper = objectMapper.writeValueAsString(affectationDTO);
+
+        //When
+        mockMvc.perform(post("/gestaffectation/affectation")//
+                .content(monObjetMapper) //
+                .contentType(MediaType.APPLICATION_JSON))
+                // Then
+                .andExpect(status().isForbidden());
     }
 
 
