@@ -16,9 +16,6 @@ public class RepositoryUtilisateurImpl implements IRepositoryUtilisateur {
     @Autowired
     private IRepositoryJpaUtilisateur userJpaRepository;
 
-    @Autowired
-    private IRepositoryJpaCollaborateur collaborateurJpaRepository;
-
     @Override
     public void creerUser(Utilisateur utilisateur) {
 
@@ -26,6 +23,9 @@ public class RepositoryUtilisateurImpl implements IRepositoryUtilisateur {
 
         userJpaRepository.save(monUtilisateurEntity);
     }
+
+
+
 
     @Override
     public Utilisateur rechercherUser(String login) {

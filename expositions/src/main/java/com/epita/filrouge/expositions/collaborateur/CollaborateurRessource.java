@@ -14,7 +14,6 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequestMapping("/gestaffectation")
-@Secured("ROLE_ADMIN")
 public class CollaborateurRessource {
 
     @Autowired
@@ -25,7 +24,7 @@ public class CollaborateurRessource {
         return "ok";
     }
 
-    @Secured("ROLE_TYPE1")
+    @Secured({"ROLE_TYPE1","ROLE_ADMIN"})
     @GetMapping(value = "/collaborateur/{uid}" , produces = {"application/json"})
     public ResponseEntity<CollaborateurFullDTO> rechercheCollaborateurParUid (@PathVariable("uid") String uid) {
 

@@ -14,9 +14,16 @@ public class Utilisateur {
         this.uid = uid;
         this.nom= nom;
         this.prenom = prenom;
-        login = prenom + "." + nom + "@entreprise.com";
         password = "password";
         userRole= UtilisateurRoleEnum.ROLE_TYPE1;
+    }
+
+    public void setLogin(String login) {
+        this.login = login;
+    }
+
+    public void construireLogin() {
+        this.login = this.prenom + "." + this.nom + "@entreprise.com";
     }
 
     public String getUid() {
@@ -49,10 +56,6 @@ public class Utilisateur {
 
     public void setPrenom(String prenom) {
         this.prenom = prenom;
-    }
-
-    public void modifierPassword(String password) {
-        this.password = password;
     }
 
     public void setUserRole(UtilisateurRoleEnum userRole) {

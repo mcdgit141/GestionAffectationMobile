@@ -18,7 +18,7 @@ public class AffectationRessource {
 
     @PostMapping(value = "/affectation", consumes = { "application/json" }, produces =  { "application/json" })
     @ResponseStatus(HttpStatus.CREATED)
-    @Secured({"ROLE_TYPE2","ROLE_ADMIN"})
+    @Secured({"ROLE_ADMIN","ROLE_TYPE2"})
     public void saveAffectation(@NotNull @RequestBody final AffectationDTO affectationDTO) {
 
         System.out.println("DV  -  dans le post  mapping");
