@@ -25,8 +25,8 @@ public class RepositoryCollaborateurImpl implements IRepositoryCollaborateur {
 
             return collaborateur;
         }
-        throw new NotFoundTransverseException("C", "Collaborateur par recherche UID non trouvé : Uid non trouvé = " + uid);
-
+     //   throw new NotFoundTransverseException("C", "Collaborateur par recherche UID non trouvé : Uid non trouvé = " + uid);
+        return null;
     }
 
     @Override
