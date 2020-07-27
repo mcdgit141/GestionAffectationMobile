@@ -3,6 +3,7 @@ package com.epita.filrouge.infrastructure.affectation;
 import com.epita.filrouge.domain.affectation.Affectation;
 import com.epita.filrouge.domain.affectation.IRepositoryAffectation;
 import com.epita.filrouge.domain.collaborateur.Collaborateur;
+import com.epita.filrouge.domain.exception.NotFoundException;
 import com.epita.filrouge.domain.iphone.Iphone;
 import com.epita.filrouge.domain.iphone.ModeleIphone;
 import com.epita.filrouge.infrastructure.collaborateur.CollaborateurEntity;
@@ -10,6 +11,8 @@ import com.epita.filrouge.infrastructure.iphone.IphoneEntity;
 import com.epita.filrouge.infrastructure.iphone.ModeleIphoneEntity;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
+
+import java.util.List;
 
 @Repository
 public class RepositoryAffectationImpl implements IRepositoryAffectation {
@@ -59,12 +62,21 @@ public class RepositoryAffectationImpl implements IRepositoryAffectation {
         affectationEntity.setNumeroAffectation(affectationACreer.getNumeroAffectation());
         affectationEntity.setDateAffectation(affectationACreer.getDateAffectation());
         affectationEntity.setDateRenouvellementPrevue(affectationACreer.getDateRenouvellementPrevue());
-        affectationEntity.setDateFin(affectationACreer.getDateAffectation());
+        affectationEntity.setDateFin(affectationACreer.getDateFin());
         affectationEntity.setCommentaire(affectationACreer.getCommentaire());
         affectationEntity.setMotifFin(affectationACreer.getMotifFin());
         affectationEntity.setCollaborateur(collaborateurEntity);
         affectationEntity.setIphone(iphoneEntity);
 
         iRepositoryJpaAffectation.save(affectationEntity);
+    }
+
+    @Override
+    public List<Affectation> rechercheAffectationByUid(String collaborateurUid) {
+        List<AffectationEntity> affectationsList = iRepositoryJpaAffectation.findByCollabarateurEntityUid(collaborateurUid);
+        if (affectationsList.size() != 0) {
+            return null; // à compléter ********************************
+        } else
+            throw new NotFoundException("AFFECTATION001", "pas d'affectation pour Uid suivant : " + collaborateurUid);
     }
 }

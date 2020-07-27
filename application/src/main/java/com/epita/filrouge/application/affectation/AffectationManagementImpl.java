@@ -9,6 +9,7 @@ import com.epita.filrouge.domain.iphone.Iphone;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Random;
 
 import java.time.LocalDate;
@@ -35,6 +36,12 @@ public class AffectationManagementImpl implements IAffectationManagement {
 //        if (user == null) {
 //            throw new NotFoundException(USER_NOT_FOUND, "Email " + userName + " not found");
 //        }
+
+        // implementation du contrôle de l'existence de cet UID dans la table des affectations car si déjà présent et affectation toujours en cours,
+        // on va obliger à clôturer avant de resaisir
+
+        List<Affectation> affectationDejaCreer = repositoryAffectation.rechercheAffectationByUid(collaborateurUid);
+
 
         Iphone iPhone = repositoryIphone.findByNumeroSerie(iPhoneNumeroSerie);
         System.out.println("application iPhone.getIphoneId() = " + iPhone.getIphoneId());

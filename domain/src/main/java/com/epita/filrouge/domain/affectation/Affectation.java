@@ -4,14 +4,13 @@ import com.epita.filrouge.domain.collaborateur.Collaborateur;
 import com.epita.filrouge.domain.iphone.Iphone;
 
 import java.time.LocalDate;
-import java.time.Year;
 
 public class Affectation {
 
     private Long numeroAffectation;
     private LocalDate dateAffectation;
     private LocalDate dateRenouvellementPrevue;
-    private LocalDate dateRenouvellementEffective;
+    private LocalDate dateFin;
     private String commentaire;
     private String motifFin;
 
@@ -39,8 +38,8 @@ public class Affectation {
         return dateRenouvellementPrevue;
     }
 
-    public LocalDate getDateRenouvellementEffective() {
-        return dateRenouvellementEffective;
+    public LocalDate getDateFin() {
+        return dateFin;
     }
 
     public String getCommentaire() {
