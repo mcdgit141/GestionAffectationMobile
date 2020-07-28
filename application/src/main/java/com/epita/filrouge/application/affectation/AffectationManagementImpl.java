@@ -40,7 +40,7 @@ public class AffectationManagementImpl implements IAffectationManagement {
         // implementation du contrôle de l'existence de cet UID dans la table des affectations car si déjà présent et affectation toujours en cours,
         // on va obliger à clôturer avant de resaisir
 
-        List<Affectation> affectationDejaCreer = repositoryAffectation.rechercheAffectationByUid(collaborateurUid);
+        //List<Affectation> affectationDejaCreer = repositoryAffectation.rechercheAffectationByUid(collaborateurUid);
 
 
         Iphone iPhone = repositoryIphone.findByNumeroSerie(iPhoneNumeroSerie);
@@ -62,5 +62,10 @@ public class AffectationManagementImpl implements IAffectationManagement {
     private static Long genererNumeroAffectation() {
         final Random random = new Random();
         return random.nextLong();
+    }
+
+    @Override
+    public List<Affectation> listerAffectation() {
+        return repositoryAffectation.listerAffectation();
     }
 }

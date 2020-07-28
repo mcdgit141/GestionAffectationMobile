@@ -22,8 +22,8 @@ public class CollaborateurEntity {
 
     private String numeroLigne;
 
-    @OneToMany(mappedBy = "collaborateur")
-    private List<AffectationEntity> affectationCollaborateur = new ArrayList<>();
+//    @OneToMany(mappedBy = "collaborateur")
+//    private List<AffectationEntity> affectationCollaborateur = new ArrayList<>();
 
     public String getNumeroLigne() {
         return numeroLigne;

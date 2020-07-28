@@ -8,5 +8,7 @@ public interface IRepositoryAffectation {
 
     public void affecter(Affectation affectationACreer);
 
-    List<Affectation> rechercheAffectationByUid(String collaborateurUid);
+    List<Affectation> listerAffectation();
+
+//    List<Affectation> rechercheAffectationByUid(String collaborateurUid);
 }

@@ -10,7 +10,8 @@ public interface IAffectationManagement {
 
     Affectation creerAffectation(String collaborateurUid, String iPhoneNumeroSerie, LocalDate dateAffectation, String numeroLigne, String commentaire);
 
-//     List<Affectation> listerAllAffection();
+    List<Affectation> listerAffectation();
+
 
 //    public <T> List<Affectation> listerAffection(T criteresDeFiltre );   // l'objet T est une liste contenant les critères de filtre transmis par le front
 

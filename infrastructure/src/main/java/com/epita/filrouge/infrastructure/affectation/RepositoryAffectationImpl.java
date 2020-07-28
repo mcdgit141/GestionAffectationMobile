@@ -12,10 +12,14 @@ import com.epita.filrouge.infrastructure.iphone.ModeleIphoneEntity;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Repository
 public class RepositoryAffectationImpl implements IRepositoryAffectation {
+
+    @Autowired
+    private AffectationEntityMapper affectationMapper;
 
     @Autowired
     IRepositoryJpaAffectation iRepositoryJpaAffectation;
@@ -72,11 +76,18 @@ public class RepositoryAffectationImpl implements IRepositoryAffectation {
     }
 
     @Override
-    public List<Affectation> rechercheAffectationByUid(String collaborateurUid) {
-        List<AffectationEntity> affectationsList = iRepositoryJpaAffectation.findByCollabarateurEntityUid(collaborateurUid);
-        if (affectationsList.size() != 0) {
-            return null; // à compléter ********************************
-        } else
-            throw new NotFoundException("AFFECTATION001", "pas d'affectation pour Uid suivant : " + collaborateurUid);
+    public List<Affectation> listerAffectation() {
+        return affectationMapper.mapToDomainList(iRepositoryJpaAffectation.findAll());
     }
+
+//    @Override
+//    public List<Affectation> rechercheAffectationByUid(String collaborateurUid) {
+//        List<AffectationEntity> affectationsList = iRepositoryJpaAffectation.findByCollabarateurEntityUid(collaborateurUid);
+//        if (affectationsList.size() != 0) {
+//            if (affectationsList.get)
+//            return null; // à compléter ********************************
+//        } else
+//            throw new NotFoundException("AFFECTATION001", "pas d'affectation pour Uid suivant : " + collaborateurUid);
+//    }
+
 }

@@ -17,9 +17,9 @@ public class Affectation {
     private Collaborateur collaborateur;
     private Iphone iphone;
 
-    public Affectation(Long numeroAffectation, LocalDate dateAttribution, String commentaire, Collaborateur collaborateur, Iphone iphone) {
+    public Affectation(Long numeroAffectation, LocalDate dateAffectation, String commentaire, Collaborateur collaborateur, Iphone iphone) {
         this.numeroAffectation = numeroAffectation;
-        this.dateAffectation = dateAttribution;
+        this.dateAffectation = dateAffectation;
         this.commentaire = commentaire;
         this.collaborateur = collaborateur;
         this.iphone = iphone;
@@ -62,5 +62,15 @@ public class Affectation {
         dateRenouvellementPrevue =  dateAffectation.plusYears(2);
     }
 
+    public void setDateFin(LocalDate dateFin) {
+        this.dateFin = dateFin;
+    }
 
+    public void setMotifFin(String motifFin) {
+        this.motifFin = motifFin;
+    }
+
+    public void setDateRenouvellementPrevue(LocalDate dateRenouvellementPrevue) {
+        this.dateRenouvellementPrevue = dateRenouvellementPrevue;
+    }
 }
