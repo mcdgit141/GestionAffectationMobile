@@ -14,8 +14,6 @@ public class CollaborateurFullDTO {
 //    private List<Affectation> affectationCollaborateur;
 
 
-
-
     public void setUid(String uid) {
         this.uid = uid;
     }

@@ -1,6 +1,8 @@
 package com.epita.filrouge.domain.collaborateur;
 
 import com.epita.filrouge.domain.affectation.Affectation;
+import com.epita.filrouge.domain.site.SiteExercice;
+import com.epita.filrouge.domain.uo.Uo;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -13,6 +15,8 @@ public class Collaborateur {
     private String nom;
     private String prenom;
     private String numeroLigne;
+    private Uo uo;
+    private SiteExercice siteExercice;
 
     private List<Affectation> affectationCollaborateur;
 
@@ -44,15 +48,23 @@ public class Collaborateur {
         return numeroLigne;
     }
 
-    public List<Affectation> getAffectation() {
-        return affectationCollaborateur;
-    }
-
     public Long getId() {
         return id;
     }
 
     public void setId(Long id) {
         this.id = id;
+    }
+
+    public Uo getUo() {
+        return uo;
+    }
+
+    public SiteExercice getSiteExercice() {
+        return siteExercice;
+    }
+
+    public List<Affectation> getAffectationCollaborateur() {
+        return affectationCollaborateur;
     }
 }
