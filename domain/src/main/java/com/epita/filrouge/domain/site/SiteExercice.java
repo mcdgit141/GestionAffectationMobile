@@ -13,7 +13,7 @@ public class SiteExercice {
         private LocalDate dateCreation;
         private LocalDate dateCloture;
 
-    public SiteExercice(String codeSite, String nomSite, String adressePostale1, String codePostal, String ville, String pays, LocalDate dateCreation) {
+    public SiteExercice(String codeSite, String nomSite, String adressePostale1, String codePostal, String ville, String pays, LocalDate creation, LocalDate dateCreation) {
         this.codeSite = codeSite;
         this.nomSite = nomSite;
         this.adressePostale1 = adressePostale1;

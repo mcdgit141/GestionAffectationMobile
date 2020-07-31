@@ -1,9 +1,8 @@
 package com.epita.filrouge.infrastructure.uo;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import com.epita.filrouge.infrastructure.site.SiteExerciceEntity;
+
+import javax.persistence.*;
 
 @Entity
 public class UoEntity {
@@ -13,9 +12,13 @@ public class UoEntity {
 
     private String codeUo;
     private String fonctionRattachement;
-    private String codeUoRattachementHierarchique;
+    private String codeUoParent;
     private String nomUsageUo;
     private String nomResponsableUo;
+
+    @OneToOne
+    @JoinColumn ( name="siteId" )
+    private SiteExerciceEntity siteExercice;
 
     public UoEntity() {
 
@@ -45,12 +48,12 @@ public class UoEntity {
         this.fonctionRattachement = fonctionRattachement;
     }
 
-    public String getCodeUoRattachementHierarchique() {
-        return codeUoRattachementHierarchique;
+    public String getCodeUoParent() {
+        return codeUoParent;
     }
 
-    public void setCodeUoRattachementHierarchique(String codeUoRattachementHierarchique) {
-        this.codeUoRattachementHierarchique = codeUoRattachementHierarchique;
+    public void setCodeUoParent(String codeUoParent) {
+        this.codeUoParent = codeUoParent;
     }
 
     public String getNomUsageUo() {
@@ -68,4 +71,13 @@ public class UoEntity {
     public void setNomResponsableUo(String nomResponsableUo) {
         this.nomResponsableUo = nomResponsableUo;
     }
+
+    public SiteExerciceEntity getSiteExercice() {
+        return siteExercice;
+    }
+
+    public void setSiteExercice(SiteExerciceEntity siteExercice) {
+        this.siteExercice = siteExercice;
+    }
+
 }

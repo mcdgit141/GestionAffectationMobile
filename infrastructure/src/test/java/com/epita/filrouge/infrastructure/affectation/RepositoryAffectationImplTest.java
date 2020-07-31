@@ -11,6 +11,7 @@ import com.epita.filrouge.infrastructure.collaborateur.RepositoryCollaborateurIm
 import com.epita.filrouge.infrastructure.iphone.IphoneEntity;
 import com.epita.filrouge.infrastructure.iphone.ModeleIphoneEntity;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -26,6 +27,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 @ExtendWith(SpringExtension.class)
 @DataJpaTest
+@Disabled
 class RepositoryAffectationImplTest {
 
     private static final Long COLLABORATEUR_ID = 1L;

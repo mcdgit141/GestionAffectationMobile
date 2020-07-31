@@ -16,7 +16,6 @@ public class IphoneEntityMapper extends AbstractMapper<Iphone, IphoneEntity> {
     private AffectationEntityMapper affectationMapper;
 
 
-
     @Override
     public Iphone mapToDomain(IphoneEntity entity) {
         return null;

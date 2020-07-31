@@ -23,6 +23,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 @ExtendWith(SpringExtension.class)
 @DataJpaTest
+@Disabled
 public class RepositoryIphoneImplTest {
 
     private IphoneEntity iphoneEntity3persiste;

@@ -16,7 +16,7 @@ public class Collaborateur {
     private String prenom;
     private String numeroLigne;
     private Uo uo;
-    private SiteExercice siteExercice;
+    /*private SiteExercice siteExercice;*/
 
     private List<Affectation> affectationCollaborateur;
 
@@ -60,9 +60,9 @@ public class Collaborateur {
         return uo;
     }
 
-    public SiteExercice getSiteExercice() {
+    /*public SiteExercice getSiteExercice() {
         return siteExercice;
-    }
+    }*/
 
     public List<Affectation> getAffectationCollaborateur() {
         return affectationCollaborateur;

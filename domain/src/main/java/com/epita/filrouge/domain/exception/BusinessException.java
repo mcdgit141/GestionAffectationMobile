@@ -2,7 +2,6 @@ package com.epita.filrouge.domain.exception;
 
 public abstract class BusinessException extends RuntimeException{
 
-    public static final String NOT_FOUND = "BUSINESS_NOT_FOUND";
     public static String ALREADY_EXIST_CODE = "ALREADYEXIST";
 
     private String code;

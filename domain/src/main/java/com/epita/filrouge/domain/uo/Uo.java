@@ -1,17 +1,20 @@
 package com.epita.filrouge.domain.uo;
 
+import com.epita.filrouge.domain.site.SiteExercice;
+
 public class Uo {
 
     private String codeUo;
     private String fonctionRattachement;
-    private String codeUoRattachementHierarchique;
+    private String codeUoParent;
     private String nomUsageUo;
     private String nomResponsableUo;
+    private SiteExercice siteExercice;
 
-    public Uo(String codeUo, String fonctionRattachement, String codeUoRattachementHierarchique, String nomUsageUo, String nomResponsableUo) {
+    public Uo(String codeUo, String fonctionRattachement, String codeUoParent, String nomUsageUo, String nomResponsableUo) {
         this.codeUo = codeUo;
         this.fonctionRattachement = fonctionRattachement;
-        this.codeUoRattachementHierarchique = codeUoRattachementHierarchique;
+        this.codeUoParent = codeUoParent;
         this.nomUsageUo = nomUsageUo;
         this.nomResponsableUo = nomResponsableUo;
     }
@@ -24,8 +27,8 @@ public class Uo {
         return fonctionRattachement;
     }
 
-    public String getCodeUoRattachementHierarchique() {
-        return codeUoRattachementHierarchique;
+    public String getCodeUoParent() {
+        return codeUoParent;
     }
 
     public String getNomUsageUo() {
@@ -34,5 +37,13 @@ public class Uo {
 
     public String getNomResponsableUo() {
         return nomResponsableUo;
+    }
+
+    public SiteExercice getSiteExercice() {
+        return siteExercice;
+    }
+
+    public void setSiteExercice(SiteExercice siteExercice) {
+        this.siteExercice = siteExercice;
     }
 }

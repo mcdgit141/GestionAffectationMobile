@@ -2,6 +2,7 @@ package com.epita.filrouge.infrastructure.collaborateur;
 
 import com.epita.filrouge.domain.collaborateur.Collaborateur;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -17,6 +18,7 @@ import static org.junit.jupiter.api.Assertions.*;
 
 @ExtendWith(SpringExtension.class)
 @DataJpaTest // permet de dire que l'on utilise h2 si trouve le package h2 dans le pom
+@Disabled
 class RepositoryCollaborateurImplTest {
 
     private CollaborateurEntity monCollaborateurPersiste;

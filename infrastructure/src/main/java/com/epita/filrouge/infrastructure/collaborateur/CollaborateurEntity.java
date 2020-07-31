@@ -27,9 +27,9 @@ public class CollaborateurEntity {
     @JoinColumn(name = "uoId", nullable = false)
     private UoEntity uo;
 
-    @ManyToOne(fetch = FetchType.LAZY  )
+    /*@ManyToOne(fetch = FetchType.LAZY  )
     @JoinColumn(name = "siteId", nullable = false)
-    private SiteExerciceEntity siteExercice;
+    private SiteExerciceEntity siteExercice;*/  //le site a été mis au niveau de l' UO
 
     @OneToMany(mappedBy = "collaborateur") //permet à partir de collaborateur de consulter les affectations
     private List<AffectationEntity> affectationCollaborateur = new ArrayList<>();
@@ -90,11 +90,10 @@ public class CollaborateurEntity {
         this.uo = uo;
     }
 
-    public SiteExerciceEntity getSiteExercice() {
+   /* public SiteExerciceEntity getSiteExercice() {
         return siteExercice;
     }
-
     public void setSiteExercice(SiteExerciceEntity siteExercice) {
         this.siteExercice = siteExercice;
-    }
+    }*/
 }
