@@ -6,7 +6,7 @@ public interface IRepositoryCollaborateur {
 
     public Collaborateur findByUid (String uid) throws NotFoundException;
 
-    public Collaborateur findByNumeroLigne (String numeroLigne);
+    public Collaborateur findByNumeroLigne (String numeroLigne) throws NotFoundException;
 
     public void miseAJourCollaborateur(Collaborateur collaborateur, String numLigne);
 

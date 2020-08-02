@@ -46,6 +46,10 @@ public class CollaborateurEntity {
 
     }
 
+    public void setAffectationCollaborateur(List<AffectationEntity> affectationCollaborateur) {
+        this.affectationCollaborateur = affectationCollaborateur;
+    }
+
     public void setUid(String uid) {
         this.uid = uid;
     }

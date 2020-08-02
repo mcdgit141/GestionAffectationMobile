@@ -20,11 +20,12 @@ public class Collaborateur {
 
     private List<Affectation> affectationCollaborateur;
 
-    public Collaborateur(String uid, String nom, String prenom, String numeroLigne) {
+    public Collaborateur(String uid, String nom, String prenom, String numeroLigne, Uo uo) {
         this.uid = uid;
         this.nom = nom;
         this.prenom = prenom;
         this.numeroLigne = numeroLigne;
+        this.uo = uo;
 
         this.affectationCollaborateur = new ArrayList<Affectation>();
     }
@@ -66,5 +67,9 @@ public class Collaborateur {
 
     public List<Affectation> getAffectationCollaborateur() {
         return affectationCollaborateur;
+    }
+
+    public void addAffectationCollaborateur(final Affectation affectation){
+        affectationCollaborateur.add(affectation);
     }
 }
