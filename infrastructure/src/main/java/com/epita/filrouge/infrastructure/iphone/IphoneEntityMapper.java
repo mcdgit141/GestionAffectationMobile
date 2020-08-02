@@ -43,6 +43,7 @@ public class IphoneEntityMapper extends AbstractMapper<Iphone, IphoneEntity> {
         iphoneEntity.setPrixIphone(iphone.getPrixIphone());
         iphoneEntity.setEtatIphone(iphone.getEtatIphone());
         iphoneEntity.setModeleIphoneEntity(getModeleIphoneEntity(iphone.getModeleIphone()));
+        iphoneEntity.setAffectationIphone(affectationMapper.mapToEntityList(iphone.getAffectationIphone()));
         return iphoneEntity;
     }
     private ModeleIphoneEntity getModeleIphoneEntity(ModeleIphone modeleIphone) {
