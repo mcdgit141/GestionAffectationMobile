@@ -21,16 +21,18 @@ public class RepositorySiteExerciceImpl implements IRepositorySiteExercice {
         final SiteExerciceEntity siteExerciceEntityEntity = repositoryJpaSiteExercice.findByNomSite(nomSite);
         if (siteExerciceEntityEntity != null) {
             return siteExerciceEntityMapper.mapToDomain(siteExerciceEntityEntity);
+        } else {
+            throw new NotFoundException("SE000001", "Ce nom de site d'exercice n'existe pas : " + nomSite);
         }
-        throw new NotFoundException("SE000001","Ce nom de site d'exercice n'existe pas : " + nomSite);
     }
     public SiteExercice findByCodeSite(final String codeSite) {
 
         final SiteExerciceEntity siteExerciceEntityEntity = repositoryJpaSiteExercice.findByCodeSite(codeSite);
         if (siteExerciceEntityEntity != null) {
             return siteExerciceEntityMapper.mapToDomain(siteExerciceEntityEntity);
+        } else {
+            throw new NotFoundException("SE000002", "Ce code site d'exercice n'existe pas : " + codeSite);
         }
-        throw new NotFoundException("SE000002","Ce code site d'exercice n'existe pas : " + codeSite);
     }
 }
 

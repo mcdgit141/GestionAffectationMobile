@@ -1,9 +1,7 @@
 package com.epita.filrouge.infrastructure.site;
 
-import com.epita.filrouge.domain.affectation.Affectation;
 import com.epita.filrouge.domain.site.SiteExercice;
 import com.epita.filrouge.infrastructure.AbstractMapper;
-import com.epita.filrouge.infrastructure.affectation.AffectationEntity;
 import org.springframework.stereotype.Component;
 
 @Component
@@ -13,7 +11,9 @@ public class SiteExerciceEntityMapper extends AbstractMapper<SiteExercice, SiteE
     public SiteExercice mapToDomain(final SiteExerciceEntity siteExerciceEntity) {
         final SiteExercice siteExercice = new SiteExercice(siteExerciceEntity.getCodeSite(),siteExerciceEntity.getNomSite(),
                 siteExerciceEntity.getAdressePostale1(), siteExerciceEntity.getCodePostal(),siteExerciceEntity.getVille(),
-                siteExerciceEntity.getPays(),siteExerciceEntity.getDateCreation(),siteExerciceEntity.getDateCloture());
+                siteExerciceEntity.getPays(),siteExerciceEntity.getDateCreation());
+
+        siteExercice.setDateCloture(siteExerciceEntity.getDateCloture());
 
         return siteExercice;
     }

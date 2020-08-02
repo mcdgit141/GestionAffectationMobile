@@ -1,14 +1,10 @@
 package com.epita.filrouge.infrastructure.iphone;
 
+import com.epita.filrouge.domain.exception.NotFoundException;
 import com.epita.filrouge.domain.iphone.Iphone;
-import com.epita.filrouge.domain.iphone.ModeleIphone;
-import com.epita.filrouge.domain.site.SiteExercice;
 import com.epita.filrouge.infrastructure.AbstractMapper;
 import com.epita.filrouge.infrastructure.affectation.AffectationEntity;
 import com.epita.filrouge.infrastructure.affectation.AffectationEntityMapper;
-import com.epita.filrouge.infrastructure.site.IRepositoryJpaSiteExercice;
-import com.epita.filrouge.infrastructure.site.SiteExerciceEntity;
-import com.epita.filrouge.infrastructure.site.SiteExerciceEntityMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -42,12 +38,17 @@ public class IphoneEntityMapper extends AbstractMapper<Iphone, IphoneEntity> {
         iphoneEntity.setNumeroSerie(iphone.getNumeroSerie());
         iphoneEntity.setPrixIphone(iphone.getPrixIphone());
         iphoneEntity.setEtatIphone(iphone.getEtatIphone());
-        iphoneEntity.setModeleIphoneEntity(getModeleIphoneEntity(iphone.getModeleIphone()));
+
+        String nomModeleMapper = iphone.getModeleIphone().getNomModele();
+        ModeleIphoneEntity modeleIphoneEntity = repositoryJpaModeleIphone.findByNomModele(nomModeleMapper);
+        if (modeleIphoneEntity != null) {
+            iphoneEntity.setModeleIphoneEntity(modeleIphoneEntity);
+        } else {
+            throw new NotFoundException("MI000001", "Ce nom de modele d'Iphone n'existe pas : " + nomModeleMapper);
+        }
+
         iphoneEntity.setAffectationIphone(affectationMapper.mapToEntityList(iphone.getAffectationIphone()));
         return iphoneEntity;
-    }
-    private ModeleIphoneEntity getModeleIphoneEntity(ModeleIphone modeleIphone) {
-        return repositoryJpaModeleIphone.findByNomModele(modeleIphone.getNomModele());
     }
 
 }

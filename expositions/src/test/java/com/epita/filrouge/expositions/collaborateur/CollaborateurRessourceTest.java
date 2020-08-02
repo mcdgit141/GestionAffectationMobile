@@ -2,6 +2,8 @@ package com.epita.filrouge.expositions.collaborateur;
 
 import com.epita.filrouge.application.collaborateur.ICollaborateurManagement;
 import com.epita.filrouge.domain.collaborateur.Collaborateur;
+import com.epita.filrouge.domain.site.SiteExercice;
+import com.epita.filrouge.domain.uo.Uo;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -14,6 +16,9 @@ import org.springframework.http.MediaType;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.web.servlet.MockMvc;
+
+import java.time.LocalDate;
+
 import static org.mockito.Mockito.when;
 import static org.mockito.ArgumentMatchers.any;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
@@ -25,6 +30,21 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @ExtendWith(SpringExtension.class)
 @WebMvcTest(CollaborateurRessource.class)
 class CollaborateurRessourceTest {
+    private static final Long SITE_ID = 1L;
+    private static final String CODE_SITE = "V2";
+    private static final String NOM_SITE = "Valmy2";
+    private static final String ADRESSE_POSTALE = "41, Rue de Valmy";
+    private static final String CODE_POSTAL = "93100";
+    private static final String VILLE = "MONTREUIL";
+    private static final String PAYS = "FRANCE";
+    private static final LocalDate DATE_CREATION = LocalDate.now();
+
+    private static final Long UO_ID = 1L;
+    private static final String CODE_UO = "SDI101";
+    private static final String FONCTION_RATTACHEMENT = "BDDF IT";
+    private static final String CODE_UO_PARENT = "SDI1";
+    private static final String NOM_USAGE_UO = "DATAHUB";
+    private static final String NOM_RESPONSABLE_UO = "Alfonse de la Renardiere";
 
     @Autowired
     private MockMvc mockMvc;
@@ -36,7 +56,12 @@ class CollaborateurRessourceTest {
     @WithMockUser(roles = {"TYPE1","TYPE2","ADMIN"})
     void DoitRetournerInformationsCollaborateur_SurSaisieUid () throws Exception {
         // Given
-        Collaborateur collaborateurRetour = new Collaborateur("425895", "Vivier", "D","0606060606");
+
+        SiteExercice siteExercice = new SiteExercice(CODE_SITE,NOM_SITE,ADRESSE_POSTALE,CODE_POSTAL,VILLE,PAYS,DATE_CREATION);
+        Uo uo = new Uo(CODE_UO,FONCTION_RATTACHEMENT,CODE_UO_PARENT,NOM_USAGE_UO,NOM_RESPONSABLE_UO);
+        uo.setSiteExercice(siteExercice);
+
+        Collaborateur collaborateurRetour = new Collaborateur("425895", "Vivier", "D","0606060606",uo);
         when(collaborateurManagement.findByUid("425895")).thenReturn(collaborateurRetour);
 
       //  when(collaborateurManagement.findByUid(any(String.class))).thenReturn(collaborateurRetour);
@@ -55,7 +80,10 @@ class CollaborateurRessourceTest {
     @WithMockUser(roles = {"USER"})
     void role_user_ne_peux_pas_chercher_de_collaborateur () throws Exception {
         // Given
-        Collaborateur collaborateurRetour = new Collaborateur("425895", "Vivier", "D","0606060606");
+        SiteExercice siteExercice = new SiteExercice(CODE_SITE,NOM_SITE,ADRESSE_POSTALE,CODE_POSTAL,VILLE,PAYS,DATE_CREATION);
+        Uo uo = new Uo(CODE_UO,FONCTION_RATTACHEMENT,CODE_UO_PARENT,NOM_USAGE_UO,NOM_RESPONSABLE_UO);
+        uo.setSiteExercice(siteExercice);
+        Collaborateur collaborateurRetour = new Collaborateur("425895", "Vivier", "D","0606060606",uo);
         when(collaborateurManagement.findByUid("425895")).thenReturn(collaborateurRetour);
 
         //  when(collaborateurManagement.findByUid(any(String.class))).thenReturn(collaborateurRetour);

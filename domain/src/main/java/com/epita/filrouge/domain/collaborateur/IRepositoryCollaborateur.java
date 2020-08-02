@@ -4,11 +4,10 @@ import com.epita.filrouge.domain.exception.NotFoundException;
 
 public interface IRepositoryCollaborateur {
 
-    public Collaborateur findByUid (String uid) throws NotFoundException;
+    Collaborateur findByUid (String uid) throws NotFoundException;
 
-    public Collaborateur findByNumeroLigne (String numeroLigne) throws NotFoundException;
+    Collaborateur findByNumeroLigne (String numeroLigne) throws NotFoundException;
 
-    public void miseAJourCollaborateur(Collaborateur collaborateur, String numLigne);
-
+    void miseAJourCollaborateur(Collaborateur collaborateur, String numLigne);
 
 }

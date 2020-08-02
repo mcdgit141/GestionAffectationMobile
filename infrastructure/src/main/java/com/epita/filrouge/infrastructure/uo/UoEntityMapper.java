@@ -1,6 +1,6 @@
 package com.epita.filrouge.infrastructure.uo;
 
-import com.epita.filrouge.domain.site.SiteExercice;
+import com.epita.filrouge.domain.exception.NotFoundException;
 import com.epita.filrouge.domain.uo.Uo;
 import com.epita.filrouge.infrastructure.AbstractMapper;
 import com.epita.filrouge.infrastructure.site.IRepositoryJpaSiteExercice;
@@ -35,14 +35,17 @@ public class UoEntityMapper extends AbstractMapper<Uo, UoEntity> {
         uoEntity.setCodeUoParent(uo.getCodeUoParent());
         uoEntity.setNomUsageUo(uo.getNomUsageUo());
         uoEntity.setNomResponsableUo(uo.getNomResponsableUo());
+
+        String codeSiteMapper = uoEntity.getSiteExercice().getCodeSite();
+
+        SiteExerciceEntity siteExerciceEntity = repositoryJpaSiteExercice.findByCodeSite(codeSiteMapper);
+        if (siteExerciceEntity != null) {
+            uoEntity.setSiteExercice(siteExerciceEntity);
+        } else {
+            throw new NotFoundException("SE000002", "Ce code site d'exercice n'existe pas : " + codeSiteMapper);
+        }
            
-        uoEntity.setSiteExercice(getSiteExerciceEntity(uo.getSiteExercice()));
-
-        return uoEntity;
-    }
-
-    private SiteExerciceEntity getSiteExerciceEntity(SiteExercice siteExercice) {
-        return repositoryJpaSiteExercice.findByCodeSite(siteExercice.getCodeSite());
+       return uoEntity;
     }
 
  }

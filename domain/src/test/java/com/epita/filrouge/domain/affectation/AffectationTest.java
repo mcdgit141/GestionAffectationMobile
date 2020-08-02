@@ -4,6 +4,8 @@ import com.epita.filrouge.domain.collaborateur.Collaborateur;
 import com.epita.filrouge.domain.iphone.EtatIphoneEnum;
 import com.epita.filrouge.domain.iphone.Iphone;
 import com.epita.filrouge.domain.iphone.ModeleIphone;
+import com.epita.filrouge.domain.site.SiteExercice;
+import com.epita.filrouge.domain.uo.Uo;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
@@ -14,6 +16,22 @@ import java.time.LocalDate;
 import static org.junit.jupiter.api.Assertions.*;
 @Disabled
 class AffectationTest {
+    private static final Long SITE_ID = 1L;
+    private static final String CODE_SITE = "V2";
+    private static final String NOM_SITE = "Valmy2";
+    private static final String ADRESSE_POSTALE = "41, Rue de Valmy";
+    private static final String CODE_POSTAL = "93100";
+    private static final String VILLE = "MONTREUIL";
+    private static final String PAYS = "FRANCE";
+    private static final LocalDate DATE_CREATION = LocalDate.now();
+
+    private static final Long UO_ID = 1L;
+    private static final String CODE_UO = "SDI101";
+    private static final String FONCTION_RATTACHEMENT = "BDDF IT";
+    private static final String CODE_UO_PARENT = "SDI1";
+    private static final String NOM_USAGE_UO = "DATAHUB";
+    private static final String NOM_RESPONSABLE_UO = "Alfonse de la Renardiere";
+
     private static final Long COLLABORATEUR_ID = 1L;
     private static final String COLLABORATEUR_UID = "666999";
     private static final String COLLABORATEUR_NOM = "Doe";
@@ -37,7 +55,11 @@ class AffectationTest {
         //Given
         LocalDate dateRevouvelementAttentue = AFFECTATION_DATE.plusYears(2);
 
-        Collaborateur collaborateur = new Collaborateur( COLLABORATEUR_UID, COLLABORATEUR_NOM, COLLABORATEUR_PRENOM, COLLABORATEUR_NUMEROLIGNE);
+        SiteExercice siteExercice = new SiteExercice(CODE_SITE,NOM_SITE,ADRESSE_POSTALE,CODE_POSTAL,VILLE,PAYS,DATE_CREATION);
+        Uo uo = new Uo(CODE_UO,FONCTION_RATTACHEMENT,CODE_UO_PARENT,NOM_USAGE_UO,NOM_RESPONSABLE_UO);
+        uo.setSiteExercice(siteExercice);
+
+        Collaborateur collaborateur = new Collaborateur( COLLABORATEUR_UID, COLLABORATEUR_NOM, COLLABORATEUR_PRENOM, COLLABORATEUR_NUMEROLIGNE,uo);
         collaborateur.setId(1L);
 
         ModeleIphone modeleIphone = new ModeleIphone(1L, MODELE_NOMMODELE);

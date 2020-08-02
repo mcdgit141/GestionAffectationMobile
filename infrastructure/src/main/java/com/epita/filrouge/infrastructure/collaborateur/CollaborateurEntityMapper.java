@@ -1,13 +1,10 @@
 package com.epita.filrouge.infrastructure.collaborateur;
 
 import com.epita.filrouge.domain.collaborateur.Collaborateur;
-import com.epita.filrouge.domain.site.SiteExercice;
-import com.epita.filrouge.domain.uo.Uo;
+import com.epita.filrouge.domain.exception.NotFoundException;
 import com.epita.filrouge.infrastructure.AbstractMapper;
 import com.epita.filrouge.infrastructure.affectation.AffectationEntity;
 import com.epita.filrouge.infrastructure.affectation.AffectationEntityMapper;
-import com.epita.filrouge.infrastructure.site.IRepositoryJpaSiteExercice;
-import com.epita.filrouge.infrastructure.site.SiteExerciceEntity;
 import com.epita.filrouge.infrastructure.uo.IRepositoryJpaUo;
 import com.epita.filrouge.infrastructure.uo.UoEntity;
 import com.epita.filrouge.infrastructure.uo.UoEntityMapper;
@@ -47,14 +44,17 @@ public class CollaborateurEntityMapper extends AbstractMapper<Collaborateur,Coll
         collaborateurEntity.setPrenom(collaborateur.getPrenom());
         collaborateurEntity.setNumeroLigne(collaborateur.getNumeroLigne());
 
-        collaborateurEntity.setUo(getUoEntity(collaborateur.getUo()));
+        String codeUoMapper = collaborateur.getUo().getCodeUo();
+        UoEntity uoEntity = repositoryJpaUo.findByCodeUo(codeUoMapper);
+        if (uoEntity != null) {
+            collaborateurEntity.setUo(uoEntity);
+        } else {
+            throw new NotFoundException("UO000001","Ce code UO n'existe pas : " + codeUoMapper);
+        }
 
         collaborateurEntity.setAffectationCollaborateur(affectationMapper.mapToEntityList(collaborateur.getAffectationCollaborateur()));
 
         return collaborateurEntity;
     }
 
-    private UoEntity getUoEntity(Uo uo) {
-        return repositoryJpaUo.findByCodeUo(uo.getCodeUo());
-    }
 }

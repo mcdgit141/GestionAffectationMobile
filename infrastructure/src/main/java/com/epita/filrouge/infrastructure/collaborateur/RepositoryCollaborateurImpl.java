@@ -3,6 +3,11 @@ package com.epita.filrouge.infrastructure.collaborateur;
 import com.epita.filrouge.domain.collaborateur.Collaborateur;
 import com.epita.filrouge.domain.collaborateur.IRepositoryCollaborateur;
 import com.epita.filrouge.domain.exception.NotFoundException;
+import com.epita.filrouge.domain.site.SiteExercice;
+import com.epita.filrouge.domain.uo.Uo;
+import com.epita.filrouge.infrastructure.site.IRepositoryJpaSiteExercice;
+import com.epita.filrouge.infrastructure.site.SiteExerciceEntity;
+import com.epita.filrouge.infrastructure.uo.UoEntity;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
@@ -12,19 +17,39 @@ public class RepositoryCollaborateurImpl implements IRepositoryCollaborateur {
     @Autowired
     private IRepositoryJpaCollaborateur repositoryJpaCollaborateur;
 
+    @Autowired
+    private IRepositoryJpaSiteExercice repositoryJpaSiteExercice;
+
     @Override
     public Collaborateur findByUid(String uid) {
 
         CollaborateurEntity collaborateurEntity =  repositoryJpaCollaborateur.findByUid(uid);
 
         if (collaborateurEntity != null) {
-            Collaborateur collaborateur = new Collaborateur(collaborateurEntity.getUid(), collaborateurEntity.getNom(), collaborateurEntity.getPrenom(), collaborateurEntity.getNumeroLigne());
+
+            UoEntity uoEntity = collaborateurEntity.getUo();
+            SiteExerciceEntity siteExerciceEntity = uoEntity.getSiteExercice();
+
+            SiteExercice siteExercice = new SiteExercice(siteExerciceEntity.getCodeSite(),siteExerciceEntity.getNomSite(),
+                                        siteExerciceEntity.getAdressePostale1(),siteExerciceEntity.getCodePostal(),
+                                        siteExerciceEntity.getVille(), siteExerciceEntity.getPays(), siteExerciceEntity.getDateCreation());
+
+            siteExercice.setDateCloture(siteExerciceEntity.getDateCloture());
+
+            Uo uo = new Uo(uoEntity.getCodeUo(),uoEntity.getFonctionRattachement(),uoEntity.getCodeUoParent(),
+                        uoEntity.getNomUsageUo(),uoEntity.getNomResponsableUo());
+
+            uo.setSiteExercice(siteExercice);
+
+            Collaborateur collaborateur = new Collaborateur(collaborateurEntity.getUid(), collaborateurEntity.getNom(), collaborateurEntity.getPrenom(),
+                                            collaborateurEntity.getNumeroLigne(),uo);
             collaborateur.setNumeroLigne(collaborateurEntity.getNumeroLigne());
             collaborateur.setId(collaborateurEntity.getCollaborateurId());
 
             return collaborateur;
+        } else {
+            throw new NotFoundException("CO000001", "Le collaborateur par recherche sur l'UID suivant est non trouvé = " + uid);
         }
-        throw new NotFoundException("CO000001", "Le collaborateur par recherche sur l'UID suivant est non trouvé = " + uid);
 
     }
 
@@ -33,9 +58,26 @@ public class RepositoryCollaborateurImpl implements IRepositoryCollaborateur {
 
         CollaborateurEntity collaborateurEntity = repositoryJpaCollaborateur.findByNumeroLigne(numeroLigne);
         if (collaborateurEntity != null) {
-            return new Collaborateur(collaborateurEntity.getUid(), collaborateurEntity.getNom(), collaborateurEntity.getPrenom(), collaborateurEntity.getNumeroLigne());
+
+            UoEntity uoEntity = collaborateurEntity.getUo();
+            SiteExerciceEntity siteExerciceEntity = uoEntity.getSiteExercice();
+
+            SiteExercice siteExercice = new SiteExercice(siteExerciceEntity.getCodeSite(),siteExerciceEntity.getNomSite(),
+                    siteExerciceEntity.getAdressePostale1(),siteExerciceEntity.getCodePostal(),
+                    siteExerciceEntity.getVille(), siteExerciceEntity.getPays(), siteExerciceEntity.getDateCreation());
+
+            siteExercice.setDateCloture(siteExerciceEntity.getDateCloture());
+
+            Uo uo = new Uo(uoEntity.getCodeUo(),uoEntity.getFonctionRattachement(),uoEntity.getCodeUoParent(),
+                    uoEntity.getNomUsageUo(),uoEntity.getNomResponsableUo());
+
+            uo.setSiteExercice(siteExercice);
+            return new Collaborateur(collaborateurEntity.getUid(), collaborateurEntity.getNom(), collaborateurEntity.getPrenom(),
+                    collaborateurEntity.getNumeroLigne(),uo);
+
+        } else {
+            throw new NotFoundException("CO000002", "Le collaborateur par recherche du numéro de ligne suivant est non trouvé  = " + numeroLigne);
         }
-        throw new NotFoundException("CO000002", "Le collaborateur par recherche du numéro de ligne suivant est non trouvé  = " + numeroLigne);
     }
 
     @Override
@@ -48,5 +90,9 @@ public class RepositoryCollaborateurImpl implements IRepositoryCollaborateur {
             repositoryJpaCollaborateur.save(monCollaborateurEntity);
         }
 
+    }
+
+    private SiteExerciceEntity getSiteExerciceEntity(SiteExercice siteExercice) {
+        return repositoryJpaSiteExercice.findByCodeSite(siteExercice.getCodeSite());
     }
 }
