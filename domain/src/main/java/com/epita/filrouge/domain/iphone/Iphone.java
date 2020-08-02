@@ -53,4 +53,9 @@ public class Iphone {
     public ModeleIphone getModeleIphone() {
         return modeleIphone;
     }
+
+    public void addAffectation(final Affectation affectation){
+        affectationIphone.add(affectation);
+            }
+
 }
