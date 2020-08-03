@@ -1,5 +1,7 @@
 package com.epita.filrouge.security;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -29,6 +31,8 @@ import java.io.IOException;
 @EnableGlobalMethodSecurity(securedEnabled = true, proxyTargetClass = true)
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
+    Logger monLogger = LoggerFactory.getLogger(SecurityConfig.class);
+
     @Autowired
     private UserDetailsService userDetailServiceImpl;
 
@@ -36,7 +40,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     @Override
     protected void configure(AuthenticationManagerBuilder auth) throws Exception {
         auth.userDetailsService(userDetailServiceImpl).passwordEncoder(passwordEncoder());
-        System.out.println("******* AUTHENTIFICATION ********");
+//        System.out.println("******* AUTHENTIFICATION ********");
+        monLogger.debug("******* AUTHENTIFICATION ********");
     }
 
     @Override
