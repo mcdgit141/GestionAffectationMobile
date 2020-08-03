@@ -3,7 +3,6 @@ package com.epita.filrouge.infrastructure.affectation;
 import com.epita.filrouge.domain.affectation.Affectation;
 import com.epita.filrouge.domain.affectation.IRepositoryAffectation;
 import com.epita.filrouge.domain.collaborateur.Collaborateur;
-import com.epita.filrouge.domain.exception.NotFoundException;
 import com.epita.filrouge.domain.iphone.Iphone;
 import com.epita.filrouge.domain.iphone.ModeleIphone;
 import com.epita.filrouge.infrastructure.collaborateur.CollaborateurEntity;
@@ -12,7 +11,6 @@ import com.epita.filrouge.infrastructure.iphone.ModeleIphoneEntity;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
-import java.util.ArrayList;
 import java.util.List;
 
 @Repository
@@ -80,14 +78,12 @@ public class RepositoryAffectationImpl implements IRepositoryAffectation {
         return affectationMapper.mapToDomainList(iRepositoryJpaAffectation.findAll());
     }
 
-//    @Override
-//    public List<Affectation> rechercheAffectationByUid(String collaborateurUid) {
-//        List<AffectationEntity> affectationsList = iRepositoryJpaAffectation.findByCollabarateurEntityUid(collaborateurUid);
-//        if (affectationsList.size() != 0) {
-//            if (affectationsList.get)
-//            return null; // à compléter ********************************
-//        } else
-//            throw new NotFoundException("AFFECTATION001", "pas d'affectation pour Uid suivant : " + collaborateurUid);
-//    }
+    @Override
+    public List<Affectation> rechercheAffectationByUid(String collaborateurUid) {
+
+        List<AffectationEntity> affectationsList = iRepositoryJpaAffectation.findByCollaborateurUid(collaborateurUid);
+
+        return affectationMapper.mapToDomainList(affectationsList);
+    }
 
 }

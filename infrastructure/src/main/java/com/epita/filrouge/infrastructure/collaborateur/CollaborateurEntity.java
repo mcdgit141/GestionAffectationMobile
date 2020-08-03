@@ -1,6 +1,5 @@
 package com.epita.filrouge.infrastructure.collaborateur;
 
-import com.epita.filrouge.domain.affectation.Affectation;
 import com.epita.filrouge.infrastructure.affectation.AffectationEntity;
 import com.epita.filrouge.infrastructure.site.SiteExerciceEntity;
 import com.epita.filrouge.infrastructure.uo.UoEntity;
@@ -10,6 +9,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Entity
+@Table(name ="Collaborateur")
 public class CollaborateurEntity {
 
     @Id

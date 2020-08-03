@@ -23,7 +23,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 @ExtendWith(SpringExtension.class)
 @DataJpaTest
-@Disabled
+//@Disabled
 public class RepositoryIphoneImplTest {
 
     private IphoneEntity iphoneEntity3persiste;
@@ -127,7 +127,7 @@ public class RepositoryIphoneImplTest {
         String iPhoneNumeroSerie = "010206";
 
         //when
-        repositoryIphoneImpl.miseAJourEtatIphone(iphone, iPhoneNumeroSerie);
+        repositoryIphoneImpl.miseAJourEtatIphone(iPhoneNumeroSerie);
 
         //then
         IphoneEntity iphoneEntityLu = entityManager.find(IphoneEntity.class,iphoneEntity3persiste.getIphoneId());

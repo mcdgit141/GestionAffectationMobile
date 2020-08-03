@@ -31,7 +31,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 @ExtendWith(SpringExtension.class)
 @DataJpaTest
-@Disabled
+//@Disabled
 class RepositoryAffectationImplTest {
 
     private static final Long SITE_ID = 1L;

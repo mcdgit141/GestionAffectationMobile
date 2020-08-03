@@ -4,6 +4,8 @@ import com.epita.filrouge.domain.affectation.Affectation;
 import com.epita.filrouge.domain.affectation.IRepositoryAffectation;
 import com.epita.filrouge.domain.collaborateur.Collaborateur;
 import com.epita.filrouge.domain.collaborateur.IRepositoryCollaborateur;
+import com.epita.filrouge.domain.exception.AffectationAlreadyExistException;
+import com.epita.filrouge.domain.exception.NotFoundException;
 import com.epita.filrouge.domain.iphone.IRepositoryIphone;
 import com.epita.filrouge.domain.iphone.Iphone;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -40,8 +42,17 @@ public class AffectationManagementImpl implements IAffectationManagement {
         // implementation du contrôle de l'existence de cet UID dans la table des affectations car si déjà présent et affectation toujours en cours,
         // on va obliger à clôturer avant de resaisir
 
-        //List<Affectation> affectationDejaCreer = repositoryAffectation.rechercheAffectationByUid(collaborateurUid);
+        List<Affectation> affectationDejaCree = repositoryAffectation.rechercheAffectationByUid(collaborateurUid);
 
+        if (affectationDejaCree != null) {
+            //faire la boucle for pour test de la date de fin. Si la date de fin est à NULL, l'affectation existe déjà donc refuser la création
+
+            for (final Affectation affectations : affectationDejaCree) {
+                if (affectations.getDateFin() == null) {
+                    throw new AffectationAlreadyExistException(affectations.getCollaborateur().getUid());
+                }
+            }
+        }
 
         Iphone iPhone = repositoryIphone.findByNumeroSerie(iPhoneNumeroSerie);
         System.out.println("application iPhone.getIphoneId() = " + iPhone.getIphoneId());
@@ -53,7 +64,7 @@ public class AffectationManagementImpl implements IAffectationManagement {
 
         repositoryCollaborateur.miseAJourCollaborateur(collaborateur, numeroLigne);
 
-        repositoryIphone.miseAJourEtatIphone(iPhone, iPhoneNumeroSerie);
+        repositoryIphone.miseAJourEtatIphone(iPhoneNumeroSerie);
 
         return affectationACreer;
 
