@@ -25,8 +25,11 @@ public class IphoneEntityMapper extends AbstractMapper<Iphone, IphoneEntity> {
     {
         final Iphone iphone = new Iphone(iphoneEntity.getIphoneId(),iphoneEntity.getNumeroSerie(),iphoneEntity.getPrixIphone(),
                 modeleIphoneMapper.mapToDomain(iphoneEntity.getModeleIphoneEntity()),iphoneEntity.getEtatIphone());
-        for (final AffectationEntity affectationEntity : iphoneEntity.getAffectationIphone()) {
-            iphone.addAffectation(affectationMapper.mapToDomain(affectationEntity));
+
+        if (iphoneEntity.getAffectationIphone() != null) {
+            for (final AffectationEntity affectationEntity : iphoneEntity.getAffectationIphone()) {
+                iphone.addAffectation(affectationMapper.mapToDomain(affectationEntity));
+            }
         }
 
         return iphone;

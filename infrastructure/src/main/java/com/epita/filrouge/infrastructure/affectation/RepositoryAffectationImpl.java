@@ -9,6 +9,8 @@ import com.epita.filrouge.domain.iphone.ModeleIphone;
 import com.epita.filrouge.infrastructure.collaborateur.CollaborateurEntity;
 import com.epita.filrouge.infrastructure.iphone.IphoneEntity;
 import com.epita.filrouge.infrastructure.iphone.ModeleIphoneEntity;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
@@ -20,6 +22,8 @@ import java.util.List;
 
 @Repository
 public class RepositoryAffectationImpl implements IRepositoryAffectation {
+
+    Logger monLogger = LoggerFactory.getLogger(RepositoryAffectationImpl.class);
 
     @Autowired
     private AffectationEntityMapper affectationMapper;
@@ -89,38 +93,47 @@ public class RepositoryAffectationImpl implements IRepositoryAffectation {
     @Override
     public List<Affectation> rechercheAffectationAvecFiltres(String uid, String nom, String codeUo, String nomUsageUo, String nomSite, String numeroLigneCollaborateur, String nomModeleIphone, LocalDate dateRenouvMin, LocalDate dateRenouvMax) {
         StringBuilder query = new StringBuilder();
-        query.append("select * from affectation where 1=1 ");
-        if (uid != null | uid !=""){
-            query.append("AND Affectation.Collaborateur.uid = {} " + uid);
+        query.append("select a from AffectationEntity a where 1=1 ");
+//        String query = "select a from AffectationEntity a where 1=1 ";
+        if (uid != null & uid !=""){
+            query.append(String.format("AND a.collaborateur.uid = '%s' ", uid ));
+
         }
-        if (nom != null | nom !=""){
-            query.append("AND Affectation.Collaborateur.nom = {} " + nom);
+        if (nom != null & nom !=""){
+            query.append(String.format("AND a.collaborateur.nom = '%s' ", nom ));
         }
-        if (codeUo != null | codeUo !=""){
-            query.append("AND Affectation.Collaborateur.uo.codeuo = {} " + codeUo);
+        if (codeUo != null & codeUo !=""){
+            query.append(String.format("AND a.collaborateur.uo.codeUo = '%s' ",  codeUo));
+
         }
-        if (nomUsageUo != null | nomUsageUo !=""){
-            query.append("AND affectation.collaborateur.uo.nomusageuo = {} " + nomUsageUo);
+        if (nomUsageUo != null & nomUsageUo !=""){
+            query.append(String.format("AND a.collaborateur.uo.nomUsageUo = '%s' ", nomUsageUo));
+
         }
-        if (nomSite != null | nomSite !=""){
-            query.append("AND affectation.collaborateur.uo.site.nomusagesite = {} " + nomSite);
+        if (nomSite != null & nomSite !=""){
+            query.append(String.format("AND a.collaborateur.uo.siteExercice.nomSite = '%s' ", nomSite ));
+
         }
-        if (numeroLigneCollaborateur != null | numeroLigneCollaborateur !=""){
-            query.append("AND affectation.collaborateur.numeroligne = {} " + numeroLigneCollaborateur);
+        if (numeroLigneCollaborateur != null & numeroLigneCollaborateur !=""){
+            query.append(String.format("AND a.collaborateur.numeroLigne = '%s' ", numeroLigneCollaborateur));
+
         }
-        if (nomModeleIphone != null | nomModeleIphone !=""){
-            query.append("AND affectation.iphone.modeleiphone.nommodele = {} " + nomModeleIphone);
+        if (nomModeleIphone != null & nomModeleIphone !=""){
+            query.append(String.format("AND a.iphone.modeleIphoneEntity.nomModele = '%s' ", nomModeleIphone));
         }
-        if (dateRenouvMin != null){
-            query.append("AND affectation.dateRenouvellementPrevue > {} " + dateRenouvMin);
+/*        if (dateRenouvMin != null){
+            query.format("AND Affectation.dateRenouvellementPrevue > '" + dateRenouvMin + "' ");
         }
         if (dateRenouvMax != null){
-            query.append("AND affectation.dateRenouvellementPrevue < {} " + dateRenouvMax);
-        }
+            query.format("AND Affectation.dateRenouvellementPrevue < '" + dateRenouvMax + "' ");
+        }*/
 
-        String maRequete = query.toString();
 
-        List<AffectationEntity> maListEntity = monEntityManager.createQuery(maRequete).getResultList();
+        String maRequeteConstruite = query.toString();
+        monLogger.debug(maRequeteConstruite);
+        System.out.println(maRequeteConstruite);
+
+        List<AffectationEntity> maListEntity = monEntityManager.createQuery(maRequeteConstruite).getResultList();
         List<Affectation> maList = new ArrayList<>();
         for (AffectationEntity affectationEntity : maListEntity) {
             maList.add(affectationMapper.mapToDomain(affectationEntity));

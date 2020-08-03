@@ -31,7 +31,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 @ExtendWith(SpringExtension.class)
 @DataJpaTest
-@Disabled
+//@Disabled
 class RepositoryAffectationImplTest {
 
     private static final Long SITE_ID = 1L;
@@ -68,6 +68,13 @@ class RepositoryAffectationImplTest {
     private static final LocalDate AFFECTATION_DATE = LocalDate.now();
     private static final String AFFECTATION_COMMENTAIRE = "Premeire affectation";
 
+    private SiteExerciceEntity monSiteExercicePersiste;
+    private UoEntity monUoEntityPersiste;
+    private CollaborateurEntity monCollaborateurEntityPersiste;
+    private ModeleIphoneEntity monModeleIphoneEntityPersiste;
+    private IphoneEntity monIphoneEntityPersiste;
+    private AffectationEntity monAffectationEntityPersiste;
+
     @Autowired
     RepositoryCollaborateurImpl repositoryCollaborateurImpl;
 
@@ -88,7 +95,7 @@ class RepositoryAffectationImplTest {
         siteExerciceEntity.setVille(VILLE);
         siteExerciceEntity.setPays(PAYS);
         siteExerciceEntity.setDateCreation(DATE_CREATION);
-        entityManager.persistAndFlush(siteExerciceEntity);
+        monSiteExercicePersiste = entityManager.persistAndFlush(siteExerciceEntity);
 
         UoEntity uoEntity = new UoEntity();
         uoEntity.setCodeUo(CODE_UO);
@@ -97,7 +104,7 @@ class RepositoryAffectationImplTest {
         uoEntity.setNomUsageUo(NOM_USAGE_UO);
         uoEntity.setNomResponsableUo(NOM_RESPONSABLE_UO);
         uoEntity.setSiteExercice(siteExerciceEntity);
-        entityManager.persistAndFlush(uoEntity);
+        monUoEntityPersiste = entityManager.persistAndFlush(uoEntity);
 
         CollaborateurEntity collaborateurEntity = new CollaborateurEntity();
         collaborateurEntity.setUid(COLLABORATEUR_UID);
@@ -105,18 +112,18 @@ class RepositoryAffectationImplTest {
         collaborateurEntity.setPrenom(COLLABORATEUR_PRENOM);
         collaborateurEntity.setNumeroLigne(COLLABORATEUR_NUMEROLIGNE);
         collaborateurEntity.setUo(uoEntity);
-        entityManager.persistAndFlush(collaborateurEntity);
+        monCollaborateurEntityPersiste = entityManager.persistAndFlush(collaborateurEntity);
 
         ModeleIphoneEntity modeleIphoneEntity = new ModeleIphoneEntity();
         modeleIphoneEntity.setNomModele(MODELE_NOMMODELE);
-        entityManager.persistAndFlush(modeleIphoneEntity);
+        monModeleIphoneEntityPersiste = entityManager.persistAndFlush(modeleIphoneEntity);
 
         IphoneEntity iPhoneEntity = new IphoneEntity();
         iPhoneEntity.setNumeroSerie(IPHONE_NUMEROSERIE);
         iPhoneEntity.setPrixIphone(IPHONE_PRIX);
         iPhoneEntity.setModeleIphoneEntity(modeleIphoneEntity);
         iPhoneEntity.setEtatIphone(IPHONE_ETAT);
-        entityManager.persistAndFlush(iPhoneEntity);
+        monIphoneEntityPersiste = entityManager.persistAndFlush(iPhoneEntity);
 
 //        System.out.println("collaborateurEntity.getCollaborateurId() = " + collaborateurEntity.getCollaborateurId());
 //        System.out.println("iPhoneEntity.getIphoneId() = " + iPhoneEntity.getIphoneId());
@@ -159,6 +166,25 @@ class RepositoryAffectationImplTest {
                 .getResultList();
         assertThat(colloaborateursRecus.size()).isEqualTo(1);
 
+    }
+
+    @Test
+    @DisplayName("Recherche Affectation par filtres")
+    public void Should_return_Affectations_giving_filters(){
+        //giving
+        AffectationEntity affectationEntity = new AffectationEntity();
+        affectationEntity.setCollaborateur(entityManager.find(CollaborateurEntity.class,entityManager.getId(monCollaborateurEntityPersiste)));
+        affectationEntity.setIphone(entityManager.find(IphoneEntity.class,entityManager.getId(monIphoneEntityPersiste)));
+        affectationEntity.setDateAffectation(LocalDate.now());
+        monAffectationEntityPersiste = entityManager.persist(affectationEntity);
+        //when
+
+        List<Affectation> result = repositoryAffectation.rechercheAffectationAvecFiltres(monCollaborateurEntityPersiste.getUid(),monCollaborateurEntityPersiste.getNom(),monUoEntityPersiste.getCodeUo(),
+                monUoEntityPersiste.getNomUsageUo(),monSiteExercicePersiste.getNomSite(),monCollaborateurEntityPersiste.getNumeroLigne(),monModeleIphoneEntityPersiste.getNomModele(),
+                null, null);
+
+        //then
+        assertThat(result.size()).isEqualTo(1);
     }
 
 

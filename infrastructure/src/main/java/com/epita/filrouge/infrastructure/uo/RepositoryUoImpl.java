@@ -28,7 +28,7 @@ public class RepositoryUoImpl implements IRepositoryUo{
 
     @Override
     public Uo findByNomUsage(String nomUsage) {
-        final UoEntity uoEntity = repositoryJpaUo.findByNomUsage(nomUsage);
+        final UoEntity uoEntity = repositoryJpaUo.findByNomUsageUo(nomUsage);
         if (uoEntity != null) {
             return uoEntityMapper.mapToDomain(uoEntity);
         } else {
