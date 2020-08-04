@@ -25,6 +25,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 @ExtendWith(SpringExtension.class)
 @WebMvcTest(IphoneRessource.class)
+@Disabled
 public class IphoneRessourceTest {
     @Autowired
     private MockMvc mockMvc;

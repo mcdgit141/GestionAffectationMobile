@@ -5,7 +5,7 @@ import com.epita.filrouge.domain.utilisateur.UtilisateurRoleEnum;
 import javax.persistence.*;
 
 @Entity
-@Table(name = "Utilisateur")
+//@Table(name ="Utilisateur")
 public class UtilisateurEntity {
 
     @Id

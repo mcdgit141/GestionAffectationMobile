@@ -14,7 +14,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 import java.time.LocalDate;
 
 import static org.junit.jupiter.api.Assertions.*;
-@Disabled
+//@Disabled
 class AffectationTest {
     private static final Long SITE_ID = 1L;
     private static final String CODE_SITE = "V2";

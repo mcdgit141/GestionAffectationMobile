@@ -22,9 +22,9 @@ public class RepositoryCollaborateurImpl implements IRepositoryCollaborateur {
 
     @Override
     public Collaborateur findByUid(String uid) {
-
+        System.out.println("RepositoryCollaborateurImpl--uid--:" + uid );
         CollaborateurEntity collaborateurEntity =  repositoryJpaCollaborateur.findByUid(uid);
-
+        System.out.println("RepositoryCollaborateurImpl--collaborateurEntity.getUid()--après recherche:" + collaborateurEntity.getUid() );
         if (collaborateurEntity != null) {
 
             UoEntity uoEntity = collaborateurEntity.getUo();
@@ -48,7 +48,7 @@ public class RepositoryCollaborateurImpl implements IRepositoryCollaborateur {
 
             return collaborateur;
         } else {
-            throw new NotFoundException("CO000001", "Le collaborateur par recherche sur l'UID suivant est non trouvé = " + uid);
+            throw new NotFoundException("Le collaborateur par recherche sur l'UID suivant est non trouvé = " + uid);
         }
 
     }
@@ -76,7 +76,7 @@ public class RepositoryCollaborateurImpl implements IRepositoryCollaborateur {
                     collaborateurEntity.getNumeroLigne(),uo);
 
         } else {
-            throw new NotFoundException("CO000002", "Le collaborateur par recherche du numéro de ligne suivant est non trouvé  = " + numeroLigne);
+            throw new NotFoundException("Le collaborateur par recherche du numéro de ligne suivant est non trouvé  = " + numeroLigne);
         }
     }
 

@@ -4,7 +4,7 @@ import com.epita.filrouge.domain.exception.NotFoundException;
 
 public interface IRepositoryUo {
 
-    public Uo findByCodeUo (String codeUo) throws NotFoundException;
+    Uo findByCodeUo (String codeUo) throws NotFoundException;
 
-    public Uo findByNomUsage (String nomUsage) throws NotFoundException;
+    Uo findByNomUsageUo (String nomUsageUo) throws NotFoundException;
 }

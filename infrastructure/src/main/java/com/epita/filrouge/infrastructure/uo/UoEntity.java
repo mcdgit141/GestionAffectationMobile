@@ -5,7 +5,7 @@ import com.epita.filrouge.infrastructure.site.SiteExerciceEntity;
 import javax.persistence.*;
 
 @Entity
-@Table(name = "Uo")
+//@Table(name ="Uo")
 public class UoEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

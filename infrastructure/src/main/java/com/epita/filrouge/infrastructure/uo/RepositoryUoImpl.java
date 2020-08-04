@@ -22,17 +22,17 @@ public class RepositoryUoImpl implements IRepositoryUo{
         if (uoEntity != null) {
             return uoEntityMapper.mapToDomain(uoEntity);
         } else {
-        throw new NotFoundException("UO000001","Ce code UO n'existe pas : " + codeUo);
+        throw new NotFoundException("Ce code UO n'existe pas : " + codeUo);
         }
     }
 
     @Override
-    public Uo findByNomUsage(String nomUsage) {
-        final UoEntity uoEntity = repositoryJpaUo.findByNomUsage(nomUsage);
+    public Uo findByNomUsageUo(String nomUsageUo) {
+        final UoEntity uoEntity = repositoryJpaUo.findByNomUsageUo(nomUsageUo);
         if (uoEntity != null) {
             return uoEntityMapper.mapToDomain(uoEntity);
         } else {
-            throw new NotFoundException("UO000002", "Ce nom d'UO n'existe pas : " + nomUsage);
+            throw new NotFoundException("Ce nom d'UO n'existe pas : " + nomUsageUo);
         }
     }
 

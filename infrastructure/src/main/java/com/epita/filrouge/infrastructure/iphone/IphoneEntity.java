@@ -4,10 +4,10 @@ import com.epita.filrouge.domain.iphone.EtatIphoneEnum;
 import com.epita.filrouge.infrastructure.affectation.AffectationEntity;
 
 import javax.persistence.*;
-import java.util.ArrayList;
 import java.util.List;
+
 @Entity
-@Table (name = "Iphone")
+//@Table(name ="Iphone")
 public class IphoneEntity {
 
     @Id

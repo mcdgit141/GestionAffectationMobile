@@ -24,7 +24,7 @@ import static org.junit.jupiter.api.Assertions.*;
 
 @ExtendWith(SpringExtension.class)
 @DataJpaTest // permet de dire que l'on utilise h2 si trouve le package h2 dans le pom
-@Disabled
+//@Disabled
 class RepositoryCollaborateurImplTest {
 
     private static final Long SITE_ID = 1L;
