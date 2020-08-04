@@ -46,12 +46,8 @@ public class CollaborateurEntityMapper extends AbstractMapper<Collaborateur,Coll
 
         String codeUoMapper = collaborateur.getUo().getCodeUo();
         UoEntity uoEntity = repositoryJpaUo.findByCodeUo(codeUoMapper);
-        if (uoEntity != null) {
-            collaborateurEntity.setUo(uoEntity);
-        } else {
-            throw new NotFoundException("UO000001","Ce code UO n'existe pas : " + codeUoMapper);
-        }
 
+        collaborateurEntity.setUo(uoEntity);
         collaborateurEntity.setAffectationCollaborateur(affectationMapper.mapToEntityList(collaborateur.getAffectationCollaborateur()));
 
         return collaborateurEntity;

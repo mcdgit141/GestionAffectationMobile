@@ -1,50 +1,64 @@
 package com.epita.filrouge.expositions.exception;
 
-import com.epita.filrouge.domain.exception.NotFoundException;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import com.epita.filrouge.domain.exception.BusinessException;
+import com.fasterxml.jackson.databind.exc.ValueInstantiationException;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.access.AccessDeniedException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
+import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
+
+import java.time.LocalDateTime;
+import java.util.LinkedHashMap;
+import java.util.Map;
 
 @ControllerAdvice
 public class ExceptionConversion extends ResponseEntityExceptionHandler {
 
-    private static final Logger LOG = LoggerFactory.getLogger(ExceptionConversion.class);
+    public static final String TIMESTAMP = "timestamp";
+    public static final String STATUS = "status";
+    public static final String ERROR = "error";
+    public static final String MESSAGE = "message";
+    public static final String CODE = "code";
 
-    @ExceptionHandler(NotFoundException.class)
-    public ResponseEntity<Object> notFoundExceptionHandler(final NotFoundException ex) {
-
-        final ErreurDTO error = new ErreurDTO();
-        error.setMessage(ex.getMessage());
-        error.setCode(ex.getCode());
-
-        return new ResponseEntity<>(error, HttpStatus.NOT_FOUND);
+    public ExceptionConversion(FooMapperExceptionCode mapperExceptionCode) {
+        this.mapperExceptionCode = mapperExceptionCode;
     }
 
-    @ExceptionHandler(AccessDeniedException.class)
-    public ResponseEntity<Object> accessDeniedExceptionHandler(final AccessDeniedException ex) {
+    @Autowired
+    private final FooMapperExceptionCode mapperExceptionCode;
 
-        final ErreurDTO error = new ErreurDTO();
-        error.setMessage(ex.getMessage());
+    @ExceptionHandler(ValueInstantiationException.class)
+    public ResponseEntity<Object> handleValueInstantiationException(ValueInstantiationException ex, WebRequest request) {
+        Map<String, Object> body = new LinkedHashMap<>();
+        body.put(TIMESTAMP, LocalDateTime.now());
+        body.put(STATUS, HttpStatus.BAD_REQUEST);
+        body.put(ERROR, "Command is not valid");
+        String message = ex.getLocalizedMessage();
+        body.put(MESSAGE, message.substring(message.indexOf("problem:")+9, message.indexOf('\n')));
+        return new ResponseEntity<>(body, HttpStatus.BAD_REQUEST);
+    }
 
-        LOG.error(ex.getMessage());
-
-        return new ResponseEntity<>(error, HttpStatus.FORBIDDEN);
+    @ExceptionHandler(BusinessException.class)
+    public ResponseEntity<Object> notFoundExceptionHandler(BusinessException businessException, WebRequest request) {
+        Map<String, Object> body = new LinkedHashMap<>();
+        body.put(TIMESTAMP, LocalDateTime.now());
+        body.put(CODE, businessException.getCode());
+        body.put(ERROR, "Business logic error");
+        body.put(MESSAGE, businessException.getLocalizedMessage());
+        return new ResponseEntity<>(body, mapperExceptionCode.mapCodeToHTTPCode(businessException.getCode()));
     }
 
     @ExceptionHandler(Exception.class)
-    public ResponseEntity<Object> defaultHandler(final Exception ex) {
-
-        final ErreurDTO error = new ErreurDTO();
-        error.setMessage(ex.getMessage());
-        error.setCode("99999");
-
-        LOG.error(ex.getMessage());
-
-        return new ResponseEntity<>(error, HttpStatus.INTERNAL_SERVER_ERROR);
+    public ResponseEntity<Object> handleUnknowException(Exception ex, WebRequest request) {
+        Map<String, Object> body = new LinkedHashMap<>();
+        body.put(TIMESTAMP, LocalDateTime.now());
+        body.put(STATUS, HttpStatus.INTERNAL_SERVER_ERROR);
+        body.put(ERROR, "Unknow Exception");
+        body.put(MESSAGE, ex.getLocalizedMessage());
+        return new ResponseEntity<>(body, HttpStatus.INTERNAL_SERVER_ERROR);
     }
 }
+

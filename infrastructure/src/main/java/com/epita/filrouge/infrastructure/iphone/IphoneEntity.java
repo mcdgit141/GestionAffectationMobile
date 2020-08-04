@@ -7,7 +7,7 @@ import javax.persistence.*;
 import java.util.List;
 
 @Entity
-@Table(name ="Iphone")
+//@Table(name ="Iphone")
 public class IphoneEntity {
 
     @Id

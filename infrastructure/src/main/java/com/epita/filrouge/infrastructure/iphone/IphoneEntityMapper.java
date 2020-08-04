@@ -25,10 +25,11 @@ public class IphoneEntityMapper extends AbstractMapper<Iphone, IphoneEntity> {
     {
         final Iphone iphone = new Iphone(iphoneEntity.getIphoneId(),iphoneEntity.getNumeroSerie(),iphoneEntity.getPrixIphone(),
                 modeleIphoneMapper.mapToDomain(iphoneEntity.getModeleIphoneEntity()),iphoneEntity.getEtatIphone());
-        for (final AffectationEntity affectationEntity : iphoneEntity.getAffectationIphone()) {
-            iphone.addAffectation(affectationMapper.mapToDomain(affectationEntity));
+        if (iphoneEntity.getAffectationIphone() != null) {
+            for (final AffectationEntity affectationEntity : iphoneEntity.getAffectationIphone()) {
+                iphone.addAffectation(affectationMapper.mapToDomain(affectationEntity));
+            }
         }
-
         return iphone;
     }
 
@@ -41,12 +42,7 @@ public class IphoneEntityMapper extends AbstractMapper<Iphone, IphoneEntity> {
 
         String nomModeleMapper = iphone.getModeleIphone().getNomModele();
         ModeleIphoneEntity modeleIphoneEntity = repositoryJpaModeleIphone.findByNomModele(nomModeleMapper);
-        if (modeleIphoneEntity != null) {
             iphoneEntity.setModeleIphoneEntity(modeleIphoneEntity);
-        } else {
-            throw new NotFoundException("MI000001", "Ce nom de modele d'Iphone n'existe pas : " + nomModeleMapper);
-        }
-
         iphoneEntity.setAffectationIphone(affectationMapper.mapToEntityList(iphone.getAffectationIphone()));
         return iphoneEntity;
     }

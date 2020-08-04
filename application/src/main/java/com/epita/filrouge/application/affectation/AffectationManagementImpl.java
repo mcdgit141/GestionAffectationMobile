@@ -4,8 +4,7 @@ import com.epita.filrouge.domain.affectation.Affectation;
 import com.epita.filrouge.domain.affectation.IRepositoryAffectation;
 import com.epita.filrouge.domain.collaborateur.Collaborateur;
 import com.epita.filrouge.domain.collaborateur.IRepositoryCollaborateur;
-import com.epita.filrouge.domain.exception.AffectationAlreadyExistException;
-import com.epita.filrouge.domain.exception.NotFoundException;
+import com.epita.filrouge.domain.exception.AllReadyExistException;
 import com.epita.filrouge.domain.iphone.IRepositoryIphone;
 import com.epita.filrouge.domain.iphone.Iphone;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -30,8 +29,10 @@ public class AffectationManagementImpl implements IAffectationManagement {
 
     @Override
     public Affectation creerAffectation(String collaborateurUid, String iPhoneNumeroSerie, LocalDate dateAffectation, String numeroLigne, String commentaire) {
-
+        System.out.println("creer affectation--collaborateurUid");
         Collaborateur collaborateur = repositoryCollaborateur.findByUid(collaborateurUid);
+
+        System.out.println("creer affectation--collaborateur.getCollaborateur().getUid----" + collaborateur.getUid());
 
         System.out.println("application collaborateur.getPrenom() = " + collaborateur.getPrenom());
         System.out.println("application collaborateur.getPrenom() = " + collaborateur.getId());
@@ -49,7 +50,7 @@ public class AffectationManagementImpl implements IAffectationManagement {
 
             for (final Affectation affectations : affectationDejaCree) {
                 if (affectations.getDateFin() == null) {
-                    throw new AffectationAlreadyExistException(affectations.getCollaborateur().getUid());
+                    throw new AllReadyExistException("L'affectation pour ce collaborateur existe déjà, merci de la clôturer au préalable : " + affectations.getCollaborateur().getUid());
                 }
             }
         }

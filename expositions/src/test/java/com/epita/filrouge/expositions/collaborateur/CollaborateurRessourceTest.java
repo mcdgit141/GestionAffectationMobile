@@ -29,6 +29,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 @ExtendWith(SpringExtension.class)
 @WebMvcTest(CollaborateurRessource.class)
+@Disabled
 class CollaborateurRessourceTest {
     private static final Long SITE_ID = 1L;
     private static final String CODE_SITE = "V2";

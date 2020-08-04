@@ -7,7 +7,7 @@ import javax.persistence.*;
 import java.time.LocalDate;
 
 @Entity
-@Table(name ="Affectation")
+//@Table(name ="Affectation")
 public class AffectationEntity {
 
     @Id

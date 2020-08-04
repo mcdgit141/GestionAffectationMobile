@@ -32,6 +32,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 @ExtendWith(SpringExtension.class)
 @WebMvcTest(AffectationRessource.class)
+@Disabled
 class AffectationRessourceTest {
     private static final Long COLLABORATEUR_ID = 1L;
     private static final String COLLABORATEUR_UID = "666999";
@@ -108,8 +109,5 @@ class AffectationRessourceTest {
                 .andExpect(status().isForbidden());
     }
 
-
-
-
-    }
+}
 

@@ -39,12 +39,8 @@ public class UoEntityMapper extends AbstractMapper<Uo, UoEntity> {
         String codeSiteMapper = uoEntity.getSiteExercice().getCodeSite();
 
         SiteExerciceEntity siteExerciceEntity = repositoryJpaSiteExercice.findByCodeSite(codeSiteMapper);
-        if (siteExerciceEntity != null) {
-            uoEntity.setSiteExercice(siteExerciceEntity);
-        } else {
-            throw new NotFoundException("SE000002", "Ce code site d'exercice n'existe pas : " + codeSiteMapper);
-        }
-           
+        uoEntity.setSiteExercice(siteExerciceEntity);
+
        return uoEntity;
     }
 

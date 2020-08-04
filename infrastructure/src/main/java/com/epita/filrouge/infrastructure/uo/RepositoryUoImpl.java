@@ -22,7 +22,7 @@ public class RepositoryUoImpl implements IRepositoryUo{
         if (uoEntity != null) {
             return uoEntityMapper.mapToDomain(uoEntity);
         } else {
-        throw new NotFoundException("UO000001","Ce code UO n'existe pas : " + codeUo);
+        throw new NotFoundException("Ce code UO n'existe pas : " + codeUo);
         }
     }
 
@@ -32,7 +32,7 @@ public class RepositoryUoImpl implements IRepositoryUo{
         if (uoEntity != null) {
             return uoEntityMapper.mapToDomain(uoEntity);
         } else {
-            throw new NotFoundException("UO000002", "Ce nom d'UO n'existe pas : " + nomUsageUo);
+            throw new NotFoundException("Ce nom d'UO n'existe pas : " + nomUsageUo);
         }
     }
 

@@ -21,7 +21,7 @@ public class RepositoryModeleIphoneImpl implements IRepositoryModeleIphone {
         if (modeleIphoneEntity != null) {
             return modeleIphoneEntityMapper.mapToDomain(modeleIphoneEntity);
         } else {
-            throw new NotFoundException("MI000001", "Ce nom de modele d'Iphone n'existe pas : " + nomModele);
+            throw new NotFoundException("Ce nom de modele d'Iphone n'existe pas : " + nomModele);
         }
     }
 }
