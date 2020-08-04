@@ -176,12 +176,13 @@ class RepositoryAffectationImplTest {
         affectationEntity.setCollaborateur(entityManager.find(CollaborateurEntity.class,entityManager.getId(monCollaborateurEntityPersiste)));
         affectationEntity.setIphone(entityManager.find(IphoneEntity.class,entityManager.getId(monIphoneEntityPersiste)));
         affectationEntity.setDateAffectation(LocalDate.now());
+        affectationEntity.setDateRenouvellementPrevue(LocalDate.now().plusYears(2));
         monAffectationEntityPersiste = entityManager.persist(affectationEntity);
         //when
 
         List<Affectation> result = repositoryAffectation.rechercheAffectationAvecFiltres(monCollaborateurEntityPersiste.getUid(),monCollaborateurEntityPersiste.getNom(),monUoEntityPersiste.getCodeUo(),
                 monUoEntityPersiste.getNomUsageUo(),monSiteExercicePersiste.getNomSite(),monCollaborateurEntityPersiste.getNumeroLigne(),monModeleIphoneEntityPersiste.getNomModele(),
-                LocalDate.now().minusDays(2), null);
+                LocalDate.now(), null);
 
         //then
         assertThat(result.size()).isEqualTo(1);

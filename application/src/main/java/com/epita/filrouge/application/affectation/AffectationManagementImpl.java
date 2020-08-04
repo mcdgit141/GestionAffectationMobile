@@ -88,11 +88,6 @@ public class AffectationManagementImpl implements IAffectationManagement {
 
     @Override
     public List<Affectation> listerAffection(String uid, String nom, String codeUo, String nomUsageUo, String nomSite, String numeroLigneCollaborateur, String nomModeleIphone, LocalDate dateRenouvMin, LocalDate dateRenouvMax) {
-//        List<Uo> uoList = repositoryUo.rechercheUoAvecFiltre(codeUo, nomUsageUo);
-
-//        List<Collaborateur> collaborateurList = repositoryCollaborateur.rechercheCollaborateurAvecFiltre(uid, nom, numeroLigneCollaborateur, uoList);
-
-
 
         return repositoryAffectation.rechercheAffectationAvecFiltres(uid,nom,codeUo,nomUsageUo,nomSite,numeroLigneCollaborateur,nomModeleIphone,dateRenouvMin,dateRenouvMax);
     }
