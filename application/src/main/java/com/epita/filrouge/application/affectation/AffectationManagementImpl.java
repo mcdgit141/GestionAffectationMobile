@@ -7,6 +7,8 @@ import com.epita.filrouge.domain.collaborateur.IRepositoryCollaborateur;
 import com.epita.filrouge.domain.exception.AllReadyExistException;
 import com.epita.filrouge.domain.iphone.IRepositoryIphone;
 import com.epita.filrouge.domain.iphone.Iphone;
+import com.epita.filrouge.domain.uo.IRepositoryUo;
+import com.epita.filrouge.domain.uo.Uo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -26,6 +28,9 @@ public class AffectationManagementImpl implements IAffectationManagement {
 
     @Autowired
     private IRepositoryIphone repositoryIphone;
+
+    @Autowired
+    private IRepositoryUo repositoryUo;
 
     @Override
     public Affectation creerAffectation(String collaborateurUid, String iPhoneNumeroSerie, LocalDate dateAffectation, String numeroLigne, String commentaire) {
@@ -79,5 +84,11 @@ public class AffectationManagementImpl implements IAffectationManagement {
     @Override
     public List<Affectation> listerAffectation() {
         return repositoryAffectation.listerAffectation();
+    }
+
+    @Override
+    public List<Affectation> listerAffection(String uid, String nom, String codeUo, String nomUsageUo, String nomSite, String numeroLigneCollaborateur, String nomModeleIphone, LocalDate dateRenouvMin, LocalDate dateRenouvMax) {
+
+        return repositoryAffectation.rechercheAffectationAvecFiltres(uid,nom,codeUo,nomUsageUo,nomSite,numeroLigneCollaborateur,nomModeleIphone,dateRenouvMin,dateRenouvMax);
     }
 }

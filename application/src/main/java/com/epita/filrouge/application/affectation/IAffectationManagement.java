@@ -15,7 +15,8 @@ public interface IAffectationManagement {
 
 //    public <T> List<Affectation> listerAffection(T criteresDeFiltre );   // l'objet T est une liste contenant les critères de filtre transmis par le front
 
-//    <T> List<Affectation> listerAffection( List<T> listeCriteresDeFiltre );
+    List<Affectation> listerAffection(String uid, String nom, String codeUo, String nomUsageUo, String nomSite,
+                                      String numeroLigneCollaborateur,String nomModeleIphone, LocalDate dateRenouvMin, LocalDate dateRenouvMax );
 
 
 }
