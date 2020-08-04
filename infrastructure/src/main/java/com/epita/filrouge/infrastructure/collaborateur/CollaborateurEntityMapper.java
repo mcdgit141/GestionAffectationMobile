@@ -28,9 +28,9 @@ public class CollaborateurEntityMapper extends AbstractMapper<Collaborateur,Coll
                                             collaborateurEntity.getPrenom(),collaborateurEntity.getNumeroLigne(),
                                             uoMapper.mapToDomain(collaborateurEntity.getUo()));
 
-        for (final AffectationEntity affectationEntity : collaborateurEntity.getAffectationCollaborateur()) {
-            collaborateur.addAffectationCollaborateur(affectationMapper.mapToDomain(affectationEntity));
-        }
+//        for (final AffectationEntity affectationEntity : collaborateurEntity.getAffectationCollaborateur()) {
+//            collaborateur.addAffectationCollaborateur(affectationMapper.mapToDomain(affectationEntity));
+//        }
 
         return collaborateur;
     }
@@ -48,7 +48,7 @@ public class CollaborateurEntityMapper extends AbstractMapper<Collaborateur,Coll
         UoEntity uoEntity = repositoryJpaUo.findByCodeUo(codeUoMapper);
 
         collaborateurEntity.setUo(uoEntity);
-        collaborateurEntity.setAffectationCollaborateur(affectationMapper.mapToEntityList(collaborateur.getAffectationCollaborateur()));
+//        collaborateurEntity.setAffectationCollaborateur(affectationMapper.mapToEntityList(collaborateur.getAffectationCollaborateur()));
 
         return collaborateurEntity;
     }

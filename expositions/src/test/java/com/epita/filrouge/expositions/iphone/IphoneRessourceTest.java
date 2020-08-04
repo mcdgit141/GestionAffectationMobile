@@ -7,6 +7,7 @@ import com.epita.filrouge.domain.iphone.EtatIphoneEnum;
 import com.epita.filrouge.domain.iphone.Iphone;
 import com.epita.filrouge.domain.iphone.ModeleIphone;
 import com.epita.filrouge.expositions.collaborateur.CollaborateurRessource;
+import com.epita.filrouge.expositions.exception.MapperExceptionCode;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -24,8 +25,8 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @ExtendWith(SpringExtension.class)
-@WebMvcTest(IphoneRessource.class)
-@Disabled
+@WebMvcTest({IphoneRessource.class, MapperExceptionCode.class})
+//@Disabled
 public class IphoneRessourceTest {
     @Autowired
     private MockMvc mockMvc;

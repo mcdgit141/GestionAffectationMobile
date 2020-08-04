@@ -5,7 +5,7 @@ import com.fasterxml.jackson.databind.exc.ValueInstantiationException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.http.converter.json.GsonBuilderUtils;
+import org.springframework.security.access.AccessDeniedException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.context.request.WebRequest;
@@ -16,7 +16,7 @@ import java.util.LinkedHashMap;
 import java.util.Map;
 
 @ControllerAdvice
-public class ExceptionConversion extends ResponseEntityExceptionHandler {
+public class ExceptionRetour extends ResponseEntityExceptionHandler {
 
     public static final String TIMESTAMP = "timestamp";
     public static final String STATUS = "status";
@@ -24,12 +24,11 @@ public class ExceptionConversion extends ResponseEntityExceptionHandler {
     public static final String MESSAGE = "message";
     public static final String CODE = "code";
 
-    public ExceptionConversion(FooMapperExceptionCode mapperExceptionCode) {
-        this.mapperExceptionCode = mapperExceptionCode;
+    public ExceptionRetour() {
     }
 
     @Autowired
-    private final FooMapperExceptionCode mapperExceptionCode;
+    private MapperExceptionCode mapperExceptionCode;
 
     @ExceptionHandler(ValueInstantiationException.class)
     public ResponseEntity<Object> handleValueInstantiationException(ValueInstantiationException ex, WebRequest request) {
@@ -38,7 +37,7 @@ public class ExceptionConversion extends ResponseEntityExceptionHandler {
         body.put(STATUS, HttpStatus.BAD_REQUEST);
         body.put(ERROR, "Command is not valid");
         String message = ex.getLocalizedMessage();
-        body.put(MESSAGE, message.substring(message.indexOf("problem:")+9, message.indexOf('\n')));
+        body.put(MESSAGE, message.substring(message.indexOf("problem:") + 9, message.indexOf('\n')));
         return new ResponseEntity<>(body, HttpStatus.BAD_REQUEST);
     }
 
@@ -60,6 +59,16 @@ public class ExceptionConversion extends ResponseEntityExceptionHandler {
         body.put(ERROR, "Unknow Exception");
         body.put(MESSAGE, ex.getLocalizedMessage());
         return new ResponseEntity<>(body, HttpStatus.INTERNAL_SERVER_ERROR);
+    }
+
+    @ExceptionHandler(AccessDeniedException.class)
+    public ResponseEntity<Object> accessDeniedExceptionHandler(AccessDeniedException ex, WebRequest request) {
+        Map<String, Object> body = new LinkedHashMap<>();
+        body.put(TIMESTAMP, LocalDateTime.now());
+        body.put(STATUS, HttpStatus.FORBIDDEN);
+        body.put(ERROR, "Acces interdit");
+        body.put(MESSAGE, ex.getLocalizedMessage());
+        return new ResponseEntity<>(body, HttpStatus.FORBIDDEN);
     }
 }
 

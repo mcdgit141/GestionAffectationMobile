@@ -169,6 +169,7 @@ class RepositoryAffectationImplTest {
     }
 
     @Test
+    @Disabled
     @DisplayName("Recherche Affectation par filtres")
     public void Should_return_Affectations_giving_filters(){
         //giving

@@ -25,11 +25,11 @@ public class IphoneEntityMapper extends AbstractMapper<Iphone, IphoneEntity> {
     {
         final Iphone iphone = new Iphone(iphoneEntity.getIphoneId(),iphoneEntity.getNumeroSerie(),iphoneEntity.getPrixIphone(),
                 modeleIphoneMapper.mapToDomain(iphoneEntity.getModeleIphoneEntity()),iphoneEntity.getEtatIphone());
-        if (iphoneEntity.getAffectationIphone() != null) {
-            for (final AffectationEntity affectationEntity : iphoneEntity.getAffectationIphone()) {
-                iphone.addAffectation(affectationMapper.mapToDomain(affectationEntity));
-            }
-        }
+//        if (iphoneEntity.getAffectationIphone() != null) {
+//            for (final AffectationEntity affectationEntity : iphoneEntity.getAffectationIphone()) {
+//                iphone.addAffectation(affectationMapper.mapToDomain(affectationEntity));
+//            }
+//        }
         return iphone;
     }
 
@@ -42,8 +42,10 @@ public class IphoneEntityMapper extends AbstractMapper<Iphone, IphoneEntity> {
 
         String nomModeleMapper = iphone.getModeleIphone().getNomModele();
         ModeleIphoneEntity modeleIphoneEntity = repositoryJpaModeleIphone.findByNomModele(nomModeleMapper);
-            iphoneEntity.setModeleIphoneEntity(modeleIphoneEntity);
-        iphoneEntity.setAffectationIphone(affectationMapper.mapToEntityList(iphone.getAffectationIphone()));
+        iphoneEntity.setModeleIphoneEntity(modeleIphoneEntity);
+
+//        iphoneEntity.setAffectationIphone(affectationMapper.mapToEntityList(iphone.getAffectationIphone()));
+
         return iphoneEntity;
     }
 

@@ -18,7 +18,7 @@ public class Collaborateur {
     private Uo uo;
     /*private SiteExercice siteExercice;*/
 
-    private List<Affectation> affectationCollaborateur;
+//    private List<Affectation> affectationCollaborateur;
 
     public Collaborateur(String uid, String nom, String prenom, String numeroLigne, Uo uo) {
         this.uid = uid;
@@ -27,7 +27,7 @@ public class Collaborateur {
         this.numeroLigne = numeroLigne;
         this.uo = uo;
 
-        this.affectationCollaborateur = new ArrayList<Affectation>();
+//        this.affectationCollaborateur = new ArrayList<Affectation>();
     }
 
     public void setNumeroLigne(String numeroLigne) {
@@ -65,11 +65,11 @@ public class Collaborateur {
         return siteExercice;
     }*/
 
-    public List<Affectation> getAffectationCollaborateur() {
-        return affectationCollaborateur;
-    }
-
-    public void addAffectationCollaborateur(final Affectation affectation){
-        affectationCollaborateur.add(affectation);
-    }
+//    public List<Affectation> getAffectationCollaborateur() {
+//        return affectationCollaborateur;
+//    }
+//
+//    public void addAffectationCollaborateur(final Affectation affectation){
+//        affectationCollaborateur.add(affectation);
+//    }
 }
