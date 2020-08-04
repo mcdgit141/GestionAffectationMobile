@@ -6,5 +6,5 @@ public interface IRepositoryJpaUo extends JpaRepository<UoEntity, Long> {
 
     UoEntity findByCodeUo (String codeUo);
 
-    UoEntity findByNomUsageUo(String nomUsage);
+    UoEntity findByNomUsage (String nomUsage);
 }
