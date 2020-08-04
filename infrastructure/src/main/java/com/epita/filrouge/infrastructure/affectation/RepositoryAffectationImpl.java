@@ -121,12 +121,12 @@ public class RepositoryAffectationImpl implements IRepositoryAffectation {
         if (nomModeleIphone != null & nomModeleIphone !=""){
             query.append(String.format("AND a.iphone.modeleIphoneEntity.nomModele = '%s' ", nomModeleIphone));
         }
-/*        if (dateRenouvMin != null){
-            query.format("AND Affectation.dateRenouvellementPrevue > '" + dateRenouvMin + "' ");
+        if (dateRenouvMin != null){
+            query.append("AND Affectation.dateRenouvellementPrevue > '" + dateRenouvMin + "' ");
         }
         if (dateRenouvMax != null){
-            query.format("AND Affectation.dateRenouvellementPrevue < '" + dateRenouvMax + "' ");
-        }*/
+            query.append("AND Affectation.dateRenouvellementPrevue < '" + dateRenouvMax + "' ");
+        }
 
 
         String maRequeteConstruite = query.toString();

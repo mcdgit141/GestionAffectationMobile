@@ -181,7 +181,7 @@ class RepositoryAffectationImplTest {
 
         List<Affectation> result = repositoryAffectation.rechercheAffectationAvecFiltres(monCollaborateurEntityPersiste.getUid(),monCollaborateurEntityPersiste.getNom(),monUoEntityPersiste.getCodeUo(),
                 monUoEntityPersiste.getNomUsageUo(),monSiteExercicePersiste.getNomSite(),monCollaborateurEntityPersiste.getNumeroLigne(),monModeleIphoneEntityPersiste.getNomModele(),
-                null, null);
+                LocalDate.now().minusDays(2), null);
 
         //then
         assertThat(result.size()).isEqualTo(1);
