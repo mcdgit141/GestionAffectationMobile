@@ -7,6 +7,7 @@ import com.epita.filrouge.domain.iphone.EtatIphoneEnum;
 import com.epita.filrouge.domain.iphone.Iphone;
 import com.epita.filrouge.domain.iphone.ModeleIphone;
 import com.epita.filrouge.expositions.collaborateur.CollaborateurRessource;
+import com.epita.filrouge.expositions.exception.FooMapperExceptionCode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.DisplayName;
@@ -31,8 +32,7 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @ExtendWith(SpringExtension.class)
-@WebMvcTest(AffectationRessource.class)
-@Disabled
+@WebMvcTest({AffectationRessource.class, FooMapperExceptionCode.class})
 class AffectationRessourceTest {
     private static final Long COLLABORATEUR_ID = 1L;
     private static final String COLLABORATEUR_UID = "666999";

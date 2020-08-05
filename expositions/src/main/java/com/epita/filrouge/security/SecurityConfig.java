@@ -43,6 +43,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     protected void configure(AuthenticationManagerBuilder auth) throws Exception {
         auth.userDetailsService(userDetailServiceImpl).passwordEncoder(passwordEncoder());
         monLogger.debug("******* AUTHENTIFICATION ********");
+        monLogger.debug("**** mdp admin crypté *** " + passwordEncoderBis().encode("admin"));
+        monLogger.debug("**** mdp password crypté *** " + passwordEncoderBis().encode("password"));
     }
 
     @Override
@@ -108,5 +110,11 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     @Bean
     public PasswordEncoder passwordEncoder() {
         return NoOpPasswordEncoder.getInstance();
+    }
+
+
+    @Bean
+    public PasswordEncoder passwordEncoderBis() {
+        return new BCryptPasswordEncoder();
     }
 }

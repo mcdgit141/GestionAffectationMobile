@@ -6,8 +6,10 @@ import com.epita.filrouge.domain.collaborateur.Collaborateur;
 import com.epita.filrouge.domain.iphone.Iphone;
 import com.epita.filrouge.domain.iphone.ModeleIphone;
 import com.epita.filrouge.infrastructure.collaborateur.CollaborateurEntity;
+import com.epita.filrouge.infrastructure.collaborateur.IRepositoryJpaCollaborateur;
 import com.epita.filrouge.infrastructure.iphone.IphoneEntity;
 import com.epita.filrouge.infrastructure.iphone.ModeleIphoneEntity;
+import com.epita.filrouge.infrastructure.uo.UoEntityMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,10 +29,19 @@ public class RepositoryAffectationImpl implements IRepositoryAffectation {
     @Autowired
     IRepositoryJpaAffectation iRepositoryJpaAffectation;
 
+    @Autowired
+    IRepositoryJpaCollaborateur iRepositoryJpaCollaborateur;
+
     Logger monLogger = LoggerFactory.getLogger(RepositoryAffectationImpl.class);
 
     @Autowired
     private EntityManager monEntityManager;
+
+    @Autowired
+    UoEntityMapper uoEntityMapper;
+
+    @Autowired
+    AffectationEntityMapper affectationEntityMapper;
 
     @Override
     public void affecter(Affectation affectationACreer) {
@@ -38,11 +49,16 @@ public class RepositoryAffectationImpl implements IRepositoryAffectation {
         System.out.println("affectationACreer = " + affectationACreer);
         Collaborateur collaborateur = affectationACreer.getCollaborateur();
         CollaborateurEntity collaborateurEntity = new CollaborateurEntity();
-        collaborateurEntity.setCollaborateurId(collaborateur.getId());
+//        collaborateurEntity.setCollaborateurId(collaborateur.getId());
         collaborateurEntity.setUid(collaborateur.getUid());
         collaborateurEntity.setNom(collaborateur.getNom());
         collaborateurEntity.setPrenom(collaborateur.getPrenom());
         collaborateurEntity.setNumeroLigne(collaborateur.getNumeroLigne());
+
+        collaborateurEntity.setUo(uoEntityMapper.mapToEntity(collaborateur.getUo()));
+        collaborateurEntity.setAffectationCollaborateur(affectationEntityMapper.mapToEntityList(collaborateur.getAffectationCollaborateur()));
+
+        CollaborateurEntity monCollaborateurEntity = iRepositoryJpaCollaborateur.findByUid(affectationACreer.getCollaborateur().getUid());
 
         System.out.println("collaborateurEntity.getCollaborateurId() = " + collaborateurEntity.getCollaborateurId());
         System.out.println("collaborateurEntity.getUid() = " + collaborateurEntity.getUid());
@@ -77,7 +93,8 @@ public class RepositoryAffectationImpl implements IRepositoryAffectation {
         affectationEntity.setDateFin(affectationACreer.getDateFin());
         affectationEntity.setCommentaire(affectationACreer.getCommentaire());
         affectationEntity.setMotifFin(affectationACreer.getMotifFin());
-        affectationEntity.setCollaborateur(collaborateurEntity);
+//        affectationEntity.setCollaborateur(collaborateurEntity);
+        affectationEntity.setCollaborateur(monCollaborateurEntity);
         affectationEntity.setIphone(iphoneEntity);
 
         iRepositoryJpaAffectation.save(affectationEntity);

@@ -35,11 +35,17 @@ public class UoEntityMapper extends AbstractMapper<Uo, UoEntity> {
         uoEntity.setCodeUoParent(uo.getCodeUoParent());
         uoEntity.setNomUsageUo(uo.getNomUsageUo());
         uoEntity.setNomResponsableUo(uo.getNomResponsableUo());
+        // Utilisation du mapper pour donner un siteExerciceEntity à l'UO entity
+        if (uo.getSiteExercice() != null) {
+            uoEntity.setSiteExercice(siteExerciceMapper.mapToEntity(uo.getSiteExercice()));
+        }
 
-        String codeSiteMapper = uoEntity.getSiteExercice().getCodeSite();
-
-        SiteExerciceEntity siteExerciceEntity = repositoryJpaSiteExercice.findByCodeSite(codeSiteMapper);
-        uoEntity.setSiteExercice(siteExerciceEntity);
+        // mise en commentaire du find, pour donner un siteExerciceEntity à l'UO entity
+//
+//        String codeSiteMapper = uoEntity.getSiteExercice().getCodeSite();
+//
+//        SiteExerciceEntity siteExerciceEntity = repositoryJpaSiteExercice.findByCodeSite(codeSiteMapper);
+//        uoEntity.setSiteExercice(siteExerciceEntity);
 
        return uoEntity;
     }

@@ -60,7 +60,7 @@ class AffectationTest {
         uo.setSiteExercice(siteExercice);
 
         Collaborateur collaborateur = new Collaborateur( COLLABORATEUR_UID, COLLABORATEUR_NOM, COLLABORATEUR_PRENOM, COLLABORATEUR_NUMEROLIGNE,uo);
-        collaborateur.setId(1L);
+//        collaborateur.setId(1L);
 
         ModeleIphone modeleIphone = new ModeleIphone(1L, MODELE_NOMMODELE);
         Iphone iphone = new Iphone(1L, IPHONE_NUMEROSERIE, IPHONE_PRIX, modeleIphone, IPHONE_ETAT);

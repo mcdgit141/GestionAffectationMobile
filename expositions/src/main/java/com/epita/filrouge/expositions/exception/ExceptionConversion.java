@@ -5,6 +5,7 @@ import com.fasterxml.jackson.databind.exc.ValueInstantiationException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.AccessDeniedException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.context.request.WebRequest;
@@ -59,6 +60,16 @@ public class ExceptionConversion extends ResponseEntityExceptionHandler {
         body.put(ERROR, "Unknow Exception");
         body.put(MESSAGE, ex.getLocalizedMessage());
         return new ResponseEntity<>(body, HttpStatus.INTERNAL_SERVER_ERROR);
+    }
+
+    @ExceptionHandler(AccessDeniedException.class)
+    public ResponseEntity<Object> accessDeniedExceptionHandler(AccessDeniedException ex, WebRequest request) {
+        Map<String, Object> body = new LinkedHashMap<>();
+        body.put(TIMESTAMP, LocalDateTime.now());
+        body.put(STATUS, HttpStatus.FORBIDDEN);
+        body.put(ERROR, "Acces interdit");
+        body.put(MESSAGE, ex.getLocalizedMessage());
+        return new ResponseEntity<>(body, HttpStatus.FORBIDDEN);
     }
 }
 

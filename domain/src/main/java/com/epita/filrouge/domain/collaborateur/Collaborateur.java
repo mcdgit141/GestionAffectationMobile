@@ -9,8 +9,6 @@ import java.util.List;
 
 public class Collaborateur {
 
-    private Long id;
-
     private String uid;
     private String nom;
     private String prenom;
@@ -47,14 +45,6 @@ public class Collaborateur {
 
     public String getNumeroLigne() {
         return numeroLigne;
-    }
-
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
     }
 
     public Uo getUo() {
