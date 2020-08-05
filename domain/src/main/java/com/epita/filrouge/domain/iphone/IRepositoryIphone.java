@@ -4,9 +4,9 @@ import com.epita.filrouge.domain.exception.NotFoundException;
 
 public interface IRepositoryIphone {
 
-    Iphone findByNomModele (String nomModele) throws NotFoundException;
+    Iphone findByNomModele (String nomModele);
 
-    Iphone findByNumeroSerie(String iPhoneNumeroSerie) throws NotFoundException;
+    Iphone findByNumeroSerie(String iPhoneNumeroSerie);
 
-    void miseAJourEtatIphone(String iphoneNumeroSerie);
+    void miseAJourEtatIphone(String iphoneNumeroSerie,  EtatIphoneEnum etatIphoneEnum);
 }

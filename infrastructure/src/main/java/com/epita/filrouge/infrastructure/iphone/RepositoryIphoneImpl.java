@@ -50,10 +50,10 @@ public class RepositoryIphoneImpl implements IRepositoryIphone {
     @Override
     // mise à jour de l'état de l'Iphone suite à une affectation. Pas besoin de retester l'état car seul le premier disponible est remonté
 
-    public void miseAJourEtatIphone(String iPhoneNumeroSerie){
+    public void miseAJourEtatIphone(String iPhoneNumeroSerie, EtatIphoneEnum etatIphoneEnum){
 
         IphoneEntity iphoneEntity = repositoryJpaIphone.findByNumeroSerie(iPhoneNumeroSerie);
-        iphoneEntity.setEtatIphone(EtatIphoneEnum.AFFECTE);
+        iphoneEntity.setEtatIphone(etatIphoneEnum);
 
         repositoryJpaIphone.save(iphoneEntity);
     }

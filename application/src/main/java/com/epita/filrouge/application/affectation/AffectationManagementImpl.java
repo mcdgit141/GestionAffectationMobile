@@ -5,10 +5,10 @@ import com.epita.filrouge.domain.affectation.IRepositoryAffectation;
 import com.epita.filrouge.domain.collaborateur.Collaborateur;
 import com.epita.filrouge.domain.collaborateur.IRepositoryCollaborateur;
 import com.epita.filrouge.domain.exception.AllReadyExistException;
+import com.epita.filrouge.domain.iphone.EtatIphoneEnum;
 import com.epita.filrouge.domain.iphone.IRepositoryIphone;
 import com.epita.filrouge.domain.iphone.Iphone;
 import com.epita.filrouge.domain.uo.IRepositoryUo;
-import com.epita.filrouge.domain.uo.Uo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -19,6 +19,8 @@ import java.time.LocalDate;
 
 @Service
 public class AffectationManagementImpl implements IAffectationManagement {
+
+    private static final EtatIphoneEnum etatIphoneEnum = EtatIphoneEnum.AFFECTE;
 
     @Autowired
     private IRepositoryAffectation repositoryAffectation;
@@ -70,7 +72,7 @@ public class AffectationManagementImpl implements IAffectationManagement {
 
         repositoryCollaborateur.miseAJourCollaborateur(collaborateur, numeroLigne);
 
-        repositoryIphone.miseAJourEtatIphone(iPhoneNumeroSerie);
+        repositoryIphone.miseAJourEtatIphone(iPhoneNumeroSerie, etatIphoneEnum);
 
         return affectationACreer;
 

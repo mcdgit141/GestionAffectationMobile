@@ -1,14 +1,9 @@
 package com.epita.filrouge.infrastructure.iphone;
 
-import com.epita.filrouge.domain.collaborateur.Collaborateur;
 import com.epita.filrouge.domain.iphone.EtatIphoneEnum;
 import com.epita.filrouge.domain.iphone.Iphone;
 import com.epita.filrouge.domain.iphone.ModeleIphone;
-import com.epita.filrouge.infrastructure.collaborateur.CollaborateurEntity;
-import com.epita.filrouge.infrastructure.collaborateur.RepositoryCollaborateurImpl;
-import javafx.beans.binding.When;
 import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -16,8 +11,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.boot.test.autoconfigure.orm.jpa.TestEntityManager;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
-
-import javax.persistence.EntityManager;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -123,11 +116,11 @@ public class RepositoryIphoneImplTest {
 
         System.out.println("Hello dans should_update_etatIphone_when_affecterIscalled");
         ModeleIphone modeleIphone9 = new ModeleIphone(3L, "Iphone9");
-        Iphone iphone = new Iphone(4L,"010206", 1400.00, modeleIphone9,EtatIphoneEnum.DISPONIBLE);
+        Iphone iphone = new Iphone(4L,"010206", 1400.00, modeleIphone9,EtatIphoneEnum.AFFECTE);
         String iPhoneNumeroSerie = "010206";
 
         //when
-        repositoryIphoneImpl.miseAJourEtatIphone(iPhoneNumeroSerie);
+        repositoryIphoneImpl.miseAJourEtatIphone(iPhoneNumeroSerie, iphone.getEtatIphone());
 
         //then
         IphoneEntity iphoneEntityLu = entityManager.find(IphoneEntity.class,iphoneEntity3persiste.getIphoneId());
