@@ -7,4 +7,6 @@ import java.util.List;
 public interface IRepositoryJpaAffectation extends JpaRepository<AffectationEntity , Long> {
 
       List<AffectationEntity> findByCollaborateurUid(String collaborateurUid);
+
+    List<AffectationEntity> findByIphoneNumeroSerie(String numeroSerie);
 }

@@ -25,8 +25,8 @@ public class IphoneEntity {
     @Enumerated(EnumType.STRING)
     private EtatIphoneEnum etatIphone;
 
-//    @OneToMany(mappedBy = "iphone" )
-//    private List<AffectationEntity> affectationIphone;
+    @OneToMany(mappedBy = "iphone" )
+    private List<AffectationEntity> affectationIphone;
 
     public IphoneEntity () {
 
@@ -73,12 +73,21 @@ public class IphoneEntity {
         return etatIphone;
     }
 
+    public List<AffectationEntity> getAffectationIphone() {
+        return affectationIphone;
+    }
+
+    public void setAffectationIphone(List<AffectationEntity> affectationIphone) {
+        this.affectationIphone = affectationIphone;
+    }
+
     @Override
     public String toString() {
         return "\n---------------\nEtat: "+ this.getEtatIphone().toString() +"\n"
                 + "Id: " + this.getIphoneId()  +"\n"
                 + "NumeroSerie: " + this.getNumeroSerie()  +"\n"
                 + "ModeleEntityIphone: " + this.getModeleIphoneEntity()  +"\n"
-                + "PrixIphone: " + this.getPrixIphone();
+                + "PrixIphone: " + this.getPrixIphone()
+                + "affectationIphone: " + this.getAffectationIphone();
     }
 }

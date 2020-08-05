@@ -7,6 +7,7 @@ import com.epita.filrouge.domain.iphone.Iphone;
 import com.epita.filrouge.domain.iphone.ModeleIphone;
 import com.epita.filrouge.infrastructure.collaborateur.CollaborateurEntity;
 import com.epita.filrouge.infrastructure.collaborateur.IRepositoryJpaCollaborateur;
+import com.epita.filrouge.infrastructure.iphone.IRepositoryJpaIphone;
 import com.epita.filrouge.infrastructure.iphone.IphoneEntity;
 import com.epita.filrouge.infrastructure.iphone.ModeleIphoneEntity;
 import com.epita.filrouge.infrastructure.uo.UoEntityMapper;
@@ -32,6 +33,9 @@ public class RepositoryAffectationImpl implements IRepositoryAffectation {
     @Autowired
     IRepositoryJpaCollaborateur iRepositoryJpaCollaborateur;
 
+    @Autowired
+    IRepositoryJpaIphone iRepositoryJpaIphone;
+
     Logger monLogger = LoggerFactory.getLogger(RepositoryAffectationImpl.class);
 
     @Autowired
@@ -47,43 +51,45 @@ public class RepositoryAffectationImpl implements IRepositoryAffectation {
     public void affecter(Affectation affectationACreer) {
 
         System.out.println("affectationACreer = " + affectationACreer);
-        Collaborateur collaborateur = affectationACreer.getCollaborateur();
-        CollaborateurEntity collaborateurEntity = new CollaborateurEntity();
-//        collaborateurEntity.setCollaborateurId(collaborateur.getId());
-        collaborateurEntity.setUid(collaborateur.getUid());
-        collaborateurEntity.setNom(collaborateur.getNom());
-        collaborateurEntity.setPrenom(collaborateur.getPrenom());
-        collaborateurEntity.setNumeroLigne(collaborateur.getNumeroLigne());
-
-        collaborateurEntity.setUo(uoEntityMapper.mapToEntity(collaborateur.getUo()));
-        collaborateurEntity.setAffectationCollaborateur(affectationEntityMapper.mapToEntityList(collaborateur.getAffectationCollaborateur()));
+//        Collaborateur collaborateur = affectationACreer.getCollaborateur();
+//        CollaborateurEntity collaborateurEntity = new CollaborateurEntity();
+////        collaborateurEntity.setCollaborateurId(collaborateur.getId());
+//        collaborateurEntity.setUid(collaborateur.getUid());
+//        collaborateurEntity.setNom(collaborateur.getNom());
+//        collaborateurEntity.setPrenom(collaborateur.getPrenom());
+//        collaborateurEntity.setNumeroLigne(collaborateur.getNumeroLigne());
+//
+//        collaborateurEntity.setUo(uoEntityMapper.mapToEntity(collaborateur.getUo()));
+//        collaborateurEntity.setAffectationCollaborateur(affectationEntityMapper.mapToEntityList(collaborateur.getAffectationCollaborateur()));
 
         CollaborateurEntity monCollaborateurEntity = iRepositoryJpaCollaborateur.findByUid(affectationACreer.getCollaborateur().getUid());
 
-        System.out.println("collaborateurEntity.getCollaborateurId() = " + collaborateurEntity.getCollaborateurId());
-        System.out.println("collaborateurEntity.getUid() = " + collaborateurEntity.getUid());
-        System.out.println("collaborateurEntity.getNom() = " + collaborateurEntity.getNom());
-        System.out.println("collaborateurEntity.getPrenom() = " + collaborateurEntity.getPrenom());
-        System.out.println("collaborateurEntity.getCollaborateurId() = " + collaborateurEntity.getCollaborateurId());
+//        System.out.println("collaborateurEntity.getCollaborateurId() = " + collaborateurEntity.getCollaborateurId());
+//        System.out.println("collaborateurEntity.getUid() = " + collaborateurEntity.getUid());
+//        System.out.println("collaborateurEntity.getNom() = " + collaborateurEntity.getNom());
+//        System.out.println("collaborateurEntity.getPrenom() = " + collaborateurEntity.getPrenom());
+//        System.out.println("collaborateurEntity.getCollaborateurId() = " + collaborateurEntity.getCollaborateurId());
 
-        Iphone iPhone = affectationACreer.getIphone();
-        ModeleIphone modeleIphone = iPhone.getModeleIphone();
+//        Iphone iPhone = affectationACreer.getIphone();
+//        ModeleIphone modeleIphone = iPhone.getModeleIphone();
 
-        ModeleIphoneEntity modeleIphoneEntity = new ModeleIphoneEntity();
-        modeleIphoneEntity.setNomModele(modeleIphone.getNomModele());
-        modeleIphoneEntity.setModeleId(modeleIphone.getModeleID());
-        System.out.println("infra modeleIphoneEntity.getModeleId() = " + modeleIphoneEntity.getModeleId());
-        System.out.println("infra modeleIphoneEntity.getNomModele() = " + modeleIphoneEntity.getNomModele());
+//        ModeleIphoneEntity modeleIphoneEntity = new ModeleIphoneEntity();
+//        modeleIphoneEntity.setNomModele(modeleIphone.getNomModele());
+//        modeleIphoneEntity.setModeleId(modeleIphone.getModeleID());
+//        System.out.println("infra modeleIphoneEntity.getModeleId() = " + modeleIphoneEntity.getModeleId());
+//        System.out.println("infra modeleIphoneEntity.getNomModele() = " + modeleIphoneEntity.getNomModele());
 
 
-        IphoneEntity iphoneEntity = new IphoneEntity();
-        iphoneEntity.setIphoneId(iPhone.getIphoneId());
-        iphoneEntity.setNumeroSerie(iPhone.getNumeroSerie());
-        iphoneEntity.setEtatIphone(iPhone.getEtatIphone());
-        iphoneEntity.setModeleIphoneEntity(modeleIphoneEntity);
-        System.out.println("iphoneEntity.getIphoneId() = " + iphoneEntity.getIphoneId());
-        System.out.println("iphoneEntity.getEtatIphone() = " + iphoneEntity.getEtatIphone());
-        System.out.println("iphoneEntity.getNumeroSerie() = " + iphoneEntity.getNumeroSerie());
+//        IphoneEntity iphoneEntity = new IphoneEntity();
+//        iphoneEntity.setIphoneId(iPhone.getIphoneId());
+//        iphoneEntity.setNumeroSerie(iPhone.getNumeroSerie());
+//        iphoneEntity.setEtatIphone(iPhone.getEtatIphone());
+//        iphoneEntity.setModeleIphoneEntity(modeleIphoneEntity);
+//        System.out.println("iphoneEntity.getIphoneId() = " + iphoneEntity.getIphoneId());
+//        System.out.println("iphoneEntity.getEtatIphone() = " + iphoneEntity.getEtatIphone());
+//        System.out.println("iphoneEntity.getNumeroSerie() = " + iphoneEntity.getNumeroSerie());
+
+        IphoneEntity monIphoneEntity = iRepositoryJpaIphone.findByNumeroSerie(affectationACreer.getIphone().getNumeroSerie());
 
         AffectationEntity affectationEntity = new AffectationEntity();
 
@@ -95,7 +101,7 @@ public class RepositoryAffectationImpl implements IRepositoryAffectation {
         affectationEntity.setMotifFin(affectationACreer.getMotifFin());
 //        affectationEntity.setCollaborateur(collaborateurEntity);
         affectationEntity.setCollaborateur(monCollaborateurEntity);
-        affectationEntity.setIphone(iphoneEntity);
+        affectationEntity.setIphone(monIphoneEntity);
 
         iRepositoryJpaAffectation.save(affectationEntity);
     }

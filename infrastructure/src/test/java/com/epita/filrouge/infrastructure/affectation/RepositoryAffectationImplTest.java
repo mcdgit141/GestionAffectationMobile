@@ -142,25 +142,20 @@ class RepositoryAffectationImplTest {
     @DisplayName("Doit créer un enregistrement Affectation")
     void ShouldCreateAnAffectation() {
 //        //Given
-        SiteExercice siteExercice = new SiteExercice(CODE_SITE,NOM_SITE,ADRESSE_POSTALE,CODE_POSTAL,VILLE,PAYS,DATE_CREATION);
-
-        Uo uo = new Uo(CODE_UO,FONCTION_RATTACHEMENT,CODE_UO_PARENT,NOM_USAGE_UO,NOM_RESPONSABLE_UO);
-        uo.setSiteExercice(siteExercice);
+//        SiteExercice siteExercice = new SiteExercice(CODE_SITE,NOM_SITE,ADRESSE_POSTALE,CODE_POSTAL,VILLE,PAYS,DATE_CREATION);
+//
+//        Uo uo = new Uo(CODE_UO,FONCTION_RATTACHEMENT,CODE_UO_PARENT,NOM_USAGE_UO,NOM_RESPONSABLE_UO);
+//        uo.setSiteExercice(siteExercice);
 
 //        Collaborateur collaborateur = new Collaborateur( COLLABORATEUR_UID, COLLABORATEUR_NOM, COLLABORATEUR_PRENOM, COLLABORATEUR_NUMEROLIGNE,uo);
 //        collaborateur.setId(1L);
-        Collaborateur collaborateur = collaborateurEntityMapper.mapToDomain(entityManager.find(CollaborateurEntity.class,
-                entityManager.getId(monCollaborateurEntityPersiste)));
-        System.out.println(collaborateur.getUid());
-        System.out.println(collaborateur.getPrenom());
-        System.out.println(collaborateur.getNom());
-        System.out.println(collaborateur.getNumeroLigne());
-        System.out.println(collaborateur.getUo());
-        System.out.println(collaborateur.getAffectationCollaborateur());
+        Collaborateur collaborateur = collaborateurEntityMapper.mapToDomain(monCollaborateurEntityPersiste);
+
 
 //        ModeleIphone modeleIphone = new ModeleIphone(1L, MODELE_NOMMODELE);
 //        Iphone iphone = new Iphone(1L, IPHONE_NUMEROSERIE, IPHONE_PRIX, modeleIphone, IPHONE_ETAT);
-        Iphone iphone = iphoneEntityMapper.mapToDomain(entityManager.find(IphoneEntity.class, entityManager.getId(monIphoneEntityPersiste)));
+//        Iphone iphone = iphoneEntityMapper.mapToDomain(entityManager.find(IphoneEntity.class, entityManager.getId(monIphoneEntityPersiste)));
+        Iphone iphone = iphoneEntityMapper.mapToDomain(monIphoneEntityPersiste);
 
         Affectation affectationACreer = new Affectation(AFFECTATION_NUMERO, AFFECTATION_DATE, AFFECTATION_COMMENTAIRE, collaborateur, iphone);
 
