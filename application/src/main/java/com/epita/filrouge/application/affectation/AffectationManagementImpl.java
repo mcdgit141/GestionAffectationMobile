@@ -40,7 +40,7 @@ public class AffectationManagementImpl implements IAffectationManagement {
         System.out.println("creer affectation--collaborateur.getCollaborateur().getUid----" + collaborateur.getUid());
 
         System.out.println("application collaborateur.getPrenom() = " + collaborateur.getPrenom());
-        System.out.println("application collaborateur.getPrenom() = " + collaborateur.getId());
+//        System.out.println("application collaborateur.getPrenom() = " + collaborateur.getId());
 //        if (user == null) {
 //            throw new NotFoundException(USER_NOT_FOUND, "Email " + userName + " not found");
 //        }

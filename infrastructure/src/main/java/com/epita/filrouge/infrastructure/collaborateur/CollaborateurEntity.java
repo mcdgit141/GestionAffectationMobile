@@ -31,8 +31,8 @@ public class CollaborateurEntity {
     @JoinColumn(name = "siteId", nullable = false)
     private SiteExerciceEntity siteExercice;*/  //le site a été mis au niveau de l' UO
 
-//    @OneToMany(mappedBy = "collaborateur") //permet à partir de collaborateur de consulter les affectations
-//    private List<AffectationEntity> affectationCollaborateur = new ArrayList<>();
+    @OneToMany(mappedBy = "collaborateur") //permet à partir de collaborateur de consulter les affectations
+    private List<AffectationEntity> affectationCollaborateur = new ArrayList<>();
 
     public String getNumeroLigne() {
         return numeroLigne;
@@ -86,7 +86,14 @@ public class CollaborateurEntity {
         this.uo = uo;
     }
 
-   /* public SiteExerciceEntity getSiteExercice() {
+    public List<AffectationEntity> getAffectationCollaborateur() {
+        return affectationCollaborateur;
+    }
+
+    public void setAffectationCollaborateur(List<AffectationEntity> affectationCollaborateur) {
+        this.affectationCollaborateur = affectationCollaborateur;
+    }
+    /* public SiteExerciceEntity getSiteExercice() {
         return siteExercice;
     }
     public void setSiteExercice(SiteExerciceEntity siteExercice) {

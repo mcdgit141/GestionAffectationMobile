@@ -9,8 +9,10 @@ import com.epita.filrouge.domain.iphone.ModeleIphone;
 import com.epita.filrouge.domain.site.SiteExercice;
 import com.epita.filrouge.domain.uo.Uo;
 import com.epita.filrouge.infrastructure.collaborateur.CollaborateurEntity;
+import com.epita.filrouge.infrastructure.collaborateur.CollaborateurEntityMapper;
 import com.epita.filrouge.infrastructure.collaborateur.RepositoryCollaborateurImpl;
 import com.epita.filrouge.infrastructure.iphone.IphoneEntity;
+import com.epita.filrouge.infrastructure.iphone.IphoneEntityMapper;
 import com.epita.filrouge.infrastructure.iphone.ModeleIphoneEntity;
 import com.epita.filrouge.infrastructure.site.SiteExerciceEntity;
 import com.epita.filrouge.infrastructure.uo.UoEntity;
@@ -84,6 +86,12 @@ class RepositoryAffectationImplTest {
     @Autowired
     TestEntityManager entityManager;
 
+    @Autowired
+    CollaborateurEntityMapper collaborateurEntityMapper;
+
+    @Autowired
+    IphoneEntityMapper iphoneEntityMapper;
+
     @BeforeEach
     public void init() {
 
@@ -134,18 +142,23 @@ class RepositoryAffectationImplTest {
     @DisplayName("Doit créer un enregistrement Affectation")
     void ShouldCreateAnAffectation() {
 //        //Given
-        SiteExercice siteExercice = new SiteExercice(CODE_SITE,NOM_SITE,ADRESSE_POSTALE,CODE_POSTAL,VILLE,PAYS,DATE_CREATION);
+//        SiteExercice siteExercice = new SiteExercice(CODE_SITE,NOM_SITE,ADRESSE_POSTALE,CODE_POSTAL,VILLE,PAYS,DATE_CREATION);
+//
+//        Uo uo = new Uo(CODE_UO,FONCTION_RATTACHEMENT,CODE_UO_PARENT,NOM_USAGE_UO,NOM_RESPONSABLE_UO);
+//        uo.setSiteExercice(siteExercice);
 
-        Uo uo = new Uo(CODE_UO,FONCTION_RATTACHEMENT,CODE_UO_PARENT,NOM_USAGE_UO,NOM_RESPONSABLE_UO);
-        uo.setSiteExercice(siteExercice);
+//        Collaborateur collaborateur = new Collaborateur( COLLABORATEUR_UID, COLLABORATEUR_NOM, COLLABORATEUR_PRENOM, COLLABORATEUR_NUMEROLIGNE,uo);
+//        collaborateur.setId(1L);
+        Collaborateur collaborateur = collaborateurEntityMapper.mapToDomain(monCollaborateurEntityPersiste);
 
-        Collaborateur collaborateur = new Collaborateur( COLLABORATEUR_UID, COLLABORATEUR_NOM, COLLABORATEUR_PRENOM, COLLABORATEUR_NUMEROLIGNE,uo);
-        collaborateur.setId(1L);
 
-        ModeleIphone modeleIphone = new ModeleIphone(1L, MODELE_NOMMODELE);
-        Iphone iphone = new Iphone(1L, IPHONE_NUMEROSERIE, IPHONE_PRIX, modeleIphone, IPHONE_ETAT);
+//        ModeleIphone modeleIphone = new ModeleIphone(1L, MODELE_NOMMODELE);
+//        Iphone iphone = new Iphone(1L, IPHONE_NUMEROSERIE, IPHONE_PRIX, modeleIphone, IPHONE_ETAT);
+//        Iphone iphone = iphoneEntityMapper.mapToDomain(entityManager.find(IphoneEntity.class, entityManager.getId(monIphoneEntityPersiste)));
+        Iphone iphone = iphoneEntityMapper.mapToDomain(monIphoneEntityPersiste);
 
         Affectation affectationACreer = new Affectation(AFFECTATION_NUMERO, AFFECTATION_DATE, AFFECTATION_COMMENTAIRE,collaborateur, iphone);
+
 
 
 ////        //When
