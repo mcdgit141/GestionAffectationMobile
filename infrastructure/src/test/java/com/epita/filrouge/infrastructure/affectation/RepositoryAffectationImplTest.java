@@ -169,7 +169,7 @@ class RepositoryAffectationImplTest {
     }
 
     @Test
-    @Disabled
+//    @Disabled
     @DisplayName("Recherche Affectation par filtres")
     public void Should_return_Affectations_giving_filters(){
         //giving
@@ -188,9 +188,4 @@ class RepositoryAffectationImplTest {
         //then
         assertThat(result.size()).isEqualTo(1);
     }
-
-
-
-
-
 }
