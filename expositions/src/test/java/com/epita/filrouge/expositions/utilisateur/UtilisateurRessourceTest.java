@@ -1,7 +1,7 @@
 package com.epita.filrouge.expositions.utilisateur;
 
 import com.epita.filrouge.application.utilisateur.IUtilisateurManagement;
-import com.epita.filrouge.expositions.exception.FooMapperExceptionCode;
+import com.epita.filrouge.expositions.exception.MapperExceptionCode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
@@ -20,7 +20,8 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @ExtendWith(SpringExtension.class)
-@WebMvcTest({UtilisateurRessource.class, FooMapperExceptionCode.class})
+@WebMvcTest({UtilisateurRessource.class, MapperExceptionCode.class})
+//@Disabled
 public class UtilisateurRessourceTest {
 
     @Autowired
@@ -70,8 +71,4 @@ public class UtilisateurRessourceTest {
                 .andExpect(status().isForbidden());    // controle de l'AUTORISATION (spring security)
 
     }
-
-
-
-
 }

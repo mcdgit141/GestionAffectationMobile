@@ -16,7 +16,7 @@ import java.util.LinkedHashMap;
 import java.util.Map;
 
 @ControllerAdvice
-public class ExceptionConversion extends ResponseEntityExceptionHandler {
+public class ExceptionRetour extends ResponseEntityExceptionHandler {
 
     public static final String TIMESTAMP = "timestamp";
     public static final String STATUS = "status";
@@ -24,12 +24,11 @@ public class ExceptionConversion extends ResponseEntityExceptionHandler {
     public static final String MESSAGE = "message";
     public static final String CODE = "code";
 
-    public ExceptionConversion(FooMapperExceptionCode mapperExceptionCode) {
-        this.mapperExceptionCode = mapperExceptionCode;
+    public ExceptionRetour() {
     }
 
     @Autowired
-    private final FooMapperExceptionCode mapperExceptionCode;
+    private MapperExceptionCode mapperExceptionCode;
 
     @ExceptionHandler(ValueInstantiationException.class)
     public ResponseEntity<Object> handleValueInstantiationException(ValueInstantiationException ex, WebRequest request) {
@@ -38,7 +37,7 @@ public class ExceptionConversion extends ResponseEntityExceptionHandler {
         body.put(STATUS, HttpStatus.BAD_REQUEST);
         body.put(ERROR, "Command is not valid");
         String message = ex.getLocalizedMessage();
-        body.put(MESSAGE, message.substring(message.indexOf("problem:")+9, message.indexOf('\n')));
+        body.put(MESSAGE, message.substring(message.indexOf("problem:") + 9, message.indexOf('\n')));
         return new ResponseEntity<>(body, HttpStatus.BAD_REQUEST);
     }
 

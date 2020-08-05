@@ -4,7 +4,7 @@ import com.epita.filrouge.application.collaborateur.ICollaborateurManagement;
 import com.epita.filrouge.domain.collaborateur.Collaborateur;
 import com.epita.filrouge.domain.site.SiteExercice;
 import com.epita.filrouge.domain.uo.Uo;
-import com.epita.filrouge.expositions.exception.FooMapperExceptionCode;
+import com.epita.filrouge.expositions.exception.MapperExceptionCode;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -29,7 +29,8 @@ import static org.junit.jupiter.api.Assertions.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @ExtendWith(SpringExtension.class)
-@WebMvcTest({CollaborateurRessource.class, FooMapperExceptionCode.class})
+@WebMvcTest({CollaborateurRessource.class, MapperExceptionCode.class})
+//@Disabled
 class CollaborateurRessourceTest {
     private static final Long SITE_ID = 1L;
     private static final String CODE_SITE = "V2";

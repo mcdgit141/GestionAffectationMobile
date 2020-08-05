@@ -22,8 +22,7 @@ public class UoEntityMapper extends AbstractMapper<Uo, UoEntity> {
     public Uo mapToDomain(final UoEntity uoEntity) {
         final Uo uo = new Uo(uoEntity.getCodeUo(),uoEntity.getFonctionRattachement(),uoEntity.getCodeUoParent(),
                             uoEntity.getNomUsageUo(),uoEntity.getNomResponsableUo());
-        siteExerciceMapper.mapToDomain(uoEntity.getSiteExercice());
-
+                            siteExerciceMapper.mapToDomain(uoEntity.getSiteExercice());
         return uo;
     }
 

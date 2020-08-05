@@ -34,6 +34,7 @@ public class AffectationEntityMapper extends AbstractMapper<Affectation,Affectat
                                                         affectationEntity.getCommentaire(),
                                                         collaborateurMapper.mapToDomain(affectationEntity.getCollaborateur()),
                                                         iphoneMapper.mapToDomain(affectationEntity.getIphone()));
+
         affectation.setDateFin(affectationEntity.getDateFin());
         affectation.setDateRenouvellementPrevue(affectationEntity.getDateRenouvellementPrevue());
         affectation.setMotifFin(affectationEntity.getMotifFin());
