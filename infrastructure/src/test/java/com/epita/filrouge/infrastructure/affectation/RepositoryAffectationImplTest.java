@@ -145,7 +145,8 @@ class RepositoryAffectationImplTest {
         ModeleIphone modeleIphone = new ModeleIphone(1L, MODELE_NOMMODELE);
         Iphone iphone = new Iphone(1L, IPHONE_NUMEROSERIE, IPHONE_PRIX, modeleIphone, IPHONE_ETAT);
 
-        Affectation affectationACreer = new Affectation(AFFECTATION_NUMERO, AFFECTATION_DATE, AFFECTATION_COMMENTAIRE, collaborateur, iphone);
+        Affectation affectationACreer = new Affectation(AFFECTATION_NUMERO, AFFECTATION_DATE, AFFECTATION_COMMENTAIRE,collaborateur, iphone);
+
 
 ////        //When
         repositoryAffectation.affecter(affectationACreer);
@@ -155,17 +156,6 @@ class RepositoryAffectationImplTest {
                 .setParameter("numeroAffectation", AFFECTATION_NUMERO)
                 .getResultList();
         assertThat(affectationRecues.size()).isEqualTo(1);
-
-        final List<?> IphonesRecus = entityManager.getEntityManager()
-                .createQuery("select o from IphoneEntity o")
-                .getResultList();
-        assertThat(IphonesRecus.size()).isEqualTo(1);
-
-        final List<?> colloaborateursRecus = entityManager.getEntityManager()
-                .createQuery("select o from CollaborateurEntity o")
-                .getResultList();
-        assertThat(colloaborateursRecus.size()).isEqualTo(1);
-
     }
 
     @Test
