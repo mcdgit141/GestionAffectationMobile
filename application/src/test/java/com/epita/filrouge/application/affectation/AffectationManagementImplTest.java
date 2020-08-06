@@ -72,8 +72,8 @@ public class AffectationManagementImplTest {
     @MockBean
     private IRepositoryCollaborateur repositoryCollaborateur;
 
-    @MockBean
-    private IRepositoryCollaborateur repositoryCollaborateur1;
+//    @MockBean
+//    private IRepositoryCollaborateur repositoryCollaborateur1;
 
     @MockBean
     private IRepositoryIphone repositoryIphone;
