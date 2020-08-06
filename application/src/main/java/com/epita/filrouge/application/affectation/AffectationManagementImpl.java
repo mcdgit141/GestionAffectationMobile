@@ -9,6 +9,8 @@ import com.epita.filrouge.domain.iphone.EtatIphoneEnum;
 import com.epita.filrouge.domain.iphone.IRepositoryIphone;
 import com.epita.filrouge.domain.iphone.Iphone;
 import com.epita.filrouge.domain.uo.IRepositoryUo;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -22,6 +24,8 @@ public class AffectationManagementImpl implements IAffectationManagement {
 
     private static final EtatIphoneEnum etatIphoneEnum = EtatIphoneEnum.AFFECTE;
 
+    Logger monLogger = LoggerFactory.getLogger(AffectationManagementImpl.class);
+
     @Autowired
     private IRepositoryAffectation repositoryAffectation;
 
@@ -31,18 +35,18 @@ public class AffectationManagementImpl implements IAffectationManagement {
     @Autowired
     private IRepositoryIphone repositoryIphone;
 
-    @Autowired
-    private IRepositoryUo repositoryUo;
+//    @Autowired
+//    private IRepositoryUo repositoryUo;
 
     @Override
     public Affectation creerAffectation(String collaborateurUid, String iPhoneNumeroSerie, LocalDate dateAffectation, String numeroLigne, String commentaire) {
-        System.out.println("creer affectation--collaborateurUid");
+
+        monLogger.debug("creer affectation--collaborateurUid");
         Collaborateur collaborateur = repositoryCollaborateur.findByUid(collaborateurUid);
 
-        System.out.println("creer affectation--collaborateur.getCollaborateur().getUid----" + collaborateur.getUid());
+        monLogger.debug("creer affectation--collaborateur.getCollaborateur().getUid---- {}" , collaborateur.getUid());
 
-        System.out.println("application collaborateur.getPrenom() = " + collaborateur.getPrenom());
-//        System.out.println("application collaborateur.getPrenom() = " + collaborateur.getId());
+        monLogger.debug("application collaborateur.getPrenom() = {} " , collaborateur.getPrenom());
 //        if (user == null) {
 //            throw new NotFoundException(USER_NOT_FOUND, "Email " + userName + " not found");
 //        }
@@ -63,7 +67,7 @@ public class AffectationManagementImpl implements IAffectationManagement {
         }
 
         Iphone iPhone = repositoryIphone.findByNumeroSerie(iPhoneNumeroSerie);
-        System.out.println("application iPhone.getIphoneId() = " + iPhone.getIphoneId());
+        monLogger.debug("application iPhone.getIphoneId() = {}}" ,iPhone.getIphoneId());
 //      test existence Iphone
         Long numeroAffectation = genererNumeroAffectation();
         Affectation affectationACreer = new Affectation(numeroAffectation, dateAffectation, commentaire,collaborateur, iPhone);
