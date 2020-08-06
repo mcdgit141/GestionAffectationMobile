@@ -47,7 +47,7 @@ public class UtilisateurRessourceTest {
         // Given
         UtilisateurDTO utilisateurDTO = new UtilisateurDTO();
         utilisateurDTO.setUid("a19390");
-        utilisateurDTO.setRoleUtilisateur(UtilisateurRoleEnum.ROLE_TYPE1);
+        utilisateurDTO.setRoleUtilisateur("type1");
 
         monObjetMapper = objectMapper.writeValueAsString(utilisateurDTO);
 
@@ -67,7 +67,7 @@ public class UtilisateurRessourceTest {
         // Given
         UtilisateurDTO utilisateurDTO = new UtilisateurDTO();
         utilisateurDTO.setUid("a19390");
-        utilisateurDTO.setRoleUtilisateur(UtilisateurRoleEnum.ROLE_TYPE1);
+        utilisateurDTO.setRoleUtilisateur("type1");
 
         monObjetMapper = objectMapper.writeValueAsString(utilisateurDTO);
 
@@ -89,7 +89,7 @@ public class UtilisateurRessourceTest {
         //given
         UtilisateurDTO utilisateurDTO = new UtilisateurDTO();
         utilisateurDTO.setUid("a19390");
-        utilisateurDTO.setRoleUtilisateur(UtilisateurRoleEnum.ROLE_TYPE1);
+        utilisateurDTO.setRoleUtilisateur("type1");
 
         monObjetMapper = objectMapper.writeValueAsString(utilisateurDTO);
 

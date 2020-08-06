@@ -20,7 +20,8 @@ public class UtilisateurMapper extends  AbstractMapper<Utilisateur, UtilisateurE
     public Utilisateur mapToDomain(UtilisateurEntity utilisateurEntity) {
         CollaborateurEntity collaborateurCorrespondant = repositoryJpaCollaborateur.findByUid(utilisateurEntity.getUid());
 
-        Utilisateur monUtilisateur = new Utilisateur(utilisateurEntity.getUid(), collaborateurCorrespondant.getNom(), collaborateurCorrespondant.getPrenom(),utilisateurEntity.getUserRole());
+        Utilisateur monUtilisateur = new Utilisateur(utilisateurEntity.getUid(), collaborateurCorrespondant.getNom(),
+                collaborateurCorrespondant.getPrenom(),utilisateurEntity.getUserRole());
         monUtilisateur.setPassword(utilisateurEntity.getPassword());
         monUtilisateur.setLogin(utilisateurEntity.getLogin());
 

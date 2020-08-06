@@ -41,19 +41,21 @@ public class UtilisateurManagementImplTest {
         String nom = "DUPOND";
         String prenom = "Francois";
         String numeroLigne = "0102030405";
-        UtilisateurRoleEnum role = UtilisateurRoleEnum.ROLE_TYPE1;
+        String roleRecu = "type1";
+        UtilisateurRoleEnum roleDomaine = UtilisateurRoleEnum.ROLE_TYPE1;
+
 
         SiteExercice siteExercice = new SiteExercice(CODE_SITE,NOM_SITE,ADRESSE_POSTALE,CODE_POSTAL,VILLE,PAYS,DATE_CREATION);
         Uo monUo = new Uo(CODE_UO,FONCTION_RATTACHEMENT,CODE_UO_PARENT,NOM_USAGE_UO,NOM_RESPONSABLE_UO);
         monUo.setSiteExercice(siteExercice);
         Collaborateur monCollaborateur = new Collaborateur(uid,nom, prenom,numeroLigne,monUo);
 
-        Utilisateur monUtilisateur = new Utilisateur(uid,nom,prenom,role);
+        Utilisateur monUtilisateur = new Utilisateur(uid,nom,prenom,roleDomaine);
 
         Mockito.when(collaborateurManagement.findByUid(uid)).thenReturn(monCollaborateur);
 
         //when
-        utilisateurManagement.enregistrerUtilisateur(uid,role);
+        utilisateurManagement.enregistrerUtilisateur(uid,roleRecu);
 
         //then
         Mockito.verify(collaborateurManagement, Mockito.times(1)).findByUid(uid);

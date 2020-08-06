@@ -1,11 +1,10 @@
 package com.epita.filrouge.application.utilisateur;
 
 import com.epita.filrouge.domain.utilisateur.Utilisateur;
-import com.epita.filrouge.domain.utilisateur.UtilisateurRoleEnum;
 
 public interface IUtilisateurManagement {
 
-    void enregistrerUtilisateur(String uid, UtilisateurRoleEnum profil);
+    void enregistrerUtilisateur(String uid, String profil);
 
     Utilisateur rechercheUtilisateur(String login);
 }
