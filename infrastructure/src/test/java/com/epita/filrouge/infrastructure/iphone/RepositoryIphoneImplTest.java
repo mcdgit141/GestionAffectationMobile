@@ -73,7 +73,7 @@ public class RepositoryIphoneImplTest {
        // Given
 
         // When
-       Iphone iphoneRetour = repositoryIphoneImpl.findByNomModele("Iphone8");
+       Iphone iphoneRetour = repositoryIphoneImpl.rechercheIphoneParNomModele("Iphone8");
 
         // Then
        assertThat(iphoneRetour.getNumeroSerie()).isEqualTo("010203");
@@ -87,7 +87,7 @@ public class RepositoryIphoneImplTest {
         // Given
 
         // When
-        Iphone iphoneRetour = repositoryIphoneImpl.findByNomModele("Iphone10");
+        Iphone iphoneRetour = repositoryIphoneImpl.rechercheIphoneParNomModele("Iphone10");
 
         // Then
         assertThat(iphoneRetour.getNumeroSerie()).isEqualTo("010205");
@@ -100,7 +100,7 @@ public class RepositoryIphoneImplTest {
         //Given
 
         //When
-        Iphone iphoneRetour = repositoryIphoneImpl.findByNumeroSerie("010204");
+        Iphone iphoneRetour = repositoryIphoneImpl.rechercheIphoneParNumeroSerie("010204");
 
         //then
         assertThat(iphoneRetour.getNumeroSerie()).isEqualTo("010204");

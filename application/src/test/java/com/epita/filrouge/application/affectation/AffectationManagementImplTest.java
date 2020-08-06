@@ -16,7 +16,6 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 
 import org.mockito.Mockito;
-import org.mockito.stubbing.OngoingStubbing;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
@@ -73,9 +72,6 @@ public class AffectationManagementImplTest {
     private IRepositoryCollaborateur repositoryCollaborateur;
 
     @MockBean
-    private IRepositoryCollaborateur repositoryCollaborateur1;
-
-    @MockBean
     private IRepositoryIphone repositoryIphone;
 
     @MockBean
@@ -95,14 +91,14 @@ public class AffectationManagementImplTest {
         Iphone iphone = new Iphone(1L, IPHONE_NUMEROSERIE, IPHONE_PRIX, modeleIphone, IPHONE_ETAT);
 
         when(repositoryCollaborateur.findByUid(COLLABORATEUR_UID)).thenReturn(collaborateur);
-        when(repositoryIphone.findByNumeroSerie(IPHONE_NUMEROSERIE)).thenReturn(iphone);
+        when(repositoryIphone.rechercheIphoneParNumeroSerie(IPHONE_NUMEROSERIE)).thenReturn(iphone);
 
         //When
         affectationManagementImpl.creerAffectation(COLLABORATEUR_UID,IPHONE_NUMEROSERIE,AFFECTATION_DATE,COLLABORATEUR_NUMEROLIGNE,AFFECTATION_COMMENTAIRE);
 
         //Then
         verify(repositoryCollaborateur, Mockito.times(1)).findByUid(COLLABORATEUR_UID);
-        verify(repositoryIphone,Mockito.times(1)).findByNumeroSerie(IPHONE_NUMEROSERIE);
+        verify(repositoryIphone,Mockito.times(1)).rechercheIphoneParNumeroSerie(IPHONE_NUMEROSERIE);
         verify(repositoryAffectation,Mockito.times(1)).affecter(any(Affectation.class));
         verify(repositoryCollaborateur, Mockito.times(1)).miseAJourCollaborateur(collaborateur,COLLABORATEUR_NUMEROLIGNE);
     }

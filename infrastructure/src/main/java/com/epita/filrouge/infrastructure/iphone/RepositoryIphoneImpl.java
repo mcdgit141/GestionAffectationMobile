@@ -16,7 +16,7 @@ public class RepositoryIphoneImpl implements IRepositoryIphone {
     private IRepositoryJpaIphone repositoryJpaIphone;
 
     @Override
-    public Iphone findByNomModele(String nomModele) {
+    public Iphone rechercheIphoneParNomModele(String nomModele) {
         // modification suite à ajout de la list pour ne prendre que le premier enregistrement envoyé car pas de règles métier. On prend
         // le premier iphone disponible
         // ajouter le test de la liste vide et voir pour mettre un try catch
@@ -39,7 +39,7 @@ public class RepositoryIphoneImpl implements IRepositoryIphone {
     }
 
     @Override
-    public Iphone findByNumeroSerie(String iPhoneNumeroSerie) {
+    public Iphone rechercheIphoneParNumeroSerie(String iPhoneNumeroSerie) {
         IphoneEntity iphoneEntity = repositoryJpaIphone.findByNumeroSerie(iPhoneNumeroSerie);
         ModeleIphoneEntity modeleIphoneEntity = iphoneEntity.getModeleIphoneEntity();
         ModeleIphone modeleIphone = new ModeleIphone(modeleIphoneEntity.getModeleId(),modeleIphoneEntity.getNomModele());

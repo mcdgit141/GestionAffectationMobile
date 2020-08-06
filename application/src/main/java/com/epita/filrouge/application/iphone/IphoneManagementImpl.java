@@ -12,9 +12,9 @@ public class IphoneManagementImpl implements IIphoneManagement{
     private IRepositoryIphone repositoryIphone;
 
     @Override
-    public Iphone findByNomModele(String nomModele) {
+    public Iphone rechercheIphoneParNomModele(String nomModele) {
 
-        return repositoryIphone.findByNomModele(nomModele);
+        return repositoryIphone.rechercheIphoneParNomModele(nomModele);
     }
 
 }

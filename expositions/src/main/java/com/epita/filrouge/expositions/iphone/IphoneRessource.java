@@ -23,7 +23,7 @@ public class IphoneRessource {
         System.out.println("on est rentre par Iphone");
 
 
-        final Iphone iphone = iphoneManagement.findByNomModele(nomModele);
+        final Iphone iphone = iphoneManagement.rechercheIphoneParNomModele(nomModele);
 
         final IphoneFullDTO iphoneFullDTO = new IphoneFullDTO();
         iphoneFullDTO.setIphoneId(iphone.getIphoneId());

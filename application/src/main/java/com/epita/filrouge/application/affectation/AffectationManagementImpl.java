@@ -8,7 +8,6 @@ import com.epita.filrouge.domain.exception.AllReadyExistException;
 import com.epita.filrouge.domain.iphone.EtatIphoneEnum;
 import com.epita.filrouge.domain.iphone.IRepositoryIphone;
 import com.epita.filrouge.domain.iphone.Iphone;
-import com.epita.filrouge.domain.uo.IRepositoryUo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -30,9 +29,6 @@ public class AffectationManagementImpl implements IAffectationManagement {
 
     @Autowired
     private IRepositoryIphone repositoryIphone;
-
-    @Autowired
-    private IRepositoryUo repositoryUo;
 
     @Override
     public Affectation creerAffectation(String collaborateurUid, String iPhoneNumeroSerie, LocalDate dateAffectation, String numeroLigne, String commentaire) {
@@ -62,7 +58,7 @@ public class AffectationManagementImpl implements IAffectationManagement {
             }
         }
 
-        Iphone iPhone = repositoryIphone.findByNumeroSerie(iPhoneNumeroSerie);
+        Iphone iPhone = repositoryIphone.rechercheIphoneParNumeroSerie(iPhoneNumeroSerie);
         System.out.println("application iPhone.getIphoneId() = " + iPhone.getIphoneId());
 //      test existence Iphone
         Long numeroAffectation = genererNumeroAffectation();
@@ -71,6 +67,10 @@ public class AffectationManagementImpl implements IAffectationManagement {
         repositoryAffectation.affecter(affectationACreer);
 
         repositoryCollaborateur.miseAJourCollaborateur(collaborateur, numeroLigne);
+
+  //        //iphone.setEtat(..) => la recherche a déjà été faite
+//        repositoryIphone.update(iphone);
+       // implementation de la mise à jour générique sur le téléphone en modifiant l'attribut concerné avant
 
         repositoryIphone.miseAJourEtatIphone(iPhoneNumeroSerie, etatIphoneEnum);
 

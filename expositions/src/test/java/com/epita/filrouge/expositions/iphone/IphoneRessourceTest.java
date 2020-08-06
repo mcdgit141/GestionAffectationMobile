@@ -42,7 +42,7 @@ public class IphoneRessourceTest {
         ModeleIphone modeleIphone = new ModeleIphone(1L,"Iphone8");
 
         Iphone iphoneRetour = new Iphone(1L,"010203",1400d,modeleIphone, EtatIphoneEnum.DISPONIBLE);
-        when(iPhoneManagement.findByNomModele("Iphone8")).thenReturn(iphoneRetour);
+        when(iPhoneManagement.rechercheIphoneParNomModele("Iphone8")).thenReturn(iphoneRetour);
 
         // When
         final String result = mockMvc.perform(get("/gestaffectation/iphone/{nommodele}", "Iphone8")

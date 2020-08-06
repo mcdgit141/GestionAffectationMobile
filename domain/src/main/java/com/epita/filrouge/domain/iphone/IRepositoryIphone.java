@@ -1,12 +1,10 @@
 package com.epita.filrouge.domain.iphone;
 
-import com.epita.filrouge.domain.exception.NotFoundException;
-
 public interface IRepositoryIphone {
 
-    Iphone findByNomModele (String nomModele);
+    Iphone rechercheIphoneParNomModele (String nomModele);
 
-    Iphone findByNumeroSerie(String iPhoneNumeroSerie);
+    Iphone rechercheIphoneParNumeroSerie(String iPhoneNumeroSerie);
 
     void miseAJourEtatIphone(String iphoneNumeroSerie,  EtatIphoneEnum etatIphoneEnum);
 }
