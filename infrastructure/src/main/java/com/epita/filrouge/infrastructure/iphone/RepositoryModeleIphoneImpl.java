@@ -16,7 +16,7 @@ public class RepositoryModeleIphoneImpl implements IRepositoryModeleIphone {
     private ModeleIphoneEntityMapper modeleIphoneEntityMapper;
 
     @Override
-    public ModeleIphone findNomModele(final String nomModele) {
+    public ModeleIphone rechercheNomModele(final String nomModele) {
         final ModeleIphoneEntity modeleIphoneEntity = repositoryJpaModeleIphone.findByNomModele(nomModele);
         if (modeleIphoneEntity != null) {
             return modeleIphoneEntityMapper.mapToDomain(modeleIphoneEntity);

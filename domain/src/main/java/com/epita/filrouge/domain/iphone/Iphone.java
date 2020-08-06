@@ -58,4 +58,7 @@ public class Iphone {
         affectationIphone.add(affectation);
             }
 
+    public void setEtatIphone(EtatIphoneEnum etatIphone) {
+        this.etatIphone = etatIphone;
+    }
 }

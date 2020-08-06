@@ -35,9 +35,6 @@ public class AffectationManagementImpl implements IAffectationManagement {
     @Autowired
     private IRepositoryIphone repositoryIphone;
 
-//    @Autowired
-//    private IRepositoryUo repositoryUo;
-
     @Override
     public Affectation creerAffectation(String collaborateurUid, String iPhoneNumeroSerie, LocalDate dateAffectation, String numeroLigne, String commentaire) {
 
@@ -66,8 +63,10 @@ public class AffectationManagementImpl implements IAffectationManagement {
             }
         }
 
-        Iphone iPhone = repositoryIphone.findByNumeroSerie(iPhoneNumeroSerie);
+//        Iphone iPhone = repositoryIphone.findByNumeroSerie(iPhoneNumeroSerie);
+        Iphone iPhone = repositoryIphone.rechercheIphoneParNumeroSerie(iPhoneNumeroSerie);
         monLogger.debug("application iPhone.getIphoneId() = {}}" ,iPhone.getIphoneId());
+        System.out.println("application iPhone.getIphoneId() = " + iPhone.getIphoneId());
 //      test existence Iphone
         Long numeroAffectation = genererNumeroAffectation();
         Affectation affectationACreer = new Affectation(numeroAffectation, dateAffectation, commentaire,collaborateur, iPhone);
@@ -75,6 +74,12 @@ public class AffectationManagementImpl implements IAffectationManagement {
         repositoryAffectation.affecter(affectationACreer);
 
         repositoryCollaborateur.miseAJourCollaborateur(collaborateur, numeroLigne);
+
+//        iPhone.setEtatIphone(EtatIphoneEnum.AFFECTE);
+//
+//  //        //iphone.setEtat(..) => la recherche a déjà été faite
+////        repositoryIphone.update(iphone);
+//       // implementation de la mise à jour générique sur le téléphone en modifiant l'attribut concerné avant
 
         repositoryIphone.miseAJourEtatIphone(iPhoneNumeroSerie, etatIphoneEnum);
 

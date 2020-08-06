@@ -4,5 +4,5 @@ import com.epita.filrouge.domain.iphone.Iphone;
 
 public interface IIphoneManagement {
 
-    Iphone findByNomModele(String nomModele);
+    Iphone rechercheIphoneParNomModele(String nomModele);
 }
