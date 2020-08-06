@@ -7,15 +7,14 @@ public class Utilisateur {
     private String prenom;
     private String login;
     private String password;
-
     private UtilisateurRoleEnum userRole;
 
-    public Utilisateur(String uid,String nom, String prenom) {
+    public Utilisateur(String uid,String nom, String prenom, UtilisateurRoleEnum userRole) {
         this.uid = uid;
         this.nom= nom;
         this.prenom = prenom;
         password = "password";
-        userRole= UtilisateurRoleEnum.ROLE_TYPE1;
+        this.userRole = userRole;
     }
 
     public void setLogin(String login) {
@@ -23,7 +22,7 @@ public class Utilisateur {
     }
 
     public void construireLogin() {
-        this.login = this.prenom + "." + this.nom + "@entreprise.com";
+        this.login = this.prenom.toLowerCase() + "." + this.nom.toLowerCase() + "@entreprise.com";
     }
 
     public String getUid() {
