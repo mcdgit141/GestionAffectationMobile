@@ -68,9 +68,11 @@ public class AffectationManagementImpl implements IAffectationManagement {
 
         repositoryCollaborateur.miseAJourCollaborateur(collaborateur, numeroLigne);
 
-  //        //iphone.setEtat(..) => la recherche a déjà été faite
-//        repositoryIphone.update(iphone);
-       // implementation de la mise à jour générique sur le téléphone en modifiant l'attribut concerné avant
+//        iPhone.setEtatIphone(EtatIphoneEnum.AFFECTE);
+//
+//  //        //iphone.setEtat(..) => la recherche a déjà été faite
+////        repositoryIphone.update(iphone);
+//       // implementation de la mise à jour générique sur le téléphone en modifiant l'attribut concerné avant
 
         repositoryIphone.miseAJourEtatIphone(iPhoneNumeroSerie, etatIphoneEnum);
 
