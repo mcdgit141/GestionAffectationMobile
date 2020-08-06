@@ -3,11 +3,10 @@ package com.epita.filrouge.infrastructure.utilisateur;
 import com.epita.filrouge.domain.utilisateur.IRepositoryUtilisateur;
 import com.epita.filrouge.domain.utilisateur.Utilisateur;
 import com.epita.filrouge.domain.utilisateur.UtilisateurRoleEnum;
-import com.epita.filrouge.infrastructure.collaborateur.CollaborateurEntity;
-import com.epita.filrouge.infrastructure.collaborateur.IRepositoryJpaCollaborateur;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Repository
@@ -16,10 +15,13 @@ public class RepositoryUtilisateurImpl implements IRepositoryUtilisateur {
     @Autowired
     private IRepositoryJpaUtilisateur userJpaRepository;
 
+    @Autowired
+    private UtilisateurMapper utilisateurMapper;
+
+
     @Override
     public void creerUser(Utilisateur utilisateur) {
-
-        UtilisateurEntity monUtilisateurEntity = UtilisateurMapper.mapToInfra(utilisateur);
+        UtilisateurEntity monUtilisateurEntity = utilisateurMapper.mapToEntity(utilisateur);
 
         userJpaRepository.save(monUtilisateurEntity);
     }
@@ -28,7 +30,7 @@ public class RepositoryUtilisateurImpl implements IRepositoryUtilisateur {
     public Utilisateur rechercherUser(String login) {
         UtilisateurEntity monUtilisateurEntity = userJpaRepository.findByLogin(login);
         if (monUtilisateurEntity != null) {
-            return UtilisateurMapper.mapToDomain(monUtilisateurEntity);
+            return utilisateurMapper.mapToDomain(monUtilisateurEntity);
         } else {
             return  null;
         }
@@ -55,4 +57,5 @@ public class RepositoryUtilisateurImpl implements IRepositoryUtilisateur {
         UtilisateurEntity monUtilisateurEntity = userJpaRepository.findByLogin(utilisateur.getLogin());
         monUtilisateurEntity.setUserRole(UtilisateurRoleEnum.ROLE_ADMIN);
     }
+
 }

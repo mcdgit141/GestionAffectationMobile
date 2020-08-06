@@ -1,8 +1,11 @@
 package com.epita.filrouge.expositions.utilisateur;
 
+import com.epita.filrouge.domain.utilisateur.UtilisateurRoleEnum;
+
 public class UtilisateurDTO {
 
     private String uid;
+    private UtilisateurRoleEnum roleUtilisateur;
 
     public String getUid() {
         return uid;
@@ -12,4 +15,11 @@ public class UtilisateurDTO {
         this.uid = uid;
     }
 
+    public UtilisateurRoleEnum getRoleUtilisateur() {
+        return roleUtilisateur;
+    }
+
+    public void setRoleUtilisateur(UtilisateurRoleEnum roleUtilisateur) {
+        this.roleUtilisateur = roleUtilisateur;
+    }
 }

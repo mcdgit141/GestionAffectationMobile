@@ -19,6 +19,6 @@ public class UtilisateurRessource {
     @ResponseStatus(HttpStatus.CREATED)
     @Secured("ROLE_ADMIN")
     public void creerUtilisateur(@NotNull @RequestBody final UtilisateurDTO utilisateurDTO) {
-        utilisateurManagement.enregistrerUtilisateur(utilisateurDTO.getUid());
+        utilisateurManagement.enregistrerUtilisateur(utilisateurDTO.getUid(),utilisateurDTO.getRoleUtilisateur());
     }
 }
