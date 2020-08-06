@@ -22,7 +22,7 @@ public class Utilisateur {
     }
 
     public void construireLogin() {
-        this.login = this.prenom + "." + this.nom + "@entreprise.com";
+        this.login = this.prenom.toLowerCase() + "." + this.nom.toLowerCase() + "@entreprise.com";
     }
 
     public String getUid() {
