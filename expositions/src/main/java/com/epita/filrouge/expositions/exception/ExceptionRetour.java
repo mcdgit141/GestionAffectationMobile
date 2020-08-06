@@ -1,5 +1,6 @@
 package com.epita.filrouge.expositions.exception;
 
+import com.epita.filrouge.domain.exception.BadRequestException;
 import com.epita.filrouge.domain.exception.BusinessException;
 import com.fasterxml.jackson.databind.exc.ValueInstantiationException;
 import org.springframework.beans.factory.annotation.Autowired;
