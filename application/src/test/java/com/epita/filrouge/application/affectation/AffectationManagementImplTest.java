@@ -4,6 +4,7 @@ import com.epita.filrouge.domain.affectation.Affectation;
 import com.epita.filrouge.domain.affectation.IRepositoryAffectation;
 import com.epita.filrouge.domain.collaborateur.Collaborateur;
 import com.epita.filrouge.domain.collaborateur.IRepositoryCollaborateur;
+import com.epita.filrouge.domain.exception.AllReadyExistException;
 import com.epita.filrouge.domain.iphone.EtatIphoneEnum;
 import com.epita.filrouge.domain.iphone.IRepositoryIphone;
 import com.epita.filrouge.domain.iphone.Iphone;
@@ -11,6 +12,9 @@ import com.epita.filrouge.domain.iphone.ModeleIphone;
 
 import com.epita.filrouge.domain.site.SiteExercice;
 import com.epita.filrouge.domain.uo.Uo;
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -22,13 +26,19 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.List;
 
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.catchThrowable;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.nullable;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 @ExtendWith(SpringExtension.class)
-@SpringBootTest(classes = { AffectationManagementImpl.class } )
+@SpringBootTest(classes = {AffectationManagementImpl.class})
 public class AffectationManagementImplTest {
 
     private static final String CODE_SITE = "V2";
@@ -59,6 +69,19 @@ public class AffectationManagementImplTest {
     private static final LocalDate AFFECTATION_DATE = LocalDate.now();
     private static final String AFFECTATION_COMMENTAIRE = "Premeire affectation";
 
+
+    SiteExercice siteExercice = null;
+    Uo uo = null;
+
+    private static Collaborateur collaborateur = null;
+
+    ModeleIphone modeleIphone = null;
+    private static Iphone iphone = null;
+    private static Iphone iphoneAffecte = null;
+    private static Affectation affectationEnCours = null;
+    private static Affectation affectationAvecDateFin = null;
+
+
     @Autowired
     private IAffectationManagement affectationManagementImpl;
 
@@ -71,28 +94,98 @@ public class AffectationManagementImplTest {
     @MockBean
     private IRepositoryAffectation repositoryAffectation;
 
+    @BeforeAll
+    static void init() {
+        SiteExercice siteExercice = new SiteExercice(CODE_SITE, NOM_SITE, ADRESSE_POSTALE, CODE_POSTAL, VILLE, PAYS, DATE_CREATION);
+        Uo uo = new Uo(CODE_UO, FONCTION_RATTACHEMENT, CODE_UO_PARENT, NOM_USAGE_UO, NOM_RESPONSABLE_UO);
+        uo.setSiteExercice(siteExercice);
+
+        collaborateur = new Collaborateur(COLLABORATEUR_UID, COLLABORATEUR_NOM, COLLABORATEUR_PRENOM, COLLABORATEUR_NUMEROLIGNE, uo);
+
+        ModeleIphone modeleIphone = new ModeleIphone(1L, MODELE_NOMMODELE);
+        iphone = new Iphone(1L, IPHONE_NUMEROSERIE, IPHONE_PRIX, modeleIphone, IPHONE_ETAT);
+        iphoneAffecte = new Iphone(1L, IPHONE_NUMEROSERIE, IPHONE_PRIX, modeleIphone, EtatIphoneEnum.AFFECTE);
+
+
+        affectationEnCours = new Affectation(1L, LocalDate.now(), "blabla", collaborateur, iphone);
+
+        affectationAvecDateFin = new Affectation(1L, LocalDate.now(), "blabla", collaborateur, iphone);
+        affectationAvecDateFin.setDateFin(LocalDate.now());
+
+    }
+
     @Test
     void ShouldCallFindByUid_And_FindByNumeroSerie_And_repositoryAffectationSave() {
         //Given
-        SiteExercice siteExercice = new SiteExercice(CODE_SITE,NOM_SITE,ADRESSE_POSTALE,CODE_POSTAL,VILLE,PAYS,DATE_CREATION);
-        Uo uo = new Uo(CODE_UO,FONCTION_RATTACHEMENT,CODE_UO_PARENT,NOM_USAGE_UO,NOM_RESPONSABLE_UO);
-        uo.setSiteExercice(siteExercice);
-
-        Collaborateur collaborateur = new Collaborateur( COLLABORATEUR_UID, COLLABORATEUR_NOM, COLLABORATEUR_PRENOM, COLLABORATEUR_NUMEROLIGNE,uo);
-
-        ModeleIphone modeleIphone = new ModeleIphone(1L, MODELE_NOMMODELE);
-        Iphone iphone = new Iphone(1L, IPHONE_NUMEROSERIE, IPHONE_PRIX, modeleIphone, IPHONE_ETAT);
 
         when(repositoryCollaborateur.findByUid(COLLABORATEUR_UID)).thenReturn(collaborateur);
         when(repositoryIphone.rechercheIphoneParNumeroSerie(IPHONE_NUMEROSERIE)).thenReturn(iphone);
 
         //When
-        affectationManagementImpl.creerAffectation(COLLABORATEUR_UID,IPHONE_NUMEROSERIE,AFFECTATION_DATE,COLLABORATEUR_NUMEROLIGNE,AFFECTATION_COMMENTAIRE);
+        affectationManagementImpl.creerAffectation(COLLABORATEUR_UID, IPHONE_NUMEROSERIE, AFFECTATION_DATE, COLLABORATEUR_NUMEROLIGNE, AFFECTATION_COMMENTAIRE);
 
         //Then
         verify(repositoryCollaborateur, Mockito.times(1)).findByUid(COLLABORATEUR_UID);
-        verify(repositoryIphone,Mockito.times(1)).rechercheIphoneParNumeroSerie(IPHONE_NUMEROSERIE);
-        verify(repositoryAffectation,Mockito.times(1)).affecter(any(Affectation.class));
-        verify(repositoryCollaborateur, Mockito.times(1)).miseAJourCollaborateur(collaborateur,COLLABORATEUR_NUMEROLIGNE);
+        verify(repositoryIphone, Mockito.times(1)).rechercheIphoneParNumeroSerie(IPHONE_NUMEROSERIE);
+        verify(repositoryAffectation, Mockito.times(1)).affecter(any(Affectation.class));
+        verify(repositoryCollaborateur, Mockito.times(1)).miseAJourCollaborateur(collaborateur, COLLABORATEUR_NUMEROLIGNE);
+        verify(repositoryCollaborateur, Mockito.times(1)).miseAJourCollaborateur(collaborateur, COLLABORATEUR_NUMEROLIGNE);
+        verify(repositoryIphone, Mockito.times(1)).miseAJourEtatIphone(IPHONE_NUMEROSERIE,EtatIphoneEnum.AFFECTE);
     }
+
+    @Test
+    void WhenAskToAffectAnIphoneAlreadyAffected_ShouldReturnAnAllReadyExistException() {
+        //Given
+        when(repositoryCollaborateur.findByUid(COLLABORATEUR_UID)).thenReturn(collaborateur);
+        when(repositoryIphone.rechercheIphoneParNumeroSerie(IPHONE_NUMEROSERIE)).thenReturn(iphoneAffecte);
+
+        //When
+        Throwable thrown = catchThrowable( () -> affectationManagementImpl.creerAffectation(COLLABORATEUR_UID, IPHONE_NUMEROSERIE, AFFECTATION_DATE, COLLABORATEUR_NUMEROLIGNE, AFFECTATION_COMMENTAIRE));
+        String messageAttendu = "Cet iPhone n'est pas disponible, merci de recommencer : " + IPHONE_NUMEROSERIE;
+        //Then
+        assertThat(thrown).isInstanceOf(AllReadyExistException.class);
+        assertThat(thrown).hasMessage(messageAttendu);
+    }
+
+    @Test
+    void WhenAskToAffectAColloborateurAlreadyAffected_ShouldReturnAnAllReadyExistException() {
+        //Given
+
+        when(repositoryCollaborateur.findByUid(COLLABORATEUR_UID)).thenReturn(collaborateur);
+        when(repositoryIphone.rechercheIphoneParNumeroSerie(IPHONE_NUMEROSERIE)).thenReturn(iphone);
+
+        List<Affectation> listAffections = new ArrayList();
+        listAffections.add(affectationAvecDateFin);
+        listAffections.add(affectationEnCours);
+        when(repositoryAffectation.rechercheAffectationByUid(COLLABORATEUR_UID)).thenReturn(listAffections);
+        //When
+        Throwable thrown = catchThrowable( () -> affectationManagementImpl.creerAffectation(COLLABORATEUR_UID, IPHONE_NUMEROSERIE, AFFECTATION_DATE, COLLABORATEUR_NUMEROLIGNE, AFFECTATION_COMMENTAIRE));
+        String messageAttendu = "L'affectation pour ce collaborateur existe déjà, merci de la clôturer au préalable : " + COLLABORATEUR_UID;
+        //Then
+        assertThat(thrown).isInstanceOf(AllReadyExistException.class);
+        assertThat(thrown).hasMessage(messageAttendu);
+    }
+
+    @Test
+    void WhenAskToAffectAColloborateurWithCloseAffectation_ShouldReturnAnAffectation() {
+        //Given
+
+        when(repositoryCollaborateur.findByUid(COLLABORATEUR_UID)).thenReturn(collaborateur);
+        when(repositoryIphone.rechercheIphoneParNumeroSerie(IPHONE_NUMEROSERIE)).thenReturn(iphone);
+
+        List<Affectation> listAffections = new ArrayList();
+        listAffections.add(affectationAvecDateFin);
+        when(repositoryAffectation.rechercheAffectationByUid(COLLABORATEUR_UID)).thenReturn(listAffections);
+        //When
+        affectationManagementImpl.creerAffectation(COLLABORATEUR_UID, IPHONE_NUMEROSERIE, AFFECTATION_DATE, COLLABORATEUR_NUMEROLIGNE, AFFECTATION_COMMENTAIRE);
+
+        //Then
+        verify(repositoryCollaborateur, Mockito.times(1)).findByUid(COLLABORATEUR_UID);
+        verify(repositoryAffectation, Mockito.times(1)).rechercheAffectationByUid(COLLABORATEUR_UID);
+        verify(repositoryIphone, Mockito.times(1)).rechercheIphoneParNumeroSerie(IPHONE_NUMEROSERIE);
+        verify(repositoryAffectation, Mockito.times(1)).affecter(any(Affectation.class));
+        verify(repositoryCollaborateur, Mockito.times(1)).miseAJourCollaborateur(collaborateur, COLLABORATEUR_NUMEROLIGNE);
+        verify(repositoryIphone, Mockito.times(1)).miseAJourEtatIphone(IPHONE_NUMEROSERIE,EtatIphoneEnum.AFFECTE);
+    }
+
 }
