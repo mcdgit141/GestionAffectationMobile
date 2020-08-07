@@ -25,7 +25,6 @@ public class UtilisateurRessource {
         UtilisateurRoleEnum roleUtilisateurACreer;
 
         if (utilisateurDTO.getUid() != null & utilisateurDTO.getRoleUtilisateur() != null){
-
             utilisateurManagement.enregistrerUtilisateur(utilisateurDTO.getUid(),utilisateurDTO.getRoleUtilisateur());
         } else {
             throw new BadRequestException("Information(s) manquante(s) pour l'utilisateur a creer");

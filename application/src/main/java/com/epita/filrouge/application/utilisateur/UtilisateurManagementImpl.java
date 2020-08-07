@@ -2,6 +2,7 @@ package com.epita.filrouge.application.utilisateur;
 
 import com.epita.filrouge.application.collaborateur.ICollaborateurManagement;
 import com.epita.filrouge.domain.collaborateur.Collaborateur;
+import com.epita.filrouge.domain.exception.AllReadyExistException;
 import com.epita.filrouge.domain.exception.BadRequestException;
 import com.epita.filrouge.domain.utilisateur.IRepositoryUtilisateur;
 import com.epita.filrouge.domain.utilisateur.Utilisateur;
@@ -38,12 +39,13 @@ public class UtilisateurManagementImpl implements IUtilisateurManagement{
 
         Utilisateur utilisateurACreer = new Utilisateur(monCollaborateur.getUid(),monCollaborateur.getNom(), monCollaborateur.getPrenom(), roleUtilisateurACreer);
         utilisateurACreer.construireLogin();
-        repositoryUtilisateur.creerUser(utilisateurACreer);
+        Utilisateur utilisateurExistant = repositoryUtilisateur.rechercherUser(utilisateurACreer.getLogin());
+        if (utilisateurExistant == null){
+            repositoryUtilisateur.creerUser(utilisateurACreer);
+        } else {
+            throw new AllReadyExistException("Un Utilisateur existe déjà pour cet uid");
+        }
 
     }
 
-    @Override
-    public Utilisateur rechercheUtilisateur(String login) {
-        return null;
-    }
 }

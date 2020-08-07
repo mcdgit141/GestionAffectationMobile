@@ -3,6 +3,7 @@ package com.epita.filrouge.application.utilisateur;
 
 import com.epita.filrouge.application.collaborateur.ICollaborateurManagement;
 import com.epita.filrouge.domain.collaborateur.Collaborateur;
+import com.epita.filrouge.domain.exception.AllReadyExistException;
 import com.epita.filrouge.domain.exception.BadRequestException;
 import com.epita.filrouge.domain.site.SiteExercice;
 import com.epita.filrouge.domain.uo.Uo;
@@ -14,6 +15,7 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.ArgumentCaptor;
 import org.mockito.InOrder;
+import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -23,10 +25,12 @@ import org.springframework.test.context.junit.jupiter.SpringExtension;
 import java.time.LocalDate;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.junit.jupiter.api.Assertions.assertAll;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.inOrder;
+import static org.mockito.Mockito.when;
 
 
 @ExtendWith(SpringExtension.class)
@@ -41,6 +45,32 @@ public class UtilisateurManagementImplTest {
 
     @MockBean
     private IRepositoryUtilisateur repositoryUtilisateur;
+
+    @Test
+    @DisplayName("Rejet création d'un utilisateur avec un uid déjà utilisé")
+    public void enregistrerUtilisateur_should_fail_with_already_existing_uid(){
+        //giving
+        String uid = "a19390";
+        String nom = "DUPOND";
+        String prenom = "Francois";
+        String numeroLigne = "0102030405";
+        String roleRecu = "type1";
+        UtilisateurRoleEnum roleDomaine = UtilisateurRoleEnum.ROLE_TYPE1;
+
+        SiteExercice siteExercice = new SiteExercice(CODE_SITE,NOM_SITE,ADRESSE_POSTALE,CODE_POSTAL,VILLE,PAYS,DATE_CREATION);
+        Uo monUo = new Uo(CODE_UO,FONCTION_RATTACHEMENT,CODE_UO_PARENT,NOM_USAGE_UO,NOM_RESPONSABLE_UO);
+        monUo.setSiteExercice(siteExercice);
+        Collaborateur monCollaborateur = new Collaborateur(uid,nom, prenom,numeroLigne,monUo);
+        Utilisateur monUtilisateur = new Utilisateur(uid,nom,prenom,roleDomaine);
+
+        Mockito.when(collaborateurManagement.findByUid(uid)).thenReturn(monCollaborateur);
+        Mockito.when(repositoryUtilisateur.rechercherUser(any(String.class))).thenReturn(monUtilisateur);
+
+        //when + then
+        assertThatThrownBy(
+                () -> {utilisateurManagement.enregistrerUtilisateur(uid,roleRecu);}
+        ).isInstanceOf(AllReadyExistException.class).hasMessageContaining("Un Utilisateur existe déjà pour cet uid");
+    }
 
     @Test
     @DisplayName("Construction d'un Utilisateur, à partir d'un uid et d'un profil")
@@ -140,16 +170,12 @@ public class UtilisateurManagementImplTest {
     public void wrong_profilUtilisateur_should_throw_badRequestException(){
         //giving
         String uid = "a19390";
-        String nom = "DUPOND";
-        String prenom = "Francois";
-        String numeroLigne = "0102030405";
         String roleRecu = "type3";
 
-        //when
-            utilisateurManagement.enregistrerUtilisateur(uid,roleRecu);
-
-        //then
-
+        //when + then
+        assertThatThrownBy(
+                () -> {utilisateurManagement.enregistrerUtilisateur(uid,roleRecu);}
+                ).isInstanceOf(BadRequestException.class).hasMessageContaining("role utilisateur transmis inconnu");
 
     }
 
