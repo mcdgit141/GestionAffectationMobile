@@ -123,4 +123,5 @@ public class UtilisateurRessourceTest {
         assertThat(resultat.contains("BAD REQUEST")).isTrue();
 
     }
+
 }
