@@ -4,7 +4,7 @@ import com.epita.filrouge.domain.utilisateur.Utilisateur;
 
 public interface IUtilisateurManagement {
 
-    void enregistrerUtilisateur(String uid);
+    void enregistrerUtilisateur(String uid, String profil);
 
     Utilisateur rechercheUtilisateur(String login);
 }
