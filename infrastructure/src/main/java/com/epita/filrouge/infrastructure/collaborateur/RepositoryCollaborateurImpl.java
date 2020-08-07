@@ -20,37 +20,17 @@ public class RepositoryCollaborateurImpl implements IRepositoryCollaborateur {
     @Autowired
     private IRepositoryJpaSiteExercice repositoryJpaSiteExercice;
 
+    @Autowired
+    private CollaborateurEntityMapper collaborateurEntityMapper;
+
     @Override
     public Collaborateur findByUid(String uid) {
-        System.out.println("RepositoryCollaborateurImpl--uid--:" + uid );
         CollaborateurEntity collaborateurEntity =  repositoryJpaCollaborateur.findByUid(uid);
-        System.out.println("RepositoryCollaborateurImpl--collaborateurEntity.getUid()--après recherche:" + collaborateurEntity.getUid() );
         if (collaborateurEntity != null) {
-
-            UoEntity uoEntity = collaborateurEntity.getUo();
-            SiteExerciceEntity siteExerciceEntity = uoEntity.getSiteExercice();
-
-            SiteExercice siteExercice = new SiteExercice(siteExerciceEntity.getCodeSite(),siteExerciceEntity.getNomSite(),
-                                        siteExerciceEntity.getAdressePostale1(),siteExerciceEntity.getCodePostal(),
-                                        siteExerciceEntity.getVille(), siteExerciceEntity.getPays(), siteExerciceEntity.getDateCreation());
-
-            siteExercice.setDateCloture(siteExerciceEntity.getDateCloture());
-
-            Uo uo = new Uo(uoEntity.getCodeUo(),uoEntity.getFonctionRattachement(),uoEntity.getCodeUoParent(),
-                        uoEntity.getNomUsageUo(),uoEntity.getNomResponsableUo());
-
-            uo.setSiteExercice(siteExercice);
-
-            Collaborateur collaborateur = new Collaborateur(collaborateurEntity.getUid(), collaborateurEntity.getNom(), collaborateurEntity.getPrenom(),
-                                            collaborateurEntity.getNumeroLigne(),uo);
-            collaborateur.setNumeroLigne(collaborateurEntity.getNumeroLigne());
-//            collaborateur.setId(collaborateurEntity.getCollaborateurId());
-
-            return collaborateur;
+            return collaborateurEntityMapper.mapToDomain(collaborateurEntity);
         } else {
-            throw new NotFoundException("Le collaborateur par recherche sur l'UID suivant est non trouvé = " + uid);
+            return null;
         }
-
     }
 
     @Override

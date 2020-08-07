@@ -6,5 +6,4 @@ public interface IUtilisateurManagement {
 
     void enregistrerUtilisateur(String uid, String profil);
 
-    Utilisateur rechercheUtilisateur(String login);
 }
