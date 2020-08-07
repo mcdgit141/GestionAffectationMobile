@@ -8,7 +8,6 @@ import com.epita.filrouge.domain.exception.AllReadyExistException;
 import com.epita.filrouge.domain.iphone.EtatIphoneEnum;
 import com.epita.filrouge.domain.iphone.IRepositoryIphone;
 import com.epita.filrouge.domain.iphone.Iphone;
-import com.epita.filrouge.domain.uo.IRepositoryUo;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -42,15 +41,41 @@ public class AffectationManagementImpl implements IAffectationManagement {
         Collaborateur collaborateur = repositoryCollaborateur.findByUid(collaborateurUid);
 
         monLogger.debug("creer affectation--collaborateur.getCollaborateur().getUid---- {}" , collaborateur.getUid());
-
         monLogger.debug("application collaborateur.getPrenom() = {} " , collaborateur.getPrenom());
-//        if (user == null) {
-//            throw new NotFoundException(USER_NOT_FOUND, "Email " + userName + " not found");
-//        }
 
         // implementation du contrôle de l'existence de cet UID dans la table des affectations car si déjà présent et affectation toujours en cours,
         // on va obliger à clôturer avant de resaisir
+        controlCollaborateurEstSansAffectationEnCours(collaborateurUid);
 
+//      test existence Iphone
+        Iphone iPhone = repositoryIphone.rechercheIphoneParNumeroSerie(iPhoneNumeroSerie);
+        controlDisponibiliteIphone(iPhone);
+
+        monLogger.debug("application iPhone.getIphoneId() = {}}" ,iPhone.getIphoneId());
+
+        Long numeroAffectation = genererNumeroAffectation();
+        Affectation affectationACreer = new Affectation(numeroAffectation, dateAffectation, commentaire,collaborateur, iPhone);
+
+        repositoryAffectation.affecter(affectationACreer);
+
+        repositoryCollaborateur.miseAJourCollaborateur(collaborateur, numeroLigne);
+
+//       // implementation de la mise à jour générique sur le téléphone en modifiant l'attribut concerné avant
+
+        repositoryIphone.miseAJourEtatIphone(iPhoneNumeroSerie, etatIphoneEnum);
+
+        return affectationACreer;
+
+    }
+
+    private void controlDisponibiliteIphone(Iphone iPhone) {
+        if (iPhone.getEtatIphone() != EtatIphoneEnum.DISPONIBLE) {
+            throw new AllReadyExistException("Cet iPhone n'est pas disponible, merci de recommencer : " + iPhone.getNumeroSerie());
+        }
+    }
+
+
+    private void controlCollaborateurEstSansAffectationEnCours(String collaborateurUid) {
         List<Affectation> affectationDejaCree = repositoryAffectation.rechercheAffectationByUid(collaborateurUid);
 
         if (affectationDejaCree != null) {
@@ -62,29 +87,6 @@ public class AffectationManagementImpl implements IAffectationManagement {
                 }
             }
         }
-
-//        Iphone iPhone = repositoryIphone.findByNumeroSerie(iPhoneNumeroSerie);
-        Iphone iPhone = repositoryIphone.rechercheIphoneParNumeroSerie(iPhoneNumeroSerie);
-        monLogger.debug("application iPhone.getIphoneId() = {}}" ,iPhone.getIphoneId());
-        System.out.println("application iPhone.getIphoneId() = " + iPhone.getIphoneId());
-//      test existence Iphone
-        Long numeroAffectation = genererNumeroAffectation();
-        Affectation affectationACreer = new Affectation(numeroAffectation, dateAffectation, commentaire,collaborateur, iPhone);
-
-        repositoryAffectation.affecter(affectationACreer);
-
-        repositoryCollaborateur.miseAJourCollaborateur(collaborateur, numeroLigne);
-
-//        iPhone.setEtatIphone(EtatIphoneEnum.AFFECTE);
-//
-//  //        //iphone.setEtat(..) => la recherche a déjà été faite
-////        repositoryIphone.update(iphone);
-//       // implementation de la mise à jour générique sur le téléphone en modifiant l'attribut concerné avant
-
-        repositoryIphone.miseAJourEtatIphone(iPhoneNumeroSerie, etatIphoneEnum);
-
-        return affectationACreer;
-
     }
 
     private static Long genererNumeroAffectation() {
