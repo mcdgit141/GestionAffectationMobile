@@ -1,7 +1,7 @@
 package com.epita.filrouge.domain.collaborateur;
 
 import com.epita.filrouge.domain.affectation.Affectation;
-import com.epita.filrouge.domain.site.SiteExercice;
+
 import com.epita.filrouge.domain.uo.Uo;
 
 import java.util.ArrayList;
@@ -30,6 +30,7 @@ public class Collaborateur {
     public void setNumeroLigne(String numeroLigne) {
         this.numeroLigne = numeroLigne;
     }
+
     public String getUid() {
         return uid;
     }
@@ -56,5 +57,9 @@ public class Collaborateur {
 
     public void addAffectationCollaborateur(final Affectation affectation){
         affectationCollaborateur.add(affectation);
+    }
+
+    public void affecterNumeroLigne (String numeroLigne){
+
     }
 }

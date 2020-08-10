@@ -21,11 +21,11 @@ public class AffectationEntity {
     private String commentaire;
     private String motifFin;
 
-    @ManyToOne(fetch = FetchType.LAZY  )
+    @ManyToOne(cascade = CascadeType.PERSIST,fetch = FetchType.LAZY)
     @JoinColumn(name = "collaborateurId", nullable = false)
     private CollaborateurEntity collaborateur;
 
-    @ManyToOne(fetch = FetchType.LAZY )
+    @ManyToOne(cascade = CascadeType.PERSIST,fetch = FetchType.LAZY )
     @JoinColumn(name = "iphoneId", nullable = false)
     private IphoneEntity iphone;
 
