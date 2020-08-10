@@ -16,6 +16,16 @@ public class RepositoryUtilisateurImpl implements IRepositoryUtilisateur {
     @Autowired
     private IRepositoryJpaUtilisateur userJpaRepository;
 
+    @Override
+    public Utilisateur rechercherUserParUid(String uid) {
+        UtilisateurEntity monUtilisateurEntity = userJpaRepository.findByUid(uid);
+        if (monUtilisateurEntity != null) {
+            return utilisateurMapper.mapToDomain(monUtilisateurEntity);
+        } else {
+            return  null;
+        }
+    }
+
     @Autowired
     private UtilisateurMapper utilisateurMapper;
 

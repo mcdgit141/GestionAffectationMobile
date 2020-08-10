@@ -148,6 +148,20 @@ public class RepositoryUtilisateurImplTest {
         );
     }
 
+    @Test
+    @DisplayName("recherche d'un Utilisateur par l'uid associé")
+    public void rechercherUserParUid_should_return_an_UtilisateurEntity_giving_an_existing_Uid(){
+
+        //giving the existing DB
+
+        //when
+        Utilisateur utilisateur = repositoryUtilisateur.rechercherUserParUid(UID);
+        //then
+        assertThat(utilisateur).isNotNull();
+
+
+    }
+
     //Collaborateur/Utilisateur
     private final String UID = "a19390";
     private final String NOM = "KAMDEM";

@@ -49,8 +49,8 @@ public class UtilisateurManagementImpl implements IUtilisateurManagement{
     }
 
     @Override
-    public void supprimerUtilisateur(String login) {
-        Utilisateur utilisateurASupprimer = repositoryUtilisateur.rechercherUser(login);
+    public void supprimerUtilisateur(String uid) {
+        Utilisateur utilisateurASupprimer = repositoryUtilisateur.rechercherUserParUid(uid);
         if (utilisateurASupprimer != null){
             repositoryUtilisateur.deleteUser(utilisateurASupprimer);
         } else {

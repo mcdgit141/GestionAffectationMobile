@@ -8,5 +8,8 @@ public interface IRepositoryUtilisateur {
      Utilisateur rechercherUser(String login);
 
     void deleteUser(Utilisateur utilisateurASupprimer);
+
+    Utilisateur rechercherUserParUid(String uid);
+
 }
 

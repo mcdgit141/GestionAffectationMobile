@@ -6,6 +6,7 @@ import com.epita.filrouge.domain.exception.BusinessException;
 import com.epita.filrouge.domain.utilisateur.UtilisateurRoleEnum;
 import com.epita.filrouge.expositions.exception.MapperExceptionCode;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mockito;
@@ -20,6 +21,7 @@ import org.springframework.test.web.servlet.ResultMatcher;
 
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 

@@ -198,7 +198,7 @@ public class UtilisateurManagementImplTest {
     }
 
     @Test
-    public void supprimerUtilisateur_should_call_repo_giving_an_existing_login(){
+    public void supprimerUtilisateur_should_call_repo_giving_an_existing_uid(){
         //giving
         String uid = "a19390";
         String nom = "KAMDEM";
@@ -206,7 +206,7 @@ public class UtilisateurManagementImplTest {
         UtilisateurRoleEnum roleUser = UtilisateurRoleEnum.ROLE_TYPE1;
 
         Utilisateur utilisateurTrouve = new Utilisateur(uid,nom,prenom,roleUser);
-        Mockito.when(repositoryUtilisateur.rechercherUser(uid)).thenReturn(utilisateurTrouve);
+        Mockito.when(repositoryUtilisateur.rechercherUserParUid(uid)).thenReturn(utilisateurTrouve);
         ArgumentCaptor<Utilisateur> valueCapture = ArgumentCaptor.forClass(Utilisateur.class);
 
         //when

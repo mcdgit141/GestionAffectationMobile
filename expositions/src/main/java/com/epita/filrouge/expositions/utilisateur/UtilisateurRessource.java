@@ -5,6 +5,7 @@ import com.epita.filrouge.domain.exception.BadRequestException;
 import com.epita.filrouge.domain.utilisateur.UtilisateurRoleEnum;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.annotation.Secured;
 import org.springframework.web.bind.annotation.*;
 
@@ -30,4 +31,12 @@ public class UtilisateurRessource {
             throw new BadRequestException("Information(s) manquante(s) pour l'utilisateur a creer");
         }
     }
+
+    @GetMapping(value = "/delete/{uid}")
+    @ResponseStatus(HttpStatus.ACCEPTED)
+    @Secured("ROLE_ADMIN")
+    public void supprimerUtilisateur(@NotNull @PathVariable("uid") String uid){
+        utilisateurManagement.supprimerUtilisateur(uid);
+    }
+
 }
