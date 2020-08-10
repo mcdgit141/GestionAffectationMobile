@@ -8,5 +8,7 @@ public interface IRepositoryJpaAffectation extends JpaRepository<AffectationEnti
 
       List<AffectationEntity> findByCollaborateurUid(String collaborateurUid);
 
-    List<AffectationEntity> findByIphoneNumeroSerie(String numeroSerie);
+      List<AffectationEntity> findByIphoneNumeroSerie(String numeroSerie);
+
+      AffectationEntity findByNumeroAffectation(Long numeroAffectation);
 }

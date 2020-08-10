@@ -18,5 +18,5 @@ public interface IAffectationManagement {
     List<Affectation> listerAffection(String uid, String nom, String codeUo, String nomUsageUo, String nomSite,
                                       String numeroLigneCollaborateur,String nomModeleIphone, LocalDate dateRenouvMin, LocalDate dateRenouvMax );
 
-
+    void cloturerAffectation(Long numeroAffectation, String affectationCommentaire, String motifFin, LocalDate dateFin);
 }

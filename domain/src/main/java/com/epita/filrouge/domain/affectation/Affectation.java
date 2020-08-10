@@ -24,6 +24,7 @@ public class Affectation {
         this.collaborateur = collaborateur;
         this.iphone = iphone;
         calculDateRenouvellement();
+
     }
 
     public Long getNumeroAffectation() {
@@ -58,8 +59,8 @@ public class Affectation {
         return iphone;
     }
 
-    private void calculDateRenouvellement () {
-        dateRenouvellementPrevue =  dateAffectation.plusYears(2);
+    private void calculDateRenouvellement() {
+        dateRenouvellementPrevue = dateAffectation.plusYears(2);
     }
 
     public void setDateFin(LocalDate dateFin) {
@@ -73,4 +74,5 @@ public class Affectation {
     public void setDateRenouvellementPrevue(LocalDate dateRenouvellementPrevue) {
         this.dateRenouvellementPrevue = dateRenouvellementPrevue;
     }
+
 }

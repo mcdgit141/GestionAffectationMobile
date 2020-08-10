@@ -6,6 +6,7 @@ import com.epita.filrouge.domain.affectation.IRepositoryAffectation;
 import com.epita.filrouge.domain.collaborateur.Collaborateur;
 import com.epita.filrouge.domain.collaborateur.IRepositoryCollaborateur;
 import com.epita.filrouge.domain.exception.AllReadyExistException;
+import com.epita.filrouge.domain.exception.NotFoundException;
 import com.epita.filrouge.domain.iphone.EtatIphoneEnum;
 import com.epita.filrouge.domain.iphone.IRepositoryIphone;
 import com.epita.filrouge.domain.iphone.Iphone;
@@ -38,7 +39,7 @@ public class AffectationManagementImpl implements IAffectationManagement {
 
     @Override
     @Transactional
-    public Affectation creerAffectation(String collaborateurUid, String iPhoneNumeroSerie, LocalDate dateAffectation, String numeroLigne, String commentaire) {
+    public Affectation creerAffectation(String collaborateurUid, String iPhoneNumeroSerie, LocalDate dateAffectation, String numeroLigne, String commentaire) throws AllReadyExistException{
 
         monLogger.debug("creer affectation--collaborateurUid");
         Collaborateur collaborateur = repositoryCollaborateur.findByUid(collaborateurUid);
@@ -77,7 +78,6 @@ public class AffectationManagementImpl implements IAffectationManagement {
         }
     }
 
-
     private void controlCollaborateurEstSansAffectationEnCours(String collaborateurUid) {
         List<Affectation> affectationDejaCree = repositoryAffectation.rechercheAffectationByUid(collaborateurUid);
 
@@ -96,6 +96,22 @@ public class AffectationManagementImpl implements IAffectationManagement {
 //        final Random random = new Random();
 //        return random.nextLong();
 //    }
+
+    @Override
+    @Transactional
+    public void cloturerAffectation (Long numeroAffectation, String affectationCommentaire, String motifFin, LocalDate dateFin) throws NotFoundException {
+
+
+        Affectation affectationACloturer = repositoryAffectation.chercheAffectationParNumeroAffectation(numeroAffectation);
+
+        if (dateFin != null)
+            {affectationACloturer.setDateFin(dateFin);}
+        else
+            {affectationACloturer.setDateFin(LocalDate.now());}
+
+        repositoryAffectation.miseAjourAffectation(affectationACloturer);
+
+    }
 
     @Override
     public List<Affectation> listerAffectation() {

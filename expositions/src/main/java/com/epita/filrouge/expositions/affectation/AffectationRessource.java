@@ -3,6 +3,7 @@ package com.epita.filrouge.expositions.affectation;
 import com.epita.filrouge.application.affectation.IAffectationManagement;
 import com.epita.filrouge.domain.affectation.Affectation;
 import com.epita.filrouge.domain.exception.AllReadyExistException;
+import com.epita.filrouge.domain.exception.BadRequestException;
 import com.epita.filrouge.domain.exception.BusinessException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -10,7 +11,6 @@ import org.springframework.security.access.annotation.Secured;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.constraints.NotNull;
-import java.nio.Buffer;
 import java.util.List;
 
 @RestController
@@ -39,4 +39,18 @@ public class AffectationRessource {
         final List<Affectation> affectations = affectationManagement.listerAffectation();
         return affectations;
     }
+
+    @PostMapping(value = "/affectation/cloture", consumes = { "application/json" }, produces =  { "application/json" })
+    @ResponseStatus(HttpStatus.OK)
+    @Secured("ROLE_TYPE2")
+    public void clotureAffectation(@NotNull @RequestBody final AffectationDTO affectationDTO) {
+
+        System.out.println("MCD  -  dans le post  mapping de clôturer affectation");
+        if (affectationDTO.getMotifFin() == null && affectationDTO.getAffectationCommentaire() == null) {
+            throw new BadRequestException("Motif de fin et commentaire non renseignés, ces données sont à transmettre impérativement");
+        }
+        affectationManagement.cloturerAffectation(affectationDTO.getNumeroAffectation(),affectationDTO.getAffectationCommentaire()
+                                                 ,affectationDTO.getMotifFin(),affectationDTO.getDateFin());
+    }
+
 }

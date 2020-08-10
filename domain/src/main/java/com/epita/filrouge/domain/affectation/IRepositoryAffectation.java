@@ -14,4 +14,8 @@ public interface IRepositoryAffectation {
     List<Affectation> rechercheAffectationAvecFiltres(String uid, String nomCollaborateur, String codeUo, String nomUsageUo, String nomSite,
                                                       String numeroLigneCollaborateur, String nomModeleIphone,
                                                       LocalDate dateRenouvMin, LocalDate dateRenouvMax);
+
+    Affectation chercheAffectationParNumeroAffectation(Long numeroAffectation);
+
+    void miseAjourAffectation(Affectation affectation);
 }

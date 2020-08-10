@@ -2,8 +2,13 @@ package com.epita.filrouge.domain.collaborateur;
 
 import com.epita.filrouge.domain.affectation.Affectation;
 
+import com.epita.filrouge.domain.affectation.AffectationNumeroGenerateur;
+import com.epita.filrouge.domain.exception.AllReadyExistException;
+import com.epita.filrouge.domain.iphone.Iphone;
 import com.epita.filrouge.domain.uo.Uo;
 
+
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -62,4 +67,34 @@ public class Collaborateur {
     public void affecterNumeroLigne (String numeroLigne){
 
     }
+
+//    public boolean controlCollaborateurEstSansAffectationEnCours() {
+//        if (affectationCollaborateur != null) {
+//            //faire la boucle for pour test de la date de fin. Si la date de fin est à NULL, l'affectation existe déjà donc refuser la création
+//
+//            for (final Affectation affectations : affectationCollaborateur) {
+//                if (affectations.getDateFin() == null) {
+//                    throw new AllReadyExistException("L'affectation pour ce collaborateur existe déjà, merci de la clôturer au préalable : " + affectations.getCollaborateur().getUid());
+//                }
+//            }
+//        }
+//        return true;
+//    }
+//
+//    public Affectation nouvelleAffectation(Iphone iPhone, LocalDate dateAffectation, String commentaire) {
+//        if (!controlCollaborateurEstSansAffectationEnCours() {
+//            throws Pas possible
+//        }
+//        if (!iPhone.controlDisponibiliteIphone()) {
+//            throws Iphone pas dispo
+//        }
+//
+//        Affectation affectation = new Affectation(AffectationNumeroGenerateur.genererNumeroAffectation(), dateAffectation, commentaire, this, iPhone);
+//
+//        affectationCollaborateur.add(affectation);
+//
+//        iPhone.addAffectation(affectation);
+//
+//        return affectation;
+//    }
 }

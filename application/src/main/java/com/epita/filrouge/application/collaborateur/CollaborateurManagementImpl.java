@@ -13,7 +13,7 @@ public class CollaborateurManagementImpl implements ICollaborateurManagement {
     private IRepositoryCollaborateur repositoryCollaborateur;
 
     @Override
-    public Collaborateur findByUid(String uid) {
+    public Collaborateur findByUid(String uid) throws NotFoundException{
         Collaborateur collaborateur = repositoryCollaborateur.findByUid(uid);
         if (collaborateur != null) {
             return collaborateur ;
@@ -24,7 +24,7 @@ public class CollaborateurManagementImpl implements ICollaborateurManagement {
 
 
     @Override
-    public Collaborateur findByNumeroLigne(String numeroLigne) {
+    public Collaborateur findByNumeroLigne(String numeroLigne) throws NotFoundException{
         return repositoryCollaborateur.findByNumeroLigne(numeroLigne);
     }
 }

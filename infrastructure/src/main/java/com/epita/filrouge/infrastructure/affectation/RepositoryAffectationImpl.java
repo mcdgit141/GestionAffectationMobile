@@ -2,6 +2,7 @@ package com.epita.filrouge.infrastructure.affectation;
 
 import com.epita.filrouge.domain.affectation.Affectation;
 import com.epita.filrouge.domain.affectation.IRepositoryAffectation;
+import com.epita.filrouge.domain.exception.NotFoundException;
 import com.epita.filrouge.infrastructure.collaborateur.CollaborateurEntity;
 import com.epita.filrouge.infrastructure.collaborateur.IRepositoryJpaCollaborateur;
 import com.epita.filrouge.infrastructure.iphone.IRepositoryJpaIphone;
@@ -66,7 +67,31 @@ public class RepositoryAffectationImpl implements IRepositoryAffectation {
 
         iRepositoryJpaAffectation.save(affectationEntity);
     }
+    @Override
+    public Affectation chercheAffectationParNumeroAffectation(Long numeroAffectation) {
 
+        AffectationEntity affectationEntity = iRepositoryJpaAffectation.findByNumeroAffectation(numeroAffectation);
+        if (affectationEntity != null)
+            return affectationMapper.mapToDomain(affectationEntity);
+        else {
+            throw new NotFoundException("L'affectation avec le numéro suivant n'existe pas " + numeroAffectation);
+        }
+    }
+
+    @Override
+    public void miseAjourAffectation(Affectation affectation) {
+
+        AffectationEntity affectationEntity = iRepositoryJpaAffectation.findByNumeroAffectation(affectation.getNumeroAffectation());
+        if (affectationEntity != null){
+            affectationEntity.setDateFin(affectation.getDateFin());
+            affectationEntity.setCommentaire(affectation.getCommentaire());
+            affectationEntity.setMotifFin(affectation.getMotifFin());
+            iRepositoryJpaAffectation.save(affectationEntity);
+        }
+        else {
+            throw new NotFoundException("L'affectation avec le numéro suivant n'existe pas " + affectation.getNumeroAffectation());
+        }
+    }
 
     @Override
     public List<Affectation> listerAffectation() {

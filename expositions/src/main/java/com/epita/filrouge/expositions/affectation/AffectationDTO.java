@@ -4,11 +4,14 @@ import java.time.LocalDate;
 
 public class AffectationDTO {
 
+    private Long numeroAffectation;
     private String collaborateurUid;
     private String iphoneNumeroSerie;
     private LocalDate affectationDate;
     private String collaborateurNumeroLigne;
     private String affectationCommentaire;
+    private String motifFin;
+    private LocalDate dateFin;
 
     public String getCollaborateurUid() {
         return collaborateurUid;
@@ -48,5 +51,17 @@ public class AffectationDTO {
 
     public void setAffectationCommentaire(String affectationCommentaire) {
         this.affectationCommentaire = affectationCommentaire;
+    }
+
+    public Long getNumeroAffectation() {
+        return numeroAffectation;
+    }
+
+    public String getMotifFin() {
+        return motifFin;
+    }
+
+    public LocalDate getDateFin() {
+        return dateFin;
     }
 }
