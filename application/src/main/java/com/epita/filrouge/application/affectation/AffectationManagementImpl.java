@@ -1,6 +1,7 @@
 package com.epita.filrouge.application.affectation;
 
 import com.epita.filrouge.domain.affectation.Affectation;
+import com.epita.filrouge.domain.affectation.AffectationNumeroGenerateur;
 import com.epita.filrouge.domain.affectation.IRepositoryAffectation;
 import com.epita.filrouge.domain.collaborateur.Collaborateur;
 import com.epita.filrouge.domain.collaborateur.IRepositoryCollaborateur;
@@ -12,6 +13,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Random;
@@ -35,6 +37,7 @@ public class AffectationManagementImpl implements IAffectationManagement {
     private IRepositoryIphone repositoryIphone;
 
     @Override
+    @Transactional
     public Affectation creerAffectation(String collaborateurUid, String iPhoneNumeroSerie, LocalDate dateAffectation, String numeroLigne, String commentaire) {
 
         monLogger.debug("creer affectation--collaborateurUid");
@@ -53,8 +56,8 @@ public class AffectationManagementImpl implements IAffectationManagement {
 
         monLogger.debug("application iPhone.getIphoneId() = {}}" ,iPhone.getIphoneId());
 
-        Long numeroAffectation = genererNumeroAffectation();
-        Affectation affectationACreer = new Affectation(numeroAffectation, dateAffectation, commentaire,collaborateur, iPhone);
+//        Long numeroAffectation = genererNumeroAffectation();
+        Affectation affectationACreer = new Affectation(AffectationNumeroGenerateur.genererNumeroAffectation(), dateAffectation, commentaire,collaborateur, iPhone);
 
         repositoryAffectation.affecter(affectationACreer);
 
@@ -89,10 +92,10 @@ public class AffectationManagementImpl implements IAffectationManagement {
         }
     }
 
-    private static Long genererNumeroAffectation() {
-        final Random random = new Random();
-        return random.nextLong();
-    }
+//    private static Long genererNumeroAffectation() {
+//        final Random random = new Random();
+//        return random.nextLong();
+//    }
 
     @Override
     public List<Affectation> listerAffectation() {

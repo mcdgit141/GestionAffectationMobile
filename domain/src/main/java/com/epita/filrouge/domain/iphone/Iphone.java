@@ -61,4 +61,5 @@ public class Iphone {
     public void setEtatIphone(EtatIphoneEnum etatIphone) {
         this.etatIphone = etatIphone;
     }
+
 }
