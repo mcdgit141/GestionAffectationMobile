@@ -26,20 +26,38 @@ public class UtilisateurTest {
         assertThat(utilisateurCree.getPassword()).isEqualTo("password");
     }
 
+
     @Test
-    @DisplayName("contruction d'un login à partir du nom et prénom de l'Utilisateur")
-    public void construireLogin_should_add_a_login_to_Utilisateur(){
+    @DisplayName("Construction d'un login à la création d'un Utilisateur")
+    public void utilisateur_should_be_constructed_with_a_login(){
         //giving
         String uid = "a19390";
         String nom = "DUPOND";
         String prenom = "Francois";
         UtilisateurRoleEnum role = UtilisateurRoleEnum.ROLE_TYPE1;
-        Utilisateur utilisateurCree = new Utilisateur(uid,nom,prenom,role);
 
         //when
-            utilisateurCree.construireLogin();
+        Utilisateur utilisateurCree = new Utilisateur(uid,nom,prenom,role);
 
         //then
         assertThat(utilisateurCree.getLogin()).isEqualTo("francois.dupond@entreprise.com");
+
     }
+
+//    @Test
+//    @DisplayName("contruction d'un login à partir du nom et prénom de l'Utilisateur")
+//    public void construireLogin_should_add_a_login_to_Utilisateur(){
+//        //giving
+//        String uid = "a19390";
+//        String nom = "DUPOND";
+//        String prenom = "Francois";
+//        UtilisateurRoleEnum role = UtilisateurRoleEnum.ROLE_TYPE1;
+//        Utilisateur utilisateurCree = new Utilisateur(uid,nom,prenom,role);
+//
+//        //when
+//            utilisateurCree.construireLogin();
+//
+//        //then
+//        assertThat(utilisateurCree.getLogin()).isEqualTo("francois.dupond@entreprise.com");
+//    }
 }

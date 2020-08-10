@@ -6,4 +6,6 @@ public interface IUtilisateurManagement {
 
     void enregistrerUtilisateur(String uid, String profil);
 
+    void supprimerUtilisateur(String uid);
+
 }

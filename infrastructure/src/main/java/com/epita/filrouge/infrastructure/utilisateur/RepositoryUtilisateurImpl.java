@@ -1,5 +1,6 @@
 package com.epita.filrouge.infrastructure.utilisateur;
 
+import com.epita.filrouge.domain.exception.NotFoundException;
 import com.epita.filrouge.domain.utilisateur.IRepositoryUtilisateur;
 import com.epita.filrouge.domain.utilisateur.Utilisateur;
 import com.epita.filrouge.domain.utilisateur.UtilisateurRoleEnum;
@@ -20,6 +21,16 @@ public class RepositoryUtilisateurImpl implements IRepositoryUtilisateur {
 
 
     @Override
+    public void deleteUser(Utilisateur utilisateurASupprimer) {
+        UtilisateurEntity monUtilisateurEntityASupprimer = userJpaRepository.findByLogin(utilisateurASupprimer.getLogin());
+        if (monUtilisateurEntityASupprimer != null) {
+            userJpaRepository.delete(monUtilisateurEntityASupprimer);
+        } else {
+            throw new NotFoundException("UtilisateurEntity à supprimer inexistant");
+        }
+    }
+
+    @Override
     public void creerUser(Utilisateur utilisateur) {
         UtilisateurEntity monUtilisateurEntity = utilisateurMapper.mapToEntity(utilisateur);
 
@@ -34,28 +45,6 @@ public class RepositoryUtilisateurImpl implements IRepositoryUtilisateur {
         } else {
             return  null;
         }
-    }
-
-    @Override
-    public List<Utilisateur> findAllUser() {
-        return null;
-    }
-
-    @Override
-    public List<Utilisateur> rechercherParUserRole(UtilisateurRoleEnum userRole) {
-        return null;
-    }
-
-    @Override
-    public void upgradeUser(Utilisateur utilisateur) {
-        UtilisateurEntity monUtilisateurEntity = userJpaRepository.findByLogin(utilisateur.getLogin());
-        monUtilisateurEntity.setUserRole(UtilisateurRoleEnum.ROLE_TYPE2);
-    }
-
-    @Override
-    public void setAdmin(Utilisateur utilisateur) {
-        UtilisateurEntity monUtilisateurEntity = userJpaRepository.findByLogin(utilisateur.getLogin());
-        monUtilisateurEntity.setUserRole(UtilisateurRoleEnum.ROLE_ADMIN);
     }
 
 }

@@ -4,6 +4,7 @@ import com.epita.filrouge.application.collaborateur.ICollaborateurManagement;
 import com.epita.filrouge.domain.collaborateur.Collaborateur;
 import com.epita.filrouge.domain.exception.AllReadyExistException;
 import com.epita.filrouge.domain.exception.BadRequestException;
+import com.epita.filrouge.domain.exception.NotFoundException;
 import com.epita.filrouge.domain.utilisateur.IRepositoryUtilisateur;
 import com.epita.filrouge.domain.utilisateur.Utilisateur;
 import com.epita.filrouge.domain.utilisateur.UtilisateurRoleEnum;
@@ -38,7 +39,6 @@ public class UtilisateurManagementImpl implements IUtilisateurManagement{
         }
 
         Utilisateur utilisateurACreer = new Utilisateur(monCollaborateur.getUid(),monCollaborateur.getNom(), monCollaborateur.getPrenom(), roleUtilisateurACreer);
-        utilisateurACreer.construireLogin();
         Utilisateur utilisateurExistant = repositoryUtilisateur.rechercherUser(utilisateurACreer.getLogin());
         if (utilisateurExistant == null){
             repositoryUtilisateur.creerUser(utilisateurACreer);
@@ -48,4 +48,13 @@ public class UtilisateurManagementImpl implements IUtilisateurManagement{
 
     }
 
+    @Override
+    public void supprimerUtilisateur(String login) {
+        Utilisateur utilisateurASupprimer = repositoryUtilisateur.rechercherUser(login);
+        if (utilisateurASupprimer != null){
+            repositoryUtilisateur.deleteUser(utilisateurASupprimer);
+        } else {
+            throw new NotFoundException("Aucun utilisateur existant avec ce login");
+        }
+    }
 }

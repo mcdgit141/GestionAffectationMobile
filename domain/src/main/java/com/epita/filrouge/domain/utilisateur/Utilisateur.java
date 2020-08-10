@@ -15,15 +15,16 @@ public class Utilisateur {
         this.prenom = prenom;
         password = "password";
         this.userRole = userRole;
+        this.login = prenom.toLowerCase() + "." + nom.toLowerCase() + "@entreprise.com";
     }
 
     public void setLogin(String login) {
         this.login = login;
     }
 
-    public void construireLogin() {
-        this.login = this.prenom.toLowerCase() + "." + this.nom.toLowerCase() + "@entreprise.com";
-    }
+//    public void construireLogin() {
+//        this.login = this.prenom.toLowerCase() + "." + this.nom.toLowerCase() + "@entreprise.com";
+//    }
 
     public String getUid() {
         return uid;
