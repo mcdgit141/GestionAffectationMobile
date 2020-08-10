@@ -34,7 +34,7 @@ public class UtilisateurManagementImpl implements IUtilisateurManagement{
                 roleUtilisateurACreer = UtilisateurRoleEnum.ROLE_TYPE2;
                 break;
             default:
-                throw new BadRequestException("role utilisateur transmis inconnu");
+                throw new BadRequestException("rôle utilisateur transmis inconnu");
         }
 
         Utilisateur utilisateurACreer = new Utilisateur(monCollaborateur.getUid(),monCollaborateur.getNom(), monCollaborateur.getPrenom(), roleUtilisateurACreer);
