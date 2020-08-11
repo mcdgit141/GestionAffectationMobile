@@ -2,6 +2,7 @@ package com.epita.filrouge.application.affectation;
 
 import com.epita.filrouge.domain.affectation.Affectation;
 import com.epita.filrouge.domain.affectation.AffectationNumeroGenerateur;
+import com.epita.filrouge.domain.affectation.FiltresAffectation;
 import com.epita.filrouge.domain.affectation.IRepositoryAffectation;
 import com.epita.filrouge.domain.collaborateur.Collaborateur;
 import com.epita.filrouge.domain.collaborateur.IRepositoryCollaborateur;
@@ -102,9 +103,15 @@ public class AffectationManagementImpl implements IAffectationManagement {
         return repositoryAffectation.listerAffectation();
     }
 
-    @Override
-    public List<Affectation> listerAffection(String uid, String nom, String codeUo, String nomUsageUo, String nomSite, String numeroLigneCollaborateur, String nomModeleIphone, LocalDate dateRenouvMin, LocalDate dateRenouvMax) {
+    public List<Affectation> listerAffectation(String uid, String nom, String codeUo, String nomUsageUo, String nomSite, String numeroLigneCollaborateur, String nomModeleIphone, LocalDate dateRenouvMin, LocalDate dateRenouvMax) {
 
         return repositoryAffectation.rechercheAffectationAvecFiltres(uid,nom,codeUo,nomUsageUo,nomSite,numeroLigneCollaborateur,nomModeleIphone,dateRenouvMin,dateRenouvMax);
+    }
+
+    @Override
+    public List<Affectation> listerAffectation(FiltresAffectation filtresAffectation) {
+
+//        return repositoryAffectation.rechercheAffectationAvecFiltres(filtresAffectation);
+        return null;
     }
 }
