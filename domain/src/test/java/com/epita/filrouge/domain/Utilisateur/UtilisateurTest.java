@@ -2,6 +2,7 @@ package com.epita.filrouge.domain.Utilisateur;
 
 import com.epita.filrouge.domain.utilisateur.Utilisateur;
 import com.epita.filrouge.domain.utilisateur.UtilisateurRoleEnum;
+import org.junit.Ignore;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
@@ -16,14 +17,14 @@ public class UtilisateurTest {
         //giving
         String uid = "a19390";
         String nom = "DUPOND";
-        String prenom = "Francois";
+        String prenom = "François";
         UtilisateurRoleEnum role = UtilisateurRoleEnum.ROLE_TYPE1;
 
         //when
         Utilisateur utilisateurCree = new Utilisateur(uid,nom,prenom,role);
 
         //then
-        assertThat(utilisateurCree.getPassword()).isEqualTo("password");
+        assertThat(utilisateurCree.getPassword()).isNotNull();
     }
 
 
@@ -33,7 +34,7 @@ public class UtilisateurTest {
         //giving
         String uid = "a19390";
         String nom = "DUPOND";
-        String prenom = "Francois";
+        String prenom = "François";
         UtilisateurRoleEnum role = UtilisateurRoleEnum.ROLE_TYPE1;
 
         //when
@@ -44,6 +45,17 @@ public class UtilisateurTest {
 
     }
 
+//    @Test
+//    @DisplayName("TU de la methode de remplacement des caractère spéciaux dans une String")
+//    public void remplacementCaractereSpeciaux_should_return_a_string_without_specialChar(){
+//        //given
+//
+//        //when
+//        String resultat = Utilisateur.remplacementCaractereSpec("Léöpôld");
+//
+//        //then
+//        assertThat(resultat).isEqualTo("leopold");
+//    }
 //    @Test
 //    @DisplayName("contruction d'un login à partir du nom et prénom de l'Utilisateur")
 //    public void construireLogin_should_add_a_login_to_Utilisateur(){
