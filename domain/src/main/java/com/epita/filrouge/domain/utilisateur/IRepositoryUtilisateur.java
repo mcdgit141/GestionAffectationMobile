@@ -1,5 +1,7 @@
 package com.epita.filrouge.domain.utilisateur;
 
+import com.epita.filrouge.domain.exception.NotFoundException;
+
 import java.util.List;
 
 public interface IRepositoryUtilisateur {
@@ -7,12 +9,9 @@ public interface IRepositoryUtilisateur {
 
      Utilisateur rechercherUser(String login);
 
-    List<Utilisateur> findAllUser();
+    void deleteUser(Utilisateur utilisateurASupprimer);
 
-    List<Utilisateur> rechercherParUserRole(UtilisateurRoleEnum userRole);
-
-    void upgradeUser(Utilisateur utilisateur);
-
-    void setAdmin(Utilisateur utilisateur);
+    Utilisateur rechercherUserParUid(String uid);
 
 }
+

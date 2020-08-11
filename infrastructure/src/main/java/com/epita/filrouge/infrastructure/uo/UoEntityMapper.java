@@ -36,7 +36,7 @@ public class UoEntityMapper extends AbstractMapper<Uo, UoEntity> {
         uoEntity.setNomResponsableUo(uo.getNomResponsableUo());
         // Utilisation du mapper pour donner un siteExerciceEntity à l'UO entity
         if (uo.getSiteExercice() != null) {
-            uoEntity.setSiteExercice(siteExerciceMapper.mapToEntity(uo.getSiteExercice()));
+            uoEntity.setSiteExercice(repositoryJpaSiteExercice.findByCodeSite(uo.getSiteExercice().getCodeSite()));
         }
 
         // mise en commentaire du find, pour donner un siteExerciceEntity à l'UO entity

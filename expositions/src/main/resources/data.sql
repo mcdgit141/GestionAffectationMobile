@@ -164,17 +164,17 @@ INSERT INTO utilisateur_entity(
 
    login, password, uid, user_role)
 
-   VALUES ('admin', 'admin', '208656', 'ROLE_ADMIN');
+   VALUES ('admin', '$2a$10$ZiJkoU7aFquTyUm5QEF5suvJEn41zQjjPLeILaPzKcFzrsrNqoVea', '208656', 'ROLE_ADMIN');
 
 INSERT INTO utilisateur_entity(
 
    login, password, uid, user_role)
 
-   VALUES ('user1', 'password', '100200', 'ROLE_TYPE1');
+   VALUES ('user1', '$2a$10$ix2v00b5v0E.Ro3ZM0/Vv.cK704O4N1w/.yQeNq46KIVKmDanaHBi', '100200', 'ROLE_TYPE1');
 
 INSERT INTO utilisateur_entity(
 
    login, password, uid, user_role)
 
-   VALUES ('user2', 'password', '200300', 'ROLE_TYPE2');
+   VALUES ('user2', '$2a$10$ix2v00b5v0E.Ro3ZM0/Vv.cK704O4N1w/.yQeNq46KIVKmDanaHBi', '200300', 'ROLE_TYPE2');
 

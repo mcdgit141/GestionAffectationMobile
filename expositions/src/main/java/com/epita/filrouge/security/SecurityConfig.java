@@ -41,10 +41,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Override
     protected void configure(AuthenticationManagerBuilder auth) throws Exception {
-        auth.userDetailsService(userDetailServiceImpl).passwordEncoder(passwordEncoder());
-        monLogger.debug("******* AUTHENTIFICATION ********");
-        monLogger.debug("**** mdp admin crypté *** " + passwordEncoderBis().encode("admin"));
-        monLogger.debug("**** mdp password crypté *** " + passwordEncoderBis().encode("password"));
+        auth.userDetailsService(userDetailServiceImpl).passwordEncoder(passwordEncoderBis());
     }
 
     @Override
@@ -83,6 +80,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         public void onAuthenticationSuccess(final HttpServletRequest request, final HttpServletResponse response,
                                             final Authentication authentication) throws IOException, ServletException {
             response.setStatus(HttpServletResponse.SC_OK);
+            response.getOutputStream().println("Authentifie sur l'application GestionAffectationMobile");
         }
     }
 
@@ -90,7 +88,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         @Override
         public void onAuthenticationFailure(HttpServletRequest request, HttpServletResponse response, AuthenticationException exception) throws IOException, ServletException {
             response.setStatus(HttpServletResponse.SC_FORBIDDEN);
-            response.getOutputStream().println("login ou mdp incorrecte");
+            response.getOutputStream().println("*** AUTHENTIFICATION KO ****");
+            response.getOutputStream().print("Login ou mdp incorrecte");
             monLogger.debug("*** AUTHENTIFICATION ECHOUEE ****");
             for (String param : request.getQueryString().split("&")) {
                 monLogger.debug(param);
@@ -104,14 +103,9 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         public void onLogoutSuccess(final HttpServletRequest request, final HttpServletResponse response,
                                     final Authentication authentication) throws IOException, ServletException {
             response.setStatus(HttpServletResponse.SC_OK);
+            response.getOutputStream().println("Deconnecte de l'application GestionAffectationMobile");
         }
     }
-
-    @Bean
-    public PasswordEncoder passwordEncoder() {
-        return NoOpPasswordEncoder.getInstance();
-    }
-
 
     @Bean
     public PasswordEncoder passwordEncoderBis() {
