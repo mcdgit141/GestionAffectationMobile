@@ -2,7 +2,7 @@ package com.epita.filrouge.expositions.affectation;
 
 import com.epita.filrouge.application.affectation.IAffectationManagement;
 import com.epita.filrouge.domain.affectation.Affectation;
-import com.epita.filrouge.domain.exception.AllReadyExistException;
+import com.epita.filrouge.domain.affectation.FiltresAffectation;
 import com.epita.filrouge.domain.exception.BusinessException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -24,10 +24,9 @@ public class AffectationRessource {
     @PostMapping(value = "/affectation", consumes = { "application/json" }, produces =  { "application/json" })
     @ResponseStatus(HttpStatus.CREATED)
     @Secured({"ROLE_ADMIN","ROLE_TYPE2"})
-    public void saveAffectation(@NotNull @RequestBody final AffectationDTO affectationDTO) {
+    public Affectation saveAffectation(@NotNull @RequestBody final AffectationDTO affectationDTO) {
    //     throw new AllReadyExistException("foo");
-        System.out.println("DV  -  dans le post  mapping");
-        affectationManagement.creerAffectation(affectationDTO.getCollaborateurUid(),affectationDTO.getIphoneNumeroSerie(),
+        return  affectationManagement.creerAffectation(affectationDTO.getCollaborateurUid(),affectationDTO.getIphoneNumeroSerie(),
                                    affectationDTO.getAffectationDate(),affectationDTO.getCollaborateurNumeroLigne(),
                                    affectationDTO.getAffectationCommentaire());
 
@@ -37,6 +36,13 @@ public class AffectationRessource {
     public List<Affectation> rechercheAffectation(){
 
         final List<Affectation> affectations = affectationManagement.listerAffectation();
+        return affectations;
+    }
+
+    @PostMapping(value = "/listeaffectation", consumes = { "application/json" }, produces =  { "application/json" })
+    @Secured({"ROLE_ADMIN","ROLE_TYPE1","ROLE_TYPE2"})
+    public List<Affectation> rechercheAffectation(@NotNull @RequestBody final FiltresAffectation filtresAffectation){
+        final List<Affectation> affectations = affectationManagement.listerAffectation(filtresAffectation);
         return affectations;
     }
 }
