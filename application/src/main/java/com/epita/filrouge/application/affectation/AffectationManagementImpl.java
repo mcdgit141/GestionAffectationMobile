@@ -21,6 +21,7 @@ import java.util.List;
 import java.util.Random;
 
 import java.time.LocalDate;
+import java.util.concurrent.Callable;
 
 @Service
 public class AffectationManagementImpl implements IAffectationManagement {
@@ -103,18 +104,28 @@ public class AffectationManagementImpl implements IAffectationManagement {
     public void cloturerAffectation (Long numeroAffectation, String affectationCommentaire, String motifFin, LocalDate dateFin) throws NotFoundException {
 
         Affectation affectationACloturer = repositoryAffectation.chercheAffectationParNumeroAffectation(numeroAffectation);
+
+        Collaborateur collaborateur = repositoryCollaborateur.findByUid(affectationACloturer.getCollaborateur().getUid());
+        Collaborateur collaborateurAMettreAJourSuiteClotureAffectation = collaborateur.miseAJourCollaborateurSuiteClotureAffectation();
+
+        Iphone iphone = repositoryIphone.rechercheIphoneParNumeroSerie(affectationACloturer.getIphone().getNumeroSerie());
+        Iphone iphoneAMettreAJourSuiteClotureAffectation = iphone.miseAJourIphoneSuiteClotureAffectation();
+
+        Affectation affectationACloturerFinal = affectationACloturer.reglesAppliqueesPourCloturerAffectation(collaborateurAMettreAJourSuiteClotureAffectation,
+                                                iphoneAMettreAJourSuiteClotureAffectation,affectationCommentaire,motifFin,dateFin);
+
         System.out.println("couche application -cloturerAffectation--affectationAcloturer.getNumeroAffectation---" + affectationACloturer.getNumeroAffectation());
         System.out.println("couche application -cloturerAffectation--dateFin---" + dateFin);
 
-        if (dateFin != null)
-            {affectationACloturer.setDateFin(dateFin);}
-        else
-            {affectationACloturer.setDateFin(LocalDate.now());}
+//        if (dateFin != null)
+//            {affectationACloturer.setDateFin(dateFin);}
+//        else
+//            {affectationACloturer.setDateFin(LocalDate.now());}
+//
+//        affectationACloturer.setMotifFin(motifFin);
+//        affectationACloturer.setCommentaire(affectationCommentaire);
 
-        affectationACloturer.setMotifFin(motifFin);
-        affectationACloturer.setCommentaire(affectationCommentaire);
-
-        repositoryAffectation.miseAjourAffectation(affectationACloturer);
+        repositoryAffectation.miseAjourAffectation(affectationACloturerFinal);
 
     }
 

@@ -56,14 +56,16 @@ public class RepositoryAffectationImpl implements IRepositoryAffectation {
 
         AffectationEntity affectationEntity = new AffectationEntity();
 
-        affectationEntity.setNumeroAffectation(affectationACreer.getNumeroAffectation());
-        affectationEntity.setDateAffectation(affectationACreer.getDateAffectation());
-        affectationEntity.setDateRenouvellementPrevue(affectationACreer.getDateRenouvellementPrevue());
-        affectationEntity.setDateFin(affectationACreer.getDateFin());
-        affectationEntity.setCommentaire(affectationACreer.getCommentaire());
-        affectationEntity.setMotifFin(affectationACreer.getMotifFin());
-        affectationEntity.setCollaborateur(monCollaborateurEntity);
-        affectationEntity.setIphone(monIphoneEntity);
+        affectationEntity = affectationEntityMapper.mapToEntity(affectationACreer);
+
+//        affectationEntity.setNumeroAffectation(affectationACreer.getNumeroAffectation());
+//        affectationEntity.setDateAffectation(affectationACreer.getDateAffectation());
+//        affectationEntity.setDateRenouvellementPrevue(affectationACreer.getDateRenouvellementPrevue());
+//        affectationEntity.setDateFin(affectationACreer.getDateFin());
+//        affectationEntity.setCommentaire(affectationACreer.getCommentaire());
+//        affectationEntity.setMotifFin(affectationACreer.getMotifFin());
+//        affectationEntity.setCollaborateur(monCollaborateurEntity);
+//        affectationEntity.setIphone(monIphoneEntity);
 
         iRepositoryJpaAffectation.save(affectationEntity);
     }
@@ -89,10 +91,26 @@ public class RepositoryAffectationImpl implements IRepositoryAffectation {
             System.out.println("Dans couche infrastructure---affectation.getDateFin() " + affectation.getDateFin());
             System.out.println("Dans couche infrastructure---affectation.getCommentaire() " + affectation.getCommentaire());
             System.out.println("Dans couche infrastructure---affectation.getMotifFin() " + affectation.getMotifFin());
-            affectationEntity.setDateFin(affectation.getDateFin());
+//            affectationEntity.setDateFin(affectation.getDateFin());
+//            affectationEntity.setCommentaire(affectation.getCommentaire());
+//            affectationEntity.setMotifFin(affectation.getMotifFin());
+//
+            CollaborateurEntity collaborateurEntity = iRepositoryJpaCollaborateur.findByUid(affectation.getCollaborateur().getUid());
+            collaborateurEntity.setNumeroLigne(affectation.getCollaborateur().getNumeroLigne());
+
+            IphoneEntity iphoneEntity = iRepositoryJpaIphone.findByNumeroSerie(affectation.getIphone().getNumeroSerie());
+            iphoneEntity.setEtatIphone(affectation.getIphone().getEtatIphone());
+
+            affectationEntity.setCollaborateur(collaborateurEntity);
+            affectationEntity.setIphone(iphoneEntity);
+            affectationEntity.setNumeroAffectation(affectation.getNumeroAffectation());
             affectationEntity.setCommentaire(affectation.getCommentaire());
+            affectationEntity.setDateAffectation(affectation.getDateAffectation());
+            affectationEntity.setDateFin(affectation.getDateFin());
             affectationEntity.setMotifFin(affectation.getMotifFin());
-            iRepositoryJpaAffectation.save(affectationEntity);
+            affectationEntity.setDateRenouvellementPrevue(affectation.getDateRenouvellementPrevue());
+
+             iRepositoryJpaAffectation.save(affectationEntity);
         }
         else {
             System.out.println("Dans couche infrastructure---miseAjourAffectation égal à null");

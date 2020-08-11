@@ -78,4 +78,18 @@ public class Affectation {
     public void setCommentaire(String commentaire) {
         this.commentaire = commentaire;
     }
+
+    public Affectation reglesAppliqueesPourCloturerAffectation(Collaborateur collaborateur, Iphone iphone, String affectationCommentaire,String motifFin,LocalDate dateFin){
+
+        if (dateFin != null)
+            {this.setDateFin(dateFin);}
+        else
+            {this.setDateFin(LocalDate.now());}
+       this.setMotifFin(motifFin);
+       this.setCommentaire(affectationCommentaire);
+       this.collaborateur = collaborateur;
+       this.iphone = iphone;
+
+        return this;
+    }
 }

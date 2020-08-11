@@ -63,6 +63,14 @@ public class Iphone {
         affectationIphone.add(affectation);
     }
 
+    public Iphone miseAJourIphoneSuiteClotureAffectation() {
+
+        if (this.etatIphone == EtatIphoneEnum.AFFECTE){
+            this.etatIphone = EtatIphoneEnum.DISPONIBLE;
+        }
+        return this;
+    }
+
 //    public void addAffectation(final Affectation affectation) {
 //        if (affectation.getDateFin() == null) {
 //            affectationIphone.add(affectation);

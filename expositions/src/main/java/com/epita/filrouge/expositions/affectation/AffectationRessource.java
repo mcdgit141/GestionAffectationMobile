@@ -26,7 +26,18 @@ public class AffectationRessource {
     @Secured({"ROLE_ADMIN","ROLE_TYPE2"})
     public void saveAffectation(@NotNull @RequestBody final AffectationDTO affectationDTO) {
    //     throw new AllReadyExistException("foo");
-        System.out.println("DV  -  dans le post  mapping");
+
+        if (affectationDTO.getCollaborateurNumeroLigne() == null) {
+            throw new BadRequestException("numéro de ligne non renseigné, donnée à saisir impérativement");
+        }
+        if (affectationDTO.getCollaborateurUid() == null) {
+            throw new BadRequestException("collaborateur id non renseigné, donnée à saisir impérativement");
+        }
+
+        if (affectationDTO.getIphoneNumeroSerie() == null) {
+        throw new BadRequestException("numéro série iphone non renseigné, donnée à saisir impérativement");
+        }
+
         affectationManagement.creerAffectation(affectationDTO.getCollaborateurUid(),affectationDTO.getIphoneNumeroSerie(),
                                    affectationDTO.getAffectationDate(),affectationDTO.getCollaborateurNumeroLigne(),
                                    affectationDTO.getAffectationCommentaire());
@@ -52,12 +63,12 @@ public class AffectationRessource {
 
         if (affectationDTO.getAffectationCommentaire() == null) {
             System.out.println("test couche exposition commentaire non renseigné");
-            throw new BadRequestException("couche exposition commentaire non renseigné, donnée à saisir impérativement");
+            throw new BadRequestException("commentaire non renseigné, donnée à saisir impérativement");
         }
 
         if (affectationDTO.getMotifFin() == null) {
             System.out.println("test couche exposition motif fin non renseigné");
-            throw new BadRequestException("couche exposition Motif de fin non renseigné, donnée à saisir impérativement");
+            throw new BadRequestException("Motif de fin non renseigné, donnée à saisir impérativement");
         }
 
         affectationManagement.cloturerAffectation(affectationDTO.getNumeroAffectation(),affectationDTO.getAffectationCommentaire()
