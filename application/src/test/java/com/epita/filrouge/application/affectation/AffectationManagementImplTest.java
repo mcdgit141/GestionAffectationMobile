@@ -1,6 +1,7 @@
 package com.epita.filrouge.application.affectation;
 
 import com.epita.filrouge.domain.affectation.Affectation;
+import com.epita.filrouge.domain.affectation.FiltresAffectation;
 import com.epita.filrouge.domain.affectation.IRepositoryAffectation;
 import com.epita.filrouge.domain.collaborateur.Collaborateur;
 import com.epita.filrouge.domain.collaborateur.IRepositoryCollaborateur;
@@ -12,13 +13,11 @@ import com.epita.filrouge.domain.iphone.ModeleIphone;
 
 import com.epita.filrouge.domain.site.SiteExercice;
 import com.epita.filrouge.domain.uo.Uo;
-import org.junit.jupiter.api.BeforeAll;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Disabled;
-import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.*;
 
 import org.junit.jupiter.api.extension.ExtendWith;
 
+import org.mockito.ArgumentCaptor;
 import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -31,9 +30,7 @@ import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.catchThrowable;
-import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.nullable;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
@@ -66,6 +63,7 @@ public class AffectationManagementImplTest {
     private static final Double IPHONE_PRIX = 800D;
     private static final EtatIphoneEnum IPHONE_ETAT = EtatIphoneEnum.DISPONIBLE;
 
+    private static final Long AFFECTATION_NUMERO = 1L;
     private static final LocalDate AFFECTATION_DATE = LocalDate.now();
     private static final String AFFECTATION_COMMENTAIRE = "Premeire affectation";
 
@@ -130,7 +128,7 @@ public class AffectationManagementImplTest {
         verify(repositoryAffectation, Mockito.times(1)).affecter(any(Affectation.class));
         verify(repositoryCollaborateur, Mockito.times(1)).miseAJourCollaborateur(collaborateur, COLLABORATEUR_NUMEROLIGNE);
         verify(repositoryCollaborateur, Mockito.times(1)).miseAJourCollaborateur(collaborateur, COLLABORATEUR_NUMEROLIGNE);
-        verify(repositoryIphone, Mockito.times(1)).miseAJourEtatIphone(IPHONE_NUMEROSERIE,EtatIphoneEnum.AFFECTE);
+        verify(repositoryIphone, Mockito.times(1)).miseAJourEtatIphone(IPHONE_NUMEROSERIE, EtatIphoneEnum.AFFECTE);
     }
 
     @Test
@@ -140,7 +138,7 @@ public class AffectationManagementImplTest {
         when(repositoryIphone.rechercheIphoneParNumeroSerie(IPHONE_NUMEROSERIE)).thenReturn(iphoneAffecte);
 
         //When
-        Throwable thrown = catchThrowable( () -> affectationManagementImpl.creerAffectation(COLLABORATEUR_UID, IPHONE_NUMEROSERIE, AFFECTATION_DATE, COLLABORATEUR_NUMEROLIGNE, AFFECTATION_COMMENTAIRE));
+        Throwable thrown = catchThrowable(() -> affectationManagementImpl.creerAffectation(COLLABORATEUR_UID, IPHONE_NUMEROSERIE, AFFECTATION_DATE, COLLABORATEUR_NUMEROLIGNE, AFFECTATION_COMMENTAIRE));
         String messageAttendu = "Cet iPhone n'est pas disponible, merci de recommencer : " + IPHONE_NUMEROSERIE;
         //Then
         assertThat(thrown).isInstanceOf(AllReadyExistException.class);
@@ -159,7 +157,7 @@ public class AffectationManagementImplTest {
         listAffections.add(affectationEnCours);
         when(repositoryAffectation.rechercheAffectationByUid(COLLABORATEUR_UID)).thenReturn(listAffections);
         //When
-        Throwable thrown = catchThrowable( () -> affectationManagementImpl.creerAffectation(COLLABORATEUR_UID, IPHONE_NUMEROSERIE, AFFECTATION_DATE, COLLABORATEUR_NUMEROLIGNE, AFFECTATION_COMMENTAIRE));
+        Throwable thrown = catchThrowable(() -> affectationManagementImpl.creerAffectation(COLLABORATEUR_UID, IPHONE_NUMEROSERIE, AFFECTATION_DATE, COLLABORATEUR_NUMEROLIGNE, AFFECTATION_COMMENTAIRE));
         String messageAttendu = "L'affectation pour ce collaborateur existe déjà, merci de la clôturer au préalable : " + COLLABORATEUR_UID;
         //Then
         assertThat(thrown).isInstanceOf(AllReadyExistException.class);
@@ -185,7 +183,98 @@ public class AffectationManagementImplTest {
         verify(repositoryIphone, Mockito.times(1)).rechercheIphoneParNumeroSerie(IPHONE_NUMEROSERIE);
         verify(repositoryAffectation, Mockito.times(1)).affecter(any(Affectation.class));
         verify(repositoryCollaborateur, Mockito.times(1)).miseAJourCollaborateur(collaborateur, COLLABORATEUR_NUMEROLIGNE);
-        verify(repositoryIphone, Mockito.times(1)).miseAJourEtatIphone(IPHONE_NUMEROSERIE,EtatIphoneEnum.AFFECTE);
+        verify(repositoryIphone, Mockito.times(1)).miseAJourEtatIphone(IPHONE_NUMEROSERIE, EtatIphoneEnum.AFFECTE);
     }
 
+    @Test
+    @DisplayName("Doit transmettre la demande d'affichage avec les bons filtres")
+    void ShouldCallWithTheFilters() throws Exception {
+        //Given
+        FiltresAffectation filtresAffectation = new FiltresAffectation();
+        filtresAffectation.setUid(COLLABORATEUR_UID);
+        filtresAffectation.setNomModeleIphone(MODELE_NOMMODELE);
+
+        Affectation affectationRetournee = instancierUneAffectation();
+        List<Affectation> listeAffectationsRetournee = new ArrayList<>();
+        listeAffectationsRetournee.add(affectationRetournee);
+
+        when(repositoryAffectation.rechercheAffectationAvecFiltres(any(FiltresAffectation.class))).thenReturn(listeAffectationsRetournee);
+
+        ArgumentCaptor<FiltresAffectation> filtresAffectationArgumentCaptor = ArgumentCaptor.forClass(FiltresAffectation.class);
+        //When
+        List<Affectation> listeAffectationRetournee = affectationManagementImpl.listerAffectation(filtresAffectation);
+
+        //Then
+        verify(repositoryAffectation).rechercheAffectationAvecFiltres(filtresAffectationArgumentCaptor.capture());
+
+        FiltresAffectation filtresAffectationTransmis = filtresAffectationArgumentCaptor.getValue();
+
+        assertThat(filtresAffectationTransmis)
+                .extracting(FiltresAffectation::getUid,
+                        FiltresAffectation::getNom,
+                        FiltresAffectation::getNumeroLigneCollaborateur,
+                        FiltresAffectation::getCodeUo,
+                        FiltresAffectation::getNomUsageUo,
+                        FiltresAffectation::getNomSite,
+                        FiltresAffectation::getNomModeleIphone,
+                        FiltresAffectation::getDateRenouvMin,
+                        FiltresAffectation::getDateRenouvMax)
+                .containsExactly(COLLABORATEUR_UID,
+                        null, null, null, null, null,
+                        MODELE_NOMMODELE,
+                        null, null);
+
+
+        verify(repositoryAffectation, Mockito.times(1)).rechercheAffectationAvecFiltres(any(FiltresAffectation.class));
+
+    }
+
+    @Test
+    @DisplayName("Doit bien renvoyer les affectations quand demande d'affichage avec filtres")
+    void ShouldReturnAffectations_WhenFilters() throws Exception {
+        //Given
+        FiltresAffectation filtresAffectation = new FiltresAffectation();
+        filtresAffectation.setUid(COLLABORATEUR_UID);
+
+        Affectation affectationRetournee = instancierUneAffectation();
+        List<Affectation> listeAffectationsRetournee = new ArrayList<>();
+        listeAffectationsRetournee.add(affectationRetournee);
+
+        when(repositoryAffectation.rechercheAffectationAvecFiltres(any(FiltresAffectation.class))).thenReturn(listeAffectationsRetournee);
+
+        //When
+        List<Affectation> listeAffectationRetournee = affectationManagementImpl.listerAffectation(filtresAffectation);
+
+        //Then
+        assertThat(listeAffectationRetournee).size().isEqualTo(1);
+
+        assertThat(listeAffectationRetournee.get(0))
+                .extracting(
+                        Affectation::getNumeroAffectation,
+                        Affectation::getDateAffectation,
+                        Affectation::getDateRenouvellementPrevue,
+                        Affectation::getDateFin, Affectation::getMotifFin)
+                .containsExactly(
+                        AFFECTATION_NUMERO,
+                        AFFECTATION_DATE,
+                        AFFECTATION_DATE.plusYears(2),
+                        null, null);
+
+    }
+
+    private Affectation instancierUneAffectation() {
+        LocalDate dateRevouvelementAttentue = AFFECTATION_DATE.plusYears(2);
+
+        SiteExercice siteExercice = new SiteExercice(CODE_SITE, NOM_SITE, ADRESSE_POSTALE, CODE_POSTAL, VILLE, PAYS, DATE_CREATION);
+        Uo uo = new Uo(CODE_UO, FONCTION_RATTACHEMENT, CODE_UO_PARENT, NOM_USAGE_UO, NOM_RESPONSABLE_UO);
+        uo.setSiteExercice(siteExercice);
+
+        Collaborateur collaborateur = new Collaborateur(COLLABORATEUR_UID, COLLABORATEUR_NOM, COLLABORATEUR_PRENOM, COLLABORATEUR_NUMEROLIGNE, uo);
+
+        ModeleIphone modeleIphone = new ModeleIphone(1L, MODELE_NOMMODELE);
+        Iphone iphone = new Iphone(1L, IPHONE_NUMEROSERIE, IPHONE_PRIX, modeleIphone, IPHONE_ETAT);
+
+        return new Affectation(AFFECTATION_NUMERO, AFFECTATION_DATE, AFFECTATION_COMMENTAIRE, collaborateur, iphone);
+
+    }
 }
