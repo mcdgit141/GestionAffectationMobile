@@ -1,6 +1,7 @@
 package com.epita.filrouge.infrastructure.affectation;
 
 import com.epita.filrouge.domain.affectation.Affectation;
+import com.epita.filrouge.domain.affectation.FiltresAffectation;
 import com.epita.filrouge.domain.affectation.IRepositoryAffectation;
 import com.epita.filrouge.infrastructure.collaborateur.CollaborateurEntity;
 import com.epita.filrouge.infrastructure.collaborateur.IRepositoryJpaCollaborateur;
@@ -130,6 +131,11 @@ public class RepositoryAffectationImpl implements IRepositoryAffectation {
         }
 
         return maList;
+    }
+
+    @Override
+    public List<Affectation> rechercheAffectationAvecFiltres(FiltresAffectation filtresAffectation) {
+        return null;
     }
 
 

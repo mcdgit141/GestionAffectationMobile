@@ -111,7 +111,7 @@ public class AffectationManagementImpl implements IAffectationManagement {
     @Override
     public List<Affectation> listerAffectation(FiltresAffectation filtresAffectation) {
 
-//        return repositoryAffectation.rechercheAffectationAvecFiltres(filtresAffectation);
-        return null;
+        return repositoryAffectation.rechercheAffectationAvecFiltres(filtresAffectation);
+//        return null;
     }
 }
