@@ -49,12 +49,9 @@ public class UtilisateurManagementImpl implements IUtilisateurManagement{
     }
 
     @Override
-    public void supprimerUtilisateur(String uid) {
+    public void supprimerUtilisateur(String uid) throws NotFoundException {
         Utilisateur utilisateurASupprimer = repositoryUtilisateur.rechercherUserParUid(uid);
-        if (utilisateurASupprimer != null){
-            repositoryUtilisateur.deleteUser(utilisateurASupprimer);
-        } else {
-            throw new NotFoundException("Aucun utilisateur existant avec ce login");
-        }
+        repositoryUtilisateur.deleteUser(utilisateurASupprimer);
+
     }
 }

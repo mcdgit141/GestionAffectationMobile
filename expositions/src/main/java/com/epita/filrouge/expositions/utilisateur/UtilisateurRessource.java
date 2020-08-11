@@ -2,11 +2,13 @@ package com.epita.filrouge.expositions.utilisateur;
 
 import com.epita.filrouge.application.utilisateur.IUtilisateurManagement;
 import com.epita.filrouge.domain.exception.BadRequestException;
-import com.epita.filrouge.domain.utilisateur.UtilisateurRoleEnum;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.annotation.Secured;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.constraints.NotNull;
@@ -18,12 +20,12 @@ public class UtilisateurRessource {
     @Autowired
     private IUtilisateurManagement utilisateurManagement;
 
+    private Logger monLogger = LoggerFactory.getLogger(UtilisateurRessource.class);
+
     @PostMapping(value = "/create")
     @ResponseStatus(HttpStatus.CREATED)
     @Secured("ROLE_ADMIN")
     public void creerUtilisateur(@NotNull @RequestBody final UtilisateurDTO utilisateurDTO) {
-
-        UtilisateurRoleEnum roleUtilisateurACreer;
 
         if (utilisateurDTO.getUid() != null & utilisateurDTO.getRoleUtilisateur() != null){
             utilisateurManagement.enregistrerUtilisateur(utilisateurDTO.getUid(),utilisateurDTO.getRoleUtilisateur());
@@ -33,10 +35,13 @@ public class UtilisateurRessource {
     }
 
     @GetMapping(value = "/delete/{uid}")
-    @ResponseStatus(HttpStatus.ACCEPTED)
+    @ResponseStatus(HttpStatus.OK)
     @Secured("ROLE_ADMIN")
     public void supprimerUtilisateur(@NotNull @PathVariable("uid") String uid){
         utilisateurManagement.supprimerUtilisateur(uid);
-    }
+        Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        monLogger.warn("******** SUPPRESSION DE L'UTILISATEUR : " + uid + " *********");
+        monLogger.warn("PAR : " + ((UserDetails) principal).getUsername());
 
+    }
 }

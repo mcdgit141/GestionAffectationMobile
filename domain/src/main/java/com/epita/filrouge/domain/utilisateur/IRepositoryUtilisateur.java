@@ -1,5 +1,7 @@
 package com.epita.filrouge.domain.utilisateur;
 
+import com.epita.filrouge.domain.exception.NotFoundException;
+
 import java.util.List;
 
 public interface IRepositoryUtilisateur {

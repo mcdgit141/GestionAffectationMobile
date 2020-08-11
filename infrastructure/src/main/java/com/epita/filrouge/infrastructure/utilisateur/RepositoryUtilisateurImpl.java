@@ -3,8 +3,10 @@ package com.epita.filrouge.infrastructure.utilisateur;
 import com.epita.filrouge.domain.exception.NotFoundException;
 import com.epita.filrouge.domain.utilisateur.IRepositoryUtilisateur;
 import com.epita.filrouge.domain.utilisateur.Utilisateur;
-import com.epita.filrouge.domain.utilisateur.UtilisateurRoleEnum;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.support.SecurityContextProvider;
 import org.springframework.stereotype.Repository;
 
 import java.util.ArrayList;
@@ -22,7 +24,7 @@ public class RepositoryUtilisateurImpl implements IRepositoryUtilisateur {
         if (monUtilisateurEntity != null) {
             return utilisateurMapper.mapToDomain(monUtilisateurEntity);
         } else {
-            return  null;
+            throw new NotFoundException("Aucun utilisateur existant avec cet uid");
         }
     }
 

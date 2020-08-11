@@ -1,9 +1,6 @@
 package com.epita.filrouge.expositions.utilisateur;
 
 import com.epita.filrouge.application.utilisateur.IUtilisateurManagement;
-import com.epita.filrouge.domain.exception.BadRequestException;
-import com.epita.filrouge.domain.exception.BusinessException;
-import com.epita.filrouge.domain.utilisateur.UtilisateurRoleEnum;
 import com.epita.filrouge.expositions.exception.MapperExceptionCode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.DisplayName;
@@ -17,9 +14,6 @@ import org.springframework.http.MediaType;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.test.web.servlet.ResultMatcher;
-
-
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
@@ -43,6 +37,7 @@ public class UtilisateurRessourceTest {
 
 
     @Test
+    @DisplayName("creerUtilisateur : Autorisé pour le profil ADMIN")
     @WithMockUser(roles = "ADMIN")
     public void role_admin_peut_creer_des_utilisateurs() throws Exception {
 
@@ -63,6 +58,7 @@ public class UtilisateurRessourceTest {
     }
 
     @Test
+    @DisplayName("creerUtilisateur : Interdiction aux profil autre que ADMIN")
     @WithMockUser(roles = {"TYPE1","TYPE2"})
     public void role_autre_que_admin_ne_peut_pas_creer_des_utilisateurs() throws Exception {
 
@@ -86,6 +82,7 @@ public class UtilisateurRessourceTest {
     }
 
     @Test
+    @DisplayName("creerUtilisateur :  Passage de paramètre entre le Body de la requete Http et le service de création")
     @WithMockUser(roles = "ADMIN")
     public void creerUtilisateur_should_call_UtilisateurManegement_Once() throws Exception {
         //given
@@ -105,6 +102,7 @@ public class UtilisateurRessourceTest {
     }
 
     @Test
+    @DisplayName("creerUtilisateur: Levée d'une BadRequest exception si le body de la requête est incomplet")
     @WithMockUser(roles = "ADMIN")
     public void utilisateurDTO_Uncomplete_should_throw_an_Exception() throws Exception {
         //given
@@ -117,13 +115,25 @@ public class UtilisateurRessourceTest {
             String resultat = mockMvc.perform(post("/gestaffectation/utilisateur/create")
                             .content(monObjetMapper)
                             .contentType(MediaType.APPLICATION_JSON))
-//                    .andExpect(model().attributeExists("BAD_REQUEST"));
                     .andReturn().getResponse().getContentAsString();
 
         //then
 
         assertThat(resultat.contains("BAD REQUEST")).isTrue();
 
+    }
+
+    @Test
+    @DisplayName("supprimerUtilisateur: Passage de paramètre entre l'URL et l'appel au service Utilisateur")
+    @WithMockUser(roles = "ADMIN")
+    public void supprimerUtilisateur_should_call_management_with_given_parameter() throws Exception {
+        //given
+
+        //when
+        mockMvc.perform(get("/gestaffectation/utilisateur/delete/a19390")).andExpect(status().isOk());
+
+        //then
+        Mockito.verify(utilisateurManagement,Mockito.times(1)).supprimerUtilisateur("a19390");
     }
 
 }

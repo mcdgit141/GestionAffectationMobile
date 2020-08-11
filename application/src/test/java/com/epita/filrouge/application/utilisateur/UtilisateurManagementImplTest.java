@@ -11,6 +11,7 @@ import com.epita.filrouge.domain.uo.Uo;
 import com.epita.filrouge.domain.utilisateur.IRepositoryUtilisateur;
 import com.epita.filrouge.domain.utilisateur.Utilisateur;
 import com.epita.filrouge.domain.utilisateur.UtilisateurRoleEnum;
+import org.junit.Ignore;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -186,14 +187,14 @@ public class UtilisateurManagementImplTest {
     @DisplayName("NotFoundException sur la suppression d'un utilisateur inconnu")
     public void supprimerUtilisateur_should_throw_Exception_if_user_dont_exists(){
         //giving
-        String login = "login@entreprise.com";
+        String uid = "monUid";
 
-        Mockito.when(repositoryUtilisateur.rechercherUser(any(String.class))).thenReturn(null);
+        Mockito.when(repositoryUtilisateur.rechercherUserParUid(any(String.class))).thenThrow(new NotFoundException("toto"));
 
         //when + then
         assertThatThrownBy(
-                () -> {utilisateurManagement.supprimerUtilisateur(login);}
-        ).isInstanceOf(NotFoundException.class).hasMessageContaining("Aucun utilisateur existant avec ce login");
+                () -> {utilisateurManagement.supprimerUtilisateur(uid);}
+        ).isInstanceOf(NotFoundException.class);
 
     }
 

@@ -106,7 +106,7 @@ public class RepositoryUtilisateurImplTest {
     }
 
     @Test
-    @DisplayName("Suppression d'un utilisateur existant en BDD")
+    @DisplayName("Suppression d'un utilisateur existant")
     public void deleteUser_should_delete_corresponding_entity(){
         //giving BeforeEach
 
