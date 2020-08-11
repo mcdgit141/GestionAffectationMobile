@@ -135,7 +135,70 @@ public class RepositoryAffectationImpl implements IRepositoryAffectation {
 
     @Override
     public List<Affectation> rechercheAffectationAvecFiltres(FiltresAffectation filtresAffectation) {
-        return null;
+
+        StringBuilder query = new StringBuilder();
+        query.append("select a from AffectationEntity a where 1=1 ");
+
+        String uid = filtresAffectation.getUid();
+        if (uid != null && !uid.isEmpty()){
+            query.append(String.format("AND a.collaborateur.uid = '%s' ", uid ));
+
+        }
+
+        String nom = filtresAffectation.getNom();
+        if (nom != null && !nom.isEmpty()){
+            query.append(String.format("AND a.collaborateur.nom = '%s' ", nom ));
+        }
+
+        String codeUo = filtresAffectation.getCodeUo();
+        if (codeUo != null && !codeUo.isEmpty()){
+            query.append(String.format("AND a.collaborateur.uo.codeUo = '%s' ",  codeUo));
+
+        }
+
+        String nomUsageUo = filtresAffectation.getNomUsageUo();
+        if (nomUsageUo != null && !nomUsageUo.isEmpty()){
+            query.append(String.format("AND a.collaborateur.uo.nomUsageUo = '%s' ", nomUsageUo));
+
+        }
+
+        String nomSite = filtresAffectation.getNomSite();
+        if (nomSite != null && !nomSite.isEmpty()){
+            query.append(String.format("AND a.collaborateur.uo.siteExercice.nomSite = '%s' ", nomSite ));
+
+        }
+
+        String numeroLigneCollaborateur = filtresAffectation.getNumeroLigneCollaborateur();
+        if (numeroLigneCollaborateur != null && !numeroLigneCollaborateur.isEmpty()){
+            query.append(String.format("AND a.collaborateur.numeroLigne = '%s' ", numeroLigneCollaborateur));
+
+        }
+        String nomModeleIphone = filtresAffectation.getNomModeleIphone();
+        if (nomModeleIphone != null && !nomModeleIphone.isEmpty()){
+            query.append(String.format("AND a.iphone.modeleIphoneEntity.nomModele = '%s' ", nomModeleIphone));
+        }
+
+        LocalDate dateRenouvMin = filtresAffectation.getDateRenouvMin();
+        if (dateRenouvMin != null){
+            query.append("AND a.dateRenouvellementPrevue > '" + dateRenouvMin + "' ");
+        }
+
+        LocalDate dateRenouvMax = filtresAffectation.getDateRenouvMax();
+        if (dateRenouvMax != null){
+            query.append("AND a.dateRenouvellementPrevue < '" + dateRenouvMax + "' ");
+        }
+
+
+        String maRequeteConstruite = query.toString();
+        monLogger.debug(maRequeteConstruite);
+
+        List<AffectationEntity> maListEntity = monEntityManager.createQuery(maRequeteConstruite).getResultList();
+        List<Affectation> maList = new ArrayList<>();
+        for (AffectationEntity affectationEntity : maListEntity) {
+            maList.add(affectationMapper.mapToDomain(affectationEntity));
+        }
+
+        return maList;
     }
 
 
