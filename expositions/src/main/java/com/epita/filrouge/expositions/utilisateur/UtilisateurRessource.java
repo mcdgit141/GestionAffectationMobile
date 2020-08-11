@@ -27,7 +27,7 @@ public class UtilisateurRessource {
         if (utilisateurDTO.getUid() != null & utilisateurDTO.getRoleUtilisateur() != null){
             utilisateurManagement.enregistrerUtilisateur(utilisateurDTO.getUid(),utilisateurDTO.getRoleUtilisateur());
         } else {
-            throw new BadRequestException("Information(s) manquante(s) pour l'utilisateur a creer");
+            throw new BadRequestException("Information(s) manquante(s) pour l'utilisateur à créer");
         }
     }
 }
