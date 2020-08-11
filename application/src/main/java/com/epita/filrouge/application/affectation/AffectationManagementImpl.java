@@ -6,6 +6,7 @@ import com.epita.filrouge.domain.affectation.IRepositoryAffectation;
 import com.epita.filrouge.domain.collaborateur.Collaborateur;
 import com.epita.filrouge.domain.collaborateur.IRepositoryCollaborateur;
 import com.epita.filrouge.domain.exception.AllReadyExistException;
+import com.epita.filrouge.domain.exception.BadRequestException;
 import com.epita.filrouge.domain.exception.NotFoundException;
 import com.epita.filrouge.domain.iphone.EtatIphoneEnum;
 import com.epita.filrouge.domain.iphone.IRepositoryIphone;
@@ -101,13 +102,17 @@ public class AffectationManagementImpl implements IAffectationManagement {
     @Transactional
     public void cloturerAffectation (Long numeroAffectation, String affectationCommentaire, String motifFin, LocalDate dateFin) throws NotFoundException {
 
-
         Affectation affectationACloturer = repositoryAffectation.chercheAffectationParNumeroAffectation(numeroAffectation);
+        System.out.println("couche application -cloturerAffectation--affectationAcloturer.getNumeroAffectation---" + affectationACloturer.getNumeroAffectation());
+        System.out.println("couche application -cloturerAffectation--dateFin---" + dateFin);
 
         if (dateFin != null)
             {affectationACloturer.setDateFin(dateFin);}
         else
             {affectationACloturer.setDateFin(LocalDate.now());}
+
+        affectationACloturer.setMotifFin(motifFin);
+        affectationACloturer.setCommentaire(affectationCommentaire);
 
         repositoryAffectation.miseAjourAffectation(affectationACloturer);
 

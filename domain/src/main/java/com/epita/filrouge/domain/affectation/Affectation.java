@@ -75,4 +75,7 @@ public class Affectation {
         this.dateRenouvellementPrevue = dateRenouvellementPrevue;
     }
 
+    public void setCommentaire(String commentaire) {
+        this.commentaire = commentaire;
+    }
 }

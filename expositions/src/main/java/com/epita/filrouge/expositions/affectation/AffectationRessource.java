@@ -46,9 +46,20 @@ public class AffectationRessource {
     public void clotureAffectation(@NotNull @RequestBody final AffectationDTO affectationDTO) {
 
         System.out.println("MCD  -  dans le post  mapping de clôturer affectation");
-        if (affectationDTO.getMotifFin() == null && affectationDTO.getAffectationCommentaire() == null) {
-            throw new BadRequestException("Motif de fin et commentaire non renseignés, ces données sont à transmettre impérativement");
+        System.out.println("MCD  -  dans le post  mapping de clôturer getMotifFin---" + affectationDTO.getNumeroAffectation());
+        System.out.println("MCD  -  dans le post  mapping de clôturer getMotifFin---" + affectationDTO.getMotifFin());
+        System.out.println("MCD  -  dans le post  mapping de clôturer getAffectationCommentaire--" + affectationDTO.getAffectationCommentaire());
+
+        if (affectationDTO.getAffectationCommentaire() == null) {
+            System.out.println("test couche exposition commentaire non renseigné");
+            throw new BadRequestException("couche exposition commentaire non renseigné, donnée à saisir impérativement");
         }
+
+        if (affectationDTO.getMotifFin() == null) {
+            System.out.println("test couche exposition motif fin non renseigné");
+            throw new BadRequestException("couche exposition Motif de fin non renseigné, donnée à saisir impérativement");
+        }
+
         affectationManagement.cloturerAffectation(affectationDTO.getNumeroAffectation(),affectationDTO.getAffectationCommentaire()
                                                  ,affectationDTO.getMotifFin(),affectationDTO.getDateFin());
     }

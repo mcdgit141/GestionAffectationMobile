@@ -71,9 +71,11 @@ public class RepositoryAffectationImpl implements IRepositoryAffectation {
     public Affectation chercheAffectationParNumeroAffectation(Long numeroAffectation) {
 
         AffectationEntity affectationEntity = iRepositoryJpaAffectation.findByNumeroAffectation(numeroAffectation);
-        if (affectationEntity != null)
-            return affectationMapper.mapToDomain(affectationEntity);
+        if (affectationEntity != null){
+            System.out.println("Dans couche infrastructure---chercheAffectationParNumeroAffectation different null");
+            return affectationMapper.mapToDomain(affectationEntity);}
         else {
+            System.out.println("Dans couche infrastructure---chercheAffectationParNumeroAffectation égal à null");
             throw new NotFoundException("L'affectation avec le numéro suivant n'existe pas " + numeroAffectation);
         }
     }
@@ -83,12 +85,17 @@ public class RepositoryAffectationImpl implements IRepositoryAffectation {
 
         AffectationEntity affectationEntity = iRepositoryJpaAffectation.findByNumeroAffectation(affectation.getNumeroAffectation());
         if (affectationEntity != null){
+            System.out.println("Dans couche infrastructure---miseAjourAffectation different null");
+            System.out.println("Dans couche infrastructure---affectation.getDateFin() " + affectation.getDateFin());
+            System.out.println("Dans couche infrastructure---affectation.getCommentaire() " + affectation.getCommentaire());
+            System.out.println("Dans couche infrastructure---affectation.getMotifFin() " + affectation.getMotifFin());
             affectationEntity.setDateFin(affectation.getDateFin());
             affectationEntity.setCommentaire(affectation.getCommentaire());
             affectationEntity.setMotifFin(affectation.getMotifFin());
             iRepositoryJpaAffectation.save(affectationEntity);
         }
         else {
+            System.out.println("Dans couche infrastructure---miseAjourAffectation égal à null");
             throw new NotFoundException("L'affectation avec le numéro suivant n'existe pas " + affectation.getNumeroAffectation());
         }
     }

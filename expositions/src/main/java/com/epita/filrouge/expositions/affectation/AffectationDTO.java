@@ -13,6 +13,9 @@ public class AffectationDTO {
     private String motifFin;
     private LocalDate dateFin;
 
+    public AffectationDTO() {
+    }
+
     public String getCollaborateurUid() {
         return collaborateurUid;
     }
@@ -63,5 +66,9 @@ public class AffectationDTO {
 
     public LocalDate getDateFin() {
         return dateFin;
+    }
+
+    public void setMotifFin(String motifFin) {
+        this.motifFin = motifFin;
     }
 }
