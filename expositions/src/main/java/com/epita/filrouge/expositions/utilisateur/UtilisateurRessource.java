@@ -44,4 +44,13 @@ public class UtilisateurRessource {
         monLogger.warn("PAR : " + ((UserDetails) principal).getUsername());
 
     }
+
+    @PostMapping(value = "/update")
+    @ResponseStatus(HttpStatus.OK)
+    @Secured("ROLE_ADMIN")
+    public void modifierMdp(@NotNull @RequestBody UtilisateurDTO utilisateurDTO){
+        if (utilisateurDTO.getUid() != null & utilisateurDTO.getMdp() != null) {
+            utilisateurManagement.modifierMdpUtilisateur(utilisateurDTO.getUid(), utilisateurDTO.getMdp());
+        }
+    }
 }

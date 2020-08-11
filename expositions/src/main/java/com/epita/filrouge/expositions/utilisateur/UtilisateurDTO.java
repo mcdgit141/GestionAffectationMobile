@@ -6,6 +6,15 @@ public class UtilisateurDTO {
 
     private String uid;
     private String roleUtilisateur;
+    private String mdp;
+
+    public String getMdp() {
+        return mdp;
+    }
+
+    public void setMdp(String mdp) {
+        this.mdp = mdp;
+    }
 
     public String getUid() {
         return uid;

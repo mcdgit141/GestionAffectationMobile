@@ -33,6 +33,15 @@ public class RepositoryUtilisateurImpl implements IRepositoryUtilisateur {
 
 
     @Override
+    public void modifierUtilisateur(Utilisateur utilisateurAModifier) {
+        UtilisateurEntity utilisateurEntityAModifier = userJpaRepository.findByUid(utilisateurAModifier.getUid());
+        utilisateurEntityAModifier.setUserRole(utilisateurAModifier.getUserRole());
+        utilisateurEntityAModifier.setLogin(utilisateurAModifier.getLogin());
+        utilisateurEntityAModifier.setPassword(utilisateurAModifier.getPassword());
+        userJpaRepository.save(utilisateurEntityAModifier);
+    }
+
+    @Override
     public void deleteUser(Utilisateur utilisateurASupprimer) {
         UtilisateurEntity monUtilisateurEntityASupprimer = userJpaRepository.findByLogin(utilisateurASupprimer.getLogin());
         if (monUtilisateurEntityASupprimer != null) {

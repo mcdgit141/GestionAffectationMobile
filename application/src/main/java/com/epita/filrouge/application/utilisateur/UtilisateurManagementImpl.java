@@ -9,6 +9,8 @@ import com.epita.filrouge.domain.utilisateur.IRepositoryUtilisateur;
 import com.epita.filrouge.domain.utilisateur.Utilisateur;
 import com.epita.filrouge.domain.utilisateur.UtilisateurRoleEnum;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Bean;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -19,6 +21,8 @@ public class UtilisateurManagementImpl implements IUtilisateurManagement{
 
     @Autowired
     private IRepositoryUtilisateur repositoryUtilisateur;
+
+    BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
 
     @Override
     public void enregistrerUtilisateur(String uid, String profil) {
@@ -45,6 +49,15 @@ public class UtilisateurManagementImpl implements IUtilisateurManagement{
         } else {
             throw new AllReadyExistException("Un Utilisateur existe déjà pour cet uid");
         }
+
+    }
+
+    @Override
+    public void modifierMdpUtilisateur(String uid, String mdp) throws NotFoundException  {
+        Utilisateur utilisateurAModifier = repositoryUtilisateur.rechercherUserParUid(uid);
+        utilisateurAModifier.setPassword(passwordEncoder.encode(mdp));
+
+        repositoryUtilisateur.modifierUtilisateur(utilisateurAModifier);
 
     }
 

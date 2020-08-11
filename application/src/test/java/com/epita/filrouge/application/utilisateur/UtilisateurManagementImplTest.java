@@ -22,6 +22,7 @@ import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 import java.time.LocalDate;
@@ -221,6 +222,30 @@ public class UtilisateurManagementImplTest {
                 () -> assertThat(valueCapture.getValue().getPrenom()).isEqualTo(prenom),
                 () -> assertThat(valueCapture.getValue().getUserRole()).isEqualTo(roleUser)
                 );
+
+    }
+
+    @Test
+    @DisplayName("modifierUtilisateur : Appel du repo avec le mdp chiffré")
+    public void modifierUtilisateur_should_call_repo_with_an_encrypted_password(){
+        //given
+        String uid = "a19390";
+        String mdp = "monMotDePasse";
+        String nom = "KAMDEM";
+        String prenom = "Leopold";
+        UtilisateurRoleEnum roleUser = UtilisateurRoleEnum.ROLE_TYPE1;
+
+        Utilisateur utilisateurTrouve = new Utilisateur(uid,nom,prenom,roleUser);
+        Mockito.when(repositoryUtilisateur.rechercherUserParUid(uid)).thenReturn(utilisateurTrouve);
+        ArgumentCaptor<Utilisateur> valueCapture = ArgumentCaptor.forClass(Utilisateur.class);
+
+        //when
+        utilisateurManagement.modifierMdpUtilisateur(uid,mdp);
+        //then
+        Mockito.verify(repositoryUtilisateur).modifierUtilisateur(valueCapture.capture());
+        assertAll(
+                () -> assertThat(valueCapture.getValue().getPassword()).isNotEqualTo(mdp)
+        );
 
     }
 

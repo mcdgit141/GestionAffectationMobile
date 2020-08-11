@@ -13,5 +13,6 @@ public interface IRepositoryUtilisateur {
 
     Utilisateur rechercherUserParUid(String uid);
 
+    void modifierUtilisateur(Utilisateur utilisateurAModifier);
 }
 

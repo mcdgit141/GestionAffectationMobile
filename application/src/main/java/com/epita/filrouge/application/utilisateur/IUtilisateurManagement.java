@@ -9,4 +9,6 @@ public interface IUtilisateurManagement {
 
     void supprimerUtilisateur(String uid) throws NotFoundException;
 
+    void modifierMdpUtilisateur(String uid, String mdp);
+
 }
