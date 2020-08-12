@@ -104,15 +104,18 @@ public class AffectationManagementImpl implements IAffectationManagement {
     public void cloturerAffectation (Long numeroAffectation, String affectationCommentaire, String motifFin, LocalDate dateFin) throws NotFoundException {
 
         Affectation affectationACloturer = repositoryAffectation.chercheAffectationParNumeroAffectation(numeroAffectation);
+        Collaborateur collaborateur = affectationACloturer.getCollaborateur();
+        Iphone iphone = affectationACloturer.getIphone();
 
-        Collaborateur collaborateur = repositoryCollaborateur.findByUid(affectationACloturer.getCollaborateur().getUid());
-        Collaborateur collaborateurAMettreAJourSuiteClotureAffectation = collaborateur.miseAJourCollaborateurSuiteClotureAffectation();
 
-        Iphone iphone = repositoryIphone.rechercheIphoneParNumeroSerie(affectationACloturer.getIphone().getNumeroSerie());
-        Iphone iphoneAMettreAJourSuiteClotureAffectation = iphone.miseAJourIphoneSuiteClotureAffectation();
+//        Collaborateur collaborateur = repositoryCollaborateur.findByUid(affectationACloturer.getCollaborateur().getUid());
+//        Collaborateur collaborateurAMettreAJourSuiteClotureAffectation = collaborateur.miseAJourCollaborateurSuiteClotureAffectation();
+//
+//        Iphone iphone = repositoryIphone.rechercheIphoneParNumeroSerie(affectationACloturer.getIphone().getNumeroSerie());
+//        Iphone iphoneAMettreAJourSuiteClotureAffectation = iphone.miseAJourIphoneSuiteClotureAffectation();
 
-        Affectation affectationACloturerFinal = affectationACloturer.reglesAppliqueesPourCloturerAffectation(collaborateurAMettreAJourSuiteClotureAffectation,
-                                                iphoneAMettreAJourSuiteClotureAffectation,affectationCommentaire,motifFin,dateFin);
+        Affectation affectationACloturerFinal = affectationACloturer.reglesAppliqueesPourCloturerAffectation(collaborateur,
+                                                iphone,affectationCommentaire,motifFin,dateFin);
 
         System.out.println("couche application -cloturerAffectation--affectationAcloturer.getNumeroAffectation---" + affectationACloturer.getNumeroAffectation());
         System.out.println("couche application -cloturerAffectation--dateFin---" + dateFin);

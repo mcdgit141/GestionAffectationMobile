@@ -17,6 +17,7 @@ import javax.persistence.EntityManager;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.Callable;
 
 @Repository
 public class RepositoryAffectationImpl implements IRepositoryAffectation {
@@ -95,11 +96,16 @@ public class RepositoryAffectationImpl implements IRepositoryAffectation {
 //            affectationEntity.setCommentaire(affectation.getCommentaire());
 //            affectationEntity.setMotifFin(affectation.getMotifFin());
 //
-            CollaborateurEntity collaborateurEntity = iRepositoryJpaCollaborateur.findByUid(affectation.getCollaborateur().getUid());
+            CollaborateurEntity collaborateurEntity = affectationEntity.getCollaborateur();
             collaborateurEntity.setNumeroLigne(affectation.getCollaborateur().getNumeroLigne());
-
-            IphoneEntity iphoneEntity = iRepositoryJpaIphone.findByNumeroSerie(affectation.getIphone().getNumeroSerie());
+            IphoneEntity iphoneEntity = affectationEntity.getIphone();
             iphoneEntity.setEtatIphone(affectation.getIphone().getEtatIphone());
+
+//            CollaborateurEntity collaborateurEntity = iRepositoryJpaCollaborateur.findByUid(affectation.getCollaborateur().getUid());
+//            collaborateurEntity.setNumeroLigne(affectation.getCollaborateur().getNumeroLigne());
+//
+//            IphoneEntity iphoneEntity = iRepositoryJpaIphone.findByNumeroSerie(affectation.getIphone().getNumeroSerie());
+//            iphoneEntity.setEtatIphone(affectation.getIphone().getEtatIphone());
 
             affectationEntity.setCollaborateur(collaborateurEntity);
             affectationEntity.setIphone(iphoneEntity);

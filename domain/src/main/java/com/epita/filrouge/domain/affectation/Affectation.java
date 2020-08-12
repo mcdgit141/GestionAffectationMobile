@@ -87,8 +87,10 @@ public class Affectation {
             {this.setDateFin(LocalDate.now());}
        this.setMotifFin(motifFin);
        this.setCommentaire(affectationCommentaire);
-       this.collaborateur = collaborateur;
-       this.iphone = iphone;
+       this.collaborateur.miseAJourCollaborateurSuiteClotureAffectation();
+       this.iphone.miseAJourIphoneSuiteClotureAffectation();
+//       this.collaborateur = collaborateur;
+//       this.iphone = iphone;
 
         return this;
     }
