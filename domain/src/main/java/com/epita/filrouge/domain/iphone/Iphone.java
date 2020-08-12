@@ -61,5 +61,11 @@ public class Iphone {
     public void setEtatIphone(EtatIphoneEnum etatIphone) {
         this.etatIphone = etatIphone;
     }
+    public Iphone miseAJourIphoneSuiteClotureAffectation() {
 
+        if (this.etatIphone == EtatIphoneEnum.AFFECTE){
+            this.etatIphone = EtatIphoneEnum.DISPONIBLE;
+        }
+        return this;
+    }
 }
