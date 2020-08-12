@@ -139,6 +139,30 @@ class RepositoryAffectationImplTest {
     }
 
     @Test
+    @DisplayName("Doit suppimer une affectation et uniquement cela")
+    void ShouldDeleteAnAffectationAndNothingElse() {
+        //Given
+        persisteAffectation(monCollaborateurEntityPersiste, monIphoneEntityPersiste,
+                AFFECTATION_DATE, AFFECTATION_COMMENTAIRE, AFFECTATION_NUMERO);
+
+        Collaborateur collaborateur = collaborateurEntityMapper.mapToDomain(monCollaborateurEntityPersiste);
+
+        Iphone iphone = iphoneEntityMapper.mapToDomain(monIphoneEntityPersiste);
+
+        Affectation affectationASupprimer = new Affectation(AFFECTATION_NUMERO, AFFECTATION_DATE, AFFECTATION_COMMENTAIRE, collaborateur, iphone);
+
+
+        //When
+        repositoryAffectation.supprimerAffectation(affectationASupprimer);
+
+        //Then
+        final List<?> affectationRecues = entityManager.getEntityManager()
+                .createQuery("select o from AffectationEntity o where o.numeroAffectation = :numeroAffectation")
+                .setParameter("numeroAffectation", AFFECTATION_NUMERO)
+                .getResultList();
+        assertThat(affectationRecues.size()).isEqualTo(0);
+    }
+    @Test
     @DisplayName("Doit créer un enregistrement Affectation avec les bonnes valeurs")
     void ShouldCreateAnAffectation_WithTheCorrectValues() {
 //        //Given
@@ -191,9 +215,6 @@ class RepositoryAffectationImplTest {
         FiltresAffectation filtresAffectation = new FiltresAffectation();
         filtresAffectation.setNomSite("Pompei");
 
-//        List<Affectation> result = repositoryAffectation.rechercheAffectationAvecFiltres("", "", "",
-//                "", "Pompei", "", "",
-//                null, null);
         List<Affectation> result = repositoryAffectation.rechercheAffectationAvecFiltres(filtresAffectation);
 
         //then
