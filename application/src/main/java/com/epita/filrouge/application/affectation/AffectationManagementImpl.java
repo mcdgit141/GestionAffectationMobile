@@ -6,6 +6,7 @@ import com.epita.filrouge.domain.affectation.FiltresAffectation;
 import com.epita.filrouge.domain.affectation.IRepositoryAffectation;
 import com.epita.filrouge.domain.collaborateur.Collaborateur;
 import com.epita.filrouge.domain.collaborateur.IRepositoryCollaborateur;
+import com.epita.filrouge.domain.exception.AllReadyClotureeException;
 import com.epita.filrouge.domain.exception.AllReadyExistException;
 import com.epita.filrouge.domain.exception.BadRequestException;
 import com.epita.filrouge.domain.exception.NotFoundException;
@@ -101,7 +102,7 @@ public class AffectationManagementImpl implements IAffectationManagement {
 
     @Override
     @Transactional
-    public void cloturerAffectation(Long numeroAffectation, String affectationCommentaire, String motifFin, LocalDate dateFin) throws NotFoundException {
+    public Affectation cloturerAffectation(Long numeroAffectation, String affectationCommentaire, String motifFin, LocalDate dateFin) throws NotFoundException, AllReadyClotureeException {
 
         Affectation affectationACloturer = repositoryAffectation.chercheAffectationParNumeroAffectation(numeroAffectation);
         Collaborateur collaborateur = affectationACloturer.getCollaborateur();
@@ -129,6 +130,8 @@ public class AffectationManagementImpl implements IAffectationManagement {
 //        affectationACloturer.setCommentaire(affectationCommentaire);
 
         repositoryAffectation.miseAjourAffectation(affectationACloturerFinal);
+
+        return affectationACloturerFinal;
 
     }
 

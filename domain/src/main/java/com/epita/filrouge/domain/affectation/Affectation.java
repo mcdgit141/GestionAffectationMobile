@@ -1,6 +1,8 @@
 package com.epita.filrouge.domain.affectation;
 
 import com.epita.filrouge.domain.collaborateur.Collaborateur;
+import com.epita.filrouge.domain.exception.AllReadyClotureeException;
+import com.epita.filrouge.domain.exception.NotFoundException;
 import com.epita.filrouge.domain.iphone.Iphone;
 
 import java.time.LocalDate;
@@ -79,7 +81,11 @@ public class Affectation {
         this.commentaire = commentaire;
     }
 
-    public Affectation reglesAppliqueesPourCloturerAffectation(Collaborateur collaborateur, Iphone iphone, String affectationCommentaire,String motifFin,LocalDate dateFin){
+    public Affectation reglesAppliqueesPourCloturerAffectation(Collaborateur collaborateur, Iphone iphone, String affectationCommentaire,String motifFin,LocalDate dateFin) throws AllReadyClotureeException{
+
+        if (this.getDateFin() != null){
+            throw new AllReadyClotureeException("L'affectation avec le numéro suivant est déjà clôturée " + this.getNumeroAffectation());
+        }
 
         if (dateFin != null)
             {this.setDateFin(dateFin);}

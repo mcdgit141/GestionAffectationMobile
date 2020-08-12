@@ -224,7 +224,6 @@ public class AffectationManagementImplTest {
                         MODELE_NOMMODELE,
                         null, null);
 
-
         verify(repositoryAffectation, Mockito.times(1)).rechercheAffectationAvecFiltres(any(FiltresAffectation.class));
 
     }

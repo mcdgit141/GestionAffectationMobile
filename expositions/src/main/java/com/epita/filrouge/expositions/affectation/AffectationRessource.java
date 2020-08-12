@@ -27,6 +27,16 @@ public class AffectationRessource {
     @Secured({"ROLE_ADMIN","ROLE_TYPE2"})
     public Affectation saveAffectation(@NotNull @RequestBody final AffectationDTO affectationDTO) {
    //     throw new AllReadyExistException("foo");
+        if (affectationDTO.getCollaborateurNumeroLigne() == null) {
+            throw new BadRequestException("numéro de ligne non renseigné, donnée à saisir impérativement");
+        }
+        if (affectationDTO.getCollaborateurUid() == null) {
+            throw new BadRequestException("collaborateur id non renseigné, donnée à saisir impérativement");
+        }
+
+        if (affectationDTO.getIphoneNumeroSerie() == null) {
+            throw new BadRequestException("numéro série iphone non renseigné, donnée à saisir impérativement");
+        }
         return  affectationManagement.creerAffectation(affectationDTO.getCollaborateurUid(),affectationDTO.getIphoneNumeroSerie(),
                                    affectationDTO.getAffectationDate(),affectationDTO.getCollaborateurNumeroLigne(),
                                    affectationDTO.getAffectationCommentaire());
@@ -43,11 +53,6 @@ public class AffectationRessource {
     @ResponseStatus(HttpStatus.OK)
     @Secured("ROLE_TYPE2")
     public void clotureAffectation(@NotNull @RequestBody final AffectationDTO affectationDTO) {
-
-        System.out.println("MCD  -  dans le post  mapping de clôturer affectation");
-        System.out.println("MCD  -  dans le post  mapping de clôturer getMotifFin---" + affectationDTO.getNumeroAffectation());
-        System.out.println("MCD  -  dans le post  mapping de clôturer getMotifFin---" + affectationDTO.getMotifFin());
-        System.out.println("MCD  -  dans le post  mapping de clôturer getAffectationCommentaire--" + affectationDTO.getAffectationCommentaire());
 
         if (affectationDTO.getAffectationCommentaire() == null) {
             System.out.println("test couche exposition commentaire non renseigné");
