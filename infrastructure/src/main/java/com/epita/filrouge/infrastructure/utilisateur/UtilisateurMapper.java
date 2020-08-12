@@ -2,6 +2,7 @@ package com.epita.filrouge.infrastructure.utilisateur;
 
 
 
+import com.epita.filrouge.domain.utilisateur.IRepositoryUtilisateur;
 import com.epita.filrouge.domain.utilisateur.Utilisateur;
 import com.epita.filrouge.infrastructure.AbstractMapper;
 import com.epita.filrouge.infrastructure.collaborateur.CollaborateurEntity;
@@ -15,6 +16,9 @@ public class UtilisateurMapper extends  AbstractMapper<Utilisateur, UtilisateurE
 
     @Autowired
     private IRepositoryJpaCollaborateur repositoryJpaCollaborateur;
+
+    @Autowired
+    private IRepositoryJpaUtilisateur repositoryJpaUtilisateur;
 
     @Override
     public Utilisateur mapToDomain(UtilisateurEntity utilisateurEntity) {

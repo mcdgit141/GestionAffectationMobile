@@ -13,16 +13,13 @@ public class Utilisateur {
         this.uid = uid;
         this.nom= nom;
         this.prenom = prenom;
-        password = "password";
+        password = "$2a$10$ix2v00b5v0E.Ro3ZM0/Vv.cK704O4N1w/.yQeNq46KIVKmDanaHBi";
         this.userRole = userRole;
+        this.login = remplacementCaractereSpec(prenom) + "." + remplacementCaractereSpec(nom) + "@entreprise.com";
     }
 
     public void setLogin(String login) {
         this.login = login;
-    }
-
-    public void construireLogin() {
-        this.login = this.prenom.toLowerCase() + "." + this.nom.toLowerCase() + "@entreprise.com";
     }
 
     public String getUid() {
@@ -63,6 +60,16 @@ public class Utilisateur {
 
     public void setPassword(String password) {
         this.password = password;
+    }
+
+    private String remplacementCaractereSpec(String string){
+        String caractereSpeciaux = "àâäéêèëîïôöûüùç";
+        String remplacmeent = "aaaeeeeiioouuuc";
+        String result = string.toLowerCase();
+        for (int i = 0; i <caractereSpeciaux.length() ; i++) {
+           result = result.replace(caractereSpeciaux.charAt(i), remplacmeent.charAt(i));
+        }
+        return result;
     }
 
 

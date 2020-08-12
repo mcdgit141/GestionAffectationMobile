@@ -1,13 +1,13 @@
 package com.epita.filrouge.infrastructure.affectation;
 
 import com.epita.filrouge.domain.affectation.Affectation;
+import com.epita.filrouge.domain.affectation.FiltresAffectation;
 import com.epita.filrouge.domain.affectation.IRepositoryAffectation;
 import com.epita.filrouge.domain.collaborateur.Collaborateur;
 import com.epita.filrouge.domain.iphone.EtatIphoneEnum;
 import com.epita.filrouge.domain.iphone.Iphone;
 import com.epita.filrouge.infrastructure.collaborateur.CollaborateurEntity;
 import com.epita.filrouge.infrastructure.collaborateur.CollaborateurEntityMapper;
-import com.epita.filrouge.infrastructure.collaborateur.RepositoryCollaborateurImpl;
 import com.epita.filrouge.infrastructure.iphone.IphoneEntity;
 import com.epita.filrouge.infrastructure.iphone.IphoneEntityMapper;
 import com.epita.filrouge.infrastructure.iphone.ModeleIphoneEntity;
@@ -58,7 +58,7 @@ class RepositoryAffectationImplTest {
 
     private static final Long AFFECTATION_NUMERO = 1L;
     private static final LocalDate AFFECTATION_DATE = LocalDate.now();
-    private static final String AFFECTATION_COMMENTAIRE = "Premeire affectation";
+    private static final String AFFECTATION_COMMENTAIRE = "Premiere affectation";
 
     private SiteExerciceEntity monSiteExercicePersiste;
     private UoEntity monUoEntityPersiste;
@@ -99,7 +99,7 @@ class RepositoryAffectationImplTest {
         uoEntity.setCodeUoParent(CODE_UO_PARENT);
         uoEntity.setNomUsageUo(NOM_USAGE_UO);
         uoEntity.setNomResponsableUo(NOM_RESPONSABLE_UO);
-        uoEntity.setSiteExercice(siteExerciceEntity);
+        uoEntity.setSiteExercice(monSiteExercicePersiste);
         monUoEntityPersiste = entityManager.persistAndFlush(uoEntity);
 
         CollaborateurEntity collaborateurEntity = new CollaborateurEntity();
@@ -107,19 +107,14 @@ class RepositoryAffectationImplTest {
         collaborateurEntity.setNom(COLLABORATEUR_NOM);
         collaborateurEntity.setPrenom(COLLABORATEUR_PRENOM);
         collaborateurEntity.setNumeroLigne(COLLABORATEUR_NUMEROLIGNE);
-        collaborateurEntity.setUo(uoEntity);
+        collaborateurEntity.setUo(monUoEntityPersiste);
         monCollaborateurEntityPersiste = entityManager.persistAndFlush(collaborateurEntity);
 
         ModeleIphoneEntity modeleIphoneEntity = new ModeleIphoneEntity();
         modeleIphoneEntity.setNomModele(MODELE_NOMMODELE);
         monModeleIphoneEntityPersiste = entityManager.persistAndFlush(modeleIphoneEntity);
 
-        IphoneEntity iPhoneEntity = new IphoneEntity();
-        iPhoneEntity.setNumeroSerie(IPHONE_NUMEROSERIE);
-        iPhoneEntity.setPrixIphone(IPHONE_PRIX);
-        iPhoneEntity.setModeleIphoneEntity(modeleIphoneEntity);
-        iPhoneEntity.setEtatIphone(IPHONE_ETAT);
-        monIphoneEntityPersiste = entityManager.persistAndFlush(iPhoneEntity);
+        monIphoneEntityPersiste = persisteIphone(IPHONE_NUMEROSERIE, IPHONE_PRIX, modeleIphoneEntity, IPHONE_ETAT);
 
     }
 
@@ -131,7 +126,7 @@ class RepositoryAffectationImplTest {
 
         Iphone iphone = iphoneEntityMapper.mapToDomain(monIphoneEntityPersiste);
 
-        Affectation affectationACreer = new Affectation(AFFECTATION_NUMERO, AFFECTATION_DATE, AFFECTATION_COMMENTAIRE,collaborateur, iphone);
+        Affectation affectationACreer = new Affectation(AFFECTATION_NUMERO, AFFECTATION_DATE, AFFECTATION_COMMENTAIRE, collaborateur, iphone);
 
 ////        //When
         repositoryAffectation.affecter(affectationACreer);
@@ -151,7 +146,7 @@ class RepositoryAffectationImplTest {
 
         Iphone iphone = iphoneEntityMapper.mapToDomain(monIphoneEntityPersiste);
 
-        Affectation affectationACreer = new Affectation(AFFECTATION_NUMERO, AFFECTATION_DATE, AFFECTATION_COMMENTAIRE,collaborateur, iphone);
+        Affectation affectationACreer = new Affectation(AFFECTATION_NUMERO, AFFECTATION_DATE, AFFECTATION_COMMENTAIRE, collaborateur, iphone);
 
 ////        //When
         repositoryAffectation.affecter(affectationACreer);
@@ -164,84 +159,121 @@ class RepositoryAffectationImplTest {
         CollaborateurEntity collaborateurEntityGenerated = affectationEntityGenerated.getCollaborateur();
         assertThat(affectationEntityGenerated)
                 .extracting(AffectationEntity::getNumeroAffectation,
-                            AffectationEntity::getDateAffectation,
-                            AffectationEntity::getCommentaire
-                            )
+                        AffectationEntity::getDateAffectation,
+                        AffectationEntity::getCommentaire
+                )
                 .containsExactly(AFFECTATION_NUMERO,
-                                 AFFECTATION_DATE,
-                                 AFFECTATION_COMMENTAIRE
+                        AFFECTATION_DATE,
+                        AFFECTATION_COMMENTAIRE
                 );
         assertThat(collaborateurEntityGenerated)
                 .extracting(CollaborateurEntity::getUid,
-                            CollaborateurEntity::getNom,
-                            CollaborateurEntity::getPrenom,
-                            CollaborateurEntity::getNumeroLigne
-                            )
+                        CollaborateurEntity::getNom,
+                        CollaborateurEntity::getPrenom,
+                        CollaborateurEntity::getNumeroLigne
+                )
                 .containsExactly(COLLABORATEUR_UID,
-                                 COLLABORATEUR_NOM,
-                                 COLLABORATEUR_PRENOM,
-                                 COLLABORATEUR_NUMEROLIGNE
+                        COLLABORATEUR_NOM,
+                        COLLABORATEUR_PRENOM,
+                        COLLABORATEUR_NUMEROLIGNE
                 );
-    }
-
-    @Test
-    @DisplayName("Recherche Affectation par filtres")
-    void Should_return_Affectations_giving_filters(){
-        //giving
-        AffectationEntity affectationEntity = new AffectationEntity();
-        affectationEntity.setCollaborateur(entityManager.find(CollaborateurEntity.class,entityManager.getId(monCollaborateurEntityPersiste)));
-        affectationEntity.setIphone(entityManager.find(IphoneEntity.class,entityManager.getId(monIphoneEntityPersiste)));
-        affectationEntity.setDateAffectation(LocalDate.now());
-        affectationEntity.setDateRenouvellementPrevue(LocalDate.now().plusYears(2));
-        monAffectationEntityPersiste = entityManager.persist(affectationEntity);
-        //when
-
-        List<Affectation> result = repositoryAffectation.rechercheAffectationAvecFiltres(monCollaborateurEntityPersiste.getUid(),monCollaborateurEntityPersiste.getNom(),monUoEntityPersiste.getCodeUo(),
-                monUoEntityPersiste.getNomUsageUo(),monSiteExercicePersiste.getNomSite(),monCollaborateurEntityPersiste.getNumeroLigne(),monModeleIphoneEntityPersiste.getNomModele(),
-                LocalDate.now(), null);
-
-        //then
-        assertThat(result.size()).isEqualTo(1);
     }
 
     @Test
     @DisplayName("Aucune Affectation pour une recherche Affectation par filtres")
-    void Should_return_NoAffectation_giving_AnUnusedSiteExerciste(){
+    void Should_return_NoAffectation_giving_AnUnusedSiteExerciste() {
         //giving
-        AffectationEntity affectationEntity = new AffectationEntity();
-        affectationEntity.setCollaborateur(entityManager.find(CollaborateurEntity.class,entityManager.getId(monCollaborateurEntityPersiste)));
-        affectationEntity.setIphone(entityManager.find(IphoneEntity.class,entityManager.getId(monIphoneEntityPersiste)));
-        affectationEntity.setDateAffectation(LocalDate.now());
-        affectationEntity.setDateRenouvellementPrevue(LocalDate.now().plusYears(2));
-        monAffectationEntityPersiste = entityManager.persist(affectationEntity);
+        persisteAffectation(monCollaborateurEntityPersiste, monIphoneEntityPersiste,
+                AFFECTATION_DATE, AFFECTATION_COMMENTAIRE, AFFECTATION_NUMERO);
+
         //when
 
-        List<Affectation> result = repositoryAffectation.rechercheAffectationAvecFiltres("","","",
-                "","Pompei","","",
-                null, null);
+        FiltresAffectation filtresAffectation = new FiltresAffectation();
+        filtresAffectation.setNomSite("Pompei");
+
+//        List<Affectation> result = repositoryAffectation.rechercheAffectationAvecFiltres("", "", "",
+//                "", "Pompei", "", "",
+//                null, null);
+        List<Affectation> result = repositoryAffectation.rechercheAffectationAvecFiltres(filtresAffectation);
 
         //then
         assertThat(result.size()).isZero();
     }
 
     @Test
-    @DisplayName("Recherche Affectation par filtres")
-    void Should_return_Affectation_giving_OnlyOneFilter(){
+    @DisplayName("Recherche Affectation sur filtre uid")
+    void Should_return_Affectations_giving_filterUid() {
         //giving
-        AffectationEntity affectationEntity = new AffectationEntity();
-        affectationEntity.setCollaborateur(entityManager.find(CollaborateurEntity.class,entityManager.getId(monCollaborateurEntityPersiste)));
-        affectationEntity.setIphone(entityManager.find(IphoneEntity.class,entityManager.getId(monIphoneEntityPersiste)));
-        affectationEntity.setDateAffectation(LocalDate.now());
-        affectationEntity.setDateRenouvellementPrevue(LocalDate.now().plusYears(2));
-        monAffectationEntityPersiste = entityManager.persist(affectationEntity);
+        persisteAffectation(monCollaborateurEntityPersiste, monIphoneEntityPersiste,
+                AFFECTATION_DATE, AFFECTATION_COMMENTAIRE, AFFECTATION_NUMERO);
+
+
+        FiltresAffectation filtresAffectation = new FiltresAffectation();
+        filtresAffectation.setUid(COLLABORATEUR_UID);
+
         //when
 
-        List<Affectation> result = repositoryAffectation.rechercheAffectationAvecFiltres("","","",
-                "",NOM_SITE,"","",
-                null, null);
+        List<Affectation> result = repositoryAffectation.rechercheAffectationAvecFiltres(filtresAffectation);
 
         //then
         assertThat(result.size()).isEqualTo(1);
+        assertThat(result.get(0)).extracting(
+                Affectation::getNumeroAffectation,
+                Affectation::getDateAffectation,
+                Affectation::getDateRenouvellementPrevue,
+                Affectation::getDateFin, Affectation::getMotifFin,
+                Affectation::getCommentaire)
+                .containsExactly(
+                        AFFECTATION_NUMERO,
+                        AFFECTATION_DATE,
+                        AFFECTATION_DATE.plusYears(2),
+                        null, null,
+                        AFFECTATION_COMMENTAIRE
+                        );
+
+    }
+
+    @Test
+    @DisplayName("Recherche Affectation sur tous les filtres")
+    void Should_return_Affectation_giving_OnlyOneFilter() {
+        //giving
+        persisteAffectation(monCollaborateurEntityPersiste, monIphoneEntityPersiste,
+                AFFECTATION_DATE, AFFECTATION_COMMENTAIRE, AFFECTATION_NUMERO);
+
+        FiltresAffectation filtresAffectation = new FiltresAffectation();
+        filtresAffectation.setUid(COLLABORATEUR_UID);
+        filtresAffectation.setNom(COLLABORATEUR_NOM);
+        filtresAffectation.setNumeroLigneCollaborateur(COLLABORATEUR_NUMEROLIGNE);
+        filtresAffectation.setCodeUo(CODE_UO);
+        filtresAffectation.setNomUsageUo(NOM_USAGE_UO);
+        filtresAffectation.setNomSite(NOM_SITE);
+        filtresAffectation.setNomModeleIphone(MODELE_NOMMODELE);
+        filtresAffectation.setDateRenouvMin(AFFECTATION_DATE);
+        filtresAffectation.setDateRenouvMax(AFFECTATION_DATE.plusYears(5));
+        //when
+
+        List<Affectation> result = repositoryAffectation.rechercheAffectationAvecFiltres(filtresAffectation);
+
+        //then
+        assertThat(result.size()).isEqualTo(1);
+    }
+
+    @Test
+    @DisplayName("Aucune Affectation : en dehors plage date de renouvellement")
+    void Should_return_NoAffectation_giving_DtaeRenouvellementIsOutOfBound() {
+        //giving
+        persisteAffectation(monCollaborateurEntityPersiste, monIphoneEntityPersiste,
+                AFFECTATION_DATE, AFFECTATION_COMMENTAIRE, AFFECTATION_NUMERO);
+
+        FiltresAffectation filtresAffectation = new FiltresAffectation();
+        filtresAffectation.setDateRenouvMin(AFFECTATION_DATE);
+        filtresAffectation.setDateRenouvMax(AFFECTATION_DATE.plusYears(1));
+        //when
+
+        List<Affectation> result = repositoryAffectation.rechercheAffectationAvecFiltres(filtresAffectation);
+
+        //then
+        assertThat(result.size()).isEqualTo(0);
     }
 
     @Test
@@ -249,31 +281,42 @@ class RepositoryAffectationImplTest {
     void ShouldReturnListOfAffection_WhenColloborateurHaveManyAffections() {
         //Given
 
-        AffectationEntity affectationEntity = new AffectationEntity();
-        affectationEntity.setCollaborateur(entityManager.find(CollaborateurEntity.class,entityManager.getId(monCollaborateurEntityPersiste)));
-        affectationEntity.setIphone(entityManager.find(IphoneEntity.class,entityManager.getId(monIphoneEntityPersiste)));
-        affectationEntity.setDateAffectation(LocalDate.now());
-        affectationEntity.setDateRenouvellementPrevue(LocalDate.now().plusYears(2));
-        monAffectationEntityPersiste = entityManager.persist(affectationEntity);
 
-        IphoneEntity iPhoneCasseEntity = new IphoneEntity();
-        iPhoneCasseEntity.setNumeroSerie("111222333");
-        iPhoneCasseEntity.setPrixIphone(800D);
-        iPhoneCasseEntity.setModeleIphoneEntity(monModeleIphoneEntityPersiste);
-        iPhoneCasseEntity.setEtatIphone(EtatIphoneEnum.CASSE);
-        IphoneEntity monIphoneCasseEntityPersiste = entityManager.persistAndFlush(iPhoneCasseEntity);
+        IphoneEntity monIphoneCasseEntityPersiste = persisteIphone("111222333", 800D,
+                monModeleIphoneEntityPersiste, EtatIphoneEnum.CASSE);
 
-        AffectationEntity affectationIphoneCasseEntity = new AffectationEntity();
-        affectationIphoneCasseEntity.setCollaborateur(entityManager.find(CollaborateurEntity.class,entityManager.getId(monCollaborateurEntityPersiste)));
-        affectationIphoneCasseEntity.setIphone(entityManager.find(IphoneEntity.class,entityManager.getId(monIphoneCasseEntityPersiste)));
-        affectationIphoneCasseEntity.setDateAffectation(LocalDate.now());
-        affectationIphoneCasseEntity.setDateRenouvellementPrevue(LocalDate.now().plusYears(2));
-        monAffectationEntityPersiste = entityManager.persist(affectationIphoneCasseEntity);
+        persisteAffectation(monCollaborateurEntityPersiste, monIphoneEntityPersiste,
+                AFFECTATION_DATE, AFFECTATION_COMMENTAIRE, AFFECTATION_NUMERO);
+        persisteAffectation(monCollaborateurEntityPersiste, monIphoneCasseEntityPersiste,
+                LocalDate.now().plusYears(-1), "tombé par terre", 421L);
+
 
         //When
         List<Affectation> listeAffectationsRetournees = repositoryAffectation.rechercheAffectationByUid(COLLABORATEUR_UID);
 
         //Then
         assertThat(listeAffectationsRetournees.size()).isEqualTo(2);
+    }
+
+    private IphoneEntity persisteIphone(String numeroSerie, Double iphonePrix,
+                                        ModeleIphoneEntity modeleIphoneEntity, EtatIphoneEnum iphoneEtat) {
+        IphoneEntity iPhoneEntity = new IphoneEntity();
+        iPhoneEntity.setNumeroSerie(numeroSerie);
+        iPhoneEntity.setPrixIphone(iphonePrix);
+        iPhoneEntity.setModeleIphoneEntity(modeleIphoneEntity);
+        iPhoneEntity.setEtatIphone(iphoneEtat);
+        return entityManager.persistAndFlush(iPhoneEntity);
+    }
+
+    private void persisteAffectation(CollaborateurEntity collaborateurEntity, IphoneEntity iphoneEntity,
+                                     LocalDate dateAffectation, String commentaire, Long numeroAffectation) {
+        AffectationEntity affectationEntity = new AffectationEntity();
+        affectationEntity.setCollaborateur(entityManager.find(CollaborateurEntity.class, entityManager.getId(collaborateurEntity)));
+        affectationEntity.setIphone(entityManager.find(IphoneEntity.class, entityManager.getId(iphoneEntity)));
+        affectationEntity.setDateAffectation(dateAffectation);
+        affectationEntity.setDateRenouvellementPrevue(LocalDate.now().plusYears(2));
+        affectationEntity.setCommentaire(commentaire);
+        affectationEntity.setNumeroAffectation(numeroAffectation);
+        monAffectationEntityPersiste = entityManager.persist(affectationEntity);
     }
 }

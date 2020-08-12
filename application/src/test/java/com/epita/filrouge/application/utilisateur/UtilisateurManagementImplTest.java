@@ -5,11 +5,13 @@ import com.epita.filrouge.application.collaborateur.ICollaborateurManagement;
 import com.epita.filrouge.domain.collaborateur.Collaborateur;
 import com.epita.filrouge.domain.exception.AllReadyExistException;
 import com.epita.filrouge.domain.exception.BadRequestException;
+import com.epita.filrouge.domain.exception.NotFoundException;
 import com.epita.filrouge.domain.site.SiteExercice;
 import com.epita.filrouge.domain.uo.Uo;
 import com.epita.filrouge.domain.utilisateur.IRepositoryUtilisateur;
 import com.epita.filrouge.domain.utilisateur.Utilisateur;
 import com.epita.filrouge.domain.utilisateur.UtilisateurRoleEnum;
+import org.junit.Ignore;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -26,6 +28,7 @@ import java.time.LocalDate;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
+import static org.assertj.core.api.InstanceOfAssertFactories.predicate;
 import static org.junit.jupiter.api.Assertions.assertAll;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.any;
@@ -176,6 +179,48 @@ public class UtilisateurManagementImplTest {
         assertThatThrownBy(
                 () -> {utilisateurManagement.enregistrerUtilisateur(uid,roleRecu);}
                 ).isInstanceOf(BadRequestException.class).hasMessageContaining("role utilisateur transmis inconnu");
+
+    }
+
+
+    @Test
+    @DisplayName("NotFoundException sur la suppression d'un utilisateur inconnu")
+    public void supprimerUtilisateur_should_throw_Exception_if_user_dont_exists(){
+        //giving
+        String uid = "monUid";
+
+        Mockito.when(repositoryUtilisateur.rechercherUserParUid(any(String.class))).thenThrow(new NotFoundException("toto"));
+
+        //when + then
+        assertThatThrownBy(
+                () -> {utilisateurManagement.supprimerUtilisateur(uid);}
+        ).isInstanceOf(NotFoundException.class);
+
+    }
+
+    @Test
+    public void supprimerUtilisateur_should_call_repo_giving_an_existing_uid(){
+        //giving
+        String uid = "a19390";
+        String nom = "KAMDEM";
+        String prenom = "Leopold";
+        UtilisateurRoleEnum roleUser = UtilisateurRoleEnum.ROLE_TYPE1;
+
+        Utilisateur utilisateurTrouve = new Utilisateur(uid,nom,prenom,roleUser);
+        Mockito.when(repositoryUtilisateur.rechercherUserParUid(uid)).thenReturn(utilisateurTrouve);
+        ArgumentCaptor<Utilisateur> valueCapture = ArgumentCaptor.forClass(Utilisateur.class);
+
+        //when
+        utilisateurManagement.supprimerUtilisateur(uid);
+
+        //then
+        Mockito.verify(repositoryUtilisateur).deleteUser(valueCapture.capture());
+
+        assertAll(
+                () -> assertThat(valueCapture.getValue().getNom()).isEqualTo(nom),
+                () -> assertThat(valueCapture.getValue().getPrenom()).isEqualTo(prenom),
+                () -> assertThat(valueCapture.getValue().getUserRole()).isEqualTo(roleUser)
+                );
 
     }
 
