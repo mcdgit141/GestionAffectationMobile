@@ -215,29 +215,6 @@ class AffectationRessourceTest {
 
     }
 
-    @Test
-    @WithMockUser(roles = {"TYPE2","ADMIN"})
-    @DisplayName("Doit transmettre la demande d'affichage sans filtre")
-    void ShouldCallWithoutFilters() throws Exception {
-        //Given
-        Affectation affectationRetournee = instancierUneAffectation();
-        List<Affectation> listeAffectationsRetournee = new ArrayList<>();
-        listeAffectationsRetournee.add(affectationRetournee);
-
-        when(affectationManagement.listerAffectation()).thenReturn(listeAffectationsRetournee);
-
-
-        //When
-        mockMvc.perform(get("/gestaffectation//listeaffectation")//
-                .contentType(MediaType.APPLICATION_JSON))
-        //Then
-                .andExpect(status().isOk())
-                .andExpect(jsonPath("$[0].commentaire").value(AFFECTATION_COMMENTAIRE))
-                ;
-        verify(affectationManagement, Mockito.times(1)).listerAffectation();
-
-    }
-
 
     private Affectation instancierUneAffectation() {
         LocalDate dateRevouvelementAttentue = AFFECTATION_DATE.plusYears(2);

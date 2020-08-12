@@ -188,9 +188,13 @@ class RepositoryAffectationImplTest {
 
         //when
 
-        List<Affectation> result = repositoryAffectation.rechercheAffectationAvecFiltres("", "", "",
-                "", "Pompei", "", "",
-                null, null);
+        FiltresAffectation filtresAffectation = new FiltresAffectation();
+        filtresAffectation.setNomSite("Pompei");
+
+//        List<Affectation> result = repositoryAffectation.rechercheAffectationAvecFiltres("", "", "",
+//                "", "Pompei", "", "",
+//                null, null);
+        List<Affectation> result = repositoryAffectation.rechercheAffectationAvecFiltres(filtresAffectation);
 
         //then
         assertThat(result.size()).isZero();

@@ -99,16 +99,6 @@ public class AffectationManagementImpl implements IAffectationManagement {
 //    }
 
     @Override
-    public List<Affectation> listerAffectation() {
-        return repositoryAffectation.listerAffectation();
-    }
-
-    public List<Affectation> listerAffectation(String uid, String nom, String codeUo, String nomUsageUo, String nomSite, String numeroLigneCollaborateur, String nomModeleIphone, LocalDate dateRenouvMin, LocalDate dateRenouvMax) {
-
-        return repositoryAffectation.rechercheAffectationAvecFiltres(uid,nom,codeUo,nomUsageUo,nomSite,numeroLigneCollaborateur,nomModeleIphone,dateRenouvMin,dateRenouvMax);
-    }
-
-    @Override
     public List<Affectation> listerAffectation(FiltresAffectation filtresAffectation) {
 
         return repositoryAffectation.rechercheAffectationAvecFiltres(filtresAffectation);

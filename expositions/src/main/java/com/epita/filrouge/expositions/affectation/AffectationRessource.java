@@ -32,13 +32,6 @@ public class AffectationRessource {
 
     }
 
-    @GetMapping(value = "/listeaffectation", produces = { "application/json" })
-    public List<Affectation> rechercheAffectation(){
-
-        final List<Affectation> affectations = affectationManagement.listerAffectation();
-        return affectations;
-    }
-
     @PostMapping(value = "/listeaffectation", consumes = { "application/json" }, produces =  { "application/json" })
     @Secured({"ROLE_ADMIN","ROLE_TYPE1","ROLE_TYPE2"})
     public List<Affectation> rechercheAffectation(@NotNull @RequestBody final FiltresAffectation filtresAffectation){

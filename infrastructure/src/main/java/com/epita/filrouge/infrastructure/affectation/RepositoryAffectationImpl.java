@@ -69,10 +69,10 @@ public class RepositoryAffectationImpl implements IRepositoryAffectation {
     }
 
 
-    @Override
-    public List<Affectation> listerAffectation() {
-        return affectationMapper.mapToDomainList(iRepositoryJpaAffectation.findAll());
-    }
+//    @Override
+//    public List<Affectation> listerAffectation() {
+//        return affectationMapper.mapToDomainList(iRepositoryJpaAffectation.findAll());
+//    }
 
     @Override
     public List<Affectation> rechercheAffectationByUid(String collaborateurUid) {
@@ -82,56 +82,56 @@ public class RepositoryAffectationImpl implements IRepositoryAffectation {
         return affectationMapper.mapToDomainList(affectationsList);
     }
 
-    @Override
-    public List<Affectation> rechercheAffectationAvecFiltres(String uid, String nom, String codeUo, String nomUsageUo, String nomSite, String numeroLigneCollaborateur, String nomModeleIphone, LocalDate dateRenouvMin, LocalDate dateRenouvMax) {
-        StringBuilder query = new StringBuilder();
-        query.append("select a from AffectationEntity a where 1=1 ");
-
-        if (uid != null && !uid.isEmpty()){
-            query.append(String.format("AND a.collaborateur.uid = '%s' ", uid ));
-
-        }
-        if (nom != null && !nom.isEmpty()){
-            query.append(String.format("AND a.collaborateur.nom = '%s' ", nom ));
-        }
-        if (codeUo != null && !codeUo.isEmpty()){
-            query.append(String.format("AND a.collaborateur.uo.codeUo = '%s' ",  codeUo));
-
-        }
-        if (nomUsageUo != null && !nomUsageUo.isEmpty()){
-            query.append(String.format("AND a.collaborateur.uo.nomUsageUo = '%s' ", nomUsageUo));
-
-        }
-        if (nomSite != null && !nomSite.isEmpty()){
-            query.append(String.format("AND a.collaborateur.uo.siteExercice.nomSite = '%s' ", nomSite ));
-
-        }
-        if (numeroLigneCollaborateur != null && !numeroLigneCollaborateur.isEmpty()){
-            query.append(String.format("AND a.collaborateur.numeroLigne = '%s' ", numeroLigneCollaborateur));
-
-        }
-        if (nomModeleIphone != null && !nomModeleIphone.isEmpty()){
-            query.append(String.format("AND a.iphone.modeleIphoneEntity.nomModele = '%s' ", nomModeleIphone));
-        }
-        if (dateRenouvMin != null){
-            query.append("AND a.dateRenouvellementPrevue > '" + dateRenouvMin + "' ");
-        }
-        if (dateRenouvMax != null){
-            query.append("AND a.dateRenouvellementPrevue < '" + dateRenouvMax + "' ");
-        }
-
-
-        String maRequeteConstruite = query.toString();
-        monLogger.debug(maRequeteConstruite);
-
-        List<AffectationEntity> maListEntity = monEntityManager.createQuery(maRequeteConstruite).getResultList();
-        List<Affectation> maList = new ArrayList<>();
-        for (AffectationEntity affectationEntity : maListEntity) {
-            maList.add(affectationMapper.mapToDomain(affectationEntity));
-        }
-
-        return maList;
-    }
+//    @Override
+//    public List<Affectation> rechercheAffectationAvecFiltres(String uid, String nom, String codeUo, String nomUsageUo, String nomSite, String numeroLigneCollaborateur, String nomModeleIphone, LocalDate dateRenouvMin, LocalDate dateRenouvMax) {
+//        StringBuilder query = new StringBuilder();
+//        query.append("select a from AffectationEntity a where 1=1 ");
+//
+//        if (uid != null && !uid.isEmpty()){
+//            query.append(String.format("AND a.collaborateur.uid = '%s' ", uid ));
+//
+//        }
+//        if (nom != null && !nom.isEmpty()){
+//            query.append(String.format("AND a.collaborateur.nom = '%s' ", nom ));
+//        }
+//        if (codeUo != null && !codeUo.isEmpty()){
+//            query.append(String.format("AND a.collaborateur.uo.codeUo = '%s' ",  codeUo));
+//
+//        }
+//        if (nomUsageUo != null && !nomUsageUo.isEmpty()){
+//            query.append(String.format("AND a.collaborateur.uo.nomUsageUo = '%s' ", nomUsageUo));
+//
+//        }
+//        if (nomSite != null && !nomSite.isEmpty()){
+//            query.append(String.format("AND a.collaborateur.uo.siteExercice.nomSite = '%s' ", nomSite ));
+//
+//        }
+//        if (numeroLigneCollaborateur != null && !numeroLigneCollaborateur.isEmpty()){
+//            query.append(String.format("AND a.collaborateur.numeroLigne = '%s' ", numeroLigneCollaborateur));
+//
+//        }
+//        if (nomModeleIphone != null && !nomModeleIphone.isEmpty()){
+//            query.append(String.format("AND a.iphone.modeleIphoneEntity.nomModele = '%s' ", nomModeleIphone));
+//        }
+//        if (dateRenouvMin != null){
+//            query.append("AND a.dateRenouvellementPrevue > '" + dateRenouvMin + "' ");
+//        }
+//        if (dateRenouvMax != null){
+//            query.append("AND a.dateRenouvellementPrevue < '" + dateRenouvMax + "' ");
+//        }
+//
+//
+//        String maRequeteConstruite = query.toString();
+//        monLogger.debug(maRequeteConstruite);
+//
+//        List<AffectationEntity> maListEntity = monEntityManager.createQuery(maRequeteConstruite).getResultList();
+//        List<Affectation> maList = new ArrayList<>();
+//        for (AffectationEntity affectationEntity : maListEntity) {
+//            maList.add(affectationMapper.mapToDomain(affectationEntity));
+//        }
+//
+//        return maList;
+//    }
 
     @Override
     public List<Affectation> rechercheAffectationAvecFiltres(FiltresAffectation filtresAffectation) {
