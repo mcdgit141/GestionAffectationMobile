@@ -7,6 +7,8 @@ import com.epita.filrouge.domain.affectation.IRepositoryAffectation;
 import com.epita.filrouge.domain.collaborateur.Collaborateur;
 import com.epita.filrouge.domain.collaborateur.IRepositoryCollaborateur;
 import com.epita.filrouge.domain.exception.AllReadyExistException;
+import com.epita.filrouge.domain.exception.BadRequestException;
+import com.epita.filrouge.domain.exception.NotFoundException;
 import com.epita.filrouge.domain.iphone.EtatIphoneEnum;
 import com.epita.filrouge.domain.iphone.IRepositoryIphone;
 import com.epita.filrouge.domain.iphone.Iphone;
@@ -39,13 +41,13 @@ public class AffectationManagementImpl implements IAffectationManagement {
 
     @Override
     @Transactional
-    public Affectation creerAffectation(String collaborateurUid, String iPhoneNumeroSerie, LocalDate dateAffectation, String numeroLigne, String commentaire) {
+    public Affectation creerAffectation(String collaborateurUid, String iPhoneNumeroSerie, LocalDate dateAffectation, String numeroLigne, String commentaire) throws AllReadyExistException {
 
         monLogger.debug("creer affectation--collaborateurUid");
         Collaborateur collaborateur = repositoryCollaborateur.findByUid(collaborateurUid);
 
-        monLogger.debug("creer affectation--collaborateur.getCollaborateur().getUid---- {}" , collaborateur.getUid());
-        monLogger.debug("application collaborateur.getPrenom() = {} " , collaborateur.getPrenom());
+        monLogger.debug("creer affectation--collaborateur.getCollaborateur().getUid---- {}", collaborateur.getUid());
+        monLogger.debug("application collaborateur.getPrenom() = {} ", collaborateur.getPrenom());
 
         // implementation du contrôle de l'existence de cet UID dans la table des affectations car si déjà présent et affectation toujours en cours,
         // on va obliger à clôturer avant de resaisir
@@ -55,10 +57,10 @@ public class AffectationManagementImpl implements IAffectationManagement {
         Iphone iPhone = repositoryIphone.rechercheIphoneParNumeroSerie(iPhoneNumeroSerie);
         controlDisponibiliteIphone(iPhone);
 
-        monLogger.debug("application iPhone.getIphoneId() = {}}" ,iPhone.getIphoneId());
+        monLogger.debug("application iPhone.getIphoneId() = {}}", iPhone.getIphoneId());
 
 //        Long numeroAffectation = genererNumeroAffectation();
-        Affectation affectationACreer = new Affectation(AffectationNumeroGenerateur.genererNumeroAffectation(), dateAffectation, commentaire,collaborateur, iPhone);
+        Affectation affectationACreer = new Affectation(AffectationNumeroGenerateur.genererNumeroAffectation(), dateAffectation, commentaire, collaborateur, iPhone);
 
         repositoryAffectation.affecter(affectationACreer);
 
@@ -77,7 +79,6 @@ public class AffectationManagementImpl implements IAffectationManagement {
             throw new AllReadyExistException("Cet iPhone n'est pas disponible, merci de recommencer : " + iPhone.getNumeroSerie());
         }
     }
-
 
     private void controlCollaborateurEstSansAffectationEnCours(String collaborateurUid) {
         List<Affectation> affectationDejaCree = repositoryAffectation.rechercheAffectationByUid(collaborateurUid);
@@ -99,9 +100,43 @@ public class AffectationManagementImpl implements IAffectationManagement {
 //    }
 
     @Override
+    @Transactional
+    public void cloturerAffectation(Long numeroAffectation, String affectationCommentaire, String motifFin, LocalDate dateFin) throws NotFoundException {
+
+        Affectation affectationACloturer = repositoryAffectation.chercheAffectationParNumeroAffectation(numeroAffectation);
+        Collaborateur collaborateur = affectationACloturer.getCollaborateur();
+        Iphone iphone = affectationACloturer.getIphone();
+
+
+//        Collaborateur collaborateur = repositoryCollaborateur.findByUid(affectationACloturer.getCollaborateur().getUid());
+//        Collaborateur collaborateurAMettreAJourSuiteClotureAffectation = collaborateur.miseAJourCollaborateurSuiteClotureAffectation();
+//
+//        Iphone iphone = repositoryIphone.rechercheIphoneParNumeroSerie(affectationACloturer.getIphone().getNumeroSerie());
+//        Iphone iphoneAMettreAJourSuiteClotureAffectation = iphone.miseAJourIphoneSuiteClotureAffectation();
+
+        Affectation affectationACloturerFinal = affectationACloturer.reglesAppliqueesPourCloturerAffectation(collaborateur,
+                iphone, affectationCommentaire, motifFin, dateFin);
+
+        System.out.println("couche application -cloturerAffectation--affectationAcloturer.getNumeroAffectation---" + affectationACloturer.getNumeroAffectation());
+        System.out.println("couche application -cloturerAffectation--dateFin---" + dateFin);
+
+//        if (dateFin != null)
+//            {affectationACloturer.setDateFin(dateFin);}
+//        else
+//            {affectationACloturer.setDateFin(LocalDate.now());}
+//
+//        affectationACloturer.setMotifFin(motifFin);
+//        affectationACloturer.setCommentaire(affectationCommentaire);
+
+        repositoryAffectation.miseAjourAffectation(affectationACloturerFinal);
+
+    }
+
+    @Override
     public List<Affectation> listerAffectation(FiltresAffectation filtresAffectation) {
 
         return repositoryAffectation.rechercheAffectationAvecFiltres(filtresAffectation);
 //        return null;
+        }
     }
-}
+

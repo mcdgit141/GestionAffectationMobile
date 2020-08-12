@@ -12,4 +12,8 @@ public interface IRepositoryAffectation {
     List<Affectation> rechercheAffectationByUid(String collaborateurUid);
 
     List<Affectation> rechercheAffectationAvecFiltres(FiltresAffectation filtresAffectation);
+
+    Affectation chercheAffectationParNumeroAffectation(Long numeroAffectation);
+
+    void miseAjourAffectation(Affectation affectation);
 }

@@ -24,6 +24,7 @@ public class Affectation {
         this.collaborateur = collaborateur;
         this.iphone = iphone;
         calculDateRenouvellement();
+
     }
 
     public Long getNumeroAffectation() {
@@ -58,8 +59,8 @@ public class Affectation {
         return iphone;
     }
 
-    private void calculDateRenouvellement () {
-        dateRenouvellementPrevue =  dateAffectation.plusYears(2);
+    private void calculDateRenouvellement() {
+        dateRenouvellementPrevue = dateAffectation.plusYears(2);
     }
 
     public void setDateFin(LocalDate dateFin) {
@@ -72,5 +73,25 @@ public class Affectation {
 
     public void setDateRenouvellementPrevue(LocalDate dateRenouvellementPrevue) {
         this.dateRenouvellementPrevue = dateRenouvellementPrevue;
+    }
+
+    public void setCommentaire(String commentaire) {
+        this.commentaire = commentaire;
+    }
+
+    public Affectation reglesAppliqueesPourCloturerAffectation(Collaborateur collaborateur, Iphone iphone, String affectationCommentaire,String motifFin,LocalDate dateFin){
+
+        if (dateFin != null)
+            {this.setDateFin(dateFin);}
+        else
+            {this.setDateFin(LocalDate.now());}
+       this.setMotifFin(motifFin);
+       this.setCommentaire(affectationCommentaire);
+       this.collaborateur.miseAJourCollaborateurSuiteClotureAffectation();
+       this.iphone.miseAJourIphoneSuiteClotureAffectation();
+//       this.collaborateur = collaborateur;
+//       this.iphone = iphone;
+
+        return this;
     }
 }
