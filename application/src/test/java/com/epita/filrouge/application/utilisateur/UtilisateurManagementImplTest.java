@@ -68,12 +68,12 @@ public class UtilisateurManagementImplTest {
         Utilisateur monUtilisateur = new Utilisateur(uid,nom,prenom,roleDomaine);
 
         Mockito.when(collaborateurManagement.findByUid(uid)).thenReturn(monCollaborateur);
-        Mockito.when(repositoryUtilisateur.rechercherUser(any(String.class))).thenReturn(monUtilisateur);
+        Mockito.when(repositoryUtilisateur.rechercherUserParUid(any(String.class))).thenReturn(monUtilisateur);
 
         //when + then
         assertThatThrownBy(
                 () -> {utilisateurManagement.enregistrerUtilisateur(uid,roleRecu);}
-        ).isInstanceOf(AllReadyExistException.class).hasMessageContaining("Un Utilisateur existe déjà pour cet uid");
+        ).isInstanceOf(AllReadyExistException.class).hasMessageContaining("Un Utilisateur existe déjà avec l'uid : " + uid);
     }
 
     @Test
@@ -94,6 +94,7 @@ public class UtilisateurManagementImplTest {
         Utilisateur monUtilisateur = new Utilisateur(uid,nom,prenom,roleDomaine);
 
         Mockito.when(collaborateurManagement.findByUid(uid)).thenReturn(monCollaborateur);
+        Mockito.when(repositoryUtilisateur.rechercherUserParUid(uid)).thenThrow(NotFoundException.class);
 
         ArgumentCaptor<Utilisateur> valueCapture = ArgumentCaptor.forClass(Utilisateur.class);
 //        Mockito.doReturn(valueCapture.getValue()).when(repositoryUtilisateur).creerUser(valueCapture.capture());
@@ -132,6 +133,7 @@ public class UtilisateurManagementImplTest {
 
         Mockito.when(collaborateurManagement.findByUid(uid)).thenReturn(monCollaborateur);
 
+
         //when
         utilisateurManagement.enregistrerUtilisateur(uid,roleRecu);
 
@@ -157,6 +159,7 @@ public class UtilisateurManagementImplTest {
         Collaborateur monCollaborateur = new Collaborateur(uid,nom, prenom,numeroLigne,monUo);
 
         Mockito.when(collaborateurManagement.findByUid(uid)).thenReturn(monCollaborateur);
+        Mockito.when(repositoryUtilisateur.rechercherUserParUid(uid)).thenThrow(NotFoundException.class);
         InOrder inOrder = inOrder(collaborateurManagement,repositoryUtilisateur);
 
         //when
@@ -164,6 +167,7 @@ public class UtilisateurManagementImplTest {
 
         //then
         inOrder(collaborateurManagement).verify(collaborateurManagement).findByUid(uid);
+        inOrder(repositoryUtilisateur).verify(repositoryUtilisateur).rechercherUserParUid(any(String.class));
         inOrder(repositoryUtilisateur).verify(repositoryUtilisateur).enregistrerUtilisateur(any(Utilisateur.class));
 
     }

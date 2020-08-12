@@ -198,4 +198,18 @@ public class UtilisateurRessourceTest {
 
     }
 
+    @Test
+    @DisplayName("supprimerUtilisateur: retour confirmation suppression en cas de succès")
+    @WithMockUser(roles = "ADMIN")
+    public void supprimerUtilisateur_should_return_a_string_when_ok() throws Exception {
+        //given
+
+
+        //when
+        String resultat = mockMvc.perform(get("/gestaffectation/utilisateur/delete/a19390")).andReturn().getResponse().getContentAsString();
+
+        //then
+        assertThat(resultat).isEqualTo("L'utilisateur a été supprimé");
+    }
+
 }

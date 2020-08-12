@@ -216,6 +216,8 @@ public class RepositoryUtilisateurImplTest {
     }
 
 
+
+
     //Collaborateur/Utilisateur
     private final String UID = "a19390";
     private final String NOM = "KAMDEM";

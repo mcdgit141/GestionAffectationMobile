@@ -37,11 +37,12 @@ public class UtilisateurRessource {
     @GetMapping(value = "/delete/{uid}")
     @ResponseStatus(HttpStatus.OK)
     @Secured("ROLE_ADMIN")
-    public void supprimerUtilisateur(@NotNull @PathVariable("uid") String uid){
+    public String supprimerUtilisateur(@NotNull @PathVariable("uid") String uid){
         utilisateurManagement.supprimerUtilisateur(uid);
         Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         monLogger.warn("******** SUPPRESSION DE L'UTILISATEUR : " + uid + " *********");
         monLogger.warn("PAR : " + ((UserDetails) principal).getUsername());
+        return "L'utilisateur a été supprimé";
 
     }
 

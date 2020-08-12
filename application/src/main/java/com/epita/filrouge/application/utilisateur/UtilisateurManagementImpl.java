@@ -43,13 +43,15 @@ public class UtilisateurManagementImpl implements IUtilisateurManagement{
         }
 
         Utilisateur utilisateurACreer = new Utilisateur(monCollaborateur.getUid(),monCollaborateur.getNom(), monCollaborateur.getPrenom(), roleUtilisateurACreer);
-        Utilisateur utilisateurExistant = repositoryUtilisateur.rechercherUser(utilisateurACreer.getLogin());
-        if (utilisateurExistant == null){
-//            repositoryUtilisateur.creerUser(utilisateurACreer);
+        try {
+            Utilisateur utilisateurExistant = repositoryUtilisateur.rechercherUserParUid(uid);
+            if (utilisateurExistant != null) {
+                throw new AllReadyExistException("Un Utilisateur existe déjà avec l'uid : " + uid);
+            }
+        } catch (NotFoundException ex) {
             repositoryUtilisateur.enregistrerUtilisateur(utilisateurACreer);
-        } else {
-            throw new AllReadyExistException("Un Utilisateur existe déjà pour cet uid");
         }
+
 
     }
 
