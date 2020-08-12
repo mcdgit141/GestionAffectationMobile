@@ -2,6 +2,7 @@ package com.epita.filrouge.expositions.utilisateur;
 
 import com.epita.filrouge.application.utilisateur.IUtilisateurManagement;
 import com.epita.filrouge.expositions.exception.MapperExceptionCode;
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -10,6 +11,7 @@ import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
@@ -134,6 +136,66 @@ public class UtilisateurRessourceTest {
 
         //then
         Mockito.verify(utilisateurManagement,Mockito.times(1)).supprimerUtilisateur("a19390");
+    }
+
+    @Test
+    @DisplayName("ModifierMdp: Controle présence donnée obligatoire : uid + mdp")
+    @WithMockUser(roles = "ADMIN")
+    public void modifierMDP_should_fail_with_uid_or_mdp_empty() throws Exception {
+        //given
+
+        UtilisateurDTO utilisateurDTO = new UtilisateurDTO();
+        utilisateurDTO.setUid("");
+        utilisateurDTO.setMdp("mdpDeTest");
+        monObjetMapper = objectMapper.writeValueAsString(utilisateurDTO);
+        //when
+        String resultat = mockMvc.perform(post("/gestaffectation/utilisateur/update")
+                .content(monObjetMapper).contentType(MediaType.APPLICATION_JSON)).andReturn().getResponse().getContentAsString();
+        //then
+        assertThat(resultat).contains("BAD REQUEST");
+
+    }
+
+    @Test
+    @DisplayName("modifierMDP : retour confirmation en mise à jour en cas de succès")
+    @WithMockUser(roles = "ADMIN")
+    public void modifierMDP_should_return_a_string_when_ok() throws Exception {
+        //given
+
+        UtilisateurDTO utilisateurDTO = new UtilisateurDTO();
+        utilisateurDTO.setUid("a19390");
+        utilisateurDTO.setMdp("mdpDeTest");
+        monObjetMapper = objectMapper.writeValueAsString(utilisateurDTO);
+
+        Mockito.doNothing().when(utilisateurManagement).modifierMdpUtilisateur(utilisateurDTO.getUid(), utilisateurDTO.getMdp());
+
+
+        //when
+        String resultat = mockMvc.perform(post("/gestaffectation/utilisateur/update")
+                .content(monObjetMapper).contentType(MediaType.APPLICATION_JSON)).andReturn().getResponse().getContentAsString();
+
+        //then
+        assertThat(resultat).isEqualTo("Le mot de passe de l'utilisateur est modifié");
+    }
+
+    @Test
+    @DisplayName("ModifierMDP : Interdiction aux roles autre que ADMIN")
+    @WithMockUser(roles = "TYPE1")
+    public void modifierMdp_should_fait_with_roleType_other_than_admin() throws Exception {
+        //given
+
+        UtilisateurDTO utilisateurDTO = new UtilisateurDTO();
+        utilisateurDTO.setUid("a19390");
+        utilisateurDTO.setMdp("mdpDeTest");
+        monObjetMapper = objectMapper.writeValueAsString(utilisateurDTO);
+
+        Mockito.doNothing().when(utilisateurManagement).modifierMdpUtilisateur(utilisateurDTO.getUid(), utilisateurDTO.getMdp());
+
+
+        //when + then
+          mockMvc.perform(post("/gestaffectation/utilisateur/update")
+                .content(monObjetMapper).contentType(MediaType.APPLICATION_JSON)).andExpect(status().isForbidden());
+
     }
 
 }

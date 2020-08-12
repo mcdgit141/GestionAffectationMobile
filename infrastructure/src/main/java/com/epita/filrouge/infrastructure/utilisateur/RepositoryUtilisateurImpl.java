@@ -28,6 +28,17 @@ public class RepositoryUtilisateurImpl implements IRepositoryUtilisateur {
         }
     }
 
+    @Override
+    public void enregistrerUtilisateur(Utilisateur utilisateur) {
+        UtilisateurEntity utilisateurEntityAEnregistrer = utilisateurMapper.mapToEntity(utilisateur);
+
+        UtilisateurEntity utilisateurEntityExistant = userJpaRepository.findByUid(utilisateur.getUid());
+        if (utilisateurEntityExistant != null) {
+            utilisateurEntityAEnregistrer.setId(utilisateurEntityExistant.getId());
+        }
+        userJpaRepository.save(utilisateurEntityAEnregistrer);
+    }
+
     @Autowired
     private UtilisateurMapper utilisateurMapper;
 
@@ -42,7 +53,7 @@ public class RepositoryUtilisateurImpl implements IRepositoryUtilisateur {
     }
 
     @Override
-    public void deleteUser(Utilisateur utilisateurASupprimer) {
+    public void supprimerUser(Utilisateur utilisateurASupprimer) {
         UtilisateurEntity monUtilisateurEntityASupprimer = userJpaRepository.findByLogin(utilisateurASupprimer.getLogin());
         if (monUtilisateurEntityASupprimer != null) {
             userJpaRepository.delete(monUtilisateurEntityASupprimer);

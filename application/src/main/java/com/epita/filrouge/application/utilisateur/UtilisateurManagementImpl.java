@@ -45,7 +45,8 @@ public class UtilisateurManagementImpl implements IUtilisateurManagement{
         Utilisateur utilisateurACreer = new Utilisateur(monCollaborateur.getUid(),monCollaborateur.getNom(), monCollaborateur.getPrenom(), roleUtilisateurACreer);
         Utilisateur utilisateurExistant = repositoryUtilisateur.rechercherUser(utilisateurACreer.getLogin());
         if (utilisateurExistant == null){
-            repositoryUtilisateur.creerUser(utilisateurACreer);
+//            repositoryUtilisateur.creerUser(utilisateurACreer);
+            repositoryUtilisateur.enregistrerUtilisateur(utilisateurACreer);
         } else {
             throw new AllReadyExistException("Un Utilisateur existe déjà pour cet uid");
         }
@@ -57,14 +58,14 @@ public class UtilisateurManagementImpl implements IUtilisateurManagement{
         Utilisateur utilisateurAModifier = repositoryUtilisateur.rechercherUserParUid(uid);
         utilisateurAModifier.setPassword(passwordEncoder.encode(mdp));
 
-        repositoryUtilisateur.modifierUtilisateur(utilisateurAModifier);
+//        repositoryUtilisateur.modifierUtilisateur(utilisateurAModifier);
+        repositoryUtilisateur.enregistrerUtilisateur(utilisateurAModifier);
 
     }
 
     @Override
     public void supprimerUtilisateur(String uid) throws NotFoundException {
         Utilisateur utilisateurASupprimer = repositoryUtilisateur.rechercherUserParUid(uid);
-        repositoryUtilisateur.deleteUser(utilisateurASupprimer);
-
+        repositoryUtilisateur.supprimerUser(utilisateurASupprimer);
     }
 }

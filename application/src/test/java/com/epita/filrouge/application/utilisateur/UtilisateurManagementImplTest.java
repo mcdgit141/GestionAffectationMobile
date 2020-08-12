@@ -102,7 +102,7 @@ public class UtilisateurManagementImplTest {
         utilisateurManagement.enregistrerUtilisateur(uid,roleRecu);
 
         //then
-        Mockito.verify(repositoryUtilisateur).creerUser(valueCapture.capture());
+        Mockito.verify(repositoryUtilisateur).enregistrerUtilisateur(valueCapture.capture());
         assertAll(
                 () -> assertThat(valueCapture.getValue().getUid()).isEqualTo(monUtilisateur.getUid()),
                 () -> assertThat(valueCapture.getValue().getNom()).isEqualTo(monUtilisateur.getNom()),
@@ -164,7 +164,7 @@ public class UtilisateurManagementImplTest {
 
         //then
         inOrder(collaborateurManagement).verify(collaborateurManagement).findByUid(uid);
-        inOrder(repositoryUtilisateur).verify(repositoryUtilisateur).creerUser(any(Utilisateur.class));
+        inOrder(repositoryUtilisateur).verify(repositoryUtilisateur).enregistrerUtilisateur(any(Utilisateur.class));
 
     }
 
@@ -215,7 +215,7 @@ public class UtilisateurManagementImplTest {
         utilisateurManagement.supprimerUtilisateur(uid);
 
         //then
-        Mockito.verify(repositoryUtilisateur).deleteUser(valueCapture.capture());
+        Mockito.verify(repositoryUtilisateur).supprimerUser(valueCapture.capture());
 
         assertAll(
                 () -> assertThat(valueCapture.getValue().getNom()).isEqualTo(nom),
@@ -242,7 +242,7 @@ public class UtilisateurManagementImplTest {
         //when
         utilisateurManagement.modifierMdpUtilisateur(uid,mdp);
         //then
-        Mockito.verify(repositoryUtilisateur).modifierUtilisateur(valueCapture.capture());
+        Mockito.verify(repositoryUtilisateur).enregistrerUtilisateur(valueCapture.capture());
         assertAll(
                 () -> assertThat(valueCapture.getValue().getPassword()).isNotEqualTo(mdp)
         );

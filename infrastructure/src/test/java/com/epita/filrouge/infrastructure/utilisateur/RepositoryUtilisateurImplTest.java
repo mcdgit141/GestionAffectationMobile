@@ -84,6 +84,61 @@ public class RepositoryUtilisateurImplTest {
 
     }
 
+
+    @Test
+    @DisplayName("enregistrerUtilisateur : Insertion d'un nouvel utlisateur en base s'il n'existe pas déjà")
+    public void enregistrerUtilisateur_should_insert_an_Entity_when_user_dont_exists(){
+        //given
+        Utilisateur utilisateurACreer = new Utilisateur("b12345","DUPOND","Francois",UtilisateurRoleEnum.ROLE_ADMIN);
+
+        List<UtilisateurEntity> utilisateurEntityRecherche = entityManager.getEntityManager()
+                .createQuery("select u from UtilisateurEntity u where uid = 'b12345' ")
+                .getResultList();
+
+        //when
+        repositoryUtilisateur.enregistrerUtilisateur(utilisateurACreer);
+
+        //then
+        List<UtilisateurEntity> utilisateurEntityTrouve = entityManager.getEntityManager()
+                .createQuery("select u from UtilisateurEntity u where uid = 'b12345' ")
+                .getResultList();
+
+        assertAll(
+                () -> assertThat(utilisateurEntityRecherche.size()).isZero(),
+                () -> assertThat(utilisateurEntityTrouve.size()).isOne()
+        );
+
+    }
+
+    @Test
+    @DisplayName("enregistrerUtilisateur : Mise à jour de l'utlisateur en base s'il existe déjà")
+    public void enregistrerUtilisateur_should_update_Entity_when_user_exists(){
+        //given
+        Utilisateur utilisateurAModifier = new Utilisateur(UID,NOM,PRENOM,UtilisateurRoleEnum.ROLE_ADMIN);
+
+        List<UtilisateurEntity> utilisateurEntityAvant = entityManager.getEntityManager()
+                .createQuery("select u from UtilisateurEntity u where uid = 'a19390' ")
+                .getResultList();
+
+
+        //when
+        repositoryUtilisateur.enregistrerUtilisateur(utilisateurAModifier);
+
+
+        //then
+        List<UtilisateurEntity> utilisateurEntityApres = entityManager.getEntityManager()
+                .createQuery("select u from UtilisateurEntity u where uid = 'a19390' ")
+                .getResultList();
+
+
+        assertAll(
+                () -> assertThat(utilisateurEntityAvant.size()).isOne(),
+                () -> assertThat(utilisateurEntityApres.size()).isOne()
+
+        );
+
+    }
+
     @Test
     @DisplayName("Creation d'un UtilisateurEntity A partir d'un Utilisateur")
     public void creerUser_should_save_an_UtilisateurEntity(){
@@ -112,7 +167,7 @@ public class RepositoryUtilisateurImplTest {
 
 
         //when
-        repositoryUtilisateur.deleteUser(monUtitlisateur);
+        repositoryUtilisateur.supprimerUser(monUtitlisateur);
 
         //then
         assertThat(entityManager.find(UtilisateurEntity.class, utilisateurEntityPersiste.getId())).isNull();
@@ -127,7 +182,7 @@ public class RepositoryUtilisateurImplTest {
 
         //when + then
         assertThatThrownBy(
-                () -> {repositoryUtilisateur.deleteUser(mauvaisUtilisateur);}
+                () -> {repositoryUtilisateur.supprimerUser(mauvaisUtilisateur);}
                 ).isInstanceOf(NotFoundException.class);
     }
 
@@ -158,9 +213,8 @@ public class RepositoryUtilisateurImplTest {
         Utilisateur utilisateur = repositoryUtilisateur.rechercherUserParUid(UID);
         //then
         assertThat(utilisateur).isNotNull();
-
-
     }
+
 
     //Collaborateur/Utilisateur
     private final String UID = "a19390";

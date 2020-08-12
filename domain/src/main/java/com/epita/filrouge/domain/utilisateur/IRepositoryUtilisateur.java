@@ -9,10 +9,12 @@ public interface IRepositoryUtilisateur {
 
      Utilisateur rechercherUser(String login);
 
-    void deleteUser(Utilisateur utilisateurASupprimer);
+    void supprimerUser(Utilisateur utilisateurASupprimer);
 
     Utilisateur rechercherUserParUid(String uid);
 
     void modifierUtilisateur(Utilisateur utilisateurAModifier);
+
+    void enregistrerUtilisateur(Utilisateur utilisateur);
 }
 
