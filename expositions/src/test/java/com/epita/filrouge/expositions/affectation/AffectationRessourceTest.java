@@ -216,9 +216,6 @@ class AffectationRessourceTest {
                 .contentType(MediaType.APPLICATION_JSON))
                 // Then
                 .andExpect(status().isOk())
-//                .andExpect(jsonPath("$[0].numeroAffectation").isNotEmpty())
-//                .andExpect(jsonPath("$[0].affectationCommentaire").isNotEmpty())
-//                .andExpect(jsonPath("$[0].motifFin").isNotEmpty())
         ;
         verify(affectationManagement, Mockito.times(1)).cloturerAffectation(AFFECTATION_NUMERO,AFFECTATION_COMMENTAIRE,AFFECTATION_MOTIFFIN,AFFECTATION_DATEFIN);
         ;
@@ -281,7 +278,7 @@ class AffectationRessourceTest {
         //Then
                 .andExpect(status().isOk())
                 ;
-        verify(affectationManagement).listerAffectation(filtresAffectationArgumentCaptor.capture());
+        verify(affectationManagement).listerAffectation(filtresAffectationArgumentCaptor.capture());//fait la capture
 
         FiltresAffectation filtresAffectationTransmis = filtresAffectationArgumentCaptor.getValue();
 
