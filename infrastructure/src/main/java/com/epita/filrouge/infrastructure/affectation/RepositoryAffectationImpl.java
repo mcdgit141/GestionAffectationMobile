@@ -18,7 +18,6 @@ import javax.persistence.EntityManager;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.concurrent.Callable;
 
 @Repository
 public class RepositoryAffectationImpl implements IRepositoryAffectation {
@@ -80,7 +79,7 @@ public class RepositoryAffectationImpl implements IRepositoryAffectation {
             return affectationMapper.mapToDomain(affectationEntity);}
         else {
             System.out.println("Dans couche infrastructure---chercheAffectationParNumeroAffectation égal à null");
-            throw new NotFoundException("L'affectation avec le numéro suivant n'existe pas " + numeroAffectation);
+             throw new NotFoundException("L'affectation avec le numéro suivant n'existe pas " + numeroAffectation);
         }
     }
 

@@ -6,7 +6,9 @@ import com.epita.filrouge.domain.iphone.Iphone;
 import com.epita.filrouge.domain.iphone.ModeleIphone;
 import com.epita.filrouge.domain.site.SiteExercice;
 import com.epita.filrouge.domain.uo.Uo;
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Disabled;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -50,8 +52,13 @@ class AffectationTest {
     private static final LocalDate AFFECTATION_DATE = LocalDate.now();
     private static final String AFFECTATION_COMMENTAIRE = "Premeire affectation";
 
+    private static final String AFFECTATION_COMMENTAIRE_CLOTURE = "Cloture de l'affectation suite au vol du portable";
+    private static final String AFFECTATION_MOTIFFIN = "VOLE";
+    private static final LocalDate DATE_FIN = null;
+
     @Test
-    void ShouldReturnADateInTwoYears() {
+    @DisplayName("Verification règle de la date de renouvellement")
+    void ShouldReturn_ADateInTwoYears() {
         //Given
         LocalDate dateRevouvelementAttentue = AFFECTATION_DATE.plusYears(2);
 
@@ -68,9 +75,30 @@ class AffectationTest {
         //When
         Affectation affectationACreer = new Affectation(AFFECTATION_NUMERO, AFFECTATION_DATE, AFFECTATION_COMMENTAIRE, collaborateur, iphone);
 
-
         //Then
         assertThat(affectationACreer.getDateRenouvellementPrevue()).isEqualTo(dateRevouvelementAttentue);
     }
+    @Test
+    @DisplayName("Vérirification que la date de fin, le numéro de ligne du collaborateur et l'état de l'iphone ont bien été changés")
+    void Should_Return_Update_DateFin_And_NumeroLigneCollaborateur_And_EtatIphone(){
 
+        // given
+        SiteExercice siteExercice = new SiteExercice(CODE_SITE,NOM_SITE,ADRESSE_POSTALE,CODE_POSTAL,VILLE,PAYS,DATE_CREATION);
+        Uo uo = new Uo(CODE_UO,FONCTION_RATTACHEMENT,CODE_UO_PARENT,NOM_USAGE_UO,NOM_RESPONSABLE_UO);
+        uo.setSiteExercice(siteExercice);
+
+        Collaborateur collaborateur = new Collaborateur( COLLABORATEUR_UID, COLLABORATEUR_NOM, COLLABORATEUR_PRENOM, COLLABORATEUR_NUMEROLIGNE,uo);
+        ModeleIphone modeleIphone = new ModeleIphone(1L, MODELE_NOMMODELE);
+        Iphone iphone = new Iphone(1L, IPHONE_NUMEROSERIE, IPHONE_PRIX, modeleIphone, IPHONE_ETAT);
+        Affectation affectation = new Affectation(AFFECTATION_NUMERO, AFFECTATION_DATE, AFFECTATION_COMMENTAIRE, collaborateur, iphone);
+
+        // when
+        Affectation affectationACloturerFinal = affectation.reglesAppliqueesPourCloturerAffectation(collaborateur,
+                iphone, AFFECTATION_COMMENTAIRE_CLOTURE, AFFECTATION_MOTIFFIN, DATE_FIN);
+
+        //then
+        assertThat(affectationACloturerFinal.getDateFin()).isEqualTo(LocalDate.now());
+        assertThat(affectationACloturerFinal.getCollaborateur().getNumeroLigne()).isEqualTo(null);
+        assertThat(affectationACloturerFinal.getIphone().getEtatIphone()).isEqualTo(EtatIphoneEnum.DISPONIBLE);
+    }
 }

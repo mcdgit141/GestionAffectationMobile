@@ -6,6 +6,7 @@ import com.epita.filrouge.domain.affectation.IRepositoryAffectation;
 import com.epita.filrouge.domain.collaborateur.Collaborateur;
 import com.epita.filrouge.domain.collaborateur.IRepositoryCollaborateur;
 import com.epita.filrouge.domain.exception.AllReadyExistException;
+import com.epita.filrouge.domain.exception.NotFoundException;
 import com.epita.filrouge.domain.iphone.EtatIphoneEnum;
 import com.epita.filrouge.domain.iphone.IRepositoryIphone;
 import com.epita.filrouge.domain.iphone.Iphone;
@@ -28,8 +29,8 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.assertj.core.api.Assertions.catchThrowable;
+import static org.assertj.core.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertAll;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
@@ -104,13 +105,8 @@ public class AffectationManagementImplTest {
 
         ModeleIphone modeleIphone = new ModeleIphone(1L, MODELE_NOMMODELE);
         iphone = new Iphone(1L, IPHONE_NUMEROSERIE, IPHONE_PRIX, modeleIphone, IPHONE_ETAT);
-        iphoneAffecte = new Iphone(1L, IPHONE_NUMEROSERIE, IPHONE_PRIX, modeleIphone, EtatIphoneEnum.AFFECTE);
-
 
         affectationEnCours = new Affectation(1L, LocalDate.now(), "blabla", collaborateur, iphone);
-
-        affectationAvecDateFin = new Affectation(1L, LocalDate.now(), "blabla", collaborateur, iphone);
-        affectationAvecDateFin.setDateFin(LocalDate.now());
 
     }
 
@@ -187,7 +183,54 @@ public class AffectationManagementImplTest {
         verify(repositoryCollaborateur, Mockito.times(1)).miseAJourCollaborateur(collaborateur, COLLABORATEUR_NUMEROLIGNE);
         verify(repositoryIphone, Mockito.times(1)).miseAJourEtatIphone(IPHONE_NUMEROSERIE, EtatIphoneEnum.AFFECTE);
     }
+    @Test
+    @DisplayName("Cloture Affectation: Doit vérifier le nombre d'appels à la méthode miseAJourAffectation")
+    void When_Cloture_AffectationisCalled_Check_numberOfTimes_ThatMethodsCalled() {
+        //Given
 
+        when(repositoryAffectation.chercheAffectationParNumeroAffectation(AFFECTATION_NUMERO)).thenReturn(affectationEnCours);
+        Collaborateur collaborateur = affectationEnCours.getCollaborateur();
+        Iphone iphone = affectationEnCours.getIphone();
+
+        //When
+        affectationManagementImpl.cloturerAffectation(affectationEnCours.getNumeroAffectation(),affectationEnCours.getCommentaire(),affectationEnCours.getMotifFin(),affectationEnCours.getDateFin());
+
+        //Then
+        verify(repositoryAffectation, Mockito.times(1)).miseAjourAffectation(any(Affectation.class));
+    }
+    @Test
+    @DisplayName("Cloture Affectation: Verifier le résultat de la mise à jour appel de la fonction")
+    void When_Cloture_AffectationisCalled_Check_The_Value_After_Update() {
+        // given
+
+        when(repositoryAffectation.chercheAffectationParNumeroAffectation(AFFECTATION_NUMERO)).thenReturn(affectationEnCours);
+        ArgumentCaptor<Affectation> valueCapture = ArgumentCaptor.forClass(Affectation.class);
+
+        //when
+        affectationManagementImpl.cloturerAffectation(affectationEnCours.getNumeroAffectation(),
+                affectationEnCours.getCommentaire(),affectationEnCours.getMotifFin(),affectationEnCours.getDateFin());
+
+        //then
+        Mockito.verify(repositoryAffectation).miseAjourAffectation(valueCapture.capture());
+        assertAll(
+                () -> assertThat(valueCapture.getValue().getCollaborateur().getNumeroLigne()).isEqualTo(null),
+                () -> assertThat(valueCapture.getValue().getIphone().getEtatIphone()).isEqualTo(EtatIphoneEnum.DISPONIBLE),
+                () -> assertThat(valueCapture.getValue().getDateFin()).isEqualTo(LocalDate.now())
+        );
+    }
+    @Test
+    @DisplayName("Cloture Affectation: verifier existence du numéro d'affectation")
+    void When_Cloture_AffectationisCalled_Check_NumeroAffectation(){
+        //given
+        when(repositoryAffectation.chercheAffectationParNumeroAffectation(AFFECTATION_NUMERO)).thenThrow(new NotFoundException("NotfoundExceptionTest"));
+
+        // when + then
+        assertThatThrownBy(
+                () -> {affectationManagementImpl.cloturerAffectation(affectationEnCours.getNumeroAffectation(),
+                                        affectationEnCours.getCommentaire(),affectationEnCours.getMotifFin(),affectationEnCours.getDateFin());}
+        ).isInstanceOf(NotFoundException.class);
+
+    }
     @Test
     @DisplayName("Doit transmettre la demande d'affichage avec les bons filtres")
     void ShouldCallWithTheFilters() throws Exception {
@@ -262,6 +305,7 @@ public class AffectationManagementImplTest {
                         null, null);
 
     }
+
 
         private Affectation instancierUneAffectation() {
         LocalDate dateRevouvelementAttentue = AFFECTATION_DATE.plusYears(2);
