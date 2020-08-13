@@ -10,6 +10,7 @@ import com.epita.filrouge.domain.iphone.ModeleIphone;
 import com.epita.filrouge.domain.site.SiteExercice;
 import com.epita.filrouge.domain.uo.Uo;
 import com.epita.filrouge.expositions.exception.MapperExceptionCode;
+import com.epita.filrouge.expositions.utilisateur.UtilisateurDTO;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -71,6 +72,8 @@ class AffectationRessourceTest {
     private static final Long AFFECTATION_NUMERO = 1L;
     private static final LocalDate AFFECTATION_DATE = LocalDate.now();
     private static final String AFFECTATION_COMMENTAIRE = "Premiere affectation";
+    private static final LocalDate AFFECTATION_DATEFIN = LocalDate.now();
+    private static final String AFFECTATION_MOTIFFIN = "Vole";
 
     @Autowired
     private MockMvc mockMvc;
@@ -115,7 +118,6 @@ class AffectationRessourceTest {
                 ;
     }
 
-
     @Test
     @WithMockUser(roles = {"TYPE1"})
     @DisplayName("Interdiction creation affectation pour role TYPE1")
@@ -137,6 +139,86 @@ class AffectationRessourceTest {
                 .contentType(MediaType.APPLICATION_JSON))
                 // Then
                 .andExpect(status().isForbidden());
+    }
+
+    @Test
+    @WithMockUser(roles = {"TYPE1","ADMIN"})
+    @DisplayName("Interdiction creation affectation pour role TYPE1")
+    void role_type1_et_admin_ne_peux_pas_cloturer_affectation() throws Exception {
+
+        // Given
+
+        AffectationDTO affectationDTO = new AffectationDTO();
+        affectationDTO.setNumeroAffectation(AFFECTATION_NUMERO);
+        affectationDTO.setDateFin(AFFECTATION_DATEFIN);
+        affectationDTO.setMotifFin(AFFECTATION_MOTIFFIN);
+        affectationDTO.setAffectationCommentaire(AFFECTATION_COMMENTAIRE);
+
+        String monObjetMapper = objectMapper.writeValueAsString(affectationDTO);
+
+        //When
+        mockMvc.perform(post("/gestaffectation/affectation/cloture")//
+                .content(monObjetMapper) //
+                .contentType(MediaType.APPLICATION_JSON))
+                // Then
+                .andExpect(status().isForbidden());
+    }
+    @Test
+    @DisplayName("cloturer affectation: Levée d'une BadRequest exception si le body de la requête est incomplet")
+    @WithMockUser(roles = "TYPE2")
+    public void utilisateurDTO_Uncomplete_should_throw_an_Exception() throws Exception {
+        //given
+        AffectationDTO affectationDTO = new AffectationDTO();
+        affectationDTO.setNumeroAffectation(AFFECTATION_NUMERO);
+
+        String monObjetMapper = objectMapper.writeValueAsString(affectationDTO);
+
+        //when
+        String resultat = mockMvc.perform(post("/gestaffectation/affectation/cloture")
+                .content(monObjetMapper)
+                .contentType(MediaType.APPLICATION_JSON))
+                .andReturn().getResponse().getContentAsString();
+        //then
+        assertThat(resultat.contains("BAD REQUEST")).isTrue();
+
+    }
+    @Test
+    @WithMockUser(roles = {"TYPE2"})  // controle de l'AUTHENTIFICATION (Spring security), l'anotation @Secured est non indispensable dans le controller
+    @DisplayName("Doit appeler cloturerAffectation de la couche application avec les bons paramètres")
+    void role_type2_doitAppelerCloturerAffectationDeCoucheApplication() throws Exception {
+
+        // Given
+        AffectationDTO affectationDTO = new AffectationDTO();
+        affectationDTO.setCollaborateurUid(COLLABORATEUR_UID);
+        affectationDTO.setIphoneNumeroSerie(IPHONE_NUMEROSERIE);
+        affectationDTO.setAffectationDate(AFFECTATION_DATE);
+        affectationDTO.setCollaborateurNumeroLigne(COLLABORATEUR_NUMEROLIGNE);
+        affectationDTO.setAffectationCommentaire(AFFECTATION_COMMENTAIRE);
+
+        Affectation affectationRetournee = instancierUneAffectation();
+
+        when(affectationManagement.creerAffectation(COLLABORATEUR_UID, IPHONE_NUMEROSERIE,AFFECTATION_DATE,
+                COLLABORATEUR_NUMEROLIGNE,AFFECTATION_COMMENTAIRE)).thenReturn(affectationRetournee);
+
+        AffectationDTO affectationDTOCloture = new AffectationDTO();
+        affectationDTOCloture.setNumeroAffectation(AFFECTATION_NUMERO);
+        affectationDTOCloture.setDateFin(AFFECTATION_DATEFIN);
+        affectationDTOCloture.setMotifFin(AFFECTATION_MOTIFFIN);
+        affectationDTOCloture.setAffectationCommentaire(AFFECTATION_COMMENTAIRE);
+
+        when(affectationManagement.cloturerAffectation(AFFECTATION_NUMERO, AFFECTATION_COMMENTAIRE,AFFECTATION_MOTIFFIN,AFFECTATION_DATEFIN)).thenReturn(affectationRetournee);
+
+        String monObjetMapper = objectMapper.writeValueAsString(affectationDTOCloture);
+
+        //When
+        mockMvc.perform(MockMvcRequestBuilders.post("/gestaffectation/affectation/cloture")
+                .content(monObjetMapper)
+                .contentType(MediaType.APPLICATION_JSON))
+                // Then
+                .andExpect(status().isOk())
+        ;
+        verify(affectationManagement, Mockito.times(1)).cloturerAffectation(AFFECTATION_NUMERO,AFFECTATION_COMMENTAIRE,AFFECTATION_MOTIFFIN,AFFECTATION_DATEFIN);
+        ;
     }
 
     @Test
@@ -196,7 +278,7 @@ class AffectationRessourceTest {
         //Then
                 .andExpect(status().isOk())
                 ;
-        verify(affectationManagement).listerAffectation(filtresAffectationArgumentCaptor.capture());
+        verify(affectationManagement).listerAffectation(filtresAffectationArgumentCaptor.capture());//fait la capture
 
         FiltresAffectation filtresAffectationTransmis = filtresAffectationArgumentCaptor.getValue();
 
@@ -212,29 +294,6 @@ class AffectationRessourceTest {
                         FiltresAffectation::getDateRenouvMax)
                 .containsExactly(COLLABORATEUR_UID,
                         null,null,null,null,null,null,null,null);
-
-    }
-
-    @Test
-    @WithMockUser(roles = {"TYPE2","ADMIN"})
-    @DisplayName("Doit transmettre la demande d'affichage sans filtre")
-    void ShouldCallWithoutFilters() throws Exception {
-        //Given
-        Affectation affectationRetournee = instancierUneAffectation();
-        List<Affectation> listeAffectationsRetournee = new ArrayList<>();
-        listeAffectationsRetournee.add(affectationRetournee);
-
-        when(affectationManagement.listerAffectation()).thenReturn(listeAffectationsRetournee);
-
-
-        //When
-        mockMvc.perform(get("/gestaffectation//listeaffectation")//
-                .contentType(MediaType.APPLICATION_JSON))
-        //Then
-                .andExpect(status().isOk())
-                .andExpect(jsonPath("$[0].commentaire").value(AFFECTATION_COMMENTAIRE))
-                ;
-        verify(affectationManagement, Mockito.times(1)).listerAffectation();
 
     }
 

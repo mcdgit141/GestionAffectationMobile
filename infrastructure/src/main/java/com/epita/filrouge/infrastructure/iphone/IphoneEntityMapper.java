@@ -40,24 +40,24 @@ public class IphoneEntityMapper extends AbstractMapper<Iphone, IphoneEntity> {
     {
         final Iphone iphone = new Iphone(iphoneEntity.getIphoneId(),iphoneEntity.getNumeroSerie(),iphoneEntity.getPrixIphone(),
                 modeleIphoneMapper.mapToDomain(iphoneEntity.getModeleIphoneEntity()),iphoneEntity.getEtatIphone());
-        if (iphoneEntity.getAffectationIphone() != null) {
-            for (final AffectationEntity affectationEntity : iphoneEntity.getAffectationIphone()) {
-
-                UoEntity uoEntityFourni = affectationEntity.getCollaborateur().getUo();
-
-                CollaborateurEntity collaborateurEntityFourni = affectationEntity.getCollaborateur();
-                Collaborateur monCollaborateur = new Collaborateur(collaborateurEntityFourni.getUid(), collaborateurEntityFourni.getNom(),
-                        collaborateurEntityFourni.getPrenom(), collaborateurEntityFourni.getNumeroLigne(), uoEntityMapper.mapToDomain(uoEntityFourni));
-
-                IphoneEntity iphoneEntityFourni = affectationEntity.getIphone();
-                Iphone monIphone = new Iphone(iphoneEntity.getIphoneId(), iphoneEntity.getNumeroSerie(), iphoneEntity.getPrixIphone(),
-                        modeleIphoneMapper.mapToDomain(iphoneEntity.getModeleIphoneEntity()),iphoneEntity.getEtatIphone());
-
-                Affectation monAffectation = new Affectation(affectationEntity.getNumeroAffectation(),affectationEntity.getDateAffectation(),
-                        affectationEntity.getCommentaire(), monCollaborateur, monIphone);
-                iphone.addAffectation(monAffectation);
-            }
-        }
+//        if (iphoneEntity.getAffectationIphone() != null) {
+//            for (final AffectationEntity affectationEntity : iphoneEntity.getAffectationIphone()) {
+//
+//                UoEntity uoEntityFourni = affectationEntity.getCollaborateur().getUo();
+//
+//                CollaborateurEntity collaborateurEntityFourni = affectationEntity.getCollaborateur();
+//                Collaborateur monCollaborateur = new Collaborateur(collaborateurEntityFourni.getUid(), collaborateurEntityFourni.getNom(),
+//                        collaborateurEntityFourni.getPrenom(), collaborateurEntityFourni.getNumeroLigne(), uoEntityMapper.mapToDomain(uoEntityFourni));
+//
+//                IphoneEntity iphoneEntityFourni = affectationEntity.getIphone();
+//                Iphone monIphone = new Iphone(iphoneEntity.getIphoneId(), iphoneEntity.getNumeroSerie(), iphoneEntity.getPrixIphone(),
+//                        modeleIphoneMapper.mapToDomain(iphoneEntity.getModeleIphoneEntity()),iphoneEntity.getEtatIphone());
+//
+//                Affectation monAffectation = new Affectation(affectationEntity.getNumeroAffectation(),affectationEntity.getDateAffectation(),
+//                        affectationEntity.getCommentaire(), monCollaborateur, monIphone);
+//                iphone.addAffectation(monAffectation);
+//            }
+//        }
         return iphone;
     }
 
@@ -72,8 +72,8 @@ public class IphoneEntityMapper extends AbstractMapper<Iphone, IphoneEntity> {
         ModeleIphoneEntity modeleIphoneEntity = repositoryJpaModeleIphone.findByNomModele(nomModeleMapper);
         iphoneEntity.setModeleIphoneEntity(modeleIphoneEntity);
 
-        List<AffectationEntity> listAffectationEntity = repositoryJpaAffectation.findByIphoneNumeroSerie(iphone.getNumeroSerie());
-        iphoneEntity.setAffectationIphone(listAffectationEntity);
+//        List<AffectationEntity> listAffectationEntity = repositoryJpaAffectation.findByIphoneNumeroSerie(iphone.getNumeroSerie());
+//        iphoneEntity.setAffectationIphone(listAffectationEntity);
 
         return iphoneEntity;
     }

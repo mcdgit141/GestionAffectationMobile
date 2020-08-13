@@ -1,6 +1,8 @@
 package com.epita.filrouge.domain.affectation;
 
 import com.epita.filrouge.domain.collaborateur.Collaborateur;
+import com.epita.filrouge.domain.exception.AllReadyClotureeException;
+import com.epita.filrouge.domain.exception.NotFoundException;
 import com.epita.filrouge.domain.iphone.Iphone;
 
 import java.time.LocalDate;
@@ -24,6 +26,7 @@ public class Affectation {
         this.collaborateur = collaborateur;
         this.iphone = iphone;
         calculDateRenouvellement();
+
     }
 
     public Long getNumeroAffectation() {
@@ -58,8 +61,8 @@ public class Affectation {
         return iphone;
     }
 
-    private void calculDateRenouvellement () {
-        dateRenouvellementPrevue =  dateAffectation.plusYears(2);
+    private void calculDateRenouvellement() {
+        dateRenouvellementPrevue = dateAffectation.plusYears(2);
     }
 
     public void setDateFin(LocalDate dateFin) {
@@ -72,5 +75,29 @@ public class Affectation {
 
     public void setDateRenouvellementPrevue(LocalDate dateRenouvellementPrevue) {
         this.dateRenouvellementPrevue = dateRenouvellementPrevue;
+    }
+
+    public void setCommentaire(String commentaire) {
+        this.commentaire = commentaire;
+    }
+
+    public Affectation reglesAppliqueesPourCloturerAffectation(Collaborateur collaborateur, Iphone iphone, String affectationCommentaire,String motifFin,LocalDate dateFin) throws AllReadyClotureeException{
+
+        if (this.getDateFin() != null){
+            throw new AllReadyClotureeException("L'affectation avec le numéro suivant est déjà clôturée " + this.getNumeroAffectation());
+        }
+
+        if (dateFin != null)
+            {this.setDateFin(dateFin);}
+        else
+            {this.setDateFin(LocalDate.now());}
+       this.setMotifFin(motifFin);
+       this.setCommentaire(affectationCommentaire);
+       this.collaborateur.miseAJourCollaborateurSuiteClotureAffectation();
+       this.iphone.miseAJourIphoneSuiteClotureAffectation();
+//       this.collaborateur = collaborateur;
+//       this.iphone = iphone;
+
+        return this;
     }
 }
