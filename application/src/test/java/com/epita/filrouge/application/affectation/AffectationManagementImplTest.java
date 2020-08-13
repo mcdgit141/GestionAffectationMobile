@@ -146,7 +146,7 @@ public class AffectationManagementImplTest {
         assertThat(thrown).isInstanceOf(AllReadyExistException.class);
         assertThat(thrown).hasMessage(messageAttendu);
     }
-  
+
     @Test
     void WhenAskToAffectAColloborateurAlreadyAffected_ShouldReturnAnAllReadyExistException() {
         //Given
