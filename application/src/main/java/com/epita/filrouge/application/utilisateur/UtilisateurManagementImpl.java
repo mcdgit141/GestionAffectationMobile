@@ -24,6 +24,12 @@ public class UtilisateurManagementImpl implements IUtilisateurManagement{
 
     BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
 
+
+    @Override
+    public Utilisateur rechercherUtilisateur(String uid) throws NotFoundException {
+        return repositoryUtilisateur.rechercherUserParUid(uid);
+    }
+
     @Override
     public void enregistrerUtilisateur(String uid, String profil) {
         Collaborateur monCollaborateur = monCollaborateurManagement.findByUid(uid);

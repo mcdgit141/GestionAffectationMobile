@@ -253,6 +253,21 @@ public class UtilisateurManagementImplTest {
 
     }
 
+    @Test
+    @DisplayName("rechercheUtilisateur : NotFoundException si utilisateur inexistant")
+    public void rechercheUtilisateur_should_throws_NotFound_Exception_if_uid_dont_exists(){
+        //given
+
+        Mockito.when(repositoryUtilisateur.rechercherUserParUid(any(String.class))).thenThrow(new NotFoundException("message de test"));
+        //
+        //when & then
+
+        assertThatThrownBy(
+                () -> {utilisateurManagement.rechercherUtilisateur("a19390");}
+        ).isInstanceOf(NotFoundException.class);
+
+    }
+
     private static final String CODE_SITE = "V2";
     private static final String NOM_SITE = "Valmy2";
     private static final String ADRESSE_POSTALE = "41, Rue de Valmy";

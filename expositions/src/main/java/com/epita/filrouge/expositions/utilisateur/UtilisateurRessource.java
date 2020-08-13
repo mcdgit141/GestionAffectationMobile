@@ -2,6 +2,7 @@ package com.epita.filrouge.expositions.utilisateur;
 
 import com.epita.filrouge.application.utilisateur.IUtilisateurManagement;
 import com.epita.filrouge.domain.exception.BadRequestException;
+import com.epita.filrouge.domain.utilisateur.Utilisateur;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -34,16 +35,33 @@ public class UtilisateurRessource {
         }
     }
 
-    @GetMapping(value = "/delete/{uid}")
+    @PostMapping(value = "/delete")
     @ResponseStatus(HttpStatus.OK)
     @Secured("ROLE_ADMIN")
-    public String supprimerUtilisateur(@NotNull @PathVariable("uid") String uid){
-        utilisateurManagement.supprimerUtilisateur(uid);
+    public String supprimerUtilisateur(@NotNull @RequestBody UtilisateurDTO utilisateurDTO){
         Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        monLogger.warn("******** SUPPRESSION DE L'UTILISATEUR : " + uid + " *********");
-        monLogger.warn("PAR : " + ((UserDetails) principal).getUsername());
-        return "L'utilisateur a été supprimé";
+        UserDetails utilisateurEnSesion = (UserDetails) principal;
+        System.out.println("LKA ***** : " + utilisateurEnSesion.getUsername());
+        System.out.println("LKA ***** : " + utilisateurEnSesion.getPassword());
+//        if ((utilisateurDTO.getUsername().equals(utilisateurEnSesion.getUsername())) &
+//                (utilisateurDTO.getPassword().equals(utilisateurEnSesion.getPassword()))) {
+        if (utilisateurDTO.getUsername().equals(utilisateurEnSesion.getUsername())) {
 
+            utilisateurManagement.supprimerUtilisateur(utilisateurDTO.getUid());
+            monLogger.warn("******** SUPPRESSION DE L'UTILISATEUR : " + utilisateurDTO.getUid() + " *********");
+            monLogger.warn("PAR : " + utilisateurEnSesion.getUsername());
+            return "L'utilisateur a été supprimé";
+        } else {
+            return "Les informations saisies ne correspondent pas à la session active";
+        }
+    }
+
+    @GetMapping(value = "/retrieve/{uid}")
+    @ResponseStatus(HttpStatus.OK)
+    @Secured("ROLE_ADMIN")
+    public Utilisateur rechercherUtilisateur(@NotNull @PathVariable("uid") String uid) {
+        Utilisateur utilisateur = utilisateurManagement.rechercherUtilisateur(uid);
+        return utilisateur;
     }
 
     @PostMapping(value = "/update")

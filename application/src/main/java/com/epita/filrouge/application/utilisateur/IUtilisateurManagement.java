@@ -11,4 +11,5 @@ public interface IUtilisateurManagement {
 
     void modifierMdpUtilisateur(String uid, String mdp);
 
+    Utilisateur rechercherUtilisateur(String uid) throws NotFoundException;
 }

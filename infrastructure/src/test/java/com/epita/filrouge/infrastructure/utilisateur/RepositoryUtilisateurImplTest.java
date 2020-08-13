@@ -6,14 +6,12 @@ import com.epita.filrouge.domain.site.SiteExercice;
 import com.epita.filrouge.domain.uo.Uo;
 import com.epita.filrouge.domain.utilisateur.Utilisateur;
 import com.epita.filrouge.domain.utilisateur.UtilisateurRoleEnum;
-import com.epita.filrouge.infrastructure.affectation.RepositoryAffectationImpl;
 import com.epita.filrouge.infrastructure.collaborateur.CollaborateurEntity;
 import com.epita.filrouge.infrastructure.collaborateur.CollaborateurEntityMapper;
 import com.epita.filrouge.infrastructure.site.SiteExerciceEntity;
 import com.epita.filrouge.infrastructure.site.SiteExerciceEntityMapper;
 import com.epita.filrouge.infrastructure.uo.UoEntity;
 import com.epita.filrouge.infrastructure.uo.UoEntityMapper;
-import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -22,7 +20,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.boot.test.autoconfigure.orm.jpa.TestEntityManager;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
-import sun.security.x509.OtherName;
 
 import java.time.LocalDate;
 import java.util.List;
@@ -42,7 +39,7 @@ public class RepositoryUtilisateurImplTest {
     RepositoryUtilisateurImpl repositoryUtilisateur;
 
     @Autowired
-    private UtilisateurMapper utilisateurMapper;
+    private UtilisateurEntityMapper utilisateurEntityMapper;
 
     @Autowired
     private CollaborateurEntityMapper collaborateurEntityMapper;
@@ -79,7 +76,7 @@ public class RepositoryUtilisateurImplTest {
 
         UtilisateurRoleEnum roleUtilisateur = UtilisateurRoleEnum.ROLE_TYPE1;
         monUtitlisateur = new Utilisateur(UID,NOM,PRENOM,roleUtilisateur);
-        UtilisateurEntity utilisateurEntity = utilisateurMapper.mapToEntity(monUtitlisateur);
+        UtilisateurEntity utilisateurEntity = utilisateurEntityMapper.mapToEntity(monUtitlisateur);
         utilisateurEntityPersiste = entityManager.persistAndFlush(utilisateurEntity);
 
     }
@@ -133,7 +130,8 @@ public class RepositoryUtilisateurImplTest {
 
         assertAll(
                 () -> assertThat(utilisateurEntityAvant.size()).isOne(),
-                () -> assertThat(utilisateurEntityApres.size()).isOne()
+                () -> assertThat(utilisateurEntityApres.size()).isOne(),
+                () -> assertThat(utilisateurEntityApres.get(0).getUserRole()).isEqualTo(UtilisateurRoleEnum.ROLE_ADMIN)
 
         );
 
