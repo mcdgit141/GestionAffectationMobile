@@ -30,7 +30,7 @@ public class UtilisateurTest {
 
     @Test
     @DisplayName("Construction d'un login à la création d'un Utilisateur")
-    public void utilisateur_should_be_constructed_with_a_login(){
+    public void utilisateur_should_be_created_with_a_login(){
         //giving
         String uid = "a19390";
         String nom = "DUPOND";

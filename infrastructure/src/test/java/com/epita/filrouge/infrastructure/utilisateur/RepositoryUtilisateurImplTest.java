@@ -6,14 +6,12 @@ import com.epita.filrouge.domain.site.SiteExercice;
 import com.epita.filrouge.domain.uo.Uo;
 import com.epita.filrouge.domain.utilisateur.Utilisateur;
 import com.epita.filrouge.domain.utilisateur.UtilisateurRoleEnum;
-import com.epita.filrouge.infrastructure.affectation.RepositoryAffectationImpl;
 import com.epita.filrouge.infrastructure.collaborateur.CollaborateurEntity;
 import com.epita.filrouge.infrastructure.collaborateur.CollaborateurEntityMapper;
 import com.epita.filrouge.infrastructure.site.SiteExerciceEntity;
 import com.epita.filrouge.infrastructure.site.SiteExerciceEntityMapper;
 import com.epita.filrouge.infrastructure.uo.UoEntity;
 import com.epita.filrouge.infrastructure.uo.UoEntityMapper;
-import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -22,7 +20,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.boot.test.autoconfigure.orm.jpa.TestEntityManager;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
-import sun.security.x509.OtherName;
 
 import java.time.LocalDate;
 import java.util.List;
@@ -42,7 +39,7 @@ public class RepositoryUtilisateurImplTest {
     RepositoryUtilisateurImpl repositoryUtilisateur;
 
     @Autowired
-    private UtilisateurMapper utilisateurMapper;
+    private UtilisateurEntityMapper utilisateurEntityMapper;
 
     @Autowired
     private CollaborateurEntityMapper collaborateurEntityMapper;
@@ -79,8 +76,64 @@ public class RepositoryUtilisateurImplTest {
 
         UtilisateurRoleEnum roleUtilisateur = UtilisateurRoleEnum.ROLE_TYPE1;
         monUtitlisateur = new Utilisateur(UID,NOM,PRENOM,roleUtilisateur);
-        UtilisateurEntity utilisateurEntity = utilisateurMapper.mapToEntity(monUtitlisateur);
+        UtilisateurEntity utilisateurEntity = utilisateurEntityMapper.mapToEntity(monUtitlisateur);
         utilisateurEntityPersiste = entityManager.persistAndFlush(utilisateurEntity);
+
+    }
+
+
+    @Test
+    @DisplayName("enregistrerUtilisateur : Insertion d'un nouvel utlisateur en base s'il n'existe pas déjà")
+    public void enregistrerUtilisateur_should_insert_an_Entity_when_user_dont_exists(){
+        //given
+        Utilisateur utilisateurACreer = new Utilisateur("b12345","DUPOND","Francois",UtilisateurRoleEnum.ROLE_ADMIN);
+
+        List<UtilisateurEntity> utilisateurEntityRecherche = entityManager.getEntityManager()
+                .createQuery("select u from UtilisateurEntity u where uid = 'b12345' ")
+                .getResultList();
+
+        //when
+        repositoryUtilisateur.enregistrerUtilisateur(utilisateurACreer);
+
+        //then
+        List<UtilisateurEntity> utilisateurEntityTrouve = entityManager.getEntityManager()
+                .createQuery("select u from UtilisateurEntity u where uid = 'b12345' ")
+                .getResultList();
+
+        assertAll(
+                () -> assertThat(utilisateurEntityRecherche.size()).isZero(),
+                () -> assertThat(utilisateurEntityTrouve.size()).isOne()
+        );
+
+    }
+
+    @Test
+    @DisplayName("enregistrerUtilisateur : Mise à jour de l'utlisateur en base s'il existe déjà")
+    public void enregistrerUtilisateur_should_update_Entity_when_user_exists(){
+        //given
+        Utilisateur utilisateurAModifier = new Utilisateur(UID,NOM,PRENOM,UtilisateurRoleEnum.ROLE_ADMIN);
+
+        List<UtilisateurEntity> utilisateurEntityAvant = entityManager.getEntityManager()
+                .createQuery("select u from UtilisateurEntity u where uid = 'a19390' ")
+                .getResultList();
+
+
+        //when
+        repositoryUtilisateur.enregistrerUtilisateur(utilisateurAModifier);
+
+
+        //then
+        List<UtilisateurEntity> utilisateurEntityApres = entityManager.getEntityManager()
+                .createQuery("select u from UtilisateurEntity u where uid = 'a19390' ")
+                .getResultList();
+
+
+        assertAll(
+                () -> assertThat(utilisateurEntityAvant.size()).isOne(),
+                () -> assertThat(utilisateurEntityApres.size()).isOne(),
+                () -> assertThat(utilisateurEntityApres.get(0).getUserRole()).isEqualTo(UtilisateurRoleEnum.ROLE_ADMIN)
+
+        );
 
     }
 
@@ -112,7 +165,7 @@ public class RepositoryUtilisateurImplTest {
 
 
         //when
-        repositoryUtilisateur.deleteUser(monUtitlisateur);
+        repositoryUtilisateur.supprimerUser(monUtitlisateur);
 
         //then
         assertThat(entityManager.find(UtilisateurEntity.class, utilisateurEntityPersiste.getId())).isNull();
@@ -127,7 +180,7 @@ public class RepositoryUtilisateurImplTest {
 
         //when + then
         assertThatThrownBy(
-                () -> {repositoryUtilisateur.deleteUser(mauvaisUtilisateur);}
+                () -> {repositoryUtilisateur.supprimerUser(mauvaisUtilisateur);}
                 ).isInstanceOf(NotFoundException.class);
     }
 
@@ -158,9 +211,10 @@ public class RepositoryUtilisateurImplTest {
         Utilisateur utilisateur = repositoryUtilisateur.rechercherUserParUid(UID);
         //then
         assertThat(utilisateur).isNotNull();
-
-
     }
+
+
+
 
     //Collaborateur/Utilisateur
     private final String UID = "a19390";

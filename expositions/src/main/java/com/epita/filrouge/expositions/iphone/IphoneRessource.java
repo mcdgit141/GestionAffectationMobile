@@ -18,10 +18,9 @@ public class IphoneRessource {
     IIphoneManagement iphoneManagement;
 
     @GetMapping(value = "/iphone/{nommodele}" , produces = {"application/json"})
-    public ResponseEntity<IphoneFullDTO> rechercheCollaborateurParUid (@PathVariable("nommodele") String nomModele) {
+    public ResponseEntity<IphoneFullDTO> rechercheIphoneParModele (@PathVariable("nommodele") String nomModele) {
 
         System.out.println("on est rentre par Iphone");
-
 
         final Iphone iphone = iphoneManagement.rechercheIphoneParNomModele(nomModele);
 

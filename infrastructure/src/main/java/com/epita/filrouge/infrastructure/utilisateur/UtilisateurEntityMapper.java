@@ -12,7 +12,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 @Component
-public class UtilisateurMapper extends  AbstractMapper<Utilisateur, UtilisateurEntity> {
+public class UtilisateurEntityMapper extends  AbstractMapper<Utilisateur, UtilisateurEntity> {
 
     @Autowired
     private IRepositoryJpaCollaborateur repositoryJpaCollaborateur;
