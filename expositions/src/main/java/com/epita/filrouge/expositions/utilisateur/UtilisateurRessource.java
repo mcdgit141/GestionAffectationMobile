@@ -10,6 +10,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.security.access.annotation.Secured;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.constraints.NotNull;
@@ -20,6 +21,8 @@ public class UtilisateurRessource {
 
     @Autowired
     private IUtilisateurManagement utilisateurManagement;
+
+    BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
 
     private Logger monLogger = LoggerFactory.getLogger(UtilisateurRessource.class);
 
@@ -41,11 +44,9 @@ public class UtilisateurRessource {
     public String supprimerUtilisateur(@NotNull @RequestBody UtilisateurDTO utilisateurDTO){
         Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         UserDetails utilisateurEnSesion = (UserDetails) principal;
-        System.out.println("LKA ***** : " + utilisateurEnSesion.getUsername());
-        System.out.println("LKA ***** : " + utilisateurEnSesion.getPassword());
-//        if ((utilisateurDTO.getUsername().equals(utilisateurEnSesion.getUsername())) &
-//                (utilisateurDTO.getPassword().equals(utilisateurEnSesion.getPassword()))) {
-        if (utilisateurDTO.getUsername().equals(utilisateurEnSesion.getUsername())) {
+
+        if ((utilisateurDTO.getUsername().equals(utilisateurEnSesion.getUsername())) &
+                (passwordEncoder.matches(utilisateurDTO.getPassword(),utilisateurEnSesion.getPassword()))) {
 
             utilisateurManagement.supprimerUtilisateur(utilisateurDTO.getUid());
             monLogger.warn("******** SUPPRESSION DE L'UTILISATEUR : " + utilisateurDTO.getUid() + " *********");

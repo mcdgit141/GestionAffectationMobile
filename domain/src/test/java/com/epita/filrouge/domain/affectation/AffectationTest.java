@@ -6,7 +6,6 @@ import com.epita.filrouge.domain.iphone.Iphone;
 import com.epita.filrouge.domain.iphone.ModeleIphone;
 import com.epita.filrouge.domain.site.SiteExercice;
 import com.epita.filrouge.domain.uo.Uo;
-import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -18,7 +17,6 @@ import java.time.LocalDate;
 import static org.junit.jupiter.api.Assertions.*;
 //@Disabled
 class AffectationTest {
-    private static final Long SITE_ID = 1L;
     private static final String CODE_SITE = "V2";
     private static final String NOM_SITE = "Valmy2";
     private static final String ADRESSE_POSTALE = "41, Rue de Valmy";
@@ -27,30 +25,26 @@ class AffectationTest {
     private static final String PAYS = "FRANCE";
     private static final LocalDate DATE_CREATION = LocalDate.now();
 
-    private static final Long UO_ID = 1L;
     private static final String CODE_UO = "SDI101";
     private static final String FONCTION_RATTACHEMENT = "BDDF IT";
     private static final String CODE_UO_PARENT = "SDI1";
     private static final String NOM_USAGE_UO = "DATAHUB";
     private static final String NOM_RESPONSABLE_UO = "Alfonse de la Renardiere";
 
-    private static final Long COLLABORATEUR_ID = 1L;
     private static final String COLLABORATEUR_UID = "666999";
     private static final String COLLABORATEUR_NOM = "Doe";
     private static final String COLLABORATEUR_PRENOM = "John";
     private static final String COLLABORATEUR_NUMEROLIGNE = "0612345678";
 
-    private static final Long MODELE_ID = 1L;
     private static final String MODELE_NOMMODELE = "Iphone8";
 
-    private static final Long IPHONE_ID = 1L;
     private static final String IPHONE_NUMEROSERIE = "123456";
     private static final Double IPHONE_PRIX = 800D;
     private static final EtatIphoneEnum IPHONE_ETAT = EtatIphoneEnum.DISPONIBLE;
 
     private static final Long AFFECTATION_NUMERO = 1L;
     private static final LocalDate AFFECTATION_DATE = LocalDate.now();
-    private static final String AFFECTATION_COMMENTAIRE = "Premeire affectation";
+    private static final String AFFECTATION_COMMENTAIRE = "Premiere affectation";
 
     private static final String AFFECTATION_COMMENTAIRE_CLOTURE = "Cloture de l'affectation suite au vol du portable";
     private static final String AFFECTATION_MOTIFFIN = "VOLE";
@@ -67,13 +61,13 @@ class AffectationTest {
         uo.setSiteExercice(siteExercice);
 
         Collaborateur collaborateur = new Collaborateur( COLLABORATEUR_UID, COLLABORATEUR_NOM, COLLABORATEUR_PRENOM, COLLABORATEUR_NUMEROLIGNE,uo);
-//        collaborateur.setId(1L);
 
         ModeleIphone modeleIphone = new ModeleIphone(1L, MODELE_NOMMODELE);
         Iphone iphone = new Iphone(1L, IPHONE_NUMEROSERIE, IPHONE_PRIX, modeleIphone, IPHONE_ETAT);
 
         //When
         Affectation affectationACreer = new Affectation(AFFECTATION_NUMERO, AFFECTATION_DATE, AFFECTATION_COMMENTAIRE, collaborateur, iphone);
+
 
         //Then
         assertThat(affectationACreer.getDateRenouvellementPrevue()).isEqualTo(dateRevouvelementAttentue);
@@ -100,5 +94,28 @@ class AffectationTest {
         assertThat(affectationACloturerFinal.getDateFin()).isEqualTo(LocalDate.now());
         assertThat(affectationACloturerFinal.getCollaborateur().getNumeroLigne()).isEqualTo(null);
         assertThat(affectationACloturerFinal.getIphone().getEtatIphone()).isEqualTo(EtatIphoneEnum.DISPONIBLE);
+    }
+    @Test
+    @DisplayName("Lors suppression d'une affectation, doit renvoyer une Affectation avec iphone et Collaborateur mis à jour")
+    void ShouldReturnAnAffectionWithIphoneAndCollabrateurUpdated_WhenAskToDeleteAnAffectation() {
+        //Given
+        SiteExercice siteExercice = new SiteExercice(CODE_SITE,NOM_SITE,ADRESSE_POSTALE,CODE_POSTAL,VILLE,PAYS,DATE_CREATION);
+        Uo uo = new Uo(CODE_UO,FONCTION_RATTACHEMENT,CODE_UO_PARENT,NOM_USAGE_UO,NOM_RESPONSABLE_UO);
+        uo.setSiteExercice(siteExercice);
+
+        Collaborateur collaborateur = new Collaborateur( COLLABORATEUR_UID, COLLABORATEUR_NOM, COLLABORATEUR_PRENOM, COLLABORATEUR_NUMEROLIGNE,uo);
+
+        ModeleIphone modeleIphone = new ModeleIphone(1L, MODELE_NOMMODELE);
+        Iphone iphone = new Iphone(1L, IPHONE_NUMEROSERIE, IPHONE_PRIX, modeleIphone, EtatIphoneEnum.AFFECTE);
+
+        Affectation affectation = new Affectation(AFFECTATION_NUMERO, AFFECTATION_DATE, AFFECTATION_COMMENTAIRE, collaborateur, iphone);
+
+        //When
+        affectation.reglesAppliqueesPourSuppressionAffectation();
+
+
+        //Then
+        assertThat(affectation.getCollaborateur().getNumeroLigne()).isNull();
+        assertThat(affectation.getIphone().getEtatIphone()).isEqualTo(EtatIphoneEnum.DISPONIBLE);
     }
 }

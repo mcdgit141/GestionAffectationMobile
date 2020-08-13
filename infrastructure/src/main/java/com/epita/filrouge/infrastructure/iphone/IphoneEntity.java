@@ -83,11 +83,13 @@ public class IphoneEntity {
 
     @Override
     public String toString() {
-        return "\n---------------\nEtat: "+ this.getEtatIphone().toString() +"\n"
+        return "\n---------------\nHashcode: "+ this.hashCode() +"\n"
+                + "Etat: "+this.getEtatIphone().toString() +"\n"
                 + "Id: " + this.getIphoneId()  +"\n"
                 + "NumeroSerie: " + this.getNumeroSerie()  +"\n"
                 + "ModeleEntityIphone: " + this.getModeleIphoneEntity()  +"\n"
                 + "PrixIphone: " + this.getPrixIphone()
+                + "\n---------------\n"
 //                + "affectationIphone: " + this.getAffectationIphone()
                 ;
     }
