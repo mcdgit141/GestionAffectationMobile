@@ -107,7 +107,6 @@ public class Affectation {
 
         this.iphone.miseAJourIphoneSuiteClotureAffectation();
 
-//        return this;
 
     }
 }
