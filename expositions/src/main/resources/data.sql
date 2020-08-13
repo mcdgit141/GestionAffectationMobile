@@ -158,6 +158,13 @@ INSERT INTO collaborateur_entity(
 
    VALUES ('DUBOIS', '0303030303', 'Marie', '208656', 1);
 
+   INSERT INTO collaborateur_entity(
+      nom, numero_ligne, prenom, uid, uo_id)
+      VALUES ('DUPOND', '0404040404', 'François', '123456', 1);
+   INSERT INTO collaborateur_entity(
+      nom, numero_ligne, prenom, uid, uo_id)
+      VALUES ('LAGAFF', '0505050505', 'Gaston', '300400', 1);
+
 --Table Utilisateur
 
 INSERT INTO utilisateur_entity(
