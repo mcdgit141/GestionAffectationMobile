@@ -22,6 +22,7 @@ import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 import java.time.LocalDate;
@@ -67,12 +68,12 @@ public class UtilisateurManagementImplTest {
         Utilisateur monUtilisateur = new Utilisateur(uid,nom,prenom,roleDomaine);
 
         Mockito.when(collaborateurManagement.findByUid(uid)).thenReturn(monCollaborateur);
-        Mockito.when(repositoryUtilisateur.rechercherUser(any(String.class))).thenReturn(monUtilisateur);
+        Mockito.when(repositoryUtilisateur.rechercherUserParUid(any(String.class))).thenReturn(monUtilisateur);
 
         //when + then
         assertThatThrownBy(
                 () -> {utilisateurManagement.enregistrerUtilisateur(uid,roleRecu);}
-        ).isInstanceOf(AllReadyExistException.class).hasMessageContaining("Un Utilisateur existe déjà pour cet uid");
+        ).isInstanceOf(AllReadyExistException.class).hasMessageContaining("Un Utilisateur existe déjà avec l'uid : " + uid);
     }
 
     @Test
@@ -93,6 +94,7 @@ public class UtilisateurManagementImplTest {
         Utilisateur monUtilisateur = new Utilisateur(uid,nom,prenom,roleDomaine);
 
         Mockito.when(collaborateurManagement.findByUid(uid)).thenReturn(monCollaborateur);
+        Mockito.when(repositoryUtilisateur.rechercherUserParUid(uid)).thenThrow(NotFoundException.class);
 
         ArgumentCaptor<Utilisateur> valueCapture = ArgumentCaptor.forClass(Utilisateur.class);
 //        Mockito.doReturn(valueCapture.getValue()).when(repositoryUtilisateur).creerUser(valueCapture.capture());
@@ -101,7 +103,7 @@ public class UtilisateurManagementImplTest {
         utilisateurManagement.enregistrerUtilisateur(uid,roleRecu);
 
         //then
-        Mockito.verify(repositoryUtilisateur).creerUser(valueCapture.capture());
+        Mockito.verify(repositoryUtilisateur).enregistrerUtilisateur(valueCapture.capture());
         assertAll(
                 () -> assertThat(valueCapture.getValue().getUid()).isEqualTo(monUtilisateur.getUid()),
                 () -> assertThat(valueCapture.getValue().getNom()).isEqualTo(monUtilisateur.getNom()),
@@ -131,6 +133,7 @@ public class UtilisateurManagementImplTest {
 
         Mockito.when(collaborateurManagement.findByUid(uid)).thenReturn(monCollaborateur);
 
+
         //when
         utilisateurManagement.enregistrerUtilisateur(uid,roleRecu);
 
@@ -156,6 +159,7 @@ public class UtilisateurManagementImplTest {
         Collaborateur monCollaborateur = new Collaborateur(uid,nom, prenom,numeroLigne,monUo);
 
         Mockito.when(collaborateurManagement.findByUid(uid)).thenReturn(monCollaborateur);
+        Mockito.when(repositoryUtilisateur.rechercherUserParUid(uid)).thenThrow(NotFoundException.class);
         InOrder inOrder = inOrder(collaborateurManagement,repositoryUtilisateur);
 
         //when
@@ -163,7 +167,8 @@ public class UtilisateurManagementImplTest {
 
         //then
         inOrder(collaborateurManagement).verify(collaborateurManagement).findByUid(uid);
-        inOrder(repositoryUtilisateur).verify(repositoryUtilisateur).creerUser(any(Utilisateur.class));
+        inOrder(repositoryUtilisateur).verify(repositoryUtilisateur).rechercherUserParUid(any(String.class));
+        inOrder(repositoryUtilisateur).verify(repositoryUtilisateur).enregistrerUtilisateur(any(Utilisateur.class));
 
     }
 
@@ -214,13 +219,52 @@ public class UtilisateurManagementImplTest {
         utilisateurManagement.supprimerUtilisateur(uid);
 
         //then
-        Mockito.verify(repositoryUtilisateur).deleteUser(valueCapture.capture());
+        Mockito.verify(repositoryUtilisateur).supprimerUser(valueCapture.capture());
 
         assertAll(
                 () -> assertThat(valueCapture.getValue().getNom()).isEqualTo(nom),
                 () -> assertThat(valueCapture.getValue().getPrenom()).isEqualTo(prenom),
                 () -> assertThat(valueCapture.getValue().getUserRole()).isEqualTo(roleUser)
                 );
+
+    }
+
+    @Test
+    @DisplayName("modifierUtilisateur : Appel du repo avec le mdp chiffré")
+    public void modifierUtilisateur_should_call_repo_with_an_encrypted_password(){
+        //given
+        String uid = "a19390";
+        String mdp = "monMotDePasse";
+        String nom = "KAMDEM";
+        String prenom = "Leopold";
+        UtilisateurRoleEnum roleUser = UtilisateurRoleEnum.ROLE_TYPE1;
+
+        Utilisateur utilisateurTrouve = new Utilisateur(uid,nom,prenom,roleUser);
+        Mockito.when(repositoryUtilisateur.rechercherUserParUid(uid)).thenReturn(utilisateurTrouve);
+        ArgumentCaptor<Utilisateur> valueCapture = ArgumentCaptor.forClass(Utilisateur.class);
+
+        //when
+        utilisateurManagement.modifierMdpUtilisateur(uid,mdp);
+        //then
+        Mockito.verify(repositoryUtilisateur).enregistrerUtilisateur(valueCapture.capture());
+        assertAll(
+                () -> assertThat(valueCapture.getValue().getPassword()).isNotEqualTo(mdp)
+        );
+
+    }
+
+    @Test
+    @DisplayName("rechercheUtilisateur : NotFoundException si utilisateur inexistant")
+    public void rechercheUtilisateur_should_throws_NotFound_Exception_if_uid_dont_exists(){
+        //given
+
+        Mockito.when(repositoryUtilisateur.rechercherUserParUid(any(String.class))).thenThrow(new NotFoundException("message de test"));
+        //
+        //when & then
+
+        assertThatThrownBy(
+                () -> {utilisateurManagement.rechercherUtilisateur("a19390");}
+        ).isInstanceOf(NotFoundException.class);
 
     }
 

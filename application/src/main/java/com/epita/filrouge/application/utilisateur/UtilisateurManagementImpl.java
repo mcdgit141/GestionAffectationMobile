@@ -9,6 +9,8 @@ import com.epita.filrouge.domain.utilisateur.IRepositoryUtilisateur;
 import com.epita.filrouge.domain.utilisateur.Utilisateur;
 import com.epita.filrouge.domain.utilisateur.UtilisateurRoleEnum;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Bean;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -19,6 +21,14 @@ public class UtilisateurManagementImpl implements IUtilisateurManagement{
 
     @Autowired
     private IRepositoryUtilisateur repositoryUtilisateur;
+
+    BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
+
+
+    @Override
+    public Utilisateur rechercherUtilisateur(String uid) throws NotFoundException {
+        return repositoryUtilisateur.rechercherUserParUid(uid);
+    }
 
     @Override
     public void enregistrerUtilisateur(String uid, String profil) {
@@ -39,19 +49,31 @@ public class UtilisateurManagementImpl implements IUtilisateurManagement{
         }
 
         Utilisateur utilisateurACreer = new Utilisateur(monCollaborateur.getUid(),monCollaborateur.getNom(), monCollaborateur.getPrenom(), roleUtilisateurACreer);
-        Utilisateur utilisateurExistant = repositoryUtilisateur.rechercherUser(utilisateurACreer.getLogin());
-        if (utilisateurExistant == null){
-            repositoryUtilisateur.creerUser(utilisateurACreer);
-        } else {
-            throw new AllReadyExistException("Un Utilisateur existe déjà pour cet uid");
+        try {
+            Utilisateur utilisateurExistant = repositoryUtilisateur.rechercherUserParUid(uid);
+            if (utilisateurExistant != null) {
+                throw new AllReadyExistException("Un Utilisateur existe déjà avec l'uid : " + uid);
+            }
+        } catch (NotFoundException ex) {
+            repositoryUtilisateur.enregistrerUtilisateur(utilisateurACreer);
         }
+
+
+    }
+
+    @Override
+    public void modifierMdpUtilisateur(String uid, String mdp) throws NotFoundException  {
+        Utilisateur utilisateurAModifier = repositoryUtilisateur.rechercherUserParUid(uid);
+        utilisateurAModifier.setPassword(passwordEncoder.encode(mdp));
+
+//        repositoryUtilisateur.modifierUtilisateur(utilisateurAModifier);
+        repositoryUtilisateur.enregistrerUtilisateur(utilisateurAModifier);
 
     }
 
     @Override
     public void supprimerUtilisateur(String uid) throws NotFoundException {
         Utilisateur utilisateurASupprimer = repositoryUtilisateur.rechercherUserParUid(uid);
-        repositoryUtilisateur.deleteUser(utilisateurASupprimer);
-
+        repositoryUtilisateur.supprimerUser(utilisateurASupprimer);
     }
 }

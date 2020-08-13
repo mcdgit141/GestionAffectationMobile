@@ -15,11 +15,9 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-import org.springframework.security.crypto.password.NoOpPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.authentication.AuthenticationFailureHandler;
 import org.springframework.security.web.authentication.Http403ForbiddenEntryPoint;
-import org.springframework.security.web.authentication.SimpleUrlAuthenticationFailureHandler;
 import org.springframework.security.web.authentication.SimpleUrlAuthenticationSuccessHandler;
 import org.springframework.security.web.authentication.logout.SimpleUrlLogoutSuccessHandler;
 
@@ -80,7 +78,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         public void onAuthenticationSuccess(final HttpServletRequest request, final HttpServletResponse response,
                                             final Authentication authentication) throws IOException, ServletException {
             response.setStatus(HttpServletResponse.SC_OK);
-            response.getOutputStream().println("Authentifie sur l'application GestionAffectationMobile");
+            response.getOutputStream().println("Authentifié sur l'application GestionAffectationMobile");
         }
     }
 
@@ -103,7 +101,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         public void onLogoutSuccess(final HttpServletRequest request, final HttpServletResponse response,
                                     final Authentication authentication) throws IOException, ServletException {
             response.setStatus(HttpServletResponse.SC_OK);
-            response.getOutputStream().println("Deconnecte de l'application GestionAffectationMobile");
+            response.getOutputStream().println("Deconnecté de l'application GestionAffectationMobile");
         }
     }
 
