@@ -4,6 +4,7 @@ import com.epita.filrouge.domain.affectation.Affectation;
 import com.epita.filrouge.domain.affectation.FiltresAffectation;
 import com.epita.filrouge.domain.affectation.IRepositoryAffectation;
 import com.epita.filrouge.domain.exception.NotFoundException;
+import com.epita.filrouge.domain.iphone.EtatIphoneEnum;
 import com.epita.filrouge.infrastructure.collaborateur.CollaborateurEntity;
 import com.epita.filrouge.infrastructure.collaborateur.IRepositoryJpaCollaborateur;
 import com.epita.filrouge.infrastructure.iphone.IRepositoryJpaIphone;
@@ -126,9 +127,15 @@ public class RepositoryAffectationImpl implements IRepositoryAffectation {
     }
 
     public void supprimerAffectation(Affectation affectationASupprimer) {
+        AffectationEntity affectationEntityASupprimer = affectationMapper.mapToEntity(affectationASupprimer);
+
         AffectationEntity affectationEntityEnTable = iRepositoryJpaAffectation.findByNumeroAffectation(affectationASupprimer.getNumeroAffectation());
+        
         if (affectationEntityEnTable != null) {
-            iRepositoryJpaAffectation.deleteById(affectationEntityEnTable.getId());
+            // A supprimer une fois que le mapper sera modifier
+            affectationEntityEnTable.getIphone().setEtatIphone(affectationASupprimer.getIphone().getEtatIphone());
+            affectationEntityEnTable.getCollaborateur().setNumeroLigne(affectationASupprimer.getCollaborateur().getNumeroLigne());
+            iRepositoryJpaAffectation.delete(affectationEntityEnTable);
         }
         else {
             throw new NotFoundException("L'affectation avec le numéro suivant n'existe pas " + affectationEntityEnTable.getNumeroAffectation());

@@ -54,7 +54,7 @@ class RepositoryAffectationImplTest {
 
     private static final String IPHONE_NUMEROSERIE = "123456";
     private static final Double IPHONE_PRIX = 800D;
-    private static final EtatIphoneEnum IPHONE_ETAT = EtatIphoneEnum.DISPONIBLE;
+    private static final EtatIphoneEnum IPHONE_ETAT = EtatIphoneEnum.AFFECTE;
 
     private static final Long AFFECTATION_NUMERO = 1L;
     private static final LocalDate AFFECTATION_DATE = LocalDate.now();
@@ -139,8 +139,8 @@ class RepositoryAffectationImplTest {
     }
 
     @Test
-    @DisplayName("Doit suppimer une affectation et uniquement cela")
-    void ShouldDeleteAnAffectationAndNothingElse() {
+    @DisplayName("Une demande de suppression doit supprimer une affectation")
+    void ShouldDeleteAnAffectation_WhenAskToDeleteAnAffectation() {
         //Given
         persisteAffectation(monCollaborateurEntityPersiste, monIphoneEntityPersiste,
                 AFFECTATION_DATE, AFFECTATION_COMMENTAIRE, AFFECTATION_NUMERO);
@@ -162,6 +162,61 @@ class RepositoryAffectationImplTest {
                 .getResultList();
         assertThat(affectationRecues.size()).isEqualTo(0);
     }
+
+@Test
+    @DisplayName("Une demande de suppression doit mettre à jour le collaborateur")
+    void ShouldUpdateACollaborateur_WhenAskToDeleteAnAffectation() {
+        //Given
+        persisteAffectation(monCollaborateurEntityPersiste, monIphoneEntityPersiste,
+                AFFECTATION_DATE, AFFECTATION_COMMENTAIRE, AFFECTATION_NUMERO);
+
+        Collaborateur collaborateur = collaborateurEntityMapper.mapToDomain(monCollaborateurEntityPersiste);
+        collaborateur.setNumeroLigne(null);
+
+        Iphone iphone = iphoneEntityMapper.mapToDomain(monIphoneEntityPersiste);
+
+        Affectation affectationASupprimer = new Affectation(AFFECTATION_NUMERO, AFFECTATION_DATE, AFFECTATION_COMMENTAIRE, collaborateur, iphone);
+
+
+        //When
+        repositoryAffectation.supprimerAffectation(affectationASupprimer);
+
+        //Then
+        final CollaborateurEntity collaborateurEnTable = (CollaborateurEntity) entityManager.getEntityManager()
+                .createQuery("select o from CollaborateurEntity o where o.uid = :uid")
+                .setParameter("uid", COLLABORATEUR_UID)
+                .getSingleResult();
+
+        assertThat(collaborateurEnTable.getNumeroLigne()).isNull();
+    }
+
+
+@Test
+    @DisplayName("Une demande de suppression doit mettre à jour l'iphone")
+    void ShouldUpdateIphone_WhenAskToDeleteAnAffectation() {
+    //Given
+    persisteAffectation(monCollaborateurEntityPersiste, monIphoneEntityPersiste,
+                AFFECTATION_DATE, AFFECTATION_COMMENTAIRE, AFFECTATION_NUMERO);
+
+    Collaborateur collaborateur = collaborateurEntityMapper.mapToDomain(monCollaborateurEntityPersiste);
+
+    Iphone iphone = iphoneEntityMapper.mapToDomain(monIphoneEntityPersiste);
+    iphone.setEtatIphone(EtatIphoneEnum.DISPONIBLE);
+
+    Affectation affectationASupprimer = new Affectation(AFFECTATION_NUMERO, AFFECTATION_DATE, AFFECTATION_COMMENTAIRE, collaborateur, iphone);
+
+    //When
+    repositoryAffectation.supprimerAffectation(affectationASupprimer);
+
+    //Then
+    final IphoneEntity iPhoneEnTable = (IphoneEntity) entityManager.getEntityManager()
+                .createQuery("select o from IphoneEntity o where o.numeroSerie = :numeroSerie")
+                .setParameter("numeroSerie", IPHONE_NUMEROSERIE)
+                .getSingleResult();
+
+        assertThat(iPhoneEnTable.getEtatIphone()).isEqualTo(EtatIphoneEnum.DISPONIBLE);
+    }
+
     @Test
     @DisplayName("Doit créer un enregistrement Affectation avec les bonnes valeurs")
     void ShouldCreateAnAffectation_WithTheCorrectValues() {
@@ -281,7 +336,7 @@ class RepositoryAffectationImplTest {
 
     @Test
     @DisplayName("Aucune Affectation : en dehors plage date de renouvellement")
-    void Should_return_NoAffectation_giving_DtaeRenouvellementIsOutOfBound() {
+    void Should_return_NoAffectation_giving_DateRenouvellementIsOutOfBound() {
         //giving
         persisteAffectation(monCollaborateurEntityPersiste, monIphoneEntityPersiste,
                 AFFECTATION_DATE, AFFECTATION_COMMENTAIRE, AFFECTATION_NUMERO);
@@ -294,7 +349,7 @@ class RepositoryAffectationImplTest {
         List<Affectation> result = repositoryAffectation.rechercheAffectationAvecFiltres(filtresAffectation);
 
         //then
-        assertThat(result.size()).isEqualTo(0);
+        assertThat(result.size()).isZero();
     }
 
     @Test
