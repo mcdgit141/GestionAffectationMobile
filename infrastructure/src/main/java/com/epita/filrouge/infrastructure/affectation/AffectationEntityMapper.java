@@ -46,11 +46,16 @@ public class AffectationEntityMapper extends AbstractMapper<Affectation,Affectat
 
         final AffectationEntity affectationEntity = new AffectationEntity();
 
-        String uidMapper = affectation.getCollaborateur().getUid();
-        CollaborateurEntity collaborateurEntity = repositoryJpaCollaborateur.findByUid(uidMapper);
+        CollaborateurEntity collaborateurEntity = repositoryJpaCollaborateur.findByUid(affectation.getCollaborateur().getUid());
+        collaborateurEntity.setNumeroLigne(affectation.getCollaborateur().getNumeroLigne());
+        collaborateurEntity.setNom(affectation.getCollaborateur().getNom());
+        collaborateurEntity.setPrenom(affectation.getCollaborateur().getPrenom());
+        collaborateurEntity.setUid(affectation.getCollaborateur().getUid());
 
-        String numeroSerie = affectation.getIphone().getNumeroSerie();
-        IphoneEntity iphoneEntity = repositoryJpaIphone.findByNumeroSerie(numeroSerie);
+        IphoneEntity iphoneEntity = repositoryJpaIphone.findByNumeroSerie(affectation.getIphone().getNumeroSerie());
+        iphoneEntity.setEtatIphone(affectation.getIphone().getEtatIphone());
+        iphoneEntity.setNumeroSerie(affectation.getIphone().getNumeroSerie());
+        iphoneEntity.setPrixIphone(affectation.getIphone().getPrixIphone());
 
         affectationEntity.setIphone(iphoneEntity);
         affectationEntity.setCollaborateur(collaborateurEntity);

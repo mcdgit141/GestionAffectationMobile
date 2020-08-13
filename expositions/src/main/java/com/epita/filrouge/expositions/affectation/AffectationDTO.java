@@ -60,12 +60,20 @@ public class AffectationDTO {
         return numeroAffectation;
     }
 
+    public void setNumeroAffectation(Long numeroAffectation) {
+        this.numeroAffectation = numeroAffectation;
+    }
+
     public String getMotifFin() {
         return motifFin;
     }
 
     public LocalDate getDateFin() {
         return dateFin;
+    }
+
+    public void setDateFin(LocalDate dateFin) {
+        this.dateFin = dateFin;
     }
 
     public void setMotifFin(String motifFin) {

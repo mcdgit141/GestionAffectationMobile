@@ -65,8 +65,9 @@ public class AffectationManagementImplTest {
 
     private static final Long AFFECTATION_NUMERO = 1L;
     private static final LocalDate AFFECTATION_DATE = LocalDate.now();
-    private static final String AFFECTATION_COMMENTAIRE = "Premeire affectation";
-
+    private static final String AFFECTATION_COMMENTAIRE = "Premiere affectation";
+    private static final String AFFECTATION_MOTIFFIN = "Vole";
+    private static final LocalDate AFFECTATION_DATEFIN = LocalDate.now();
 
     SiteExercice siteExercice = null;
     Uo uo = null;
@@ -79,6 +80,7 @@ public class AffectationManagementImplTest {
     private static Affectation affectationEnCours = null;
     private static Affectation affectationAvecDateFin = null;
 
+    private static Affectation affectation = null;
 
     @Autowired
     private IAffectationManagement affectationManagementImpl;
@@ -224,7 +226,6 @@ public class AffectationManagementImplTest {
                         MODELE_NOMMODELE,
                         null, null);
 
-
         verify(repositoryAffectation, Mockito.times(1)).rechercheAffectationAvecFiltres(any(FiltresAffectation.class));
 
     }
@@ -262,7 +263,7 @@ public class AffectationManagementImplTest {
 
     }
 
-    private Affectation instancierUneAffectation() {
+        private Affectation instancierUneAffectation() {
         LocalDate dateRevouvelementAttentue = AFFECTATION_DATE.plusYears(2);
 
         SiteExercice siteExercice = new SiteExercice(CODE_SITE, NOM_SITE, ADRESSE_POSTALE, CODE_POSTAL, VILLE, PAYS, DATE_CREATION);
