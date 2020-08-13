@@ -15,10 +15,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.web.servlet.MockMvc;
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.mockito.ArgumentMatchers.any;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
@@ -189,7 +191,7 @@ public class UtilisateurRessourceTest {
 
     @Test
     @DisplayName("supprimerUtilisateur: retour confirmation suppression en cas de succès")
-    @WithMockUser(username = "admin", password = "password", roles = "ADMIN")
+    @WithMockUser(username = "admin", password = "$2a$10$ix2v00b5v0E.Ro3ZM0/Vv.cK704O4N1w/.yQeNq46KIVKmDanaHBi", roles = "ADMIN")
     public void supprimerUtilisateur_should_return_a_specific_string_when_ok() throws Exception {
         //given
         UtilisateurDTO utilisateurDTO = new UtilisateurDTO();
