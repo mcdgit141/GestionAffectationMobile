@@ -254,6 +254,20 @@ public class UtilisateurManagementImplTest {
     }
 
     @Test
+    @DisplayName("modifierMdp: rejet nouveau mdp = password")
+    public void password_as_new_password_should_throw_BadRequestException(){
+        //giving
+        String uid = "a19390";
+        String mdp = "password";
+
+        //when + then
+        assertThatThrownBy(
+                () -> {utilisateurManagement.modifierMdpUtilisateur(uid,mdp);}
+        ).isInstanceOf(BadRequestException.class);
+
+    }
+
+    @Test
     @DisplayName("rechercheUtilisateur : NotFoundException si utilisateur inexistant")
     public void rechercheUtilisateur_should_throws_NotFound_Exception_if_uid_dont_exists(){
         //given
