@@ -129,6 +129,7 @@ public class RepositoryAffectationImpl implements IRepositoryAffectation {
     public void supprimerAffectation(Affectation affectationASupprimer) {
 
         AffectationEntity affectationEntityASupprimer = affectationMapper.mapToEntity(affectationASupprimer);
+
         AffectationEntity affectationEntityEnTable = iRepositoryJpaAffectation.findByNumeroAffectation(affectationASupprimer.getNumeroAffectation());
 
         if (affectationEntityEnTable != null) {

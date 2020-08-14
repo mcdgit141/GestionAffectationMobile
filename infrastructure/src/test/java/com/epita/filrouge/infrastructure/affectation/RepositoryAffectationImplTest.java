@@ -160,7 +160,7 @@ class RepositoryAffectationImplTest {
                 .createQuery("select o from AffectationEntity o where o.numeroAffectation = :numeroAffectation")
                 .setParameter("numeroAffectation", AFFECTATION_NUMERO)
                 .getResultList();
-        assertThat(affectationRecues.size()).isEqualTo(0);
+        assertThat(affectationRecues.size()).isZero();
     }
 
 @Test

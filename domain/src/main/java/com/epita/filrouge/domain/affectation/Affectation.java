@@ -100,4 +100,13 @@ public class Affectation {
 
         return this;
     }
+
+    public void reglesAppliqueesPourSuppressionAffectation(){
+
+        this.collaborateur.miseAJourCollaborateurSuiteClotureAffectation();
+
+        this.iphone.miseAJourIphoneSuiteClotureAffectation();
+
+
+    }
 }
