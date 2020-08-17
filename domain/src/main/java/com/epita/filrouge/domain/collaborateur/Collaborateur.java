@@ -73,6 +73,11 @@ public class Collaborateur {
         return this;
     }
 
+    public Collaborateur miseAJourCollaborateurSuiteCreationAffectation(String numeroLigne) {
+        this.numeroLigne = numeroLigne;
+        return this;
+    }
+
 //    public boolean controlCollaborateurEstSansAffectationEnCours() {
 //        if (affectationCollaborateur != null) {
 //            //faire la boucle for pour test de la date de fin. Si la date de fin est à NULL, l'affectation existe déjà donc refuser la création

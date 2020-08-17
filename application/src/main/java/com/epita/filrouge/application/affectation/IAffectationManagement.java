@@ -19,5 +19,5 @@ public interface IAffectationManagement {
     List<Affectation> listerAffectation(FiltresAffectation filtresAffectation);
 
 
-    Affectation cloturerAffectation(Long numeroAffectation, String affectationCommentaire, String motifFin, LocalDate dateFin);
+    void cloturerAffectation(Long numeroAffectation, String affectationCommentaire, String motifFin, LocalDate dateFin);
 }

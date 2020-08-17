@@ -50,6 +50,8 @@ class AffectationTest {
     private static final String AFFECTATION_MOTIFFIN = "VOLE";
     private static final LocalDate DATE_FIN = null;
 
+    private static final String MOTIFFIN_SUPPRIME = "SUPPRIME";
+
     @Test
     @DisplayName("Verification règle de la date de renouvellement")
     void ShouldReturn_ADateInTwoYears() {
@@ -73,7 +75,7 @@ class AffectationTest {
         assertThat(affectationACreer.getDateRenouvellementPrevue()).isEqualTo(dateRevouvelementAttentue);
     }
     @Test
-    @DisplayName("Vérirification que la date de fin, le numéro de ligne du collaborateur et l'état de l'iphone ont bien été changés")
+    @DisplayName("Cloturer Affectation: Vérirification que la date de fin, le numéro de ligne du collaborateur et l'état de l'iphone ont bien été changés")
     void Should_Return_Update_DateFin_And_NumeroLigneCollaborateur_And_EtatIphone(){
 
         // given
@@ -83,7 +85,7 @@ class AffectationTest {
 
         Collaborateur collaborateur = new Collaborateur( COLLABORATEUR_UID, COLLABORATEUR_NOM, COLLABORATEUR_PRENOM, COLLABORATEUR_NUMEROLIGNE,uo);
         ModeleIphone modeleIphone = new ModeleIphone(1L, MODELE_NOMMODELE);
-        Iphone iphone = new Iphone(1L, IPHONE_NUMEROSERIE, IPHONE_PRIX, modeleIphone, IPHONE_ETAT);
+        Iphone iphone = new Iphone(1L, IPHONE_NUMEROSERIE, IPHONE_PRIX, modeleIphone, EtatIphoneEnum.AFFECTE);
         Affectation affectation = new Affectation(AFFECTATION_NUMERO, AFFECTATION_DATE, AFFECTATION_COMMENTAIRE, collaborateur, iphone);
 
         // when
@@ -93,7 +95,7 @@ class AffectationTest {
         //then
         assertThat(affectationACloturerFinal.getDateFin()).isEqualTo(LocalDate.now());
         assertThat(affectationACloturerFinal.getCollaborateur().getNumeroLigne()).isEqualTo(null);
-        assertThat(affectationACloturerFinal.getIphone().getEtatIphone()).isEqualTo(EtatIphoneEnum.DISPONIBLE);
+        assertThat(affectationACloturerFinal.getIphone().getEtatIphone()).isEqualTo(EtatIphoneEnum.VOLE);
     }
     @Test
     @DisplayName("Lors suppression d'une affectation, doit renvoyer une Affectation avec iphone et Collaborateur mis à jour")
@@ -111,8 +113,7 @@ class AffectationTest {
         Affectation affectation = new Affectation(AFFECTATION_NUMERO, AFFECTATION_DATE, AFFECTATION_COMMENTAIRE, collaborateur, iphone);
 
         //When
-        affectation.reglesAppliqueesPourSuppressionAffectation();
-
+        affectation.reglesAppliqueesPourSuppressionAffectation(MOTIFFIN_SUPPRIME);
 
         //Then
         assertThat(affectation.getCollaborateur().getNumeroLigne()).isNull();

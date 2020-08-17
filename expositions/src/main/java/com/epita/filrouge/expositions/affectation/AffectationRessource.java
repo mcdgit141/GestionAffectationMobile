@@ -52,19 +52,32 @@ public class AffectationRessource {
     @PostMapping(value = "/affectation/cloture", consumes = { "application/json" }, produces =  { "application/json" })
     @ResponseStatus(HttpStatus.OK)
     @Secured("ROLE_TYPE2")
-    public void clotureAffectation(@NotNull @RequestBody final AffectationDTO affectationDTO) {
+    public String clotureAffectation(@NotNull @RequestBody final AffectationDTO affectationDTO) {
 
-        if (affectationDTO.getAffectationCommentaire() == null) {
+       if (affectationDTO.getNumeroAffectation() == null){
+           throw new BadRequestException("numéro affectation non renseigné, donnée à saisir impérativement");
+       }
+        if (affectationDTO.getAffectationCommentaire() == "" && affectationDTO.getMotifFin() =="") {
+            System.out.println("test couche exposition motif fin non renseigné");
+            throw new BadRequestException("Motif de fin et Commentaire non renseignés, données à saisir impérativement");
+        }
+        if (affectationDTO.getMotifFin() == null && affectationDTO.getAffectationCommentaire() == null)
+        {
+            System.out.println("test couche exposition motif fin non renseigné");
+            throw new BadRequestException("Motif de fin et Commentaire non renseignés, données à saisir impérativement");
+        }
+        if (affectationDTO.getAffectationCommentaire() == null || affectationDTO.getAffectationCommentaire() == "") {
             System.out.println("test couche exposition commentaire non renseigné");
             throw new BadRequestException("commentaire non renseigné, donnée à saisir impérativement");
         }
 
-        if (affectationDTO.getMotifFin() == null) {
+        if (affectationDTO.getMotifFin() == null || affectationDTO.getMotifFin() == "") {
             System.out.println("test couche exposition motif fin non renseigné");
             throw new BadRequestException("Motif de fin non renseigné, donnée à saisir impérativement");
         }
 
         affectationManagement.cloturerAffectation(affectationDTO.getNumeroAffectation(),affectationDTO.getAffectationCommentaire()
                 ,affectationDTO.getMotifFin(),affectationDTO.getDateFin());
+        return "La clôture de l'affectation s'est bien passée";
     }
 }

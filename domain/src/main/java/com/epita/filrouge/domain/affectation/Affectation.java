@@ -2,10 +2,12 @@ package com.epita.filrouge.domain.affectation;
 
 import com.epita.filrouge.domain.collaborateur.Collaborateur;
 import com.epita.filrouge.domain.exception.AllReadyClotureeException;
+import com.epita.filrouge.domain.exception.AllReadyExistException;
 import com.epita.filrouge.domain.exception.NotFoundException;
 import com.epita.filrouge.domain.iphone.Iphone;
 
 import java.time.LocalDate;
+import java.util.List;
 
 public class Affectation {
 
@@ -83,29 +85,54 @@ public class Affectation {
 
     public Affectation reglesAppliqueesPourCloturerAffectation(Collaborateur collaborateur, Iphone iphone, String affectationCommentaire,String motifFin,LocalDate dateFin) throws AllReadyClotureeException{
 
-        if (this.getDateFin() != null){
-            throw new AllReadyClotureeException("L'affectation avec le numéro suivant est déjà clôturée " + this.getNumeroAffectation());
+        System.out.println("valeur datefin du this-----dans domain Affectation--" + this.dateFin);
+        if (this.dateFin != null){
+            throw new AllReadyClotureeException("L'affectation avec le numéro suivant est déjà clôturée " + this.numeroAffectation);
         }
-
+        System.out.println("valeur datefin du parametre-passé******----dans domain Affectation--" + dateFin);
         if (dateFin != null)
-            {this.setDateFin(dateFin);}
+            {this.dateFin=dateFin;}
         else
-            {this.setDateFin(LocalDate.now());}
-       this.setMotifFin(motifFin);
-       this.setCommentaire(affectationCommentaire);
+            {this.dateFin=LocalDate.now();}
+
+       this.motifFin=motifFin;
+       this.commentaire= affectationCommentaire;
        this.collaborateur.miseAJourCollaborateurSuiteClotureAffectation();
-       this.iphone.miseAJourIphoneSuiteClotureAffectation();
+       this.iphone.miseAJourIphoneSuiteClotureAffectation(motifFin);
 //       this.collaborateur = collaborateur;
 //       this.iphone = iphone;
 
         return this;
     }
 
-    public void reglesAppliqueesPourSuppressionAffectation(){
+    public void reglesAppliqueesPourSuppressionAffectation(String motifFin){
 
         this.collaborateur.miseAJourCollaborateurSuiteClotureAffectation();
 
-        this.iphone.miseAJourIphoneSuiteClotureAffectation();
+        this.iphone.miseAJourIphoneSuiteClotureAffectation(motifFin);
 
     }
+
+    public Affectation reglesAppliqueesPourLaCreation(Collaborateur collaborateur, Iphone iphone, String numeroLigne, List<Affectation> affectationDejaCree ) throws AllReadyClotureeException{
+
+        if (affectationDejaCree != null) {
+           //faire la boucle for pour test de la date de fin. Si la date de fin est à NULL, l'affectation existe déjà donc refuser la création
+
+            for (final Affectation affectations : affectationDejaCree) {
+                if (affectations.getDateFin() == null) {
+                   throw new AllReadyExistException("L'affectation pour ce collaborateur existe déjà, merci de la clôturer au préalable : " + affectations.getCollaborateur().getUid());
+               }
+           }
+       }
+
+        if (!iphone.controlDisponibiliteIphone()) {
+            throw new AllReadyExistException("Cet iPhone n'est pas disponible, merci de recommencer : " + iphone.getNumeroSerie());
+        }
+
+        this.collaborateur.miseAJourCollaborateurSuiteCreationAffectation(numeroLigne);
+        this.iphone.miseAJourIphoneSuiteCreationAffectation();
+
+        return this;
+    }
+
 }

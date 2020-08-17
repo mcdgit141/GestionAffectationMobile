@@ -88,6 +88,7 @@ public class RepositoryAffectationImpl implements IRepositoryAffectation {
     public void miseAjourAffectation(Affectation affectation) {
 
         AffectationEntity affectationEntity = iRepositoryJpaAffectation.findByNumeroAffectation(affectation.getNumeroAffectation());
+        System.out.println("dans couche infrastructure---miseAjourAffectation---affectationEntity---" + affectationEntity);
         if (affectationEntity != null){
             System.out.println("Dans couche infrastructure---miseAjourAffectation different null");
             System.out.println("Dans couche infrastructure---affectation.getDateFin() " + affectation.getDateFin());
@@ -141,8 +142,6 @@ public class RepositoryAffectationImpl implements IRepositoryAffectation {
             throw new NotFoundException("L'affectation avec le numéro suivant n'existe pas " + affectationEntityASupprimer.getNumeroAffectation());
         }
     }
-
-
 
     @Override
     public List<Affectation> rechercheAffectationByUid(String collaborateurUid) {
