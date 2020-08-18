@@ -7,6 +7,7 @@ import com.epita.filrouge.domain.iphone.Iphone;
 import com.epita.filrouge.domain.iphone.ModeleIphone;
 import com.epita.filrouge.domain.site.SiteExercice;
 import com.epita.filrouge.domain.uo.Uo;
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -133,7 +134,7 @@ class AffectationTest {
         String messageAttendu = "Cette affectation a une date de fin renseignée. Elle ne peut donc être supprimée.";
 
         //When
-        Throwable thrown = catchThrowable(() -> affectation.reglesAppliqueesPourSuppressionAffectation());
+        Throwable thrown = catchThrowable(() -> affectation.reglesAppliqueesPourSuppressionAffectation(MOTIFFIN_SUPPRIME));
 
         //Then
         assertThat(thrown).isInstanceOf(AllReadyClotureeException.class);
@@ -150,7 +151,7 @@ class AffectationTest {
         String messageAttendu = "Cette affectation a une date d'affectation anterieure à aujourd'hui. Elle ne peut donc être supprimée.";
 
         //When
-        Throwable thrown = catchThrowable(() -> affectation.reglesAppliqueesPourSuppressionAffectation());
+        Throwable thrown = catchThrowable(() -> affectation.reglesAppliqueesPourSuppressionAffectation(MOTIFFIN_SUPPRIME));
 
         //Then
         assertThat(thrown).isInstanceOf(AllReadyClotureeException.class);
