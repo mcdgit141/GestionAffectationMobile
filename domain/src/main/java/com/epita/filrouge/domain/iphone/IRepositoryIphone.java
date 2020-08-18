@@ -6,5 +6,4 @@ public interface IRepositoryIphone {
 
     Iphone rechercheIphoneParNumeroSerie(String iPhoneNumeroSerie);
 
-    void miseAJourEtatIphone(String iphoneNumeroSerie,  EtatIphoneEnum etatIphoneEnum);
 }

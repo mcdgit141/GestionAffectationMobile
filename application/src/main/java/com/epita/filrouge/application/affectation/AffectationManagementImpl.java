@@ -13,6 +13,7 @@ import com.epita.filrouge.domain.exception.NotFoundException;
 import com.epita.filrouge.domain.iphone.EtatIphoneEnum;
 import com.epita.filrouge.domain.iphone.IRepositoryIphone;
 import com.epita.filrouge.domain.iphone.Iphone;
+import com.epita.filrouge.domain.utilisateur.UtilisateurRoleEnum;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -47,91 +48,56 @@ public class AffectationManagementImpl implements IAffectationManagement {
         monLogger.debug("creer affectation--collaborateurUid");
         Collaborateur collaborateur = repositoryCollaborateur.findByUid(collaborateurUid);
 
+        List<Affectation> affectationDejaCree = repositoryAffectation.rechercheAffectationByUid(collaborateurUid);
+
         monLogger.debug("creer affectation--collaborateur.getCollaborateur().getUid---- {}", collaborateur.getUid());
         monLogger.debug("application collaborateur.getPrenom() = {} ", collaborateur.getPrenom());
 
-        // implementation du contrôle de l'existence de cet UID dans la table des affectations car si déjà présent et affectation toujours en cours,
-        // on va obliger à clôturer avant de resaisir
-        controlCollaborateurEstSansAffectationEnCours(collaborateurUid);
-
-//      test existence Iphone
         Iphone iPhone = repositoryIphone.rechercheIphoneParNumeroSerie(iPhoneNumeroSerie);
-        controlDisponibiliteIphone(iPhone);
 
         monLogger.debug("application iPhone.getIphoneId() = {}}", iPhone.getIphoneId());
 
-//        Long numeroAffectation = genererNumeroAffectation();
         Affectation affectationACreer = new Affectation(AffectationNumeroGenerateur.genererNumeroAffectation(), dateAffectation, commentaire, collaborateur, iPhone);
 
-        repositoryAffectation.affecter(affectationACreer);
+        Affectation affectationACreerFinal = affectationACreer.reglesAppliqueesPourLaCreation(collaborateur,iPhone,numeroLigne, affectationDejaCree);
 
-        repositoryCollaborateur.miseAJourCollaborateur(collaborateur, numeroLigne);
+        repositoryAffectation.affecter(affectationACreerFinal);
 
-//       // implementation de la mise à jour générique sur le téléphone en modifiant l'attribut concerné avant
-
-        repositoryIphone.miseAJourEtatIphone(iPhoneNumeroSerie, etatIphoneEnum);
-
-        return affectationACreer;
-
+        return affectationACreerFinal;
     }
-
-    private void controlDisponibiliteIphone(Iphone iPhone) {
-        if (iPhone.getEtatIphone() != EtatIphoneEnum.DISPONIBLE) {
-            throw new AllReadyExistException("Cet iPhone n'est pas disponible, merci de recommencer : " + iPhone.getNumeroSerie());
-        }
-    }
-
-    private void controlCollaborateurEstSansAffectationEnCours(String collaborateurUid) {
-        List<Affectation> affectationDejaCree = repositoryAffectation.rechercheAffectationByUid(collaborateurUid);
-
-        if (affectationDejaCree != null) {
-            //faire la boucle for pour test de la date de fin. Si la date de fin est à NULL, l'affectation existe déjà donc refuser la création
-
-            for (final Affectation affectations : affectationDejaCree) {
-                if (affectations.getDateFin() == null) {
-                    throw new AllReadyExistException("L'affectation pour ce collaborateur existe déjà, merci de la clôturer au préalable : " + affectations.getCollaborateur().getUid());
-                }
-            }
-        }
-    }
-
-//    private static Long genererNumeroAffectation() {
-//        final Random random = new Random();
-//        return random.nextLong();
-//    }
 
     @Override
     @Transactional
-    public Affectation cloturerAffectation(Long numeroAffectation, String affectationCommentaire, String motifFin, LocalDate dateFin) throws NotFoundException, AllReadyClotureeException {
+    public void cloturerAffectation(Long numeroAffectation, String affectationCommentaire, String motifFin, LocalDate dateFin) throws NotFoundException, AllReadyClotureeException {
+
+         switch (motifFin.toUpperCase()){
+            case "PERDU":
+                  motifFin = "PERDU";
+                  break;
+            case "VOLE":
+                  motifFin = "VOLE";
+                  break;
+            case "CASSE":
+                motifFin = "CASSE";
+                 break;
+            case "RESTITUE":
+                motifFin = "RESTITUE";
+                break;
+            default:
+                throw new BadRequestException("Le motif de fin mentionné n'est pas conforme aux valeurs attendues, veuillez corriger la saisie");
+        }
 
         Affectation affectationACloturer = repositoryAffectation.chercheAffectationParNumeroAffectation(numeroAffectation);
         Collaborateur collaborateur = affectationACloturer.getCollaborateur();
         Iphone iphone = affectationACloturer.getIphone();
 
-
-//        Collaborateur collaborateur = repositoryCollaborateur.findByUid(affectationACloturer.getCollaborateur().getUid());
-//        Collaborateur collaborateurAMettreAJourSuiteClotureAffectation = collaborateur.miseAJourCollaborateurSuiteClotureAffectation();
-//
-//        Iphone iphone = repositoryIphone.rechercheIphoneParNumeroSerie(affectationACloturer.getIphone().getNumeroSerie());
-//        Iphone iphoneAMettreAJourSuiteClotureAffectation = iphone.miseAJourIphoneSuiteClotureAffectation();
-
         Affectation affectationACloturerFinal = affectationACloturer.reglesAppliqueesPourCloturerAffectation(collaborateur,
                 iphone, affectationCommentaire, motifFin, dateFin);
 
-        System.out.println("couche application -cloturerAffectation--affectationAcloturer.getNumeroAffectation---" + affectationACloturer.getNumeroAffectation());
-        System.out.println("couche application -cloturerAffectation--dateFin---" + dateFin);
-
-//        if (dateFin != null)
-//            {affectationACloturer.setDateFin(dateFin);}
-//        else
-//            {affectationACloturer.setDateFin(LocalDate.now());}
-//
-//        affectationACloturer.setMotifFin(motifFin);
-//        affectationACloturer.setCommentaire(affectationCommentaire);
+        monLogger.debug("couche application -cloturerAffectation--affectationAcloturer.getNumeroAffectation---", affectationACloturer.getNumeroAffectation());
+        monLogger.debug("couche application -cloturerAffectation--dateFin-----", dateFin);
 
         repositoryAffectation.miseAjourAffectation(affectationACloturerFinal);
-
-        return affectationACloturerFinal;
 
     }
 
@@ -139,7 +105,7 @@ public class AffectationManagementImpl implements IAffectationManagement {
     public List<Affectation> listerAffectation(FiltresAffectation filtresAffectation) {
 
         return repositoryAffectation.rechercheAffectationAvecFiltres(filtresAffectation);
-//        return null;
+
         }
     }
 

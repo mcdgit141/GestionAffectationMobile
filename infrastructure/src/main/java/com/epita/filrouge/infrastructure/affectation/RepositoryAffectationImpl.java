@@ -19,7 +19,6 @@ import javax.persistence.EntityManager;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.concurrent.Callable;
 
 @Repository
 public class RepositoryAffectationImpl implements IRepositoryAffectation {
@@ -52,7 +51,6 @@ public class RepositoryAffectationImpl implements IRepositoryAffectation {
 
         monLogger.debug("affectationACreer = {}" , affectationACreer);
 
-
         CollaborateurEntity monCollaborateurEntity = iRepositoryJpaCollaborateur.findByUid(affectationACreer.getCollaborateur().getUid());
 
         IphoneEntity monIphoneEntity = iRepositoryJpaIphone.findByNumeroSerie(affectationACreer.getIphone().getNumeroSerie());
@@ -61,15 +59,6 @@ public class RepositoryAffectationImpl implements IRepositoryAffectation {
 
         affectationEntity = affectationEntityMapper.mapToEntity(affectationACreer);
 
-//        affectationEntity.setNumeroAffectation(affectationACreer.getNumeroAffectation());
-//        affectationEntity.setDateAffectation(affectationACreer.getDateAffectation());
-//        affectationEntity.setDateRenouvellementPrevue(affectationACreer.getDateRenouvellementPrevue());
-//        affectationEntity.setDateFin(affectationACreer.getDateFin());
-//        affectationEntity.setCommentaire(affectationACreer.getCommentaire());
-//        affectationEntity.setMotifFin(affectationACreer.getMotifFin());
-//        affectationEntity.setCollaborateur(monCollaborateurEntity);
-//        affectationEntity.setIphone(monIphoneEntity);
-
         iRepositoryJpaAffectation.save(affectationEntity);
     }
     @Override
@@ -77,10 +66,10 @@ public class RepositoryAffectationImpl implements IRepositoryAffectation {
 
         AffectationEntity affectationEntity = iRepositoryJpaAffectation.findByNumeroAffectation(numeroAffectation);
         if (affectationEntity != null){
-            System.out.println("Dans couche infrastructure---chercheAffectationParNumeroAffectation different null");
+            monLogger.debug("couche infra chercheAffectationParNumeroAffectation affectationEntity !=null  = {}");
             return affectationMapper.mapToDomain(affectationEntity);}
         else {
-            System.out.println("Dans couche infrastructure---chercheAffectationParNumeroAffectation égal à null");
+            monLogger.debug("couche infra chercheAffectationParNumeroAffectation affectationEntity =null  = {}");
             throw new NotFoundException("L'affectation avec le numéro suivant n'existe pas " + numeroAffectation);
         }
     }
@@ -89,36 +78,14 @@ public class RepositoryAffectationImpl implements IRepositoryAffectation {
     public void miseAjourAffectation(Affectation affectation) {
 
         AffectationEntity affectationEntity = iRepositoryJpaAffectation.findByNumeroAffectation(affectation.getNumeroAffectation());
+        monLogger.debug("couche infra miseAjourAffectation---");
+
         if (affectationEntity != null){
-            System.out.println("Dans couche infrastructure---miseAjourAffectation different null");
-            System.out.println("Dans couche infrastructure---affectation.getDateFin() " + affectation.getDateFin());
-            System.out.println("Dans couche infrastructure---affectation.getCommentaire() " + affectation.getCommentaire());
-            System.out.println("Dans couche infrastructure---affectation.getMotifFin() " + affectation.getMotifFin());
-//            affectationEntity.setDateFin(affectation.getDateFin());
-//            affectationEntity.setCommentaire(affectation.getCommentaire());
-//            affectationEntity.setMotifFin(affectation.getMotifFin());
-//
-            CollaborateurEntity collaborateurEntity = affectationEntity.getCollaborateur();
-            collaborateurEntity.setNumeroLigne(affectation.getCollaborateur().getNumeroLigne());
-            IphoneEntity iphoneEntity = affectationEntity.getIphone();
-            iphoneEntity.setEtatIphone(affectation.getIphone().getEtatIphone());
 
-//            CollaborateurEntity collaborateurEntity = iRepositoryJpaCollaborateur.findByUid(affectation.getCollaborateur().getUid());
-//            collaborateurEntity.setNumeroLigne(affectation.getCollaborateur().getNumeroLigne());
-//
-//            IphoneEntity iphoneEntity = iRepositoryJpaIphone.findByNumeroSerie(affectation.getIphone().getNumeroSerie());
-//            iphoneEntity.setEtatIphone(affectation.getIphone().getEtatIphone());
+             AffectationEntity affectationEntityRetourMapper = affectationEntityMapper.mapToEntity(affectation);
 
-            affectationEntity.setCollaborateur(collaborateurEntity);
-            affectationEntity.setIphone(iphoneEntity);
-            affectationEntity.setNumeroAffectation(affectation.getNumeroAffectation());
-            affectationEntity.setCommentaire(affectation.getCommentaire());
-            affectationEntity.setDateAffectation(affectation.getDateAffectation());
-            affectationEntity.setDateFin(affectation.getDateFin());
-            affectationEntity.setMotifFin(affectation.getMotifFin());
-            affectationEntity.setDateRenouvellementPrevue(affectation.getDateRenouvellementPrevue());
-
-             iRepositoryJpaAffectation.save(affectationEntity);
+             affectationEntityRetourMapper.setId(affectationEntity.getId());
+             iRepositoryJpaAffectation.save(affectationEntityRetourMapper);
         }
         else {
             System.out.println("Dans couche infrastructure---miseAjourAffectation égal à null");
@@ -142,8 +109,6 @@ public class RepositoryAffectationImpl implements IRepositoryAffectation {
             throw new NotFoundException("L'affectation avec le numéro suivant n'existe pas " + affectationEntityASupprimer.getNumeroAffectation());
         }
     }
-
-
 
     @Override
     public List<Affectation> rechercheAffectationByUid(String collaborateurUid) {

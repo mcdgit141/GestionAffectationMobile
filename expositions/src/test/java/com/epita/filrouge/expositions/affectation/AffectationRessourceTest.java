@@ -143,8 +143,8 @@ class AffectationRessourceTest {
 
     @Test
     @WithMockUser(roles = {"TYPE1","ADMIN"})
-    @DisplayName("Interdiction creation affectation pour role TYPE1")
-    void role_type1_et_admin_ne_peux_pas_cloturer_affectation() throws Exception {
+    @DisplayName("cloturer affectation: Interdiction de clôturer une affectation pour les rôles TYPE1 et Admin")
+    void role_type1_et_admin_ne_peuvent_pas_cloturer_une_affectation() throws Exception {
 
         // Given
 
@@ -184,7 +184,7 @@ class AffectationRessourceTest {
     }
     @Test
     @WithMockUser(roles = {"TYPE2"})  // controle de l'AUTHENTIFICATION (Spring security), l'anotation @Secured est non indispensable dans le controller
-    @DisplayName("Doit appeler cloturerAffectation de la couche application avec les bons paramètres")
+    @DisplayName("cloturer affectation: Doit appeler cloturerAffectation une seule fois")
     void role_type2_doitAppelerCloturerAffectationDeCoucheApplication() throws Exception {
 
         // Given
@@ -205,8 +205,6 @@ class AffectationRessourceTest {
         affectationDTOCloture.setDateFin(AFFECTATION_DATEFIN);
         affectationDTOCloture.setMotifFin(AFFECTATION_MOTIFFIN);
         affectationDTOCloture.setAffectationCommentaire(AFFECTATION_COMMENTAIRE);
-
-        when(affectationManagement.cloturerAffectation(AFFECTATION_NUMERO, AFFECTATION_COMMENTAIRE,AFFECTATION_MOTIFFIN,AFFECTATION_DATEFIN)).thenReturn(affectationRetournee);
 
         String monObjetMapper = objectMapper.writeValueAsString(affectationDTOCloture);
 
