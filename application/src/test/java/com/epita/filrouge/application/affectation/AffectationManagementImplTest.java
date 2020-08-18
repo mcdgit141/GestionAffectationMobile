@@ -95,8 +95,8 @@ public class AffectationManagementImplTest {
     @MockBean
     private IRepositoryAffectation repositoryAffectation;
 
-    @BeforeAll
-    static void init() {
+    @BeforeEach
+    public void init() {
         SiteExercice siteExercice = new SiteExercice(CODE_SITE, NOM_SITE, ADRESSE_POSTALE, CODE_POSTAL, VILLE, PAYS, DATE_CREATION);
         Uo uo = new Uo(CODE_UO, FONCTION_RATTACHEMENT, CODE_UO_PARENT, NOM_USAGE_UO, NOM_RESPONSABLE_UO);
         uo.setSiteExercice(siteExercice);
@@ -114,7 +114,6 @@ public class AffectationManagementImplTest {
     }
 
     @Test
-    @Disabled
     void ShouldCallFindByUid_And_FindByNumeroSerie_And_repositoryAffectationSave() {
         //Given
 
@@ -128,9 +127,7 @@ public class AffectationManagementImplTest {
         verify(repositoryCollaborateur, Mockito.times(1)).findByUid(COLLABORATEUR_UID);
         verify(repositoryIphone, Mockito.times(1)).rechercheIphoneParNumeroSerie(IPHONE_NUMEROSERIE);
         verify(repositoryAffectation, Mockito.times(1)).affecter(any(Affectation.class));
-//        verify(repositoryCollaborateur, Mockito.times(1)).miseAJourCollaborateur(collaborateur, COLLABORATEUR_NUMEROLIGNE);
-//        verify(repositoryCollaborateur, Mockito.times(1)).miseAJourCollaborateur(collaborateur, COLLABORATEUR_NUMEROLIGNE);
-//        verify(repositoryIphone, Mockito.times(1)).miseAJourEtatIphone(IPHONE_NUMEROSERIE, EtatIphoneEnum.AFFECTE);
+
     }
 
     @Test
@@ -184,8 +181,7 @@ public class AffectationManagementImplTest {
         verify(repositoryAffectation, Mockito.times(1)).rechercheAffectationByUid(COLLABORATEUR_UID);
         verify(repositoryIphone, Mockito.times(1)).rechercheIphoneParNumeroSerie(IPHONE_NUMEROSERIE);
         verify(repositoryAffectation, Mockito.times(1)).affecter(any(Affectation.class));
-//        verify(repositoryCollaborateur, Mockito.times(1)).miseAJourCollaborateur(collaborateur, COLLABORATEUR_NUMEROLIGNE);
-//        verify(repositoryIphone, Mockito.times(1)).miseAJourEtatIphone(IPHONE_NUMEROSERIE, EtatIphoneEnum.AFFECTE);
+
     }
     @Test
     @DisplayName("Cloturer Affectation: Doit vérifier le nombre d'appels à la méthode miseAJourAffectation")
@@ -207,14 +203,30 @@ public class AffectationManagementImplTest {
     @DisplayName("Cloturer Affectation: verifier existence du numéro d'affectation")
     void When_Cloture_AffectationisCalled_Check_NumeroAffectation(){
         //given
-        when(repositoryAffectation.chercheAffectationParNumeroAffectation(AFFECTATION_NUMERO)).thenThrow(new NotFoundException("NotfoundExceptionTest"));
+        when(repositoryAffectation.chercheAffectationParNumeroAffectation(any(Long.class))).thenThrow(new NotFoundException("Message NotfoundExceptionTest"));
 
         // when + then
         assertThatThrownBy(
-                () -> {affectationManagementImpl.cloturerAffectation(affectationEnCours.getNumeroAffectation(),
-                                        affectationEnCours.getCommentaire(),affectationEnCours.getMotifFin(),affectationEnCours.getDateFin());}
+                () -> {affectationManagementImpl.cloturerAffectation(3L,
+                                        AFFECTATION_COMMENTAIRE,AFFECTATION_MOTIFFIN,AFFECTATION_DATEFIN);}
         ).isInstanceOf(NotFoundException.class);
 
+    }
+    @Test
+    @DisplayName("Cloturer Affectation: Verifier le résultat de la mise à jour appel de la fonction")
+    void When_Cloture_AffectationisCalled_Check_The_Value_After_Update() {
+        // given
+        when(repositoryAffectation.chercheAffectationParNumeroAffectation(AFFECTATION_NUMERO)).thenReturn(affectationEnCours);
+        ArgumentCaptor<Affectation> valueCapture = ArgumentCaptor.forClass(Affectation.class);
+        //when
+        affectationManagementImpl.cloturerAffectation(affectationEnCours.getNumeroAffectation(),affectationEnCours.getCommentaire(),AFFECTATION_MOTIFFIN,affectationEnCours.getDateFin());
+        //then
+        Mockito.verify(repositoryAffectation).miseAjourAffectation(valueCapture.capture());
+        assertAll(
+                () -> assertThat(valueCapture.getValue().getCollaborateur().getNumeroLigne()).isEqualTo(null),
+                () -> assertThat(valueCapture.getValue().getIphone().getEtatIphone()).isEqualTo(EtatIphoneEnum.DISPONIBLE),
+                () -> assertThat(valueCapture.getValue().getDateFin()).isEqualTo(LocalDate.now())
+        );
     }
     @Test
     @DisplayName("Doit transmettre la demande d'affichage avec les bons filtres")

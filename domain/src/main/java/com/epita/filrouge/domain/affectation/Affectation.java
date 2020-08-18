@@ -3,7 +3,7 @@ package com.epita.filrouge.domain.affectation;
 import com.epita.filrouge.domain.collaborateur.Collaborateur;
 import com.epita.filrouge.domain.exception.AllReadyClotureeException;
 import com.epita.filrouge.domain.exception.AllReadyExistException;
-import com.epita.filrouge.domain.exception.NotFoundException;
+
 import com.epita.filrouge.domain.iphone.Iphone;
 
 import java.time.LocalDate;
@@ -99,8 +99,6 @@ public class Affectation {
        this.commentaire= affectationCommentaire;
        this.collaborateur.miseAJourCollaborateurSuiteClotureAffectation();
        this.iphone.miseAJourIphoneSuiteClotureAffectation(motifFin);
-//       this.collaborateur = collaborateur;
-//       this.iphone = iphone;
 
         return this;
     }

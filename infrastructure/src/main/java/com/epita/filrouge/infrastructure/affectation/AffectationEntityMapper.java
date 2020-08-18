@@ -63,7 +63,6 @@ public class AffectationEntityMapper extends AbstractMapper<Affectation,Affectat
         affectationEntity.setCommentaire(affectation.getCommentaire());
         affectationEntity.setDateAffectation(affectation.getDateAffectation());
         affectationEntity.setDateFin(affectation.getDateFin());
-        System.out.println("Dans infrastructure AffectationEntityMapper--DateFin----" + affectation.getDateFin());
         affectationEntity.setMotifFin(affectation.getMotifFin());
         affectationEntity.setDateRenouvellementPrevue(affectation.getDateRenouvellementPrevue());
 

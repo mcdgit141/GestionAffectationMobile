@@ -1,11 +1,6 @@
 package com.epita.filrouge.domain.iphone;
 
-import com.epita.filrouge.domain.affectation.Affectation;
 import com.epita.filrouge.domain.exception.AllReadyExistException;
-
-
-import java.util.ArrayList;
-import java.util.List;
 
 public class Iphone {
 
@@ -63,13 +58,6 @@ public class Iphone {
     public void setEtatIphone(EtatIphoneEnum etatIphone) {
         this.etatIphone = etatIphone;
     }
-//    public Iphone miseAJourIphoneSuiteClotureAffectation() {
-//
-//        if (this.etatIphone == EtatIphoneEnum.AFFECTE){
-//            this.etatIphone = EtatIphoneEnum.DISPONIBLE;
-//        }
-//        return this;
-//    }
 
     public Iphone miseAJourIphoneSuiteClotureAffectation(String motifFin) {
 
