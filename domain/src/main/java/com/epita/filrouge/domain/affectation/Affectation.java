@@ -103,7 +103,7 @@ public class Affectation {
         return this;
     }
 
-    public void reglesAppliqueesPourSuppressionAffectation(String motifFin){
+    public void reglesAppliqueesPourSuppressionAffectation(){
 
         if (this.getDateFin() != null) {
             throw new AllReadyClotureeException("Cette affectation a une date de fin renseignée. Elle ne peut donc être supprimée.");
@@ -115,7 +115,7 @@ public class Affectation {
 
         this.collaborateur.miseAJourCollaborateurSuiteClotureAffectation();
 
-        this.iphone.miseAJourIphoneSuiteClotureAffectation(motifFin);
+        this.iphone.miseAJourIphoneSuiteClotureAffectation("SUPPRIME");
 
     }
 

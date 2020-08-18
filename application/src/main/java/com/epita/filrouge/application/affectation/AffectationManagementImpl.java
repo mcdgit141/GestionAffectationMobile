@@ -102,6 +102,16 @@ public class AffectationManagementImpl implements IAffectationManagement {
     }
 
     @Override
+    public void supprimerAffectation(Long numeroAffectation) {
+
+        Affectation affectationASupprimer = repositoryAffectation.chercheAffectationParNumeroAffectation(numeroAffectation);
+
+        affectationASupprimer.reglesAppliqueesPourSuppressionAffectation();
+
+        repositoryAffectation.miseAjourAffectation(affectationASupprimer);
+    }
+
+    @Override
     public List<Affectation> listerAffectation(FiltresAffectation filtresAffectation) {
 
         return repositoryAffectation.rechercheAffectationAvecFiltres(filtresAffectation);

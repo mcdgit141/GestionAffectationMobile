@@ -117,7 +117,7 @@ class AffectationTest {
         Affectation affectation = new Affectation(AFFECTATION_NUMERO, AFFECTATION_DATE, AFFECTATION_COMMENTAIRE, collaborateur, iphone);
 
         //When
-        affectation.reglesAppliqueesPourSuppressionAffectation(MOTIFFIN_SUPPRIME);
+        affectation.reglesAppliqueesPourSuppressionAffectation();
 
         //Then
         assertThat(affectation.getCollaborateur().getNumeroLigne()).isNull();
@@ -134,7 +134,7 @@ class AffectationTest {
         String messageAttendu = "Cette affectation a une date de fin renseignée. Elle ne peut donc être supprimée.";
 
         //When
-        Throwable thrown = catchThrowable(() -> affectation.reglesAppliqueesPourSuppressionAffectation(MOTIFFIN_SUPPRIME));
+        Throwable thrown = catchThrowable(() -> affectation.reglesAppliqueesPourSuppressionAffectation());
 
         //Then
         assertThat(thrown).isInstanceOf(AllReadyClotureeException.class);
@@ -151,7 +151,7 @@ class AffectationTest {
         String messageAttendu = "Cette affectation a une date d'affectation anterieure à aujourd'hui. Elle ne peut donc être supprimée.";
 
         //When
-        Throwable thrown = catchThrowable(() -> affectation.reglesAppliqueesPourSuppressionAffectation(MOTIFFIN_SUPPRIME));
+        Throwable thrown = catchThrowable(() -> affectation.reglesAppliqueesPourSuppressionAffectation());
 
         //Then
         assertThat(thrown).isInstanceOf(AllReadyClotureeException.class);
