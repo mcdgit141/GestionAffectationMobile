@@ -1,23 +1,20 @@
 package com.epita.filrouge.domain.affectation;
 
 import com.epita.filrouge.domain.collaborateur.Collaborateur;
+import com.epita.filrouge.domain.exception.AllReadyClotureeException;
 import com.epita.filrouge.domain.iphone.EtatIphoneEnum;
 import com.epita.filrouge.domain.iphone.Iphone;
 import com.epita.filrouge.domain.iphone.ModeleIphone;
 import com.epita.filrouge.domain.site.SiteExercice;
 import com.epita.filrouge.domain.uo.Uo;
-import org.junit.jupiter.api.Disabled;
-import org.junit.jupiter.api.DisplayName;
-import org.junit.jupiter.api.Test;
-import org.mockito.Mock;
-import org.springframework.boot.test.mock.mockito.MockBean;
 
-import static org.assertj.core.api.Assertions.assertThat;
+import org.junit.jupiter.api.*;
 
 import java.time.LocalDate;
 
-import static org.junit.jupiter.api.Assertions.*;
-//@Disabled
+import static org.assertj.core.api.Assertions.*;
+
+
 class AffectationTest {
     private static final String CODE_SITE = "V2";
     private static final String NOM_SITE = "Valmy2";
@@ -48,19 +45,27 @@ class AffectationTest {
     private static final LocalDate AFFECTATION_DATE = LocalDate.now();
     private static final String AFFECTATION_COMMENTAIRE = "Premiere affectation";
 
+    private static Collaborateur collaborateur = null;
+    private static Iphone iphone = null;
+
+    @BeforeAll
+    static void initTests() {
+        SiteExercice siteExercice = new SiteExercice(CODE_SITE,NOM_SITE,ADRESSE_POSTALE,CODE_POSTAL,VILLE,PAYS,DATE_CREATION);
+        Uo uo = new Uo(CODE_UO,FONCTION_RATTACHEMENT,CODE_UO_PARENT,NOM_USAGE_UO,NOM_RESPONSABLE_UO);
+        uo.setSiteExercice(siteExercice);
+
+        collaborateur = new Collaborateur( COLLABORATEUR_UID, COLLABORATEUR_NOM, COLLABORATEUR_PRENOM, COLLABORATEUR_NUMEROLIGNE,uo);
+
+        ModeleIphone modeleIphone = new ModeleIphone(1L, MODELE_NOMMODELE);
+        iphone = new Iphone(1L, IPHONE_NUMEROSERIE, IPHONE_PRIX, modeleIphone, EtatIphoneEnum.AFFECTE);
+
+    }
+
     @Test
     void ShouldReturnADateInTwoYears() {
         //Given
         LocalDate dateRevouvelementAttentue = AFFECTATION_DATE.plusYears(2);
 
-        SiteExercice siteExercice = new SiteExercice(CODE_SITE,NOM_SITE,ADRESSE_POSTALE,CODE_POSTAL,VILLE,PAYS,DATE_CREATION);
-        Uo uo = new Uo(CODE_UO,FONCTION_RATTACHEMENT,CODE_UO_PARENT,NOM_USAGE_UO,NOM_RESPONSABLE_UO);
-        uo.setSiteExercice(siteExercice);
-
-        Collaborateur collaborateur = new Collaborateur( COLLABORATEUR_UID, COLLABORATEUR_NOM, COLLABORATEUR_PRENOM, COLLABORATEUR_NUMEROLIGNE,uo);
-
-        ModeleIphone modeleIphone = new ModeleIphone(1L, MODELE_NOMMODELE);
-        Iphone iphone = new Iphone(1L, IPHONE_NUMEROSERIE, IPHONE_PRIX, modeleIphone, IPHONE_ETAT);
 
         //When
         Affectation affectationACreer = new Affectation(AFFECTATION_NUMERO, AFFECTATION_DATE, AFFECTATION_COMMENTAIRE, collaborateur, iphone);
@@ -70,18 +75,11 @@ class AffectationTest {
         assertThat(affectationACreer.getDateRenouvellementPrevue()).isEqualTo(dateRevouvelementAttentue);
     }
 
+
     @Test
     @DisplayName("Lors suppression d'une affectation, doit renvoyer une Affectation avec iphone et Collaborateur mis à jour")
     void ShouldReturnAnAffectionWithIphoneAndCollabrateurUpdated_WhenAskToDeleteAnAffectation() {
         //Given
-        SiteExercice siteExercice = new SiteExercice(CODE_SITE,NOM_SITE,ADRESSE_POSTALE,CODE_POSTAL,VILLE,PAYS,DATE_CREATION);
-        Uo uo = new Uo(CODE_UO,FONCTION_RATTACHEMENT,CODE_UO_PARENT,NOM_USAGE_UO,NOM_RESPONSABLE_UO);
-        uo.setSiteExercice(siteExercice);
-
-        Collaborateur collaborateur = new Collaborateur( COLLABORATEUR_UID, COLLABORATEUR_NOM, COLLABORATEUR_PRENOM, COLLABORATEUR_NUMEROLIGNE,uo);
-
-        ModeleIphone modeleIphone = new ModeleIphone(1L, MODELE_NOMMODELE);
-        Iphone iphone = new Iphone(1L, IPHONE_NUMEROSERIE, IPHONE_PRIX, modeleIphone, EtatIphoneEnum.AFFECTE);
 
         Affectation affectation = new Affectation(AFFECTATION_NUMERO, AFFECTATION_DATE, AFFECTATION_COMMENTAIRE, collaborateur, iphone);
 
@@ -92,5 +90,40 @@ class AffectationTest {
         //Then
         assertThat(affectation.getCollaborateur().getNumeroLigne()).isNull();
         assertThat(affectation.getIphone().getEtatIphone()).isEqualTo(EtatIphoneEnum.DISPONIBLE);
+    }
+
+    @Test
+    @DisplayName("Demande de suppression d'une affection non en cours provoque une erreur")
+    void ShouldReturnAnError_WhenAskToDeleteAnInactiveAffectation(){
+        //Given
+        Affectation affectation = new Affectation(AFFECTATION_NUMERO, AFFECTATION_DATE, AFFECTATION_COMMENTAIRE, collaborateur, iphone);
+        affectation.setDateFin(LocalDate.now());
+
+        String messageAttendu = "Cette affectation a une date de fin renseignée. Elle ne peut donc être supprimée.";
+
+        //When
+        Throwable thrown = catchThrowable(() -> affectation.reglesAppliqueesPourSuppressionAffectation());
+
+        //Then
+        assertThat(thrown).isInstanceOf(AllReadyClotureeException.class);
+        assertThat(thrown).hasMessage(messageAttendu);
+
+    }
+
+    @Test
+    @DisplayName("Demande de suppression d'une affection ayant une date d'affectation antérieur à aujourd'hui")
+    void ShouldReturnAnError_WhenAskToDeleteAnAffectationWithAnAffectationDateOlderThanToday(){
+        //Given
+        Affectation affectation = new Affectation(AFFECTATION_NUMERO, AFFECTATION_DATE.minusDays(1), AFFECTATION_COMMENTAIRE, collaborateur, iphone);
+
+        String messageAttendu = "Cette affectation a une date d'affectation anterieure à aujourd'hui. Elle ne peut donc être supprimée.";
+
+        //When
+        Throwable thrown = catchThrowable(() -> affectation.reglesAppliqueesPourSuppressionAffectation());
+
+        //Then
+        assertThat(thrown).isInstanceOf(AllReadyClotureeException.class);
+        assertThat(thrown).hasMessage(messageAttendu);
+
     }
 }

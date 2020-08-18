@@ -6,6 +6,7 @@ import com.epita.filrouge.domain.exception.NotFoundException;
 import com.epita.filrouge.domain.iphone.Iphone;
 
 import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 
 public class Affectation {
 
@@ -102,6 +103,14 @@ public class Affectation {
     }
 
     public void reglesAppliqueesPourSuppressionAffectation(){
+
+        if (this.getDateFin() != null) {
+            throw new AllReadyClotureeException("Cette affectation a une date de fin renseignée. Elle ne peut donc être supprimée.");
+        }
+
+        if (this.getDateAffectation().compareTo(LocalDate.now()) < 0)  {
+            throw new AllReadyClotureeException("Cette affectation a une date d'affectation anterieure à aujourd'hui. Elle ne peut donc être supprimée.");
+        }
 
         this.collaborateur.miseAJourCollaborateurSuiteClotureAffectation();
 
