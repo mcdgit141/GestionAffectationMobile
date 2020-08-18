@@ -17,6 +17,7 @@ import com.epita.filrouge.infrastructure.iphone.ModeleIphoneEntity;
 import com.epita.filrouge.infrastructure.site.SiteExerciceEntity;
 import com.epita.filrouge.infrastructure.uo.UoEntity;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -273,7 +274,7 @@ class RepositoryAffectationImplTest {
     @DisplayName("Cloture Affectation: Une demande de clôture doit mettre à jour la date de fin")
     void ShouldUpdate_DateFin_When_AskToClose_AnAffectation() {
         //Given
-        persisteAffectation(monCollaborateurEntityPersiste, monIphoneEntityPersiste,
+       persisteAffectation(monCollaborateurEntityPersiste, monIphoneEntityPersiste,
                 AFFECTATION_DATE, AFFECTATION_COMMENTAIRE, AFFECTATION_NUMERO);
 
         Collaborateur collaborateur = collaborateurEntityMapper.mapToDomain(monCollaborateurEntityPersiste);
@@ -282,7 +283,7 @@ class RepositoryAffectationImplTest {
 
         Affectation affectationACloturer= new Affectation(AFFECTATION_NUMERO, AFFECTATION_DATE, AFFECTATION_COMMENTAIRE, collaborateur, iphone);
         affectationACloturer.setDateFin(LocalDate.now());
-
+        
         //When
         repositoryAffectation.miseAjourAffectation(affectationACloturer);
 
@@ -544,6 +545,6 @@ class RepositoryAffectationImplTest {
         affectationEntity.setDateRenouvellementPrevue(LocalDate.now().plusYears(2));
         affectationEntity.setCommentaire(commentaire);
         affectationEntity.setNumeroAffectation(numeroAffectation);
-        monAffectationEntityPersiste = entityManager.persist(affectationEntity);
+        monAffectationEntityPersiste = entityManager.persistAndFlush(affectationEntity);
     }
 }

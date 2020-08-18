@@ -86,28 +86,28 @@ public class RepositoryAffectationImpl implements IRepositoryAffectation {
 
     @Override
     public void miseAjourAffectation(Affectation affectation) {
-
+//
         AffectationEntity affectationEntity = iRepositoryJpaAffectation.findByNumeroAffectation(affectation.getNumeroAffectation());
-        System.out.println("dans couche infrastructure---miseAjourAffectation---affectationEntity---" + affectationEntity);
+        System.out.println("dans couche infrastructure---miseAjourAffectation-----" );
         if (affectationEntity != null){
             System.out.println("Dans couche infrastructure---miseAjourAffectation different null");
             System.out.println("Dans couche infrastructure---affectation.getDateFin() " + affectation.getDateFin());
             System.out.println("Dans couche infrastructure---affectation.getCommentaire() " + affectation.getCommentaire());
             System.out.println("Dans couche infrastructure---affectation.getMotifFin() " + affectation.getMotifFin());
-//            affectationEntity.setDateFin(affectation.getDateFin());
-//            affectationEntity.setCommentaire(affectation.getCommentaire());
-//            affectationEntity.setMotifFin(affectation.getMotifFin());
-//
+////            affectationEntity.setDateFin(affectation.getDateFin());
+////            affectationEntity.setCommentaire(affectation.getCommentaire());
+////            affectationEntity.setMotifFin(affectation.getMotifFin());
+////
             CollaborateurEntity collaborateurEntity = affectationEntity.getCollaborateur();
             collaborateurEntity.setNumeroLigne(affectation.getCollaborateur().getNumeroLigne());
             IphoneEntity iphoneEntity = affectationEntity.getIphone();
             iphoneEntity.setEtatIphone(affectation.getIphone().getEtatIphone());
 
-//            CollaborateurEntity collaborateurEntity = iRepositoryJpaCollaborateur.findByUid(affectation.getCollaborateur().getUid());
-//            collaborateurEntity.setNumeroLigne(affectation.getCollaborateur().getNumeroLigne());
-//
-//            IphoneEntity iphoneEntity = iRepositoryJpaIphone.findByNumeroSerie(affectation.getIphone().getNumeroSerie());
-//            iphoneEntity.setEtatIphone(affectation.getIphone().getEtatIphone());
+////           CollaborateurEntity collaborateurEntity = iRepositoryJpaCollaborateur.findByUid(affectation.getCollaborateur().getUid());
+////            collaborateurEntity.setNumeroLigne(affectation.getCollaborateur().getNumeroLigne());
+////
+////            IphoneEntity iphoneEntity = iRepositoryJpaIphone.findByNumeroSerie(affectation.getIphone().getNumeroSerie());
+////            iphoneEntity.setEtatIphone(affectation.getIphone().getEtatIphone());
 
             affectationEntity.setCollaborateur(collaborateurEntity);
             affectationEntity.setIphone(iphoneEntity);
@@ -117,6 +117,8 @@ public class RepositoryAffectationImpl implements IRepositoryAffectation {
             affectationEntity.setDateFin(affectation.getDateFin());
             affectationEntity.setMotifFin(affectation.getMotifFin());
             affectationEntity.setDateRenouvellementPrevue(affectation.getDateRenouvellementPrevue());
+
+//             AffectationEntity affectationEntityRetourMapper = affectationEntityMapper.mapToEntity(affectation);
 
              iRepositoryJpaAffectation.save(affectationEntity);
         }
