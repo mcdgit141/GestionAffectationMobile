@@ -8,6 +8,8 @@ public class ModeleIphoneEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long modeleId;
+
+    @Column(unique = true)
     private String nomModele;
 
     public ModeleIphoneEntity() {

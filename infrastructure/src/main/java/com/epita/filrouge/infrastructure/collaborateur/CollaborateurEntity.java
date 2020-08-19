@@ -16,6 +16,7 @@ public class CollaborateurEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long collaborateurId;
 
+    @Column(unique = true)
     private String uid;
 
     private String nom;

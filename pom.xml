@@ -23,6 +23,7 @@
         <version-h2>1.4.200</version-h2>
         <version-appli>0.0.1-SNAPSHOT</version-appli>
         <version-springboot>2.3.1.RELEASE</version-springboot>
+        <version-springboot-actuator>2.2.2.RELEASE</version-springboot-actuator>
         <version-swagger>2.9.2</version-swagger>
         <version-jupiter>5.6.0</version-jupiter>
         <version-assertj>3.16.1</version-assertj>
@@ -96,6 +97,11 @@
             </dependency>
 
             <dependency>
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-starter-actuator</artifactId>
+                <version>${version-springboot-actuator}</version>
+            </dependency>
+            <dependency>
                 <groupId>org.junit.jupiter</groupId>
                 <artifactId>junit-jupiter</artifactId>
                 <version>${version-jupiter}</version>
@@ -108,8 +114,6 @@
                 <version>${version-assertj}</version>
                 <scope>test</scope>
             </dependency>
-
-
 
             <dependency>
                 <groupId>io.springfox</groupId>
@@ -135,8 +139,7 @@
                 <scope>test</scope>
             </dependency>
 
-
-            <!-- dépendences techniques pour les couches applicatives-->
+         <!-- dépendences techniques pour les couches applicatives-->
 
             <dependency>
                 <groupId>com.epita.filrouge</groupId>

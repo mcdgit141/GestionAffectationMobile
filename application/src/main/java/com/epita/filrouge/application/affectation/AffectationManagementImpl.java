@@ -46,6 +46,7 @@ public class AffectationManagementImpl implements IAffectationManagement {
     public Affectation creerAffectation(String collaborateurUid, String iPhoneNumeroSerie, LocalDate dateAffectation, String numeroLigne, String commentaire) throws AllReadyExistException {
 
         monLogger.debug("creer affectation--collaborateurUid");
+        System.out.println("creer affectation--collaborateurUid---" + collaborateurUid);
         Collaborateur collaborateur = repositoryCollaborateur.findByUid(collaborateurUid);
 
         List<Affectation> affectationDejaCree = repositoryAffectation.rechercheAffectationByUid(collaborateurUid);

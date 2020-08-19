@@ -25,11 +25,12 @@ public class RepositoryCollaborateurImpl implements IRepositoryCollaborateur {
 
     @Override
     public Collaborateur findByUid(String uid) {
+        System.out.println("couche infra---findByUid");
         CollaborateurEntity collaborateurEntity =  repositoryJpaCollaborateur.findByUid(uid);
         if (collaborateurEntity != null) {
             return collaborateurEntityMapper.mapToDomain(collaborateurEntity);
         } else {
-            return null;
+            throw new NotFoundException("Le collaborateur par recherche du uid est non trouvé  = " + uid);
         }
     }
 

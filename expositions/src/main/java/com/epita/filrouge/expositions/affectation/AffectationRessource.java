@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.validation.constraints.NotNull;
 import java.nio.Buffer;
+import java.time.LocalDate;
 import java.util.List;
 
 @RestController
@@ -22,28 +23,42 @@ public class AffectationRessource {
     @Autowired
     private IAffectationManagement affectationManagement;
 
-    @PostMapping(value = "/affectation", consumes = { "application/json" }, produces =  { "application/json" })
+    @PostMapping(value = "/affectation/creation", consumes = { "application/json" }, produces =  { "application/json" })
     @ResponseStatus(HttpStatus.CREATED)
     @Secured({"ROLE_ADMIN","ROLE_TYPE2"})
     public Affectation saveAffectation(@NotNull @RequestBody final AffectationDTO affectationDTO) {
    //     throw new AllReadyExistException("foo");
-        if (affectationDTO.getCollaborateurNumeroLigne() == null) {
+        if (affectationDTO.getAffectationCommentaire() == "" && affectationDTO.getCollaborateurNumeroLigne() == "" ||
+            affectationDTO.getAffectationCommentaire() == null && affectationDTO.getCollaborateurNumeroLigne() == null) {
+            System.out.println("test couche exposition motif fin non renseigné");
+            throw new BadRequestException("Commentaire et numéro de ligne non renseignés, données à saisir impérativement");
+        }
+        if (affectationDTO.getCollaborateurNumeroLigne() == null || affectationDTO.getCollaborateurNumeroLigne() == "" ) {
             throw new BadRequestException("numéro de ligne non renseigné, donnée à saisir impérativement");
         }
-        if (affectationDTO.getCollaborateurUid() == null) {
+        if (affectationDTO.getCollaborateurNumeroLigne().length() > 10 || affectationDTO.getCollaborateurNumeroLigne().length() < 10){
+            throw new BadRequestException("numéro de ligne ne comporte pas les 10 chiffres attendus");
+        }
+        if (affectationDTO.getCollaborateurUid() == null || affectationDTO.getCollaborateurUid() == "" ) {
             throw new BadRequestException("collaborateur id non renseigné, donnée à saisir impérativement");
         }
 
-        if (affectationDTO.getIphoneNumeroSerie() == null) {
+        if (affectationDTO.getIphoneNumeroSerie() == null || affectationDTO.getIphoneNumeroSerie() == "") {
             throw new BadRequestException("numéro série iphone non renseigné, donnée à saisir impérativement");
         }
-        return  affectationManagement.creerAffectation(affectationDTO.getCollaborateurUid(),affectationDTO.getIphoneNumeroSerie(),
+        if (affectationDTO.getAffectationCommentaire() == null || affectationDTO.getAffectationCommentaire() == "" ) {
+            throw new BadRequestException("Commentaire non renseigné, donnée à saisir impérativement");
+        }
+        if (affectationDTO.getAffectationDate().isBefore(LocalDate.now()) || affectationDTO.getAffectationDate().isAfter(LocalDate.now())){
+            throw new BadRequestException("La date d'affectation doit être à la date du jour");
+        }
+
+        return affectationManagement.creerAffectation(affectationDTO.getCollaborateurUid(),affectationDTO.getIphoneNumeroSerie(),
                                    affectationDTO.getAffectationDate(),affectationDTO.getCollaborateurNumeroLigne(),
                                    affectationDTO.getAffectationCommentaire());
-
     }
 
-    @PostMapping(value = "/listeaffectation", consumes = { "application/json" }, produces =  { "application/json" })
+    @PostMapping(value = "/affectation/liste", consumes = { "application/json" }, produces =  { "application/json" })
     @Secured({"ROLE_ADMIN","ROLE_TYPE1","ROLE_TYPE2"})
     public List<Affectation> rechercheAffectation(@NotNull @RequestBody final FiltresAffectation filtresAffectation){
         final List<Affectation> affectations = affectationManagement.listerAffectation(filtresAffectation);

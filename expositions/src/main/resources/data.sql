@@ -72,12 +72,6 @@ INSERT INTO iphone_entity(
 
    etat_iphone, numero_serie, prix_iphone, modele_id)
 
-   VALUES ('DISPONIBLE', '010207', 1400.00, 4);
-
-INSERT INTO iphone_entity(
-
-   etat_iphone, numero_serie, prix_iphone, modele_id)
-
    VALUES ('DISPONIBLE', '010208', 1500.00, 5);
 
 INSERT INTO iphone_entity(

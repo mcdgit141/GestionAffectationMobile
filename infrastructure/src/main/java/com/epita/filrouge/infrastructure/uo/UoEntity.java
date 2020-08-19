@@ -11,6 +11,7 @@ public class UoEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long uoId;
 
+    @Column(unique = true)
     private String codeUo;
     private String fonctionRattachement;
     private String codeUoParent;
