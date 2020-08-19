@@ -47,14 +47,14 @@ public class RepositoryIphoneImpl implements IRepositoryIphone {
         return new Iphone(iphoneEntity.getIphoneId(), iphoneEntity.getNumeroSerie(), iphoneEntity.getPrixIphone(), modeleIphone, iphoneEntity.getEtatIphone());
     }
 
-    @Override
-    // mise à jour de l'état de l'Iphone suite à une affectation. Pas besoin de retester l'état car seul le premier disponible est remonté
-
-    public void miseAJourEtatIphone(String iPhoneNumeroSerie, EtatIphoneEnum etatIphoneEnum){
-
-        IphoneEntity iphoneEntity = repositoryJpaIphone.findByNumeroSerie(iPhoneNumeroSerie);
-        iphoneEntity.setEtatIphone(etatIphoneEnum);
-
-        repositoryJpaIphone.save(iphoneEntity);
-    }
+//    @Override
+//    // mise à jour de l'état de l'Iphone suite à une affectation. Pas besoin de retester l'état car seul le premier disponible est remonté
+//
+//      public void miseAJourEtatIphone(String iPhoneNumeroSerie, EtatIphoneEnum etatIphoneEnum){
+//
+//        IphoneEntity iphoneEntity = repositoryJpaIphone.findByNumeroSerie(iPhoneNumeroSerie);
+//        iphoneEntity.setEtatIphone(etatIphoneEnum);
+//
+//        repositoryJpaIphone.save(iphoneEntity);
+//    }
 }

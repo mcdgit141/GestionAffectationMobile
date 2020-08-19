@@ -26,7 +26,6 @@ public class AffectationRessource {
     @ResponseStatus(HttpStatus.CREATED)
     @Secured({"ROLE_ADMIN","ROLE_TYPE2"})
     public Affectation saveAffectation(@NotNull @RequestBody final AffectationDTO affectationDTO) {
-   //     throw new AllReadyExistException("foo");
         if (affectationDTO.getCollaborateurNumeroLigne() == null) {
             throw new BadRequestException("numéro de ligne non renseigné, donnée à saisir impérativement");
         }
@@ -43,28 +42,52 @@ public class AffectationRessource {
 
     }
 
-    @PostMapping(value = "/listeaffectation", consumes = { "application/json" }, produces =  { "application/json" })
+    @PostMapping(value = "/affectation/liste", consumes = { "application/json" }, produces =  { "application/json" })
     @Secured({"ROLE_ADMIN","ROLE_TYPE1","ROLE_TYPE2"})
-    public List<Affectation> rechercheAffectation(@NotNull @RequestBody final FiltresAffectation filtresAffectation){
-        final List<Affectation> affectations = affectationManagement.listerAffectation(filtresAffectation);
-        return affectations;
+    public List<Affectation> afficheListeAffectations(@NotNull @RequestBody final FiltresAffectation filtresAffectation){
+
+        return affectationManagement.listerAffectation(filtresAffectation);
     }
+
     @PostMapping(value = "/affectation/cloture", consumes = { "application/json" }, produces =  { "application/json" })
     @ResponseStatus(HttpStatus.OK)
     @Secured("ROLE_TYPE2")
-    public void clotureAffectation(@NotNull @RequestBody final AffectationDTO affectationDTO) {
+    public String clotureAffectation(@NotNull @RequestBody final AffectationDTO affectationDTO) {
 
-        if (affectationDTO.getAffectationCommentaire() == null) {
+       if (affectationDTO.getNumeroAffectation() == null){
+           throw new BadRequestException("numéro affectation non renseigné, donnée à saisir impérativement");
+       }
+        if (affectationDTO.getAffectationCommentaire() == "" && affectationDTO.getMotifFin() =="") {
+            System.out.println("test couche exposition motif fin non renseigné");
+            throw new BadRequestException("Motif de fin et Commentaire non renseignés, données à saisir impérativement");
+        }
+        if (affectationDTO.getMotifFin() == null && affectationDTO.getAffectationCommentaire() == null)
+        {
+            System.out.println("test couche exposition motif fin non renseigné");
+            throw new BadRequestException("Motif de fin et Commentaire non renseignés, données à saisir impérativement");
+        }
+        if (affectationDTO.getAffectationCommentaire() == null || affectationDTO.getAffectationCommentaire() == "") {
             System.out.println("test couche exposition commentaire non renseigné");
             throw new BadRequestException("commentaire non renseigné, donnée à saisir impérativement");
         }
 
-        if (affectationDTO.getMotifFin() == null) {
+        if (affectationDTO.getMotifFin() == null || affectationDTO.getMotifFin() == "") {
             System.out.println("test couche exposition motif fin non renseigné");
             throw new BadRequestException("Motif de fin non renseigné, donnée à saisir impérativement");
         }
 
         affectationManagement.cloturerAffectation(affectationDTO.getNumeroAffectation(),affectationDTO.getAffectationCommentaire()
                 ,affectationDTO.getMotifFin(),affectationDTO.getDateFin());
+        return "La clôture de l'affectation s'est bien passée";
     }
+
+
+    @PostMapping(value = "/affectation/suppression", consumes = { "application/json" })
+    @ResponseStatus(HttpStatus.OK)
+    @Secured({"ROLE_ADMIN", "ROLE_TYPE2"})
+    public void supprimerAffectation(@NotNull @RequestBody final Long numeroAffectation){
+
+        affectationManagement.supprimerAffectation(numeroAffectation);
+    }
+
 }

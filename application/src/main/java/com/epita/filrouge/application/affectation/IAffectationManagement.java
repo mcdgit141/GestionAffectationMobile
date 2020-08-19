@@ -11,13 +11,9 @@ public interface IAffectationManagement {
 
     Affectation creerAffectation(String collaborateurUid, String iPhoneNumeroSerie, LocalDate dateAffectation, String numeroLigne, String commentaire);
 
-//    List<Affectation> listerAffectation();
-
-
-//    public <T> List<Affectation> listerAffection(T criteresDeFiltre );   // l'objet T est une liste contenant les critères de filtre transmis par le front
-
     List<Affectation> listerAffectation(FiltresAffectation filtresAffectation);
 
+    void cloturerAffectation(Long numeroAffectation, String affectationCommentaire, String motifFin, LocalDate dateFin);
 
-    Affectation cloturerAffectation(Long numeroAffectation, String affectationCommentaire, String motifFin, LocalDate dateFin);
+    void supprimerAffectation(Long numeroAffectation);
 }

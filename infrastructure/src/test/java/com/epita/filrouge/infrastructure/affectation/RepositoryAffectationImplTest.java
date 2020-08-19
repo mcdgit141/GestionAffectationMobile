@@ -4,8 +4,11 @@ import com.epita.filrouge.domain.affectation.Affectation;
 import com.epita.filrouge.domain.affectation.FiltresAffectation;
 import com.epita.filrouge.domain.affectation.IRepositoryAffectation;
 import com.epita.filrouge.domain.collaborateur.Collaborateur;
+import com.epita.filrouge.domain.exception.NotFoundException;
 import com.epita.filrouge.domain.iphone.EtatIphoneEnum;
 import com.epita.filrouge.domain.iphone.Iphone;
+import com.epita.filrouge.domain.utilisateur.Utilisateur;
+import com.epita.filrouge.domain.utilisateur.UtilisateurRoleEnum;
 import com.epita.filrouge.infrastructure.collaborateur.CollaborateurEntity;
 import com.epita.filrouge.infrastructure.collaborateur.CollaborateurEntityMapper;
 import com.epita.filrouge.infrastructure.iphone.IphoneEntity;
@@ -14,6 +17,7 @@ import com.epita.filrouge.infrastructure.iphone.ModeleIphoneEntity;
 import com.epita.filrouge.infrastructure.site.SiteExerciceEntity;
 import com.epita.filrouge.infrastructure.uo.UoEntity;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -26,6 +30,7 @@ import java.time.LocalDate;
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 @ExtendWith(SpringExtension.class)
 @DataJpaTest
@@ -57,6 +62,7 @@ class RepositoryAffectationImplTest {
     private static final EtatIphoneEnum IPHONE_ETAT = EtatIphoneEnum.AFFECTE;
 
     private static final Long AFFECTATION_NUMERO = 1L;
+    private static final Long AFFECTATION_NUMERO_NONTROUVE= 2L;
     private static final LocalDate AFFECTATION_DATE = LocalDate.now();
     private static final String AFFECTATION_COMMENTAIRE = "Premiere affectation";
 
@@ -151,7 +157,6 @@ class RepositoryAffectationImplTest {
 
         Affectation affectationASupprimer = new Affectation(AFFECTATION_NUMERO, AFFECTATION_DATE, AFFECTATION_COMMENTAIRE, collaborateur, iphone);
 
-
         //When
         repositoryAffectation.supprimerAffectation(affectationASupprimer);
 
@@ -163,7 +168,7 @@ class RepositoryAffectationImplTest {
         assertThat(affectationRecues.size()).isZero();
     }
 
-@Test
+    @Test
     @DisplayName("Une demande de suppression doit mettre à jour le collaborateur")
     void ShouldUpdateACollaborateur_WhenAskToDeleteAnAffectation() {
         //Given
@@ -177,7 +182,6 @@ class RepositoryAffectationImplTest {
 
         Affectation affectationASupprimer = new Affectation(AFFECTATION_NUMERO, AFFECTATION_DATE, AFFECTATION_COMMENTAIRE, collaborateur, iphone);
 
-
         //When
         repositoryAffectation.supprimerAffectation(affectationASupprimer);
 
@@ -190,8 +194,7 @@ class RepositoryAffectationImplTest {
         assertThat(collaborateurEnTable.getNumeroLigne()).isNull();
     }
 
-
-@Test
+    @Test
     @DisplayName("Une demande de suppression doit mettre à jour l'iphone")
     void ShouldUpdateIphone_WhenAskToDeleteAnAffectation() {
     //Given
@@ -215,6 +218,155 @@ class RepositoryAffectationImplTest {
                 .getSingleResult();
 
         assertThat(iPhoneEnTable.getEtatIphone()).isEqualTo(EtatIphoneEnum.DISPONIBLE);
+    }
+    @Test
+    @DisplayName("Cloture Affectation: Une demande de clôture doit mettre à null le numéro de ligne du collaborateur")
+    void ShouldUpdate_NumeroLigne_Collaborateur_When_AskToClose_AnAffectation() {
+        //Given
+        persisteAffectation(monCollaborateurEntityPersiste, monIphoneEntityPersiste,
+                AFFECTATION_DATE, AFFECTATION_COMMENTAIRE, AFFECTATION_NUMERO);
+
+        Collaborateur collaborateur = collaborateurEntityMapper.mapToDomain(monCollaborateurEntityPersiste);
+        collaborateur.setNumeroLigne(null);
+
+        Iphone iphone = iphoneEntityMapper.mapToDomain(monIphoneEntityPersiste);
+
+        Affectation affectationACloturer = new Affectation(AFFECTATION_NUMERO, AFFECTATION_DATE, AFFECTATION_COMMENTAIRE, collaborateur, iphone);
+
+        //When
+        repositoryAffectation.miseAjourAffectation(affectationACloturer);
+
+        //Then
+        final CollaborateurEntity collaborateurEnTable = (CollaborateurEntity) entityManager.getEntityManager()
+                .createQuery("select o from CollaborateurEntity o where o.uid = :uid")
+                .setParameter("uid", COLLABORATEUR_UID)
+                .getSingleResult();
+
+        assertThat(collaborateurEnTable.getNumeroLigne()).isNull();
+    }
+
+    @Test
+    @DisplayName("Cloture Affectation: Une demande de clôture doit mettre à jour l'état de l'iphone à DISPONIBLE")
+    void ShouldUpdate_EtatIphone_Disponible_When_AskToClose_AnAffectation() {
+        //Given
+        persisteAffectation(monCollaborateurEntityPersiste, monIphoneEntityPersiste,
+                AFFECTATION_DATE, AFFECTATION_COMMENTAIRE, AFFECTATION_NUMERO);
+
+        Collaborateur collaborateur = collaborateurEntityMapper.mapToDomain(monCollaborateurEntityPersiste);
+
+        Iphone iphone = iphoneEntityMapper.mapToDomain(monIphoneEntityPersiste);
+        iphone.setEtatIphone(EtatIphoneEnum.DISPONIBLE);
+
+        Affectation affectationACloturer= new Affectation(AFFECTATION_NUMERO, AFFECTATION_DATE, AFFECTATION_COMMENTAIRE, collaborateur, iphone);
+
+        //When
+        repositoryAffectation.miseAjourAffectation(affectationACloturer);
+
+        //Then
+        final IphoneEntity iPhoneEnTable = (IphoneEntity) entityManager.getEntityManager()
+                .createQuery("select o from IphoneEntity o where o.numeroSerie = :numeroSerie")
+                .setParameter("numeroSerie", IPHONE_NUMEROSERIE)
+                .getSingleResult();
+
+        assertThat(iPhoneEnTable.getEtatIphone()).isEqualTo(EtatIphoneEnum.DISPONIBLE);
+    }
+    @Test
+    @DisplayName("Cloture Affectation: Une demande de clôture doit mettre à jour la date de fin")
+    void ShouldUpdate_DateFin_When_AskToClose_AnAffectation() {
+        //Given
+       persisteAffectation(monCollaborateurEntityPersiste, monIphoneEntityPersiste,
+                AFFECTATION_DATE, AFFECTATION_COMMENTAIRE, AFFECTATION_NUMERO);
+
+        Collaborateur collaborateur = collaborateurEntityMapper.mapToDomain(monCollaborateurEntityPersiste);
+
+        Iphone iphone = iphoneEntityMapper.mapToDomain(monIphoneEntityPersiste);
+
+        Affectation affectationACloturer= new Affectation(AFFECTATION_NUMERO, AFFECTATION_DATE, AFFECTATION_COMMENTAIRE, collaborateur, iphone);
+        affectationACloturer.setDateFin(LocalDate.now());
+        
+        //When
+        repositoryAffectation.miseAjourAffectation(affectationACloturer);
+
+        //Then
+        final AffectationEntity affectationEnTable = (AffectationEntity) entityManager.getEntityManager()
+                .createQuery("select o from AffectationEntity o where o.numeroAffectation = :numeroAffectation")
+                .setParameter("numeroAffectation", AFFECTATION_NUMERO)
+                .getSingleResult();
+
+        assertThat(affectationEnTable.getDateFin()).isEqualTo(LocalDate.now());
+    }
+    @Test
+    @DisplayName("Cloture Affectation: NotFoundException si l'affectation à cloturer n'est pas trouvée")
+    public void CloseAffectation_Should_Throw_Exception_If_Affectation_Do_Not_Exist(){
+        //giving BeforeEach
+        persisteAffectation(monCollaborateurEntityPersiste, monIphoneEntityPersiste,
+                AFFECTATION_DATE, AFFECTATION_COMMENTAIRE, AFFECTATION_NUMERO);
+
+        Collaborateur collaborateur = collaborateurEntityMapper.mapToDomain(monCollaborateurEntityPersiste);
+
+        Iphone iphone = iphoneEntityMapper.mapToDomain(monIphoneEntityPersiste);
+
+        Affectation affectationACloturer= new Affectation(AFFECTATION_NUMERO_NONTROUVE, AFFECTATION_DATE, AFFECTATION_COMMENTAIRE, collaborateur, iphone);
+
+        //when + then
+        assertThatThrownBy(
+                () -> {repositoryAffectation.miseAjourAffectation(affectationACloturer);}
+        ).isInstanceOf(NotFoundException.class);
+    }
+    @Test
+    @DisplayName("Recherche Affectation par le numero d'affectation doit trouver")
+    void Should_Return_Affectation_Giving_NumeroAffectation() {
+        //giving
+        persisteAffectation(monCollaborateurEntityPersiste, monIphoneEntityPersiste,
+                AFFECTATION_DATE, AFFECTATION_COMMENTAIRE, AFFECTATION_NUMERO);
+
+        Collaborateur collaborateur = collaborateurEntityMapper.mapToDomain(monCollaborateurEntityPersiste);
+
+        Iphone iphone = iphoneEntityMapper.mapToDomain(monIphoneEntityPersiste);
+
+        Affectation affectation = new Affectation(AFFECTATION_NUMERO, AFFECTATION_DATE, AFFECTATION_COMMENTAIRE, collaborateur, iphone);
+
+        //when
+
+        Affectation affectationResult = repositoryAffectation.chercheAffectationParNumeroAffectation(AFFECTATION_NUMERO);
+
+        //then
+        assertThat(affectationResult).isNotNull();
+        assertThat(affectationResult).extracting(
+                Affectation::getNumeroAffectation,
+                Affectation::getDateAffectation,
+                Affectation::getDateRenouvellementPrevue,
+                Affectation::getDateFin, Affectation::getMotifFin,
+                Affectation::getCommentaire)
+                .containsExactly(
+                        AFFECTATION_NUMERO,
+                        AFFECTATION_DATE,
+                        AFFECTATION_DATE.plusYears(2),
+                        null, null,
+                        AFFECTATION_COMMENTAIRE
+                );
+    }
+    @Test
+    @DisplayName("Recherche Affectation par le numero d'affectation renvoie un NotFoundException si le numero d'affectation n'existe pas")
+    void Should_Return_NotFoundException_When_NumeroAffectation_DontExist() {
+        //giving
+        persisteAffectation(monCollaborateurEntityPersiste, monIphoneEntityPersiste,
+                AFFECTATION_DATE, AFFECTATION_COMMENTAIRE, AFFECTATION_NUMERO);
+
+        Collaborateur collaborateur = collaborateurEntityMapper.mapToDomain(monCollaborateurEntityPersiste);
+
+        Iphone iphone = iphoneEntityMapper.mapToDomain(monIphoneEntityPersiste);
+
+        Affectation affectation = new Affectation(AFFECTATION_NUMERO_NONTROUVE, AFFECTATION_DATE, AFFECTATION_COMMENTAIRE, collaborateur, iphone);
+
+        //when
+
+        Affectation affectationNonTrouvee = repositoryAffectation.chercheAffectationParNumeroAffectation(AFFECTATION_NUMERO);
+
+        //then
+        assertThatThrownBy(
+                () -> {repositoryAffectation.chercheAffectationParNumeroAffectation(AFFECTATION_NUMERO_NONTROUVE);}
+        ).isInstanceOf(NotFoundException.class);
     }
 
     @Test
@@ -393,6 +545,6 @@ class RepositoryAffectationImplTest {
         affectationEntity.setDateRenouvellementPrevue(LocalDate.now().plusYears(2));
         affectationEntity.setCommentaire(commentaire);
         affectationEntity.setNumeroAffectation(numeroAffectation);
-        monAffectationEntityPersiste = entityManager.persist(affectationEntity);
+        monAffectationEntityPersiste = entityManager.persistAndFlush(affectationEntity);
     }
 }
