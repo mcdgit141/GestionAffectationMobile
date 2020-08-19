@@ -2,12 +2,14 @@ package com.epita.filrouge.expositions.iphone;
 
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
+import org.springframework.validation.annotation.Validated;
 
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
 
 @ApiModel(value = "Iphone", description = "Données Iphone")
+@Validated
 public class IphoneFullDTO {
 
     @ApiModelProperty(example = "1L", required = true, value = "Iphone Description champ IphoneId généré en automatique par la base de données")
