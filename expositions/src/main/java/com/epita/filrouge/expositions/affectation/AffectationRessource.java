@@ -27,8 +27,13 @@ public class AffectationRessource {
     @ResponseStatus(HttpStatus.CREATED)
     @Secured({"ROLE_ADMIN","ROLE_TYPE2"})
     public Affectation saveAffectation(@NotNull @RequestBody final AffectationDTO affectationDTO) {
-   //     throw new AllReadyExistException("foo");
-        if (affectationDTO.getCollaborateurNumeroLigne() == null) {
+
+        if (affectationDTO.getAffectationCommentaire() == "" && affectationDTO.getCollaborateurNumeroLigne() == "" ||
+                affectationDTO.getAffectationCommentaire() == null && affectationDTO.getCollaborateurNumeroLigne() == null) {
+            System.out.println("test couche exposition motif fin non renseigné");
+            throw new BadRequestException("Commentaire et numéro de ligne non renseignés, données à saisir impérativement");
+        }
+        if (affectationDTO.getCollaborateurNumeroLigne() == null || affectationDTO.getCollaborateurNumeroLigne() == "" ) {
             throw new BadRequestException("numéro de ligne non renseigné, donnée à saisir impérativement");
         }
         if (affectationDTO.getCollaborateurNumeroLigne().length() > 10 || affectationDTO.getCollaborateurNumeroLigne().length() < 10){
@@ -49,8 +54,8 @@ public class AffectationRessource {
         }
 
         return affectationManagement.creerAffectation(affectationDTO.getCollaborateurUid(),affectationDTO.getIphoneNumeroSerie(),
-                                   affectationDTO.getAffectationDate(),affectationDTO.getCollaborateurNumeroLigne(),
-                                   affectationDTO.getAffectationCommentaire());
+                affectationDTO.getAffectationDate(),affectationDTO.getCollaborateurNumeroLigne(),
+                affectationDTO.getAffectationCommentaire());
     }
 
     @PostMapping(value = "/affectation/liste", consumes = { "application/json" }, produces =  { "application/json" })
