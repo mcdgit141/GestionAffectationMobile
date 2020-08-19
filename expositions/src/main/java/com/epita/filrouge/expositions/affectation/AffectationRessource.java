@@ -28,12 +28,7 @@ public class AffectationRessource {
     @Secured({"ROLE_ADMIN","ROLE_TYPE2"})
     public Affectation saveAffectation(@NotNull @RequestBody final AffectationDTO affectationDTO) {
    //     throw new AllReadyExistException("foo");
-        if (affectationDTO.getAffectationCommentaire() == "" && affectationDTO.getCollaborateurNumeroLigne() == "" ||
-            affectationDTO.getAffectationCommentaire() == null && affectationDTO.getCollaborateurNumeroLigne() == null) {
-            System.out.println("test couche exposition motif fin non renseigné");
-            throw new BadRequestException("Commentaire et numéro de ligne non renseignés, données à saisir impérativement");
-        }
-        if (affectationDTO.getCollaborateurNumeroLigne() == null || affectationDTO.getCollaborateurNumeroLigne() == "" ) {
+        if (affectationDTO.getCollaborateurNumeroLigne() == null) {
             throw new BadRequestException("numéro de ligne non renseigné, donnée à saisir impérativement");
         }
         if (affectationDTO.getCollaborateurNumeroLigne().length() > 10 || affectationDTO.getCollaborateurNumeroLigne().length() < 10){
@@ -60,10 +55,11 @@ public class AffectationRessource {
 
     @PostMapping(value = "/affectation/liste", consumes = { "application/json" }, produces =  { "application/json" })
     @Secured({"ROLE_ADMIN","ROLE_TYPE1","ROLE_TYPE2"})
-    public List<Affectation> rechercheAffectation(@NotNull @RequestBody final FiltresAffectation filtresAffectation){
-        final List<Affectation> affectations = affectationManagement.listerAffectation(filtresAffectation);
-        return affectations;
+    public List<Affectation> afficheListeAffectations(@NotNull @RequestBody final FiltresAffectation filtresAffectation){
+
+        return affectationManagement.listerAffectation(filtresAffectation);
     }
+
     @PostMapping(value = "/affectation/cloture", consumes = { "application/json" }, produces =  { "application/json" })
     @ResponseStatus(HttpStatus.OK)
     @Secured("ROLE_TYPE2")
@@ -95,4 +91,14 @@ public class AffectationRessource {
                 ,affectationDTO.getMotifFin(),affectationDTO.getDateFin());
         return "La clôture de l'affectation s'est bien passée";
     }
+
+
+    @PostMapping(value = "/affectation/suppression", consumes = { "application/json" })
+    @ResponseStatus(HttpStatus.OK)
+    @Secured({"ROLE_ADMIN", "ROLE_TYPE2"})
+    public void supprimerAffectation(@NotNull @RequestBody final Long numeroAffectation){
+
+        affectationManagement.supprimerAffectation(numeroAffectation);
+    }
+
 }

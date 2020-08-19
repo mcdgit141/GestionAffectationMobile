@@ -11,6 +11,7 @@ import com.epita.filrouge.domain.utilisateur.UtilisateurRoleEnum;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -22,7 +23,9 @@ public class UtilisateurManagementImpl implements IUtilisateurManagement{
     @Autowired
     private IRepositoryUtilisateur repositoryUtilisateur;
 
-    BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
+//    BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
+    @Autowired
+    private PasswordEncoder passwordEncoder;
 
 
     @Override
@@ -63,12 +66,13 @@ public class UtilisateurManagementImpl implements IUtilisateurManagement{
 
     @Override
     public void modifierMdpUtilisateur(String uid, String mdp) throws NotFoundException  {
-        Utilisateur utilisateurAModifier = repositoryUtilisateur.rechercherUserParUid(uid);
-        utilisateurAModifier.setPassword(passwordEncoder.encode(mdp));
-
-//        repositoryUtilisateur.modifierUtilisateur(utilisateurAModifier);
-        repositoryUtilisateur.enregistrerUtilisateur(utilisateurAModifier);
-
+        if (mdp.equals("password")){
+            throw new BadRequestException("Merci de saisir un mdp différent du mdp par défaut");
+        } else{
+            Utilisateur utilisateurAModifier = repositoryUtilisateur.rechercherUserParUid(uid);
+            utilisateurAModifier.setPassword(passwordEncoder.encode(mdp));
+            repositoryUtilisateur.enregistrerUtilisateur(utilisateurAModifier);
+        }
     }
 
     @Override

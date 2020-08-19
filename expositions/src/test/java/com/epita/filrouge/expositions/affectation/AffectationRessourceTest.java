@@ -21,6 +21,7 @@ import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
@@ -164,10 +165,11 @@ class AffectationRessourceTest {
                 // Then
                 .andExpect(status().isForbidden());
     }
+
     @Test
     @DisplayName("cloturer affectation: Levée d'une BadRequest exception si le body de la requête est incomplet")
     @WithMockUser(roles = "TYPE2")
-    public void utilisateurDTO_Uncomplete_should_throw_an_Exception() throws Exception {
+    public void affectationDTO_Uncomplete_should_throw_an_Exception() throws Exception {
         //given
         AffectationDTO affectationDTO = new AffectationDTO();
         affectationDTO.setNumeroAffectation(AFFECTATION_NUMERO);
@@ -183,6 +185,7 @@ class AffectationRessourceTest {
         assertThat(resultat.contains("BAD REQUEST")).isTrue();
 
     }
+
     @Test
     @WithMockUser(roles = {"TYPE2"})  // controle de l'AUTHENTIFICATION (Spring security), l'anotation @Secured est non indispensable dans le controller
     @DisplayName("cloturer affectation: Doit appeler cloturerAffectation une seule fois")
@@ -296,6 +299,60 @@ class AffectationRessourceTest {
 
     }
 
+    @Test
+    @DisplayName("Interdiction suppression affectation pour role TYPE1")
+    @WithMockUser(roles = {"TYPE1"})
+    void role_type1_ne_peux_pas_supprimer_affectation() throws Exception {
+
+        // Given
+        Long numeroAffectation = 303L;
+        String monObjetMapper = objectMapper.writeValueAsString(numeroAffectation);
+
+        //When
+        mockMvc.perform(post("/gestaffectation/affectation/suppression")//
+                .content(monObjetMapper) //
+                .contentType(MediaType.APPLICATION_JSON))
+                // Then
+                .andExpect(status().isForbidden());
+    }
+
+    @Test
+    @DisplayName("suppression affectation: Levée d'une BadRequest exception si le body n'est pas un Long")
+    @WithMockUser(roles = "TYPE2")
+    void bodyWithWrongType_should_throw_an_Exception() throws Exception {
+        //given
+        String numeroAffection = "wrong";
+        String monObjetMapper = objectMapper.writeValueAsString(numeroAffection);
+
+        //when
+        mockMvc.perform(post("/gestaffectation/affectation/suppression")
+                .content(monObjetMapper)
+                .contentType(MediaType.APPLICATION_JSON))
+        //then
+                .andExpect(status().isBadRequest());
+
+    }
+
+    @Test
+    @WithMockUser(roles = {"TYPE2","ADMIN"})
+    @DisplayName("Suppression affectation : Doit transmettre la demande de suppression le numero d'affectation")
+    void ShouldCallWithTheNumeroAffectation_ToDelete() throws Exception {
+        //Given
+        Long numeroAffectation = 303L;
+        String monObjetMapper = objectMapper.writeValueAsString(numeroAffectation);
+
+        ArgumentCaptor<Long> numeroAffectationArgumentCaptor = ArgumentCaptor.forClass(Long.class);
+        //When
+        mockMvc.perform(post("/gestaffectation/affectation/suppression")
+                .content(monObjetMapper)
+                .contentType(MediaType.APPLICATION_JSON))
+        ;
+//                //Then
+        verify(affectationManagement).supprimerAffectation(numeroAffectationArgumentCaptor.capture());//fait la capture
+
+        assertThat(numeroAffectationArgumentCaptor.getValue()).isEqualTo(numeroAffectation);
+
+    }
 
     private Affectation instancierUneAffectation() {
         LocalDate dateRevouvelementAttentue = AFFECTATION_DATE.plusYears(2);
