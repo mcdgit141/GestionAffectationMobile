@@ -101,9 +101,9 @@ public class AffectationRessource {
     @PostMapping(value = "/affectation/suppression", consumes = { "application/json" })
     @ResponseStatus(HttpStatus.OK)
     @Secured({"ROLE_ADMIN", "ROLE_TYPE2"})
-    public void supprimerAffectation(@NotNull @RequestBody final Long numeroAffectation){
+    public void supprimerAffectation(@NotNull @RequestBody final SuppressionDTO affectationASupprimer){
 
-        affectationManagement.supprimerAffectation(numeroAffectation);
+        affectationManagement.supprimerAffectation(affectationASupprimer.numeroAffectation);
     }
 
 }
