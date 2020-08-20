@@ -1,16 +1,55 @@
 package com.epita.filrouge.expositions.affectation;
 
+import io.swagger.annotations.ApiModel;
+import io.swagger.annotations.ApiModelProperty;
+import org.springframework.validation.annotation.Validated;
+
+import javax.validation.constraints.*;
 import java.time.LocalDate;
 
+@ApiModel(value = "Affectation DTO", description = "Données d'Affectation ")
+@Validated
 public class AffectationDTO {
 
+    @ApiModelProperty(example = "256541868779997", required = true, value = "numero d'affectation généré aléatoirement")
     private Long numeroAffectation;
+
+    @ApiModelProperty(example = "405809", required = true, value = "Uid du Collaborateur")
+    @NotNull
+    @Pattern(regexp = "^([a-zA-Z0-9]{6})$")
+    @Size(max = 6)
     private String collaborateurUid;
+
+    @ApiModelProperty(example = "10504", required = true, value = "numéro de série de l'iphone")
+    @NotNull
+    @Pattern(regexp = "^([ A-Za-z0-9]{1,30})$")
+    @Size(max = 30)
     private String iphoneNumeroSerie;
+
+    @ApiModelProperty(example = "2020-08-18", required = true, value = "Date de l'affectation")
+    @Future
     private LocalDate affectationDate;
+
+    @ApiModelProperty(example = "0655896574", required = true, value = "nuémro de ligne du Collaborateur")
+    @NotNull
+    @Pattern(regexp = "(\\d{10})$")
+    @Size(max = 10)
     private String collaborateurNumeroLigne;
+
+    @ApiModelProperty(example = "Attribution d'un iphone pour les astreintes", required = true, value = "commentaire à préciser lors d'une affectation")
+    @NotNull
+    @Pattern(regexp = "^([a-zA-Z0-9]{1,200})$")
+    @Size(max = 200)
     private String affectationCommentaire;
+
+    @ApiModelProperty(example = "VOLE", required = true, value = "peut prendre 4 valeurs: VOLE, CASSE, PERDU et RESTITUE")
+    @NotNull
+    @Pattern(regexp = "^([A-Z]{1,8})$")
+    @Size(max = 8)
     private String motifFin;
+
+    @ApiModelProperty(example = "2020-08-18", required = true, value = "Date de fin de l'affectation lors de la clôture")
+    @Future
     private LocalDate dateFin;
 
     public AffectationDTO() {

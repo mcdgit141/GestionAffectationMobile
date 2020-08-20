@@ -14,6 +14,7 @@ public class AffectationEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @Column(unique = true)
     private Long numeroAffectation;
     private LocalDate dateAffectation;
     private LocalDate dateRenouvellementPrevue;

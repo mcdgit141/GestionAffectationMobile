@@ -14,6 +14,7 @@ public class IphoneEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long iphoneId;
 
+    @Column(unique = true)
     private String numeroSerie;
     private double prixIphone;
 

@@ -11,6 +11,7 @@ public class SiteExerciceEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long siteId;
 
+    @Column(unique = true)
     private String codeSite;
     private String nomSite;
     private String adressePostale1;

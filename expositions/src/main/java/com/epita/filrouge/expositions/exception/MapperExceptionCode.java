@@ -15,8 +15,14 @@ public class MapperExceptionCode {
                 case BusinessException.ALL_READY_EXIST:
                     httpStatus = HttpStatus.CONFLICT;
                     break;
+                case BusinessException.ALL_READY_CLOSED:
+                    httpStatus = HttpStatus.CONFLICT;
+                    break;
                 case BusinessException.NOT_FOUND:
                     httpStatus = HttpStatus.NOT_FOUND;
+                    break;
+                case BusinessException.BAD_REQUEST:
+                    httpStatus = HttpStatus.CONFLICT;
                     break;
                 default:
                     httpStatus = HttpStatus.INTERNAL_SERVER_ERROR;

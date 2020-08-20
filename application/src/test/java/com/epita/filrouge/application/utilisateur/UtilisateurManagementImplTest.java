@@ -23,6 +23,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 import java.time.LocalDate;
@@ -30,8 +31,7 @@ import java.time.LocalDate;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.assertj.core.api.InstanceOfAssertFactories.predicate;
-import static org.junit.jupiter.api.Assertions.assertAll;
-import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.inOrder;
 import static org.mockito.Mockito.when;
@@ -49,6 +49,9 @@ public class UtilisateurManagementImplTest {
 
     @MockBean
     private IRepositoryUtilisateur repositoryUtilisateur;
+
+    @MockBean
+    private PasswordEncoder passwordEncoder;
 
     @Test
     @DisplayName("Rejet création d'un utilisateur avec un uid déjà utilisé")
@@ -241,6 +244,7 @@ public class UtilisateurManagementImplTest {
 
         Utilisateur utilisateurTrouve = new Utilisateur(uid,nom,prenom,roleUser);
         Mockito.when(repositoryUtilisateur.rechercherUserParUid(uid)).thenReturn(utilisateurTrouve);
+
         ArgumentCaptor<Utilisateur> valueCapture = ArgumentCaptor.forClass(Utilisateur.class);
 
         //when
@@ -248,8 +252,22 @@ public class UtilisateurManagementImplTest {
         //then
         Mockito.verify(repositoryUtilisateur).enregistrerUtilisateur(valueCapture.capture());
         assertAll(
-                () -> assertThat(valueCapture.getValue().getPassword()).isNotEqualTo(mdp)
+                () -> assertThat(valueCapture.getValue().getPassword()).isEqualTo(passwordEncoder.encode(mdp))
         );
+
+    }
+
+    @Test
+    @DisplayName("modifierMdp: rejet nouveau mdp = password")
+    public void password_as_new_password_should_throw_BadRequestException(){
+        //giving
+        String uid = "a19390";
+        String mdp = "password";
+
+        //when + then
+        assertThatThrownBy(
+                () -> {utilisateurManagement.modifierMdpUtilisateur(uid,mdp);}
+        ).isInstanceOf(BadRequestException.class);
 
     }
 

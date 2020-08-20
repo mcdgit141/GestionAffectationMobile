@@ -123,60 +123,70 @@ public class RepositoryAffectationImpl implements IRepositoryAffectation {
     @Override
     public List<Affectation> rechercheAffectationAvecFiltres(FiltresAffectation filtresAffectation) {
 
+//        StringBuilder sortQueryDesc = new StringBuilder();
+//        sortQueryDesc.append("order by ");
         StringBuilder query = new StringBuilder();
         query.append("select a from AffectationEntity a where 1=1 ");
 
         String uid = filtresAffectation.getUid();
         if (uid != null && !uid.isEmpty()){
             query.append(String.format("AND a.collaborateur.uid = '%s' ", uid ));
-
+//            sortQueryDesc.append(String.format(uid ,"desc"));
+            System.out.println("couche infrastructure----query sur uid---" + query);
         }
 
         String nom = filtresAffectation.getNom();
         if (nom != null && !nom.isEmpty()){
             query.append(String.format("AND a.collaborateur.nom = '%s' ", nom ));
+            System.out.println("couche infrastructure----query sur nom---" + query);
         }
 
         String codeUo = filtresAffectation.getCodeUo();
         if (codeUo != null && !codeUo.isEmpty()){
             query.append(String.format("AND a.collaborateur.uo.codeUo = '%s' ",  codeUo));
-
+            System.out.println("couche infrastructure----query sur codeUo---" + query);
         }
 
         String nomUsageUo = filtresAffectation.getNomUsageUo();
         if (nomUsageUo != null && !nomUsageUo.isEmpty()){
             query.append(String.format("AND a.collaborateur.uo.nomUsageUo = '%s' ", nomUsageUo));
+            System.out.println("couche infrastructure----query sur nomUsage---" + query);
 
         }
 
         String nomSite = filtresAffectation.getNomSite();
         if (nomSite != null && !nomSite.isEmpty()){
             query.append(String.format("AND a.collaborateur.uo.siteExercice.nomSite = '%s' ", nomSite ));
-
+            System.out.println("couche infrastructure----query sur nomSite---" + query);
         }
 
         String numeroLigneCollaborateur = filtresAffectation.getNumeroLigneCollaborateur();
         if (numeroLigneCollaborateur != null && !numeroLigneCollaborateur.isEmpty()){
             query.append(String.format("AND a.collaborateur.numeroLigne = '%s' ", numeroLigneCollaborateur));
+            System.out.println("couche infrastructure----query sur numeroLigne---" + query);
 
         }
         String nomModeleIphone = filtresAffectation.getNomModeleIphone();
         if (nomModeleIphone != null && !nomModeleIphone.isEmpty()){
             query.append(String.format("AND a.iphone.modeleIphoneEntity.nomModele = '%s' ", nomModeleIphone));
+            System.out.println("couche infrastructure----query sur nomModele---" + query);
         }
 
         LocalDate dateRenouvMin = filtresAffectation.getDateRenouvMin();
         if (dateRenouvMin != null){
             query.append("AND a.dateRenouvellementPrevue > '" + dateRenouvMin + "' ");
+            System.out.println("couche infrastructure----query sur dateRenouvellement >=---" + query);
         }
 
         LocalDate dateRenouvMax = filtresAffectation.getDateRenouvMax();
         if (dateRenouvMax != null){
             query.append("AND a.dateRenouvellementPrevue < '" + dateRenouvMax + "' ");
+            System.out.println("couche infrastructure----query sur dateRenouvellement =<---" + query);
         }
 
 
         String maRequeteConstruite = query.toString();
+        System.out.println("couche infrastructure----query sur maRequeteConstruite  ----" + maRequeteConstruite );
         monLogger.debug(maRequeteConstruite);
 
         List<AffectationEntity> maListEntity = monEntityManager.createQuery(maRequeteConstruite).getResultList();
@@ -184,7 +194,7 @@ public class RepositoryAffectationImpl implements IRepositoryAffectation {
         for (AffectationEntity affectationEntity : maListEntity) {
             maList.add(affectationMapper.mapToDomain(affectationEntity));
         }
-
+        System.out.println("couche infrastructure ----- query de fin maList---" + maList);
         return maList;
     }
 

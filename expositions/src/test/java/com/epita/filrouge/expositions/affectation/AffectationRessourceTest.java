@@ -12,6 +12,7 @@ import com.epita.filrouge.domain.uo.Uo;
 import com.epita.filrouge.expositions.exception.MapperExceptionCode;
 import com.epita.filrouge.expositions.utilisateur.UtilisateurDTO;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -106,7 +107,7 @@ class AffectationRessourceTest {
         String monObjetMapper = objectMapper.writeValueAsString(affectationDTO);
 
         //When
-        mockMvc.perform(MockMvcRequestBuilders.post("/gestaffectation/affectation")//
+        mockMvc.perform(MockMvcRequestBuilders.post("/gestaffectation/affectation/creation")//
                 .content(monObjetMapper) //
                 .contentType(MediaType.APPLICATION_JSON))
          // Then
@@ -135,7 +136,7 @@ class AffectationRessourceTest {
         String monObjetMapper = objectMapper.writeValueAsString(affectationDTO);
 
         //When
-        mockMvc.perform(post("/gestaffectation/affectation")//
+        mockMvc.perform(post("/gestaffectation/affectation/creation")//
                 .content(monObjetMapper) //
                 .contentType(MediaType.APPLICATION_JSON))
                 // Then
