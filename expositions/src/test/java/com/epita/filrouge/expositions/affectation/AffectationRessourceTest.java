@@ -305,7 +305,9 @@ class AffectationRessourceTest {
 
         // Given
         Long numeroAffectation = 303L;
-        String monObjetMapper = objectMapper.writeValueAsString(numeroAffectation);
+        SuppressionDTO suppressionDTO = new SuppressionDTO();
+        suppressionDTO.setNumeroAffectation(numeroAffectation);
+        String monObjetMapper = objectMapper.writeValueAsString(suppressionDTO);
 
         //When
         mockMvc.perform(post("/gestaffectation/affectation/suppression")//
@@ -338,16 +340,19 @@ class AffectationRessourceTest {
     void ShouldCallWithTheNumeroAffectation_ToDelete() throws Exception {
         //Given
         Long numeroAffectation = 303L;
-        String monObjetMapper = objectMapper.writeValueAsString(numeroAffectation);
+        SuppressionDTO suppressionDTO = new SuppressionDTO();
+        suppressionDTO.setNumeroAffectation(numeroAffectation);
+        String monObjetMapper = objectMapper.writeValueAsString(suppressionDTO);
+        System.out.println("monObjetMapper = " + monObjetMapper);
 
         ArgumentCaptor<Long> numeroAffectationArgumentCaptor = ArgumentCaptor.forClass(Long.class);
         //When
         mockMvc.perform(post("/gestaffectation/affectation/suppression")
-                .content(monObjetMapper)
+                .content("{\"numeroAffectation\":303}")
                 .contentType(MediaType.APPLICATION_JSON))
         ;
 //                //Then
-        verify(affectationManagement).supprimerAffectation(numeroAffectationArgumentCaptor.capture());//fait la capture
+        verify(affectationManagement).supprimerAffectation(numeroAffectationArgumentCaptor.capture());
 
         assertThat(numeroAffectationArgumentCaptor.getValue()).isEqualTo(numeroAffectation);
 

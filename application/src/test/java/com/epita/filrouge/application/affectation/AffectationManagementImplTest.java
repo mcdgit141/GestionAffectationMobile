@@ -309,7 +309,7 @@ public class AffectationManagementImplTest {
     }
 
     @Test
-    @DisplayName("Supprimer Affectation: la méthode miseAJourAffectation est appelée une et une seule fois")
+    @DisplayName("Supprimer Affectation: la méthode supprimerAffectation est appelée une et une seule fois")
     void When_SuppressionAffectationIsCalled_ShouldCalled_MiseAJourAffectationMethod_OneTime() {
         //Given
 
@@ -319,7 +319,7 @@ public class AffectationManagementImplTest {
         affectationManagementImpl.supprimerAffectation(AFFECTATION_NUMERO);
 
         //Then
-        verify(repositoryAffectation, Mockito.times(1)).miseAjourAffectation(any(Affectation.class));
+        verify(repositoryAffectation, Mockito.times(1)).supprimerAffectation(any(Affectation.class));
     }
 
     @Test
@@ -364,7 +364,7 @@ public class AffectationManagementImplTest {
         //when
         affectationManagementImpl.supprimerAffectation(AFFECTATION_NUMERO);
         //then
-        Mockito.verify(repositoryAffectation).miseAjourAffectation(valueCapture.capture());
+        Mockito.verify(repositoryAffectation).supprimerAffectation(valueCapture.capture());
         assertAll(
                 () -> assertThat(valueCapture.getValue().getCollaborateur().getNumeroLigne()).isNull(),
                 () -> assertThat(valueCapture.getValue().getIphone().getEtatIphone()).isEqualTo(EtatIphoneEnum.DISPONIBLE)
