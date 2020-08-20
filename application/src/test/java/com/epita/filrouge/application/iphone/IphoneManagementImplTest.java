@@ -4,7 +4,9 @@ import com.epita.filrouge.application.iphone.IphoneManagementImpl;
 import com.epita.filrouge.domain.iphone.EtatIphoneEnum;
 import com.epita.filrouge.domain.iphone.IRepositoryIphone;
 import com.epita.filrouge.domain.iphone.Iphone;
+import com.epita.filrouge.domain.iphone.ModeleIphone;
 import com.epita.filrouge.domain.uo.IRepositoryUo;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -15,6 +17,7 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 
 @ExtendWith(SpringExtension.class)
 @SpringBootTest(classes = { IphoneManagementImpl.class } )
@@ -35,17 +38,18 @@ public class IphoneManagementImplTest {
     private IRepositoryIphone repositoryIphone;
 
     @Test
-    @DisplayName("Recherche par nom modèle")
-
+    @DisplayName("Iphone: Recherche par nom modèle")
     public void shouldCall_FindByNomModele(){
 
         // Given
-//        final ModeleIphone modeleIphone = new ModeleIphone(MODELE_ID, MODELE_NOMMODELE);
-//        final Iphone iphone = new Iphone(IPHONE_ID,IPHONE_NUMEROSERIE,IPHONE_PRIX,modeleIphone, IPHONE_ETAT);
+
+        final ModeleIphone modeleIphone = new ModeleIphone(MODELE_ID, MODELE_NOMMODELE);
+        final Iphone iphone = new Iphone(IPHONE_ID,IPHONE_NUMEROSERIE,IPHONE_PRIX,modeleIphone, IPHONE_ETAT);
+
+        when(repositoryIphone.rechercheIphoneParNomModele(MODELE_NOMMODELE)).thenReturn(iphone);
 
         // When du test
-
-        Iphone iphoneRetour = iphoneManagementImpl.rechercheIphoneParNomModele(MODELE_NOMMODELE);
+        iphoneManagementImpl.rechercheIphoneParNomModele(MODELE_NOMMODELE);
 
         // Then
         verify(repositoryIphone, Mockito.times(1)).rechercheIphoneParNomModele(MODELE_NOMMODELE);
