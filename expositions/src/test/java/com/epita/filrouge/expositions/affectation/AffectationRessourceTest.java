@@ -75,7 +75,7 @@ class AffectationRessourceTest {
     private static final LocalDate AFFECTATION_DATE = LocalDate.now();
     private static final String AFFECTATION_COMMENTAIRE = "Premiere affectation";
     private static final LocalDate AFFECTATION_DATEFIN = LocalDate.now();
-    private static final String AFFECTATION_MOTIFFIN = "Vole";
+    private static final String AFFECTATION_MOTIFFIN = "VOLE";
 
     @Autowired
     private MockMvc mockMvc;
