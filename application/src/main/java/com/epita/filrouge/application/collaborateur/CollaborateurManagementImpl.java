@@ -22,9 +22,14 @@ public class CollaborateurManagementImpl implements ICollaborateurManagement {
         }
     }
 
-
     @Override
     public Collaborateur findByNumeroLigne(String numeroLigne) throws NotFoundException{
-        return repositoryCollaborateur.findByNumeroLigne(numeroLigne);
+
+        Collaborateur collaborateur = repositoryCollaborateur.findByNumeroLigne(numeroLigne);
+        if (collaborateur != null) {
+            return collaborateur ;
+        } else {
+            throw new NotFoundException("Le collaborateur par recherche du numéro de ligne suivant est non trouvé = " + numeroLigne);
+        }
     }
 }

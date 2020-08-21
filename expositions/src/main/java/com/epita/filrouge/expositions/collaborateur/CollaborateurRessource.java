@@ -25,11 +25,8 @@ public class CollaborateurRessource {
     }
 
     @Secured({"ROLE_TYPE1","ROLE_ADMIN"})
-    @GetMapping(value = "/collaborateur/{uid}" , produces = {"application/json"})
+    @GetMapping(value = "/collaborateur/listeuid/{uid}" , produces = {"application/json"})
     public ResponseEntity<CollaborateurFullDTO> rechercheCollaborateurParUid (@PathVariable("uid") String uid) {
-
-        System.out.println("on est rentre");
-
 
         final Collaborateur collaborateur = collaborateurManagement.findByUid(uid);
 
@@ -39,13 +36,23 @@ public class CollaborateurRessource {
         collaborateurFullDTO.setUid(collaborateur.getUid());
         collaborateurFullDTO.setNumeroLigne(collaborateur.getNumeroLigne());
 
-       // CollaborateurFullDTO collaborateurFullDTO = new CollaborateurFullDTO(collaborateur.getUid(), collaborateur.getNom(), collaborateur.getPrenom(), collaborateur.getNumeroLigne());
+        return new ResponseEntity<CollaborateurFullDTO>(collaborateurFullDTO, HttpStatus.OK);
+
+    }
+    @Secured({"ROLE_TYPE1","ROLE_ADMIN"})
+    @GetMapping(value = "/collaborateur/listenumeroligne/{numeroLigne}" , produces = {"application/json"})
+    public ResponseEntity<CollaborateurFullDTO> rechercheCollaborateurParNumeroLigne (@PathVariable("numeroLigne") String numeroLigne) {
+
+        final Collaborateur collaborateur = collaborateurManagement.findByNumeroLigne(numeroLigne);
+
+        final CollaborateurFullDTO collaborateurFullDTO = new CollaborateurFullDTO();
+        collaborateurFullDTO.setNom(collaborateur.getNom());
+        collaborateurFullDTO.setPrenom(collaborateur.getPrenom());
+        collaborateurFullDTO.setUid(collaborateur.getUid());
+        collaborateurFullDTO.setNumeroLigne(collaborateur.getNumeroLigne());
 
         return new ResponseEntity<CollaborateurFullDTO>(collaborateurFullDTO, HttpStatus.OK);
 
     }
 
-    public void setCollaborateurManagement(ICollaborateurManagement collaborateurManagement) {
-        this.collaborateurManagement = collaborateurManagement;
-    }
 }

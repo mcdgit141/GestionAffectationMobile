@@ -15,7 +15,14 @@ public class IphoneManagementImpl implements IIphoneManagement{
     @Override
     public Iphone rechercheIphoneParNomModele(String nomModele) throws NotFoundException {
 
-        return repositoryIphone.rechercheIphoneParNomModele(nomModele);
+        Iphone iphone = repositoryIphone.rechercheIphoneParNomModele(nomModele);
+        if (iphone != null) {
+            return iphone ;
+        } else {
+            throw new NotFoundException("L'iphone par la recherche du nom modèle est non trouvé = " + nomModele);
+        }
+
+//        return repositoryIphone.rechercheIphoneParNomModele(nomModele);
     }
 
 }
