@@ -15,8 +15,8 @@ public class AffectationDTO {
     private Long numeroAffectation;
 
     @ApiModelProperty(example = "405809", required = true, value = "Uid du Collaborateur")
-    @NotNull
-    @Pattern(regexp = "^([a-zA-Z0-9]{6})$")
+    @NotNull(message = "L'UID du collaborateur ne peut etre vide")
+    @Pattern(regexp = "^([a-zA-Z0-9]{6})$" , message = "L'UID du collaborateur n'est pas valide")
     @Size(max = 6)
     private String collaborateurUid;
 
@@ -27,7 +27,7 @@ public class AffectationDTO {
     private String iphoneNumeroSerie;
 
     @ApiModelProperty(example = "2020-08-18", required = true, value = "Date de l'affectation")
-    @Future
+//    @Future
     private LocalDate affectationDate;
 
     @ApiModelProperty(example = "0655896574", required = true, value = "nuémro de ligne du Collaborateur")
@@ -38,18 +38,18 @@ public class AffectationDTO {
 
     @ApiModelProperty(example = "Attribution d'un iphone pour les astreintes", required = true, value = "commentaire à préciser lors d'une affectation")
     @NotNull
-    @Pattern(regexp = "^([a-zA-Z0-9]{1,200})$")
+    @Pattern(regexp = "^([ a-zA-Z0-9]{1,200})$")
     @Size(max = 200)
     private String affectationCommentaire;
 
     @ApiModelProperty(example = "VOLE", required = true, value = "peut prendre 4 valeurs: VOLE, CASSE, PERDU et RESTITUE")
-    @NotNull
-    @Pattern(regexp = "^([A-Z]{1,8})$")
-    @Size(max = 8)
+//    @NotNull(message = "motif doit etre renseigne")
+//    @Pattern(regexp = "^([A-Z]{1,8})$")
+//    @Size(max = 8)
     private String motifFin;
 
     @ApiModelProperty(example = "2020-08-18", required = true, value = "Date de fin de l'affectation lors de la clôture")
-    @Future
+//    @Future
     private LocalDate dateFin;
 
     public AffectationDTO() {
@@ -117,5 +117,19 @@ public class AffectationDTO {
 
     public void setMotifFin(String motifFin) {
         this.motifFin = motifFin;
+    }
+
+    @Override
+    public String toString() {
+        return "\n" + "AffectationDTO{" +
+                "\n" + "numeroAffectation=" + numeroAffectation +
+                "\n" + ", collaborateurUid='" + collaborateurUid + '\'' +
+                "\n" + ", iphoneNumeroSerie='" + iphoneNumeroSerie + '\'' +
+                "\n" + ", affectationDate=" + affectationDate +
+                "\n" + ", collaborateurNumeroLigne='" + collaborateurNumeroLigne + '\'' +
+                "\n" + ", affectationCommentaire='" + affectationCommentaire + '\'' +
+                "\n" + ", motifFin='" + motifFin + '\'' +
+                "\n" + ", dateFin=" + dateFin +
+                "\n" + '}';
     }
 }

@@ -87,6 +87,7 @@ class AffectationRessourceTest {
     private ObjectMapper objectMapper;
 
     @Test
+//    @Disabled
     @WithMockUser(roles = {"TYPE2","ADMIN"})  // controle de l'AUTHENTIFICATION (Spring security), l'anotation @Secured est non indispensable dans le controller
     @DisplayName("Doit appeler le saveAffectation de la couche application avec les bons paramètres")
     void role_type2_et_admin_doitAppelerSaveDeCoucheApplication() throws Exception {
@@ -121,6 +122,7 @@ class AffectationRessourceTest {
     }
 
     @Test
+//    @Disabled
     @WithMockUser(roles = {"TYPE1"})
     @DisplayName("Interdiction creation affectation pour role TYPE1")
     void role_type1_ne_peux_pas_creer_affectation() throws Exception {
@@ -357,6 +359,53 @@ class AffectationRessourceTest {
 
         assertThat(numeroAffectationArgumentCaptor.getValue()).isEqualTo(numeroAffectation);
 
+    }
+
+    @Test
+//    @Disabled
+    @WithMockUser(roles = {"TYPE2","ADMIN"})
+    @DisplayName("Créer une affectation - Badrequest si l'uid est null")
+    void WhenUidIsNullForACreation_ShouldReturnABadRequestExceptionWithMessage() throws Exception {
+        //Given
+
+        String monObjetMapper = "{\"collaborateurUid\" : null , \n" +
+                "\"iphoneNumeroSerie\" : \"010208\" , \n" +
+                "\"affectationDate\" : \"2020-08-21\" ,\n" +
+                "\"collaborateurNumeroLigne\" : \"0766776677\" ,\n" +
+                "\"affectationCommentaire\" : \"first time\"\n" +
+                "}";
+        //When
+        String resultat = mockMvc.perform(post("/gestaffectation/affectation/creation")
+                .content(monObjetMapper)
+                .contentType(MediaType.APPLICATION_JSON))
+        //then
+                .andExpect(status().isBadRequest())
+                .andReturn().getResponse().getContentAsString();
+        System.out.println("resultat = " + resultat);
+        assertThat(resultat).contains("L'UID du collaborateur ne peut etre vide");
+    }
+
+    @Test
+    @WithMockUser(roles = {"TYPE2","ADMIN"})
+    @DisplayName("Créer une affectation - Badrequest si l'uid n'est pas sur 6 caractères")
+    void WhenLengthOfUidIsNotSix_ShouldReturnABadRequestExceptionWithMessage() throws Exception {
+        //Given
+
+        String monObjetMapper = "{\"collaborateurUid\" : \"12345678\" , \n" +
+                "\"iphoneNumeroSerie\" : \"010208\" , \n" +
+                "\"affectationDate\" : \"2020-08-21\" ,\n" +
+                "\"collaborateurNumeroLigne\" : \"0766776677\" ,\n" +
+                "\"affectationCommentaire\" : \"first time\"\n" +
+                "}";
+        //When
+        String resultat = mockMvc.perform(post("/gestaffectation/affectation/creation")
+                .content(monObjetMapper)
+                .contentType(MediaType.APPLICATION_JSON))
+        //then
+                .andExpect(status().isBadRequest())
+                .andReturn().getResponse().getContentAsString()
+                ;
+        assertThat(resultat).contains("L'UID du collaborateur n'est pas valide");
     }
 
     private Affectation instancierUneAffectation() {

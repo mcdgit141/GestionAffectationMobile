@@ -5,21 +5,30 @@ import com.epita.filrouge.domain.affectation.Affectation;
 import com.epita.filrouge.domain.affectation.FiltresAffectation;
 import com.epita.filrouge.domain.exception.BadRequestException;
 import com.epita.filrouge.domain.exception.BusinessException;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.access.annotation.Secured;
+import org.springframework.validation.FieldError;
+import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
 import java.nio.Buffer;
 import java.time.LocalDate;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+
 
 @RestController
 @RequestMapping("/gestaffectation")
 
 public class AffectationRessource {
+
+    Logger monLogger = LoggerFactory.getLogger(AffectationRessource.class);
 
     @Autowired
     private IAffectationManagement affectationManagement;
@@ -27,7 +36,7 @@ public class AffectationRessource {
     @PostMapping(value = "/affectation/creation", consumes = { "application/json" }, produces =  { "application/json" })
     @ResponseStatus(HttpStatus.CREATED)
     @Secured({"ROLE_ADMIN","ROLE_TYPE2"})
-    public Affectation saveAffectation(@NotNull @RequestBody final AffectationDTO affectationDTO) {
+    public Affectation saveAffectation(@NotNull @Valid @RequestBody final AffectationDTO affectationDTO) {
 
         if (affectationDTO.getAffectationCommentaire() == "" && affectationDTO.getCollaborateurNumeroLigne() == "" ||
                 affectationDTO.getAffectationCommentaire() == null && affectationDTO.getCollaborateurNumeroLigne() == null) {
@@ -102,7 +111,7 @@ public class AffectationRessource {
     @PostMapping(value = "/affectation/suppression", consumes = { "application/json" })
     @ResponseStatus(HttpStatus.OK)
     @Secured({"ROLE_ADMIN", "ROLE_TYPE2"})
-    public void supprimerAffectation(@NotNull @RequestBody final SuppressionDTO affectationASupprimer){
+    public void supprimerAffectation(@NotNull @Valid  @RequestBody final SuppressionDTO affectationASupprimer){
 
         affectationManagement.supprimerAffectation(affectationASupprimer.numeroAffectation);
     }
