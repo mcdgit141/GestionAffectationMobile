@@ -421,6 +421,8 @@ class RepositoryAffectationImplTest {
 
         FiltresAffectation filtresAffectation = new FiltresAffectation();
         filtresAffectation.setNomSite("Pompei");
+        filtresAffectation.setCritereDeTri("UID");
+        filtresAffectation.setSensduTri("D");
 
         List<Affectation> result = repositoryAffectation.rechercheAffectationAvecFiltres(filtresAffectation);
 

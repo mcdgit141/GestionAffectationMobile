@@ -16,6 +16,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
 import javax.persistence.EntityManager;
+import java.lang.invoke.SwitchPoint;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
@@ -122,6 +123,19 @@ public class RepositoryAffectationImpl implements IRepositoryAffectation {
 
     @Override
     public List<Affectation> rechercheAffectationAvecFiltres(FiltresAffectation filtresAffectation) {
+        int numeroPageDemande;
+        int taillePage;
+
+        if (filtresAffectation.getNumeroDePage() != 0) {
+            numeroPageDemande = filtresAffectation.getNumeroDePage();
+        } else {
+            numeroPageDemande = 1;
+        }
+        if (filtresAffectation.getTaillePage() != 0) {
+            taillePage = filtresAffectation.getTaillePage();
+        } else {
+            taillePage = 10;
+        }
 
 //        StringBuilder sortQueryDesc = new StringBuilder();
 //        sortQueryDesc.append("order by ");
@@ -184,12 +198,40 @@ public class RepositoryAffectationImpl implements IRepositoryAffectation {
             System.out.println("couche infrastructure----query sur dateRenouvellement =<---" + query);
         }
 
+        String critereDeTri;
+        if (filtresAffectation.getCritereDeTri() != null) {
+            switch (filtresAffectation.getCritereDeTri()) {
+                case "UID":
+                    critereDeTri = "a.collaborateur.uid";
+                    break;
+                case "DATE_AFFECTATION":
+                    critereDeTri = "a.dateAffectation";
+                    break;
+                default:
+                    critereDeTri = null;
+                    break;
+            }
+
+            String sensDuTri;
+            if (filtresAffectation.getSensduTri().equals("D")) {
+                sensDuTri = "DESC";
+            } else {
+                sensDuTri = "ASC";
+            }
+            if (critereDeTri != null && !critereDeTri.isEmpty()) {
+                query.append("ORDER BY " + critereDeTri + " " + sensDuTri);
+            }
+        }
+
 
         String maRequeteConstruite = query.toString();
         System.out.println("couche infrastructure----query sur maRequeteConstruite  ----" + maRequeteConstruite );
         monLogger.debug(maRequeteConstruite);
 
-        List<AffectationEntity> maListEntity = monEntityManager.createQuery(maRequeteConstruite).getResultList();
+        List<AffectationEntity> maListEntity = monEntityManager.createQuery(maRequeteConstruite)
+                .setMaxResults(taillePage)
+                .setFirstResult((numeroPageDemande-1)*taillePage)
+                .getResultList();
         List<Affectation> maList = new ArrayList<>();
         for (AffectationEntity affectationEntity : maListEntity) {
             maList.add(affectationMapper.mapToDomain(affectationEntity));

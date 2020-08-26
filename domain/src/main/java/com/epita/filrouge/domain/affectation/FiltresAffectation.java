@@ -13,6 +13,42 @@ public class FiltresAffectation {
     String nomModeleIphone;
     LocalDate dateRenouvMin;
     LocalDate dateRenouvMax;
+    int taillePage;
+    int numeroDePage;
+    String critereDeTri;
+    String sensduTri;
+
+    public String getCritereDeTri() {
+        return critereDeTri;
+    }
+
+    public void setCritereDeTri(String critereDeTri) {
+        this.critereDeTri = critereDeTri;
+    }
+
+    public String getSensduTri() {
+        return sensduTri;
+    }
+
+    public void setSensduTri(String sensduTri) {
+        this.sensduTri = sensduTri;
+    }
+
+    public int getTaillePage() {
+        return taillePage;
+    }
+
+    public void setTaillePage(int taillePage) {
+        this.taillePage = taillePage;
+    }
+
+    public int getNumeroDePage() {
+        return numeroDePage;
+    }
+
+    public void setNumeroDePage(int numeroDePage) {
+        this.numeroDePage = numeroDePage;
+    }
 
     public String getUid() {
         return uid;
