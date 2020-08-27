@@ -136,6 +136,7 @@ public class RepositoryAffectationImpl implements IRepositoryAffectation {
         } else {
             taillePage = 10;
         }
+        int positionDeDepart = (numeroPageDemande-1)*taillePage;
 
 //        StringBuilder sortQueryDesc = new StringBuilder();
 //        sortQueryDesc.append("order by ");
@@ -198,9 +199,11 @@ public class RepositoryAffectationImpl implements IRepositoryAffectation {
             System.out.println("couche infrastructure----query sur dateRenouvellement =<---" + query);
         }
 
-        String critereDeTri;
+
         if (filtresAffectation.getCritereDeTri() != null) {
+            String critereDeTri;
             switch (filtresAffectation.getCritereDeTri()) {
+                //A completer avec les différents critère de tri envisagés
                 case "UID":
                     critereDeTri = "a.collaborateur.uid";
                     break;
@@ -213,7 +216,7 @@ public class RepositoryAffectationImpl implements IRepositoryAffectation {
             }
 
             String sensDuTri;
-            if (filtresAffectation.getSensduTri().equals("D")) {
+            if (filtresAffectation.getSensduTri() == "D") {
                 sensDuTri = "DESC";
             } else {
                 sensDuTri = "ASC";
@@ -230,7 +233,7 @@ public class RepositoryAffectationImpl implements IRepositoryAffectation {
 
         List<AffectationEntity> maListEntity = monEntityManager.createQuery(maRequeteConstruite)
                 .setMaxResults(taillePage)
-                .setFirstResult((numeroPageDemande-1)*taillePage)
+                .setFirstResult(positionDeDepart)
                 .getResultList();
         List<Affectation> maList = new ArrayList<>();
         for (AffectationEntity affectationEntity : maListEntity) {
