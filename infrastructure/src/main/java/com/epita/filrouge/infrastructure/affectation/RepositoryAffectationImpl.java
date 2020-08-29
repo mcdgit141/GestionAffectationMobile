@@ -216,7 +216,7 @@ public class RepositoryAffectationImpl implements IRepositoryAffectation {
             }
 
             String sensDuTri;
-            if (filtresAffectation.getSensduTri() == "D") {
+            if (filtresAffectation.getSensduTri() != null && filtresAffectation.getSensduTri().equals("D")) {
                 sensDuTri = "DESC";
             } else {
                 sensDuTri = "ASC";
