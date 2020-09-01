@@ -80,6 +80,27 @@ INSERT INTO iphone_entity(
 
    VALUES ('PERDU', '010209', 1600.00, 6);
 
+INSERT INTO iphone_entity(iphone_id, etat_iphone, numero_serie, prix_iphone, modele_id)
+   VALUES (800, 'AFFECTE', '11111111', 1200.00, 1);
+INSERT INTO iphone_entity(iphone_id, etat_iphone, numero_serie, prix_iphone, modele_id)
+   VALUES (801, 'AFFECTE', '22222222', 1200.00, 1);
+INSERT INTO iphone_entity(iphone_id, etat_iphone, numero_serie, prix_iphone, modele_id)
+   VALUES (802, 'AFFECTE', '33333333', 1200.00, 1);
+INSERT INTO iphone_entity(iphone_id, etat_iphone, numero_serie, prix_iphone, modele_id)
+   VALUES (803, 'AFFECTE', '44444444', 1200.00, 1);
+INSERT INTO iphone_entity(iphone_id, etat_iphone, numero_serie, prix_iphone, modele_id)
+   VALUES (804, 'AFFECTE', '55555555', 1200.00, 1);
+INSERT INTO iphone_entity(iphone_id, etat_iphone, numero_serie, prix_iphone, modele_id)
+   VALUES (805, 'AFFECTE', '66666666', 1200.00, 1);
+INSERT INTO iphone_entity(iphone_id, etat_iphone, numero_serie, prix_iphone, modele_id)
+   VALUES (806, 'AFFECTE', '77777777', 1200.00, 1);
+INSERT INTO iphone_entity(iphone_id, etat_iphone, numero_serie, prix_iphone, modele_id)
+   VALUES (807, 'AFFECTE', '88888888', 1200.00, 1);
+INSERT INTO iphone_entity(iphone_id, etat_iphone, numero_serie, prix_iphone, modele_id)
+   VALUES (808, 'AFFECTE', '99999999', 1200.00, 1);
+INSERT INTO iphone_entity(iphone_id, etat_iphone, numero_serie, prix_iphone, modele_id)
+   VALUES (809, 'AFFECTE', '00000000', 1200.00, 1);
+
 -- Table siteExercice
 
 INSERT INTO site_exercice_entity(
@@ -158,6 +179,59 @@ INSERT INTO collaborateur_entity(
    INSERT INTO collaborateur_entity(
       nom, numero_ligne, prenom, uid, uo_id)
       VALUES ('LAGAFF', '0505050505', 'Gaston', '300400', 1);
+
+INSERT INTO collaborateur_entity(collaborateur_id, nom, numero_ligne, prenom, uid, uo_id)
+   VALUES (900, 'nom1', '1234567890', 'prenom1', '111111', 1);
+INSERT INTO collaborateur_entity(collaborateur_id, nom, numero_ligne, prenom, uid, uo_id)
+   VALUES (901, 'nom2', '2345678901', 'prenom2', '222222', 1);
+INSERT INTO collaborateur_entity(collaborateur_id, nom, numero_ligne, prenom, uid, uo_id)
+   VALUES (902, 'nom3', '3456789012', 'prenom3', '333333', 1);
+INSERT INTO collaborateur_entity(collaborateur_id, nom, numero_ligne, prenom, uid, uo_id)
+   VALUES (903, 'nom4', '4567890123', 'prenom4', '444444', 1);
+INSERT INTO collaborateur_entity(collaborateur_id, nom, numero_ligne, prenom, uid, uo_id)
+   VALUES (904, 'nom5', '5678901234', 'prenom5', '555555', 1);
+INSERT INTO collaborateur_entity(collaborateur_id, nom, numero_ligne, prenom, uid, uo_id)
+   VALUES (905, 'nom6', '6789012345', 'prenom6', '666666', 1);
+INSERT INTO collaborateur_entity(collaborateur_id, nom, numero_ligne, prenom, uid, uo_id)
+   VALUES (906, 'nom7', '7890123456', 'prenom7', '777777', 1);
+INSERT INTO collaborateur_entity(collaborateur_id, nom, numero_ligne, prenom, uid, uo_id)
+   VALUES (907, 'nom8', '8901234567', 'prenom8', '888888', 1);
+INSERT INTO collaborateur_entity(collaborateur_id, nom, numero_ligne, prenom, uid, uo_id)
+   VALUES (908, 'nom9', '9012345678', 'prenom9', '999999', 1);
+INSERT INTO collaborateur_entity(collaborateur_id, nom, numero_ligne, prenom, uid, uo_id)
+   VALUES (909, 'nom0', '0123456789', 'prenom0', '000000', 1);
+
+-- Table Affectation
+INSERT INTO affectation_entity(
+	commentaire, date_affectation, date_renouvellement_prevue, numero_affectation, collaborateur_id, iphone_id)
+	VALUES ( 'commentaire1', '2020-08-01', '2022-08-01', 1, 900, 800);
+INSERT INTO affectation_entity(
+	commentaire, date_affectation, date_renouvellement_prevue, numero_affectation, collaborateur_id, iphone_id)
+	VALUES ( 'commentaire2', '2020-08-02', '2022-08-02', 2, 901, 801);
+INSERT INTO affectation_entity(
+	commentaire, date_affectation, date_renouvellement_prevue, numero_affectation, collaborateur_id, iphone_id)
+	VALUES ( 'commentaire3', '2020-08-03', '2022-08-03', 3, 902, 802);
+INSERT INTO affectation_entity(
+	commentaire, date_affectation, date_renouvellement_prevue, numero_affectation, collaborateur_id, iphone_id)
+	VALUES ( 'commentaire4', '2020-08-04', '2022-08-04', 4, 903, 803);
+INSERT INTO affectation_entity(
+	commentaire, date_affectation, date_renouvellement_prevue, numero_affectation, collaborateur_id, iphone_id)
+	VALUES ( 'commentaire5', '2020-08-05', '2022-08-05', 5, 904, 804);
+INSERT INTO affectation_entity(
+	commentaire, date_affectation, date_renouvellement_prevue, numero_affectation, collaborateur_id, iphone_id)
+	VALUES ( 'commentaire6', '2020-08-06', '2022-08-06', 6, 905, 805);
+INSERT INTO affectation_entity(
+	commentaire, date_affectation, date_renouvellement_prevue, numero_affectation, collaborateur_id, iphone_id)
+	VALUES ( 'commentaire7', '2020-08-07', '2022-08-07', 7, 906, 806);
+INSERT INTO affectation_entity(
+	commentaire, date_affectation, date_renouvellement_prevue, numero_affectation, collaborateur_id, iphone_id)
+	VALUES ( 'commentaire8', '2020-08-08', '2022-08-08', 8, 907, 807);
+INSERT INTO affectation_entity(
+	commentaire, date_affectation, date_renouvellement_prevue, numero_affectation, collaborateur_id, iphone_id)
+	VALUES ( 'commentaire9', '2020-08-09', '2022-08-09', 9, 908, 808);
+INSERT INTO affectation_entity(
+	commentaire, date_affectation, date_renouvellement_prevue, numero_affectation, collaborateur_id, iphone_id)
+	VALUES ( 'commentaire0', '2020-08-10', '2022-08-10', 10, 909, 809);
 
 --Table Utilisateur
 

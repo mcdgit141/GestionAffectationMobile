@@ -31,6 +31,7 @@ import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
+import static org.junit.jupiter.api.Assertions.assertAll;
 
 @ExtendWith(SpringExtension.class)
 @DataJpaTest
@@ -108,19 +109,16 @@ class RepositoryAffectationImplTest {
         uoEntity.setSiteExercice(monSiteExercicePersiste);
         monUoEntityPersiste = entityManager.persistAndFlush(uoEntity);
 
-        CollaborateurEntity collaborateurEntity = new CollaborateurEntity();
-        collaborateurEntity.setUid(COLLABORATEUR_UID);
-        collaborateurEntity.setNom(COLLABORATEUR_NOM);
-        collaborateurEntity.setPrenom(COLLABORATEUR_PRENOM);
-        collaborateurEntity.setNumeroLigne(COLLABORATEUR_NUMEROLIGNE);
-        collaborateurEntity.setUo(monUoEntityPersiste);
-        monCollaborateurEntityPersiste = entityManager.persistAndFlush(collaborateurEntity);
+        monCollaborateurEntityPersiste = persisteCollaborateur(COLLABORATEUR_UID,COLLABORATEUR_NOM,COLLABORATEUR_PRENOM,
+                COLLABORATEUR_NUMEROLIGNE, monUoEntityPersiste);
+//        monCollaborateurEntityPersiste = entityManager.persistAndFlush(collaborateurEntity);
 
         ModeleIphoneEntity modeleIphoneEntity = new ModeleIphoneEntity();
         modeleIphoneEntity.setNomModele(MODELE_NOMMODELE);
         monModeleIphoneEntityPersiste = entityManager.persistAndFlush(modeleIphoneEntity);
 
         monIphoneEntityPersiste = persisteIphone(IPHONE_NUMEROSERIE, IPHONE_PRIX, modeleIphoneEntity, IPHONE_ETAT);
+
 
     }
 
@@ -421,6 +419,8 @@ class RepositoryAffectationImplTest {
 
         FiltresAffectation filtresAffectation = new FiltresAffectation();
         filtresAffectation.setNomSite("Pompei");
+        filtresAffectation.setCritereDeTri("UID");
+        filtresAffectation.setSensduTri("D");
 
         List<Affectation> result = repositoryAffectation.rechercheAffectationAvecFiltres(filtresAffectation);
 
@@ -526,6 +526,127 @@ class RepositoryAffectationImplTest {
         assertThat(listeAffectationsRetournees.size()).isEqualTo(2);
     }
 
+    @Test
+    @DisplayName("rechercheAffectationAvecFiltres :  taille par défaut de la page fixé à 10")
+    public void rechercheAffectationAvecFiltres_should_return_10_rows_when_no_pageSize_given(){
+        //given
+        enrichirDbDeTest();
+        FiltresAffectation monFiltre = new FiltresAffectation();
+
+        //when
+        List<Affectation> result = repositoryAffectation.rechercheAffectationAvecFiltres(monFiltre);
+
+        //then
+        assertThat(result.size()).isEqualTo(10);
+    }
+
+    @Test
+    @DisplayName("rechercheAffectationAvecFiltre : restitution d'un nombre de ligne correspondant à la taille de la page")
+    public void rechercheAffectationAvecFiltre_should_return_rows_corresponding_to_the_pageSize(){
+        //given
+        enrichirDbDeTest();
+        FiltresAffectation monFiltre = new FiltresAffectation();
+        monFiltre.setTaillePage(5);
+
+        //when
+        List<Affectation> result = repositoryAffectation.rechercheAffectationAvecFiltres(monFiltre);
+
+        //then
+        assertThat(result.size()).isEqualTo(5);
+    }
+
+    @Test
+    @DisplayName("rechercheAffectationAvecFiltres : respects des critères de tri fournis")
+    public void rechercheAffectationAvecFiltres_should_sort_results_accorging_to_given_criterias(){
+        //given
+        enrichirDbDeTest();
+        FiltresAffectation monFiltre = new FiltresAffectation();
+        monFiltre.setTaillePage(5);
+        monFiltre.setCritereDeTri("UID");
+        monFiltre.setSensduTri("D");
+
+        //when
+        List<Affectation> result = repositoryAffectation.rechercheAffectationAvecFiltres(monFiltre);
+
+        //then
+        assertAll(
+                () -> assertThat(result.size()).isEqualTo(5),
+                () -> assertThat(result.get(0).getCollaborateur().getUid()).isEqualTo("AAAAAA"),
+                () -> assertThat(result.get(1).getCollaborateur().getUid()).isEqualTo("999999"),
+                () -> assertThat(result.get(2).getCollaborateur().getUid()).isEqualTo("888888"),
+                () -> assertThat(result.get(3).getCollaborateur().getUid()).isEqualTo("777777"),
+                () -> assertThat(result.get(4).getCollaborateur().getUid()).isEqualTo("666666")
+        );
+    }
+
+    @Test
+    @DisplayName("rechercheAffectationAvecFiltre : tri ascendant par defaut")
+    public void rechercheAffectationAvecFiltres_should_sort_ascending_by_default(){
+        //given
+        enrichirDbDeTest();
+        FiltresAffectation monFiltre = new FiltresAffectation();
+        monFiltre.setTaillePage(5);
+        monFiltre.setCritereDeTri("UID");
+
+        //when
+        List<Affectation> result = repositoryAffectation.rechercheAffectationAvecFiltres(monFiltre);
+
+        //then
+        assertAll(
+                () -> assertThat(result.size()).isEqualTo(5),
+                () -> assertThat(result.get(0).getCollaborateur().getUid()).isEqualTo("000000"),
+                () -> assertThat(result.get(1).getCollaborateur().getUid()).isEqualTo("111111"),
+                () -> assertThat(result.get(2).getCollaborateur().getUid()).isEqualTo("222222"),
+                () -> assertThat(result.get(3).getCollaborateur().getUid()).isEqualTo("333333"),
+                () -> assertThat(result.get(4).getCollaborateur().getUid()).isEqualTo("444444")
+        );
+    }
+
+    @Test
+    @DisplayName("rechercheAffectationAvecFiltres : restitution de la première page, si aucune page spécifique demandé")
+    public void rechercheAffectationAvecFiltres_should_return_first_page_if_none_asked(){
+        //given
+        enrichirDbDeTest();
+        FiltresAffectation monFiltre = new FiltresAffectation();
+        monFiltre.setTaillePage(5);
+        monFiltre.setCritereDeTri("UID");
+
+        //when
+        List<Affectation> result = repositoryAffectation.rechercheAffectationAvecFiltres(monFiltre);
+
+        //then
+        assertAll(
+                () -> assertThat(result.size()).isEqualTo(5),
+                () -> assertThat(result.get(0).getCollaborateur().getUid()).isEqualTo("000000"),
+                () ->assertThat(entityManager.getEntityManager().createQuery("select a from AffectationEntity a where a.collaborateur.uid < '000000'")
+                .getResultList().size()
+                                ).isEqualTo(0)
+        );
+    }
+
+    @Test
+    @DisplayName("rechercheAffectationAvecFiltre : restitution de la page demandée")
+    public void rechercheAffectationAvecFiltre_should_return_the_page_asked(){
+        //given
+        enrichirDbDeTest();
+        FiltresAffectation monFiltre = new FiltresAffectation();
+        monFiltre.setTaillePage(5);
+        monFiltre.setCritereDeTri("UID");
+        monFiltre.setNumeroDePage(2);
+
+        //when
+        List<Affectation> result = repositoryAffectation.rechercheAffectationAvecFiltres(monFiltre);
+
+        //then
+        assertAll(
+                () -> assertThat(result.size()).isEqualTo(5),
+                () -> assertThat(result.get(0).getCollaborateur().getUid()).isEqualTo("555555"),
+                () ->assertThat(entityManager.getEntityManager().createQuery("select a from AffectationEntity a where a.collaborateur.uid < '555555'")
+                        .getResultList().size()
+                ).isEqualTo(5)
+        );
+    }
+
     private IphoneEntity persisteIphone(String numeroSerie, Double iphonePrix,
                                         ModeleIphoneEntity modeleIphoneEntity, EtatIphoneEnum iphoneEtat) {
         IphoneEntity iPhoneEntity = new IphoneEntity();
@@ -546,5 +667,53 @@ class RepositoryAffectationImplTest {
         affectationEntity.setCommentaire(commentaire);
         affectationEntity.setNumeroAffectation(numeroAffectation);
         monAffectationEntityPersiste = entityManager.persistAndFlush(affectationEntity);
+    }
+
+    private CollaborateurEntity persisteCollaborateur(String uid, String nom, String prenom, String numeroLine,UoEntity uoEntity){
+        CollaborateurEntity monCollaborateurEntity = new CollaborateurEntity();
+        monCollaborateurEntity.setUid(uid);
+        monCollaborateurEntity.setNom(nom);
+        monCollaborateurEntity.setPrenom(prenom);
+        monCollaborateurEntity.setNumeroLigne(numeroLine);
+        monCollaborateurEntity.setUo(uoEntity);
+
+        return entityManager.persistAndFlush(monCollaborateurEntity);
+    }
+
+    private void enrichirDbDeTest(){
+        CollaborateurEntity C1 = persisteCollaborateur("111111","nom1", "prenom1","1111111111",monUoEntityPersiste);
+        CollaborateurEntity C2 = persisteCollaborateur("222222","nom2", "prenom2","2222222222",monUoEntityPersiste);
+        CollaborateurEntity C3 = persisteCollaborateur("333333","nom3", "prenom3","3333333333",monUoEntityPersiste);
+        CollaborateurEntity C4 = persisteCollaborateur("444444","nom4", "prenom4","4444444444",monUoEntityPersiste);
+        CollaborateurEntity C5 = persisteCollaborateur("555555","nom5", "prenom5","5555555555",monUoEntityPersiste);
+        CollaborateurEntity C6 = persisteCollaborateur("666666","nom6", "prenom6","6666666666",monUoEntityPersiste);
+        CollaborateurEntity C7 = persisteCollaborateur("777777","nom7", "prenom7","7777777777",monUoEntityPersiste);
+        CollaborateurEntity C8 = persisteCollaborateur("888888","nom8", "prenom8","8888888888",monUoEntityPersiste);
+        CollaborateurEntity C9 = persisteCollaborateur("999999","nom9", "prenom9","9999999999",monUoEntityPersiste);
+        CollaborateurEntity C10 = persisteCollaborateur("000000","nom10", "prenom10","0000000000",monUoEntityPersiste);
+        CollaborateurEntity C11 = persisteCollaborateur("AAAAAA","nomA", "prenomA","AAAAAAAAAA",monUoEntityPersiste);
+        IphoneEntity I1 = persisteIphone("1212121212",1001.00,monModeleIphoneEntityPersiste,EtatIphoneEnum.DISPONIBLE);
+        IphoneEntity I2 = persisteIphone("2323232323",1001.00,monModeleIphoneEntityPersiste,EtatIphoneEnum.DISPONIBLE);
+        IphoneEntity I3 = persisteIphone("3434343434",1001.00,monModeleIphoneEntityPersiste,EtatIphoneEnum.DISPONIBLE);
+        IphoneEntity I4 = persisteIphone("4545454545",1001.00,monModeleIphoneEntityPersiste,EtatIphoneEnum.DISPONIBLE);
+        IphoneEntity I5 = persisteIphone("5656565656",1001.00,monModeleIphoneEntityPersiste,EtatIphoneEnum.DISPONIBLE);
+        IphoneEntity I6 = persisteIphone("6767676767",1001.00,monModeleIphoneEntityPersiste,EtatIphoneEnum.DISPONIBLE);
+        IphoneEntity I7 = persisteIphone("7878787878",1001.00,monModeleIphoneEntityPersiste,EtatIphoneEnum.DISPONIBLE);
+        IphoneEntity I8 = persisteIphone("8989898989",1001.00,monModeleIphoneEntityPersiste,EtatIphoneEnum.DISPONIBLE);
+        IphoneEntity I9 = persisteIphone("9090909090",1001.00,monModeleIphoneEntityPersiste,EtatIphoneEnum.DISPONIBLE);
+        IphoneEntity I10 =  persisteIphone("1919191919",1001.00,monModeleIphoneEntityPersiste,EtatIphoneEnum.DISPONIBLE);
+        IphoneEntity I11 = persisteIphone("1818181818",1001.00,monModeleIphoneEntityPersiste,EtatIphoneEnum.DISPONIBLE);
+
+        persisteAffectation(C1,I1,LocalDate.now(),"commentaire 1",1L);
+        persisteAffectation(C2,I2,LocalDate.now(),"commentaire 2",2L);
+        persisteAffectation(C3,I3,LocalDate.now(),"commentaire 3",3L);
+        persisteAffectation(C4,I4,LocalDate.now(),"commentaire 4",4L);
+        persisteAffectation(C5,I5,LocalDate.now(),"commentaire 5",5L);
+        persisteAffectation(C6,I6,LocalDate.now(),"commentaire 6",6L);
+        persisteAffectation(C7,I7,LocalDate.now(),"commentaire 7",7L);
+        persisteAffectation(C8,I8,LocalDate.now(),"commentaire 8",8L);
+        persisteAffectation(C9,I9,LocalDate.now(),"commentaire 9",9L);
+        persisteAffectation(C10,I10,LocalDate.now(),"commentaire 10",10L);
+        persisteAffectation(C11,I11,LocalDate.now(),"commentaire 11",11L);
     }
 }
