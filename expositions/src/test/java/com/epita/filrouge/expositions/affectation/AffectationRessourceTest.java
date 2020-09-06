@@ -14,6 +14,7 @@ import com.epita.filrouge.expositions.utilisateur.UtilisateurDTO;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.ArgumentCaptor;
@@ -29,6 +30,7 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 
 import static org.mockito.ArgumentMatchers.any;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 
 import java.time.LocalDate;
@@ -38,13 +40,10 @@ import java.util.List;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @ExtendWith(SpringExtension.class)
 @WebMvcTest({AffectationRessource.class, MapperExceptionCode.class})
-
 class AffectationRessourceTest {
     private static final String CODE_SITE = "V2";
     private static final String NOM_SITE = "Valmy2";
@@ -88,7 +87,8 @@ class AffectationRessourceTest {
 
     @Test
 //    @Disabled
-    @WithMockUser(roles = {"TYPE2","ADMIN"})  // controle de l'AUTHENTIFICATION (Spring security), l'anotation @Secured est non indispensable dans le controller
+    @WithMockUser(roles = {"TYPE2", "ADMIN"})
+    // controle de l'AUTHENTIFICATION (Spring security), l'anotation @Secured est non indispensable dans le controller
     @DisplayName("Doit appeler le saveAffectation de la couche application avec les bons paramètres")
     void role_type2_et_admin_doitAppelerSaveDeCoucheApplication() throws Exception {
 
@@ -102,8 +102,8 @@ class AffectationRessourceTest {
 
         Affectation affectationRetournee = instancierUneAffectation();
 
-        when(affectationManagement.creerAffectation(COLLABORATEUR_UID, IPHONE_NUMEROSERIE,AFFECTATION_DATE,
-                                                    COLLABORATEUR_NUMEROLIGNE,AFFECTATION_COMMENTAIRE)).thenReturn(affectationRetournee);
+        when(affectationManagement.creerAffectation(COLLABORATEUR_UID, IPHONE_NUMEROSERIE, AFFECTATION_DATE,
+                COLLABORATEUR_NUMEROLIGNE, AFFECTATION_COMMENTAIRE)).thenReturn(affectationRetournee);
 
         String monObjetMapper = objectMapper.writeValueAsString(affectationDTO);
 
@@ -111,14 +111,14 @@ class AffectationRessourceTest {
         mockMvc.perform(MockMvcRequestBuilders.post("/gestaffectation/affectation/creation")//
                 .content(monObjetMapper) //
                 .contentType(MediaType.APPLICATION_JSON))
-         // Then
+                // Then
                 .andExpect(status().isCreated())    // controle de l'AUTORISATION (spring security)
                 .andExpect(jsonPath("$.collaborateur").isNotEmpty())
                 .andExpect(jsonPath("$.collaborateur.uid").value(COLLABORATEUR_UID))
                 .andExpect(jsonPath("$.iphone").isNotEmpty())
                 .andExpect(jsonPath("$.iphone.numeroSerie").value(IPHONE_NUMEROSERIE))
                 .andExpect(jsonPath("$.commentaire").value(AFFECTATION_COMMENTAIRE))
-                ;
+        ;
     }
 
     @Test
@@ -146,9 +146,9 @@ class AffectationRessourceTest {
     }
 
     @Test
-    @WithMockUser(roles = {"TYPE1","ADMIN"})
-    @DisplayName("cloturer affectation: Interdiction de clôturer une affectation pour les rôles TYPE1 et Admin")
-    void role_type1_et_admin_ne_peuvent_pas_cloturer_une_affectation() throws Exception {
+    @WithMockUser(roles = {"TYPE1"})
+    @DisplayName("cloturer affectation: Interdiction de clôturer une affectation pour le rôle TYPE1")
+    void role_type1_ne_peux_pas_cloturer_une_affectation() throws Exception {
 
         // Given
 
@@ -161,7 +161,7 @@ class AffectationRessourceTest {
         String monObjetMapper = objectMapper.writeValueAsString(affectationDTO);
 
         //When
-        mockMvc.perform(post("/gestaffectation/affectation/cloture")//
+        mockMvc.perform(put("/gestaffectation/affectation/cloture")//
                 .content(monObjetMapper) //
                 .contentType(MediaType.APPLICATION_JSON))
                 // Then
@@ -179,7 +179,7 @@ class AffectationRessourceTest {
         String monObjetMapper = objectMapper.writeValueAsString(affectationDTO);
 
         //when
-        String resultat = mockMvc.perform(post("/gestaffectation/affectation/cloture")
+        String resultat = mockMvc.perform(put("/gestaffectation/affectation/cloture")
                 .content(monObjetMapper)
                 .contentType(MediaType.APPLICATION_JSON))
                 .andReturn().getResponse().getContentAsString();
@@ -189,7 +189,8 @@ class AffectationRessourceTest {
     }
 
     @Test
-    @WithMockUser(roles = {"TYPE2"})  // controle de l'AUTHENTIFICATION (Spring security), l'anotation @Secured est non indispensable dans le controller
+    @WithMockUser(roles = {"TYPE2"})
+    // controle de l'AUTHENTIFICATION (Spring security), l'anotation @Secured est non indispensable dans le controller
     @DisplayName("cloturer affectation: Doit appeler cloturerAffectation une seule fois")
     void role_type2_doitAppelerCloturerAffectationDeCoucheApplication() throws Exception {
 
@@ -203,8 +204,8 @@ class AffectationRessourceTest {
 
         Affectation affectationRetournee = instancierUneAffectation();
 
-        when(affectationManagement.creerAffectation(COLLABORATEUR_UID, IPHONE_NUMEROSERIE,AFFECTATION_DATE,
-                COLLABORATEUR_NUMEROLIGNE,AFFECTATION_COMMENTAIRE)).thenReturn(affectationRetournee);
+        when(affectationManagement.creerAffectation(COLLABORATEUR_UID, IPHONE_NUMEROSERIE, AFFECTATION_DATE,
+                COLLABORATEUR_NUMEROLIGNE, AFFECTATION_COMMENTAIRE)).thenReturn(affectationRetournee);
 
         AffectationDTO affectationDTOCloture = new AffectationDTO();
         affectationDTOCloture.setNumeroAffectation(AFFECTATION_NUMERO);
@@ -215,22 +216,22 @@ class AffectationRessourceTest {
         String monObjetMapper = objectMapper.writeValueAsString(affectationDTOCloture);
 
         //When
-        mockMvc.perform(MockMvcRequestBuilders.post("/gestaffectation/affectation/cloture")
+        mockMvc.perform(MockMvcRequestBuilders.put("/gestaffectation/affectation/cloture")
                 .content(monObjetMapper)
                 .contentType(MediaType.APPLICATION_JSON))
                 // Then
                 .andExpect(status().isOk())
         ;
-        verify(affectationManagement, Mockito.times(1)).cloturerAffectation(AFFECTATION_NUMERO,AFFECTATION_COMMENTAIRE,AFFECTATION_MOTIFFIN,AFFECTATION_DATEFIN);
+        verify(affectationManagement, Mockito.times(1)).cloturerAffectation(AFFECTATION_NUMERO, AFFECTATION_COMMENTAIRE, AFFECTATION_MOTIFFIN, AFFECTATION_DATEFIN);
         ;
     }
 
     @Test
-    @WithMockUser(roles = {"TYPE2","ADMIN"})
+    @WithMockUser(roles = {"TYPE2", "ADMIN"})
     @DisplayName("Doit bien renvoyer les affectations quand demande d'affichage avec filtres")
     void ShouldReturnAffectations_WhenFilters() throws Exception {
         //Given
-        FiltresAffectation filtresAffectation= new FiltresAffectation();
+        FiltresAffectation filtresAffectation = new FiltresAffectation();
         filtresAffectation.setUid("666999");
 
         Affectation affectationRetournee = instancierUneAffectation();
@@ -244,7 +245,7 @@ class AffectationRessourceTest {
         mockMvc.perform(post("/gestaffectation/affectation/liste")//
                 .content(monObjetMapper) //
                 .contentType(MediaType.APPLICATION_JSON))
-        //Then
+                //Then
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$[0].numeroAffectation").value(AFFECTATION_NUMERO))
                 .andExpect(jsonPath("$[0].dateAffectation").value(AFFECTATION_DATE.toString()))
@@ -253,17 +254,17 @@ class AffectationRessourceTest {
                 .andExpect(jsonPath("$[0].commentaire").value(AFFECTATION_COMMENTAIRE))
                 .andExpect(jsonPath("$[0].motifFin").isEmpty())
                 .andExpect(jsonPath("$[0].collaborateur.uid").value(COLLABORATEUR_UID))
-                ;
+        ;
         verify(affectationManagement, Mockito.times(1)).listerAffectation(any(FiltresAffectation.class));
 
     }
 
     @Test
-    @WithMockUser(roles = {"TYPE2","ADMIN"})
+    @WithMockUser(roles = {"TYPE2", "ADMIN"})
     @DisplayName("Doit transmettre la demande d'affichage avec les bons filtres")
     void ShouldCallWithTheFilters() throws Exception {
         //Given
-        FiltresAffectation filtresAffectation= new FiltresAffectation();
+        FiltresAffectation filtresAffectation = new FiltresAffectation();
         filtresAffectation.setUid(COLLABORATEUR_UID);
 
         Affectation affectationRetournee = instancierUneAffectation();
@@ -279,9 +280,9 @@ class AffectationRessourceTest {
         mockMvc.perform(post("/gestaffectation/affectation/liste")//
                 .content(monObjetMapper) //
                 .contentType(MediaType.APPLICATION_JSON))
-        //Then
+                //Then
                 .andExpect(status().isOk())
-                ;
+        ;
         verify(affectationManagement).listerAffectation(filtresAffectationArgumentCaptor.capture());//fait la capture
 
         FiltresAffectation filtresAffectationTransmis = filtresAffectationArgumentCaptor.getValue();
@@ -297,7 +298,7 @@ class AffectationRessourceTest {
                         FiltresAffectation::getDateRenouvMin,
                         FiltresAffectation::getDateRenouvMax)
                 .containsExactly(COLLABORATEUR_UID,
-                        null,null,null,null,null,null,null,null);
+                        null, null, null, null, null, null, null, null);
 
     }
 
@@ -313,7 +314,7 @@ class AffectationRessourceTest {
         String monObjetMapper = objectMapper.writeValueAsString(suppressionDTO);
 
         //When
-        mockMvc.perform(post("/gestaffectation/affectation/suppression")//
+        mockMvc.perform(delete("/gestaffectation/affectation/suppression")//
                 .content(monObjetMapper) //
                 .contentType(MediaType.APPLICATION_JSON))
                 // Then
@@ -329,10 +330,10 @@ class AffectationRessourceTest {
         String monObjetMapper = objectMapper.writeValueAsString(numeroAffection);
 
         //when
-        mockMvc.perform(post("/gestaffectation/affectation/suppression")
+        mockMvc.perform(delete("/gestaffectation/affectation/suppression")
                 .content(monObjetMapper)
                 .contentType(MediaType.APPLICATION_JSON))
-        //then
+                //then
                 .andExpect(status().isBadRequest());
 
     }
@@ -348,74 +349,73 @@ class AffectationRessourceTest {
         String monObjetMapper = objectMapper.writeValueAsString(suppressionDTO);
         System.out.println("monObjetMapper = " + monObjetMapper);
 
-        ArgumentCaptor<Long> numeroAffectationArgumentCaptor = ArgumentCaptor.forClass(Long.class);
-        //When
-        mockMvc.perform(post("/gestaffectation/affectation/suppression")
-                .content("{\"numeroAffectation\":303}")
-                .contentType(MediaType.APPLICATION_JSON))
-        ;
+            ArgumentCaptor<Long> numeroAffectationArgumentCaptor = ArgumentCaptor.forClass(Long.class);
+            //When
+            mockMvc.perform(delete("/gestaffectation/affectation/suppression")
+                    .content("{\"numeroAffectation\":303}")
+                    .contentType(MediaType.APPLICATION_JSON))
+            ;
 //                //Then
-        verify(affectationManagement).supprimerAffectation(numeroAffectationArgumentCaptor.capture());
+            verify(affectationManagement).supprimerAffectation(numeroAffectationArgumentCaptor.capture());
 
-        assertThat(numeroAffectationArgumentCaptor.getValue()).isEqualTo(numeroAffectation);
+            assertThat(numeroAffectationArgumentCaptor.getValue()).isEqualTo(numeroAffectation);
 
-    }
+        }
 
-    @Test
+        @Test
 //    @Disabled
-    @WithMockUser(roles = {"TYPE2","ADMIN"})
-    @DisplayName("Créer une affectation - Badrequest si l'uid est null")
-    void WhenUidIsNullForACreation_ShouldReturnABadRequestExceptionWithMessage() throws Exception {
-        //Given
+        @WithMockUser(roles = {"TYPE2", "ADMIN"})
+        @DisplayName("Créer une affectation - Badrequest si l'uid est null")
+        void WhenUidIsNullForACreation_ShouldReturnABadRequestExceptionWithMessage() throws Exception {
+            //Given
 
-        String monObjetMapper = "{\"collaborateurUid\" : null , \n" +
-                "\"iphoneNumeroSerie\" : \"010208\" , \n" +
-                "\"affectationDate\" : \"2020-08-21\" ,\n" +
-                "\"collaborateurNumeroLigne\" : \"0766776677\" ,\n" +
-                "\"affectationCommentaire\" : \"first time\"\n" +
-                "}";
-        //When
-        String resultat = mockMvc.perform(post("/gestaffectation/affectation/creation")
-                .content(monObjetMapper)
-                .contentType(MediaType.APPLICATION_JSON))
-        //then
-                .andExpect(status().isBadRequest())
-                .andReturn().getResponse().getContentAsString();
-        System.out.println("resultat = " + resultat);
-        assertThat(resultat).contains("L'UID du collaborateur ne peut etre vide");
-    }
+            String monObjetMapper = "{\"collaborateurUid\" : null , \n" +
+                    "\"iphoneNumeroSerie\" : \"010208\" , \n" +
+                    "\"affectationDate\" : \"2020-08-21\" ,\n" +
+                    "\"collaborateurNumeroLigne\" : \"0766776677\" ,\n" +
+                    "\"affectationCommentaire\" : \"first time\"\n" +
+                    "}";
+            //When
+            String resultat = mockMvc.perform(post("/gestaffectation/affectation/creation")
+                    .content(monObjetMapper)
+                    .contentType(MediaType.APPLICATION_JSON))
+                    //then
+                    .andExpect(status().isBadRequest())
+                    .andReturn().getResponse().getContentAsString();
+            System.out.println("resultat = " + resultat);
+            assertThat(resultat).contains("L'UID du collaborateur ne peut etre vide");
+        }
 
-    @Test
-    @WithMockUser(roles = {"TYPE2","ADMIN"})
-    @DisplayName("Créer une affectation - Badrequest si l'uid n'est pas sur 6 caractères")
-    void WhenLengthOfUidIsNotSix_ShouldReturnABadRequestExceptionWithMessage() throws Exception {
-        //Given
+        @Test
+        @WithMockUser(roles = {"TYPE2", "ADMIN"})
+        @DisplayName("Créer une affectation - Badrequest si l'uid n'est pas sur 6 caractères")
+        void WhenLengthOfUidIsNotSix_ShouldReturnABadRequestExceptionWithMessage() throws Exception {
+            //Given
 
-        String monObjetMapper = "{\"collaborateurUid\" : \"12345678\" , \n" +
-                "\"iphoneNumeroSerie\" : \"010208\" , \n" +
-                "\"affectationDate\" : \"2020-08-21\" ,\n" +
-                "\"collaborateurNumeroLigne\" : \"0766776677\" ,\n" +
-                "\"affectationCommentaire\" : \"first time\"\n" +
-                "}";
-        //When
-        String resultat = mockMvc.perform(post("/gestaffectation/affectation/creation")
-                .content(monObjetMapper)
-                .contentType(MediaType.APPLICATION_JSON))
-        //then
-                .andExpect(status().isBadRequest())
-                .andReturn().getResponse().getContentAsString()
-                ;
-        assertThat(resultat).contains("L'UID du collaborateur n'est pas valide");
-    }
+            String monObjetMapper = "{\"collaborateurUid\" : \"12345678\" , \n" +
+                    "\"iphoneNumeroSerie\" : \"010208\" , \n" +
+                    "\"affectationDate\" : \"2020-08-21\" ,\n" +
+                    "\"collaborateurNumeroLigne\" : \"0766776677\" ,\n" +
+                    "\"affectationCommentaire\" : \"first time\"\n" +
+                    "}";
+            //When
+            String resultat = mockMvc.perform(post("/gestaffectation/affectation/creation")
+                    .content(monObjetMapper)
+                    .contentType(MediaType.APPLICATION_JSON))
+                    //then
+                    .andExpect(status().isBadRequest())
+                    .andReturn().getResponse().getContentAsString();
+            assertThat(resultat).contains("L'UID du collaborateur n'est pas valide");
+        }
 
     private Affectation instancierUneAffectation() {
         LocalDate dateRevouvelementAttentue = AFFECTATION_DATE.plusYears(2);
 
-        SiteExercice siteExercice = new SiteExercice(CODE_SITE,NOM_SITE,ADRESSE_POSTALE,CODE_POSTAL,VILLE,PAYS,DATE_CREATION);
-        Uo uo = new Uo(CODE_UO,FONCTION_RATTACHEMENT,CODE_UO_PARENT,NOM_USAGE_UO,NOM_RESPONSABLE_UO);
+        SiteExercice siteExercice = new SiteExercice(CODE_SITE, NOM_SITE, ADRESSE_POSTALE, CODE_POSTAL, VILLE, PAYS, DATE_CREATION);
+        Uo uo = new Uo(CODE_UO, FONCTION_RATTACHEMENT, CODE_UO_PARENT, NOM_USAGE_UO, NOM_RESPONSABLE_UO);
         uo.setSiteExercice(siteExercice);
 
-        Collaborateur collaborateur = new Collaborateur( COLLABORATEUR_UID, COLLABORATEUR_NOM, COLLABORATEUR_PRENOM, COLLABORATEUR_NUMEROLIGNE,uo);
+        Collaborateur collaborateur = new Collaborateur(COLLABORATEUR_UID, COLLABORATEUR_NOM, COLLABORATEUR_PRENOM, COLLABORATEUR_NUMEROLIGNE, uo);
 
         ModeleIphone modeleIphone = new ModeleIphone(1L, MODELE_NOMMODELE);
         Iphone iphone = new Iphone(1L, IPHONE_NUMEROSERIE, IPHONE_PRIX, modeleIphone, IPHONE_ETAT);
@@ -423,7 +423,6 @@ class AffectationRessourceTest {
         return new Affectation(AFFECTATION_NUMERO, AFFECTATION_DATE, AFFECTATION_COMMENTAIRE, collaborateur, iphone);
 
     }
-
 
 
 }

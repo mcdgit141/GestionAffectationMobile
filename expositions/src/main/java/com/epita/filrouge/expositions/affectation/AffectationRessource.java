@@ -75,9 +75,9 @@ public class AffectationRessource {
         return affectationManagement.listerAffectation(filtresAffectation);
     }
 
-    @PostMapping(value = "/affectation/cloture", consumes = { "application/json" }, produces =  { "application/json" })
+    @PutMapping(value = "/affectation/cloture", consumes = { "application/json" }, produces =  { "application/json" })
     @ResponseStatus(HttpStatus.OK)
-    @Secured("ROLE_TYPE2")
+    @Secured({"ROLE_ADMIN","ROLE_TYPE2"})
     public String clotureAffectation(@NotNull @RequestBody final AffectationDTO affectationDTO) {
 
        if (affectationDTO.getNumeroAffectation() == null){
@@ -108,8 +108,8 @@ public class AffectationRessource {
     }
 
 
-    @PostMapping(value = "/affectation/suppression", consumes = { "application/json" })
-    @ResponseStatus(HttpStatus.OK)
+    @DeleteMapping(value = "/affectation/suppression", consumes = { "application/json" })
+    @ResponseStatus(HttpStatus.NO_CONTENT)
     @Secured({"ROLE_ADMIN", "ROLE_TYPE2"})
     public void supprimerAffectation(@NotNull @Valid  @RequestBody final SuppressionDTO affectationASupprimer){
 
