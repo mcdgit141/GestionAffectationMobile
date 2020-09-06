@@ -10,7 +10,6 @@ import com.epita.filrouge.domain.iphone.ModeleIphone;
 import com.epita.filrouge.domain.site.SiteExercice;
 import com.epita.filrouge.domain.uo.Uo;
 import com.epita.filrouge.expositions.exception.MapperExceptionCode;
-import com.epita.filrouge.expositions.utilisateur.UtilisateurDTO;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.*;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -19,7 +18,6 @@ import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
@@ -308,7 +306,7 @@ class AffectationRessourceTest {
         @Test
         @DisplayName("Levée d'une BadRequest exception si le body de la requête est incomplet")
         @WithMockUser(roles = "TYPE2")
-        public void affectationDTO_Uncomplete_should_throw_an_Exception() throws Exception {
+        void affectationDTO_Uncomplete_should_throw_an_Exception() throws Exception {
             //given
             AffectationDTO affectationDTO = new AffectationDTO();
             affectationDTO.setNumeroAffectation(AFFECTATION_NUMERO);
@@ -321,7 +319,7 @@ class AffectationRessourceTest {
                     .contentType(MediaType.APPLICATION_JSON))
                     .andReturn().getResponse().getContentAsString();
             //then
-            assertThat(resultat.contains("BAD REQUEST")).isTrue();
+            assertThat(resultat).contains("BAD REQUEST");
 
         }
 
@@ -360,7 +358,7 @@ class AffectationRessourceTest {
                     .andExpect(status().isOk())
             ;
             verify(affectationManagement, Mockito.times(1)).cloturerAffectation(AFFECTATION_NUMERO, AFFECTATION_COMMENTAIRE, AFFECTATION_MOTIFFIN, AFFECTATION_DATEFIN);
-            ;
+
         }
     }
 
@@ -431,7 +429,7 @@ class AffectationRessourceTest {
 
 
     private Affectation instancierUneAffectation() {
-        LocalDate dateRevouvelementAttentue = AFFECTATION_DATE.plusYears(2);
+//        LocalDate dateRevouvelementAttentue = AFFECTATION_DATE.plusYears(2);
 
         SiteExercice siteExercice = new SiteExercice(CODE_SITE, NOM_SITE, ADRESSE_POSTALE, CODE_POSTAL, VILLE, PAYS, DATE_CREATION);
         Uo uo = new Uo(CODE_UO, FONCTION_RATTACHEMENT, CODE_UO_PARENT, NOM_USAGE_UO, NOM_RESPONSABLE_UO);
