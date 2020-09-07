@@ -424,7 +424,5 @@ class AffectationRessourceTest {
 
     }
 
-
-
 }
 
