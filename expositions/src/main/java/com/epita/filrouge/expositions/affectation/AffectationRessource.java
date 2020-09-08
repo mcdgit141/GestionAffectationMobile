@@ -9,6 +9,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.access.annotation.Secured;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
@@ -106,7 +107,10 @@ public class AffectationRessource {
     @ResponseStatus(HttpStatus.NO_CONTENT)
     @Secured({"ROLE_ADMIN", "ROLE_TYPE2"})
     public void supprimerAffectation(@NotNull @Valid  @RequestBody final SuppressionDTO affectationASupprimer){
-
+        monLogger.debug("");
+        String name = SecurityContextHolder.getContext().getAuthentication().getName();
+        monLogger.warn("Suppression d'affectation demandée par : {}", name);
+//        monLogger.debug("affectationASupprimer : {}", affectationASupprimer);
         affectationManagement.supprimerAffectation(affectationASupprimer.numeroAffectation);
     }
 
