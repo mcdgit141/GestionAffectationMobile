@@ -4,16 +4,20 @@ import com.epita.filrouge.application.affectation.IAffectationManagement;
 import com.epita.filrouge.domain.affectation.Affectation;
 import com.epita.filrouge.domain.affectation.FiltresAffectation;
 import com.epita.filrouge.domain.exception.BadRequestException;
+//import org.hibernate.validator.constraints.NotBlank;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.access.annotation.Secured;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
 import java.time.LocalDate;
 import java.util.List;
 
@@ -110,8 +114,27 @@ public class AffectationRessource {
         monLogger.debug("");
         String name = SecurityContextHolder.getContext().getAuthentication().getName();
         monLogger.warn("Suppression d'affectation demandée par : {}", name);
-//        monLogger.debug("affectationASupprimer : {}", affectationASupprimer);
         affectationManagement.supprimerAffectation(affectationASupprimer.numeroAffectation);
+    }
+
+
+    @DeleteMapping(value = "/affectation/suppression2", consumes = { "application/json" })
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    @Validated
+    @Secured({"ROLE_ADMIN", "ROLE_TYPE2"})
+    public void supprimerAffectation2(@RequestParam final Long id, @RequestParam final String commentaire){
+        monLogger.debug("");
+        if (id == null){
+            throw new BadRequestException("numéro affectation non renseigné, donnée à saisir impérativement");
+        }
+        if (commentaire.length() < 5) {
+            throw new BadRequestException("le commentaire doit etre d'au moins 5 caracteres");
+
+        }
+
+        String name = SecurityContextHolder.getContext().getAuthentication().getName();
+        monLogger.warn("Suppression d'affectation demandée par  \"{}\", commentaire : {}", name, commentaire);
+        affectationManagement.supprimerAffectation(id);
     }
 
 }
