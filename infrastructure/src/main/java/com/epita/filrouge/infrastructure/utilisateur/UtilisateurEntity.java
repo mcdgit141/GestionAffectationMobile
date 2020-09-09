@@ -13,8 +13,10 @@ public class UtilisateurEntity {
     private Long id;
 
 //    private String uid;
+
     @Embedded
     private CollaborateurLightEntity collaborateurLight;
+
     private String login;
     private String password;
 

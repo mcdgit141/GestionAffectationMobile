@@ -34,14 +34,15 @@ public class RepositoryUtilisateurImpl implements IRepositoryUtilisateur {
     }
 
     @Override
+    public void creerUser(Utilisateur utilisateur) {
+        userJpaRepository.save(utilisateurEntityMapper.mapToEntity(utilisateur));
+    }
+    @Override
     public void supprimerUser(Utilisateur utilisateurASupprimer) {
         userJpaRepository.delete(utilisateurEntityMapper.mapToEntity(utilisateurASupprimer));
     }
 
-    @Override
-    public void creerUser(Utilisateur utilisateur) {
-        userJpaRepository.save(utilisateurEntityMapper.mapToEntity(utilisateur));
-    }
+
 
     @Override
     public Utilisateur rechercherUser(String login) {
