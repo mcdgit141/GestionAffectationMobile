@@ -12,7 +12,11 @@ public class UtilisateurEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private String uid;
+//    private String uid;
+
+    @Embedded
+    private CollaborateurLightEntity collaborateurLight;
+
     private String login;
     private String password;
 
@@ -24,20 +28,20 @@ public class UtilisateurEntity {
         // constructeur par defaut, indispensable pour hibernate
     }
 
+    public UtilisateurEntity(Long id, CollaborateurLightEntity collaborateurLight, String login, String password, UtilisateurRoleEnum userRole) {
+        this.id = id;
+        this.collaborateurLight = collaborateurLight;
+        this.login = login;
+        this.password = password;
+        this.userRole = userRole;
+    }
+
     public Long getId() {
         return id;
     }
 
     public void setId(Long id) {
         this.id = id;
-    }
-
-    public String getUid() {
-        return uid;
-    }
-
-    public void setUid(String uid) {
-        this.uid = uid;
     }
 
     public String getLogin() {
@@ -62,5 +66,13 @@ public class UtilisateurEntity {
 
     public void setUserRole(UtilisateurRoleEnum userRole) {
         this.userRole = userRole;
+    }
+
+    public CollaborateurLightEntity getCollaborateurLight() {
+        return collaborateurLight;
+    }
+
+    public void setCollaborateurLight(CollaborateurLightEntity collaborateurLight) {
+        this.collaborateurLight = collaborateurLight;
     }
 }

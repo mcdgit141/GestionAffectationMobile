@@ -14,32 +14,18 @@ import org.springframework.stereotype.Component;
 @Component
 public class UtilisateurEntityMapper extends  AbstractMapper<Utilisateur, UtilisateurEntity> {
 
-    @Autowired
-    private IRepositoryJpaCollaborateur repositoryJpaCollaborateur;
-
-    @Autowired
-    private IRepositoryJpaUtilisateur repositoryJpaUtilisateur;
-
     @Override
     public Utilisateur mapToDomain(UtilisateurEntity utilisateurEntity) {
-        CollaborateurEntity collaborateurCorrespondant = repositoryJpaCollaborateur.findByUid(utilisateurEntity.getUid());
 
-        Utilisateur monUtilisateur = new Utilisateur(utilisateurEntity.getUid(), collaborateurCorrespondant.getNom(),
-                collaborateurCorrespondant.getPrenom(),utilisateurEntity.getUserRole());
-        monUtilisateur.setPassword(utilisateurEntity.getPassword());
-        monUtilisateur.setLogin(utilisateurEntity.getLogin());
-
-        return monUtilisateur;
+        return new Utilisateur(utilisateurEntity.getId(), utilisateurEntity.getCollaborateurLight().getUid()
+                ,utilisateurEntity.getCollaborateurLight().getNom(), utilisateurEntity.getCollaborateurLight().getPrenom(),
+                utilisateurEntity.getLogin(), utilisateurEntity.getPassword(), utilisateurEntity.getUserRole());
     }
     @Override
     public UtilisateurEntity mapToEntity(Utilisateur utilisateur) {
-
-        UtilisateurEntity monUtilisateurEntity = new UtilisateurEntity();
-        monUtilisateurEntity.setUid(utilisateur.getUid());
-        monUtilisateurEntity.setLogin(utilisateur.getLogin());
-        monUtilisateurEntity.setPassword(utilisateur.getPassword());
-        monUtilisateurEntity.setUserRole(utilisateur.getUserRole());
-
-        return monUtilisateurEntity;
+        CollaborateurLightEntity collaborateurLightEntity = new CollaborateurLightEntity(utilisateur.getUid(),utilisateur.getNom(),
+                utilisateur.getPrenom());
+        return new UtilisateurEntity(utilisateur.getId(),collaborateurLightEntity, utilisateur.getLogin(), utilisateur.getPassword()
+                ,utilisateur.getUserRole());
     }
 }

@@ -364,7 +364,7 @@ class AffectationRessourceTest {
 
     @Nested
     @DisplayName("Suppression")
-    class test_supress_affectation {
+    class test_suppress_affectation {
 
         @Test
         @DisplayName("Interdiction pour role TYPE1")
@@ -373,8 +373,7 @@ class AffectationRessourceTest {
 
             // Given
             Long numeroAffectation = 303L;
-            SuppressionDTO suppressionDTO = new SuppressionDTO();
-            suppressionDTO.setNumeroAffectation(numeroAffectation);
+            SuppressionDTO suppressionDTO = new SuppressionDTO(numeroAffectation, "pour test");
             String monObjetMapper = objectMapper.writeValueAsString(suppressionDTO);
 
             //When
@@ -408,15 +407,13 @@ class AffectationRessourceTest {
         void ShouldCallWithTheNumeroAffectation_ToDelete() throws Exception {
             //Given
             Long numeroAffectation = 303L;
-            SuppressionDTO suppressionDTO = new SuppressionDTO();
-            suppressionDTO.setNumeroAffectation(numeroAffectation);
+            SuppressionDTO suppressionDTO = new SuppressionDTO(numeroAffectation,"Pour test");
             String monObjetMapper = objectMapper.writeValueAsString(suppressionDTO);
-            System.out.println("monObjetMapper = " + monObjetMapper);
 
             ArgumentCaptor<Long> numeroAffectationArgumentCaptor = ArgumentCaptor.forClass(Long.class);
             //When
             mockMvc.perform(delete("/gestaffectation/affectation/suppression")
-                    .content("{\"numeroAffectation\":303}")
+                    .content(monObjetMapper)
                     .contentType(MediaType.APPLICATION_JSON))
             ;
 //                //Then

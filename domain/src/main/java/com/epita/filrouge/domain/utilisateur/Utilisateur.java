@@ -2,6 +2,7 @@ package com.epita.filrouge.domain.utilisateur;
 
 public class Utilisateur {
 
+    private Long id;
     private String uid;
     private String nom;
     private String prenom;
@@ -18,8 +19,15 @@ public class Utilisateur {
         this.login = remplacementCaractereSpec(prenom) + "." + remplacementCaractereSpec(nom) + "@entreprise.com";
     }
 
-    public void setLogin(String login) {
+    public Utilisateur(Long id, String uid, String nom, String prenom, String login
+            , String password, UtilisateurRoleEnum userRole) {
+        this.id = id;
+        this.uid = uid;
+        this.nom = nom;
+        this.prenom = prenom;
         this.login = login;
+        this.password = password;
+        this.userRole = userRole;
     }
 
     public String getUid() {
@@ -46,20 +54,12 @@ public class Utilisateur {
         return userRole;
     }
 
-    public void setNom(String nom) {
-        this.nom = nom;
+    public Long getId() {
+        return id;
     }
 
-    public void setPrenom(String prenom) {
-        this.prenom = prenom;
-    }
-
-    public void setUserRole(UtilisateurRoleEnum userRole) {
-        this.userRole = userRole;
-    }
-
-    public void setPassword(String password) {
-        this.password = password;
+    public void modifierMdpUtilisateur(String newPassword){
+        this.password = newPassword;
     }
 
     private String remplacementCaractereSpec(String string){
@@ -67,10 +67,8 @@ public class Utilisateur {
         String remplacmeent = "aaaeeeeiioouuuc";
         String result = string.toLowerCase();
         for (int i = 0; i <caractereSpeciaux.length() ; i++) {
-           result = result.replace(caractereSpeciaux.charAt(i), remplacmeent.charAt(i));
+            result = result.replace(caractereSpeciaux.charAt(i), remplacmeent.charAt(i));
         }
         return result;
     }
-
-
 }

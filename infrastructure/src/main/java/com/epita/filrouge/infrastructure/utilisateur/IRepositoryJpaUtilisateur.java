@@ -2,9 +2,11 @@ package com.epita.filrouge.infrastructure.utilisateur;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 
-public interface IRepositoryJpaUtilisateur extends JpaRepository<UtilisateurEntity, Long> {
-    UtilisateurEntity findByLogin(String login);
+import java.util.Optional;
 
-    UtilisateurEntity findByUid(String uid);
+public interface IRepositoryJpaUtilisateur extends JpaRepository<UtilisateurEntity, Long> {
+    Optional<UtilisateurEntity> findByLogin(String login);
+
+    Optional<UtilisateurEntity> findByCollaborateurLightUid(String uid);
 }
 

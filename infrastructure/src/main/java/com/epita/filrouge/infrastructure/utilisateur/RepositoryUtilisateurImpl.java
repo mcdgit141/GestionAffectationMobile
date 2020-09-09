@@ -12,64 +12,45 @@ public class RepositoryUtilisateurImpl implements IRepositoryUtilisateur {
     @Autowired
     private IRepositoryJpaUtilisateur userJpaRepository;
 
+    @Autowired
+    private UtilisateurEntityMapper utilisateurEntityMapper;
+
     @Override
     public Utilisateur rechercherUserParUid(String uid) {
-        UtilisateurEntity monUtilisateurEntity = userJpaRepository.findByUid(uid);
-        if (monUtilisateurEntity != null) {
-            return utilisateurEntityMapper.mapToDomain(monUtilisateurEntity);
-        } else {
-            throw new NotFoundException("Aucun utilisateur existant avec cet uid");
-        }
+        UtilisateurEntity monUtilisateurEntity = userJpaRepository.findByCollaborateurLightUid(uid)
+                .orElseThrow(() -> new NotFoundException("Aucun utilisateur existant avec cet uid"));
+        return utilisateurEntityMapper.mapToDomain(monUtilisateurEntity);
     }
 
     @Override
     public void enregistrerUtilisateur(Utilisateur utilisateur) {
         UtilisateurEntity utilisateurEntityAEnregistrer = utilisateurEntityMapper.mapToEntity(utilisateur);
-
-        UtilisateurEntity utilisateurEntityExistant = userJpaRepository.findByUid(utilisateur.getUid());
-        if (utilisateurEntityExistant != null) {
-            utilisateurEntityAEnregistrer.setId(utilisateurEntityExistant.getId());
-        }
         userJpaRepository.save(utilisateurEntityAEnregistrer);
     }
 
-    @Autowired
-    private UtilisateurEntityMapper utilisateurEntityMapper;
-
-
     @Override
     public void modifierUtilisateur(Utilisateur utilisateurAModifier) {
-        UtilisateurEntity utilisateurEntityAModifier = userJpaRepository.findByUid(utilisateurAModifier.getUid());
-        utilisateurEntityAModifier.setUserRole(utilisateurAModifier.getUserRole());
-        utilisateurEntityAModifier.setLogin(utilisateurAModifier.getLogin());
-        utilisateurEntityAModifier.setPassword(utilisateurAModifier.getPassword());
-        userJpaRepository.save(utilisateurEntityAModifier);
-    }
-
-    @Override
-    public void supprimerUser(Utilisateur utilisateurASupprimer) {
-        UtilisateurEntity monUtilisateurEntityASupprimer = userJpaRepository.findByLogin(utilisateurASupprimer.getLogin());
-        if (monUtilisateurEntityASupprimer != null) {
-            userJpaRepository.delete(monUtilisateurEntityASupprimer);
-        } else {
-            throw new NotFoundException("UtilisateurEntity à supprimer inexistant");
-        }
+        userJpaRepository.save(utilisateurEntityMapper.mapToEntity(utilisateurAModifier));
     }
 
     @Override
     public void creerUser(Utilisateur utilisateur) {
-        UtilisateurEntity monUtilisateurEntity = utilisateurEntityMapper.mapToEntity(utilisateur);
-
-        userJpaRepository.save(monUtilisateurEntity);
+        userJpaRepository.save(utilisateurEntityMapper.mapToEntity(utilisateur));
     }
+    @Override
+    public void supprimerUser(Utilisateur utilisateurASupprimer) {
+        userJpaRepository.delete(utilisateurEntityMapper.mapToEntity(utilisateurASupprimer));
+    }
+
+
 
     @Override
     public Utilisateur rechercherUser(String login) {
-        UtilisateurEntity monUtilisateurEntity = userJpaRepository.findByLogin(login);
-        if (monUtilisateurEntity != null) {
+        UtilisateurEntity monUtilisateurEntity = userJpaRepository.findByLogin(login).orElse(null);
+        if (monUtilisateurEntity != null){
             return utilisateurEntityMapper.mapToDomain(monUtilisateurEntity);
-        } else {
-            return  null;
+        } else{
+            return null;
         }
     }
 

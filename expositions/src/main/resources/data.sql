@@ -235,21 +235,13 @@ INSERT INTO affectation_entity(
 
 --Table Utilisateur
 
-INSERT INTO utilisateur_entity(
+INSERT INTO public.utilisateur_entity(nom, prenom, uid, login, password, user_role)
+	VALUES ( 'DUBOIS', 'MARIE', '208656','admin', '$2a$10$ZiJkoU7aFquTyUm5QEF5suvJEn41zQjjPLeILaPzKcFzrsrNqoVea', 'ROLE_ADMIN');
 
-   login, password, uid, user_role)
+INSERT INTO public.utilisateur_entity(nom, prenom, uid, login, password, user_role)
+	VALUES ( 'KAMDEM', 'Léopold', '100200','user1', '$2a$10$ix2v00b5v0E.Ro3ZM0/Vv.cK704O4N1w/.yQeNq46KIVKmDanaHBi', 'ROLE_TYPE1');
 
-   VALUES ('admin', '$2a$10$ZiJkoU7aFquTyUm5QEF5suvJEn41zQjjPLeILaPzKcFzrsrNqoVea', '208656', 'ROLE_ADMIN');
+INSERT INTO public.utilisateur_entity(nom, prenom, uid, login, password, user_role)
+	VALUES ( 'VIVIER', 'Damien', '200300','user2', '$2a$10$ix2v00b5v0E.Ro3ZM0/Vv.cK704O4N1w/.yQeNq46KIVKmDanaHBi', 'ROLE_TYPE2');
 
-INSERT INTO utilisateur_entity(
-
-   login, password, uid, user_role)
-
-   VALUES ('user1', '$2a$10$ix2v00b5v0E.Ro3ZM0/Vv.cK704O4N1w/.yQeNq46KIVKmDanaHBi', '100200', 'ROLE_TYPE1');
-
-INSERT INTO utilisateur_entity(
-
-   login, password, uid, user_role)
-
-   VALUES ('user2', '$2a$10$ix2v00b5v0E.Ro3ZM0/Vv.cK704O4N1w/.yQeNq46KIVKmDanaHBi', '200300', 'ROLE_TYPE2');
 
