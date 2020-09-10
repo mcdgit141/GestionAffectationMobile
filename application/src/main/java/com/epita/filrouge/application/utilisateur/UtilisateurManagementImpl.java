@@ -51,7 +51,8 @@ public class UtilisateurManagementImpl implements IUtilisateurManagement{
                 throw new BadRequestException("role utilisateur transmis inconnu");
         }
 
-        Utilisateur utilisateurACreer = new Utilisateur(monCollaborateur.getUid(),monCollaborateur.getNom(), monCollaborateur.getPrenom(), roleUtilisateurACreer);
+        Utilisateur utilisateurACreer = new Utilisateur(monCollaborateur.getUid(),monCollaborateur.getNom()
+                , monCollaborateur.getPrenom(), roleUtilisateurACreer);
         try {
             Utilisateur utilisateurExistant = repositoryUtilisateur.rechercherUserParUid(uid);
             if (utilisateurExistant != null) {
@@ -70,7 +71,7 @@ public class UtilisateurManagementImpl implements IUtilisateurManagement{
             throw new BadRequestException("Merci de saisir un mdp différent du mdp par défaut");
         } else{
             Utilisateur utilisateurAModifier = repositoryUtilisateur.rechercherUserParUid(uid);
-            utilisateurAModifier.setPassword(passwordEncoder.encode(mdp));
+            utilisateurAModifier.modifierMdpUtilisateur(passwordEncoder.encode(mdp));
             repositoryUtilisateur.enregistrerUtilisateur(utilisateurAModifier);
         }
     }

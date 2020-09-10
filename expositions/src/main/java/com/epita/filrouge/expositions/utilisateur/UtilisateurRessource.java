@@ -38,10 +38,10 @@ public class UtilisateurRessource {
         }
     }
 
-    @PostMapping(value = "/delete")
+    @PostMapping(value = "/delete2")
     @ResponseStatus(HttpStatus.OK)
     @Secured("ROLE_ADMIN")
-    public String supprimerUtilisateur(@NotNull @RequestBody UtilisateurDTO utilisateurDTO){
+    public String supprimerUtilisateur2(@NotNull @RequestBody UtilisateurDTO utilisateurDTO){
         Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         UserDetails utilisateurEnSesion = (UserDetails) principal;
 
@@ -57,6 +57,20 @@ public class UtilisateurRessource {
         }
     }
 
+    @DeleteMapping(value = "/delete")
+    @ResponseStatus(HttpStatus.OK)
+    @Secured("ROLE_ADMIN")
+    public String supprimerUtilisateur(@NotNull @RequestParam("uid") String uid){
+        Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        UserDetails utilisateurEnSesion = (UserDetails) principal;
+
+        utilisateurManagement.supprimerUtilisateur(uid);
+        monLogger.warn("******** SUPPRESSION DE L'UTILISATEUR : " + uid + " *********");
+        monLogger.warn("PAR : " + utilisateurEnSesion.getUsername());
+        return "L'utilisateur a été supprimé";
+
+    }
+
     @GetMapping(value = "/retrieve/{uid}")
     @ResponseStatus(HttpStatus.OK)
     @Secured("ROLE_ADMIN")
@@ -65,7 +79,20 @@ public class UtilisateurRessource {
         return utilisateur;
     }
 
-    @PostMapping(value = "/update")
+    @PostMapping(value = "/update2")
+    @ResponseStatus(HttpStatus.OK)
+    @Secured("ROLE_ADMIN")
+    public String modifierMdp2(@NotNull @RequestBody UtilisateurDTO utilisateurDTO){
+        if ((utilisateurDTO.getUid() != null) &  (utilisateurDTO.getUid() != "") &
+                (utilisateurDTO.getMdp() != null) & (utilisateurDTO.getMdp() != "")) {
+            utilisateurManagement.modifierMdpUtilisateur(utilisateurDTO.getUid(), utilisateurDTO.getMdp());
+            return "Le mot de passe de l'utilisateur est modifié";
+        } else {
+            throw new BadRequestException("Information(s) manquante(s) pour la mise à jour du Mdp");
+        }
+    }
+
+    @PutMapping(value = "/update")
     @ResponseStatus(HttpStatus.OK)
     @Secured("ROLE_ADMIN")
     public String modifierMdp(@NotNull @RequestBody UtilisateurDTO utilisateurDTO){
