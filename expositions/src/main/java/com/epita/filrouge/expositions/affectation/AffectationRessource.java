@@ -113,7 +113,7 @@ public class AffectationRessource {
     public void supprimerAffectation(@NotNull @Valid  @RequestBody final SuppressionDTO affectationASupprimer){
         monLogger.debug("");
         String name = SecurityContextHolder.getContext().getAuthentication().getName();
-        monLogger.warn("Suppression d'affectation demandée par : {}", name);
+        monLogger.info("Suppression d'affectation demandée par : {}", name);
         affectationManagement.supprimerAffectation(affectationASupprimer.numeroAffectation);
     }
 
@@ -131,10 +131,12 @@ public class AffectationRessource {
             throw new BadRequestException("le commentaire doit etre d'au moins 5 caracteres");
 
         }
+        Affectation affectationSupprimee = affectationManagement.supprimerAffectation(id);
+        String name2 = SecurityContextHolder.getContext().getAuthentication().getName();
+        monLogger.warn("");
+        monLogger.warn("Suppression d'affectation demandée par  \"{}\", commentaire : {}", name2, commentaire);
+        monLogger.warn(" Affectation : {}", affectationSupprimee);
 
-        String name = SecurityContextHolder.getContext().getAuthentication().getName();
-        monLogger.warn("Suppression d'affectation demandée par  \"{}\", commentaire : {}", name, commentaire);
-        affectationManagement.supprimerAffectation(id);
     }
 
 }

@@ -141,4 +141,17 @@ public class Affectation {
         return this;
     }
 
+    @Override
+    public String toString() {
+        return "{" +
+                "numeroAffectation=" + numeroAffectation +
+                ", dateAffectation=" + dateAffectation +
+                ", dateRenouvellementPrevue=" + dateRenouvellementPrevue +
+                ", dateFin=" + dateFin +
+                ", commentaire='" + commentaire + '\'' +
+                ", motifFin='" + motifFin + '\'' +
+                ", collaborateur=" + collaborateur +
+                ", iphone=" + iphone +
+                '}';
+    }
 }
