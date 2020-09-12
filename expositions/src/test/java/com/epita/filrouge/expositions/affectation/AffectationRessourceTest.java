@@ -23,6 +23,7 @@ import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
+import org.springframework.test.web.servlet.result.MockMvcResultHandlers;
 
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
@@ -363,7 +364,7 @@ class AffectationRessourceTest {
     }
 
     @Nested
-    @DisplayName("Suppression")
+    @DisplayName("Suppression avec Request Body")
     class test_suppress_affectation {
 
         @Test
@@ -403,11 +404,11 @@ class AffectationRessourceTest {
 
         @Test
         @WithMockUser(roles = {"TYPE2", "ADMIN"})
-        @DisplayName("Doit transmettre la demande de suppression le numero d'affectation")
+        @DisplayName("Doit transmettre la demande de suppression avec le numero d'affectation")
         void ShouldCallWithTheNumeroAffectation_ToDelete() throws Exception {
             //Given
             Long numeroAffectation = 303L;
-            SuppressionDTO suppressionDTO = new SuppressionDTO(numeroAffectation,"Pour test");
+            SuppressionDTO suppressionDTO = new SuppressionDTO(numeroAffectation, "Pour test");
             String monObjetMapper = objectMapper.writeValueAsString(suppressionDTO);
 
             ArgumentCaptor<Long> numeroAffectationArgumentCaptor = ArgumentCaptor.forClass(Long.class);
@@ -422,6 +423,119 @@ class AffectationRessourceTest {
             assertThat(numeroAffectationArgumentCaptor.getValue()).isEqualTo(numeroAffectation);
 
         }
+    }
+
+    @Nested
+    @DisplayName("Suppression avec RequestParam")
+    class test_suppress_affectation_Requestparam {
+
+        private static final String URL_ROOT = "/gestaffectation/affectation/suppression2?";
+        private static final String URL_ID = "&id=";
+        private static final String URL_COMMENATIRE= "&commentaire=";
+        private static final long NUMERO_AFFECTATION_SUPPRESSION = 303L;
+        private static  final String COMMENTAIRE_SUPPRESSION = "Pour test";
+
+        @Test
+        @WithMockUser(roles = {"TYPE2", "ADMIN"})
+        @DisplayName("Doit transmettre la demande de suppression avec le numero d'affectation")
+        void ShouldCallWithTheNumeroAffectation_ToDelete() throws Exception {
+            //Given
+
+            String urlTemplate= URL_ROOT +
+                    "id=" +  NUMERO_AFFECTATION_SUPPRESSION +
+                    "&commentaire=" + COMMENTAIRE_SUPPRESSION;
+
+
+            ArgumentCaptor<Long> numeroAffectationArgumentCaptor = ArgumentCaptor.forClass(Long.class);
+
+            //When
+            mockMvc.perform(delete(urlTemplate)
+                    .contentType(MediaType.APPLICATION_JSON))
+            ;
+
+            //Then
+            verify(affectationManagement).supprimerAffectation(numeroAffectationArgumentCaptor.capture());
+
+            assertThat(numeroAffectationArgumentCaptor.getValue()).isEqualTo(NUMERO_AFFECTATION_SUPPRESSION);
+
+        }
+
+
+        @Test
+        @DisplayName("Interdiction pour role TYPE1")
+        @WithMockUser(roles = {"TYPE1"})
+        void role_type1_ne_peux_pas_supprimer_affectation() throws Exception {
+
+            // Given
+            String urlTemplate= URL_ROOT +
+                    "id=" +  NUMERO_AFFECTATION_SUPPRESSION +
+                    "&commentaire=" + COMMENTAIRE_SUPPRESSION;
+
+            //When
+            mockMvc.perform(delete(urlTemplate)//
+                    .contentType(MediaType.APPLICATION_JSON))
+            // Then
+                    .andExpect(status().isForbidden());
+        }
+
+        @Test
+        @DisplayName("Levée d'une BadRequest exception si l'Id n'est pas présent")
+        @WithMockUser(roles = "TYPE2")
+        void AbsentId_should_throw_an_Exception() throws Exception {
+            //given
+            String urlTemplate= URL_ROOT +
+                    "&commentaire=" + COMMENTAIRE_SUPPRESSION
+                    ;
+
+            //when
+            mockMvc.perform(delete(urlTemplate)
+                    .contentType(MediaType.APPLICATION_JSON))
+                    //then
+                    .andExpect(status().isBadRequest());
+        }
+
+        @Test
+        @DisplayName("Levée d'une ConflictRequest(409) exception si le commentaire est inférieur à 5 caractères")
+        @WithMockUser(roles = "TYPE2")
+        void TooShortCommentary_should_throw_an_Exception() throws Exception {
+            //given
+            String urlTemplate= URL_ROOT
+                    + URL_ID + NUMERO_AFFECTATION_SUPPRESSION
+                     + URL_COMMENATIRE + "\"aa\""
+                    ;
+
+            //when
+            String resultat = mockMvc.perform(delete(urlTemplate)
+                    .contentType(MediaType.APPLICATION_JSON))
+                    //then
+                    .andDo(MockMvcResultHandlers.print())
+                    .andExpect(status().isConflict())
+                    .andReturn().getResponse().getContentAsString();
+
+            //then
+            assertThat(resultat).contains("le commentaire doit etre d'au moins 5 caracteres");
+
+        }
+
+        @Test
+        @DisplayName("Levée d'une Badrequest(400) exception si le commentaire est absent")
+        @WithMockUser(roles = "TYPE2")
+        void AbsentCommentary_should_throw_an_Exception() throws Exception {
+            //given
+            String urlTemplate= URL_ROOT
+                    + URL_ID + NUMERO_AFFECTATION_SUPPRESSION
+                    ;
+
+            //when
+            mockMvc.perform(delete(urlTemplate)
+                    .contentType(MediaType.APPLICATION_JSON))
+                    //then
+                    .andDo(MockMvcResultHandlers.print())
+                    .andExpect(status().isBadRequest());
+
+
+        }
+
     }
 
 
