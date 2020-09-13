@@ -16,7 +16,7 @@ public class IphoneFullDTO {
     private Long iphoneId;
 
     @ApiModelProperty(example = "10504", required = true, value = "numéro de série de l'iphone")
-    @NotNull
+    @NotNull(message = "Le numéro de série doit être renseigné")
     @Pattern(regexp = "^([ A-Za-z0-9]{1,30})$")
     @Size(max = 30)
     private String numeroSerie;

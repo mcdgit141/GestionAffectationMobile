@@ -30,6 +30,4 @@ public class SuppressionDTO {
         this.numeroAffectation = numeroAffectation;
     }
 
-
-
 }
