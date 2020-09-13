@@ -103,14 +103,14 @@ public class AffectationManagementImpl implements IAffectationManagement {
     }
 
     @Override
-    public void supprimerAffectation(Long numeroAffectation) {
+    public Affectation supprimerAffectation(Long numeroAffectation) {
 
         monLogger.debug("supprimerAffectation : numeroAffecation" + numeroAffectation);
         Affectation affectationASupprimer = repositoryAffectation.chercheAffectationParNumeroAffectation(numeroAffectation);
 
         affectationASupprimer.reglesAppliqueesPourSuppressionAffectation();
 
-        repositoryAffectation.supprimerAffectation(affectationASupprimer);
+        return repositoryAffectation.supprimerAffectation(affectationASupprimer);
     }
 
     @Override

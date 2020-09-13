@@ -94,7 +94,8 @@ public class RepositoryAffectationImpl implements IRepositoryAffectation {
         }
     }
 
-    public void supprimerAffectation(Affectation affectationASupprimer) {
+    @Override
+    public Affectation supprimerAffectation(Affectation affectationASupprimer) {
 
         monLogger.debug("supprimerAffectation" + affectationASupprimer);
         AffectationEntity affectationEntityASupprimer = affectationMapper.mapToEntity(affectationASupprimer);
@@ -110,6 +111,7 @@ public class RepositoryAffectationImpl implements IRepositoryAffectation {
         else {
             throw new NotFoundException("L'affectation avec le numéro suivant n'existe pas " + affectationEntityASupprimer.getNumeroAffectation());
         }
+        return affectationASupprimer;
     }
 
     @Override

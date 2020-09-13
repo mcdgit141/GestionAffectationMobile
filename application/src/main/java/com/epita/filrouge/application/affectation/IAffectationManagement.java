@@ -15,5 +15,5 @@ public interface IAffectationManagement {
 
     void cloturerAffectation(Long numeroAffectation, String affectationCommentaire, String motifFin, LocalDate dateFin);
 
-    void supprimerAffectation(Long numeroAffectation);
+    Affectation supprimerAffectation(Long numeroAffectation);
 }
