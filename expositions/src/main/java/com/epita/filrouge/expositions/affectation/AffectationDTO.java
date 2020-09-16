@@ -32,7 +32,7 @@ public class AffectationDTO {
 
     @ApiModelProperty(example = "0655896574", required = true, value = "nuémro de ligne du Collaborateur")
     @NotNull
-    @Pattern(regexp = "(\\d{10})$")
+//    @Pattern(regexp = "(\\d{10})$")
     @Size(max = 10)
     private String collaborateurNumeroLigne;
 

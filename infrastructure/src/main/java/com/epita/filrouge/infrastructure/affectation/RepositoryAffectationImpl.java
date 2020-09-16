@@ -52,13 +52,7 @@ public class RepositoryAffectationImpl implements IRepositoryAffectation {
 
         monLogger.debug("affectationACreer = {}" , affectationACreer);
 
-        CollaborateurEntity monCollaborateurEntity = iRepositoryJpaCollaborateur.findByUid(affectationACreer.getCollaborateur().getUid());
-
-        IphoneEntity monIphoneEntity = iRepositoryJpaIphone.findByNumeroSerie(affectationACreer.getIphone().getNumeroSerie());
-
-        AffectationEntity affectationEntity = new AffectationEntity();
-
-        affectationEntity = affectationEntityMapper.mapToEntity(affectationACreer);
+        AffectationEntity affectationEntity = affectationEntityMapper.mapToEntity(affectationACreer);
 
         iRepositoryJpaAffectation.save(affectationEntity);
     }

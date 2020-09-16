@@ -177,6 +177,7 @@ class AffectationRessourceTest {
                     .andReturn().getResponse().getContentAsString();
             System.out.println("resultat = " + resultat);
             assertThat(resultat).contains("L'UID du collaborateur ne peut etre vide");
+
         }
 
         @Test

@@ -38,11 +38,6 @@ public class RepositoryIphoneImpl implements IRepositoryIphone {
         return null;
     }
 
-        /* IphoneEntity iphoneEntity =  repositoryJpaIphone.findByModeleIphoneEntityNomModele(nomModele); //recherche en base pour récupérer l'objet IphoneEntity correspondant au nom passé
-        ModeleIphoneEntity modeleIphoneEntity = iphoneEntity.getModeleIphoneEntity(); */ // récupère l'objet ModeleIphoneEntity de l'objet Iphone recherché par le nom
-       /*   ModeleIphone modeleIphone = new ModeleIphone(modeleIphoneEntity.getModeleId(), modeleIphoneEntity.getNomModele() ); //creation de l'objet ModelIphone de la couche domain
-        return new Iphone(iphoneEntity.getIphoneId(),iphoneEntity.getNumeroSerie(),iphoneEntity.getPrixIphone(),modeleIphone,iphoneEntity.getEtatIphone());*/ //creation de l'objet Iphone de la couche domain
-
     @Override
     public Iphone rechercheIphoneParNumeroSerie(String iPhoneNumeroSerie) {
         IphoneEntity iphoneEntity = repositoryJpaIphone.findByNumeroSerie(iPhoneNumeroSerie);
