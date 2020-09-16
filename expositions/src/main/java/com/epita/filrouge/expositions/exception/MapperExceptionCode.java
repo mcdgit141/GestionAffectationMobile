@@ -22,7 +22,7 @@ public class MapperExceptionCode {
                     httpStatus = HttpStatus.NOT_FOUND;
                     break;
                 case BusinessException.BAD_REQUEST:
-                    httpStatus = HttpStatus.CONFLICT;
+                    httpStatus = HttpStatus.BAD_REQUEST;
                     break;
                 default:
                     httpStatus = HttpStatus.INTERNAL_SERVER_ERROR;

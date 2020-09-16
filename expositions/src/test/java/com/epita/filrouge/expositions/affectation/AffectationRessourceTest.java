@@ -9,8 +9,11 @@ import com.epita.filrouge.domain.iphone.Iphone;
 import com.epita.filrouge.domain.iphone.ModeleIphone;
 import com.epita.filrouge.domain.site.SiteExercice;
 import com.epita.filrouge.domain.uo.Uo;
+import com.epita.filrouge.expositions.collaborateur.CollaborateurFullDTOMapper;
 import com.epita.filrouge.expositions.exception.MapperExceptionCode;
+import com.epita.filrouge.expositions.iphone.IphoneFullDTOMapper;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import org.junit.Ignore;
 import org.junit.jupiter.api.*;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.ArgumentCaptor;
@@ -18,6 +21,7 @@ import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.context.annotation.Import;
 import org.springframework.http.MediaType;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
@@ -38,7 +42,11 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @ExtendWith(SpringExtension.class)
-@WebMvcTest({AffectationRessource.class, MapperExceptionCode.class})
+@WebMvcTest({AffectationRessource.class, MapperExceptionCode.class
+            ,AffectationFullDTOMapper.class
+            ,IphoneFullDTOMapper.class
+            , CollaborateurFullDTOMapper.class
+            })
 @DisplayName("Affectation Tests")
 class AffectationRessourceTest {
     private static final String CODE_SITE = "V2";
@@ -92,8 +100,8 @@ class AffectationRessourceTest {
         @Test
         @WithMockUser(roles = {"TYPE2", "ADMIN"})
         // controle de l'AUTHENTIFICATION (Spring security), l'anotation @Secured est non indispensable dans le controller
-        @DisplayName("Doit appeler le saveAffectation de la couche application avec les bons paramètres")
-        void role_type2_et_admin_doitAppelerSaveDeCoucheApplication() throws Exception {
+        @DisplayName("Doit retouner une ApplicationFullDTO")
+        void doitRetournerUneFUllDTO() throws Exception {
 
             // Given
             AffectationDTO affectationDTO = new AffectationDTO();
@@ -110,7 +118,7 @@ class AffectationRessourceTest {
 
             String monObjetMapper = objectMapper.writeValueAsString(affectationDTO);
 
-            //When
+//            When
             mockMvc.perform(MockMvcRequestBuilders.post("/gestaffectation/affectation/creation")//
                     .content(monObjetMapper) //
                     .contentType(MediaType.APPLICATION_JSON))
@@ -495,7 +503,7 @@ class AffectationRessourceTest {
         }
 
         @Test
-        @DisplayName("Levée d'une ConflictRequest(409) exception si le commentaire est inférieur à 5 caractères")
+        @DisplayName("Levée d'une BadRequest(409) exception si le commentaire est inférieur à 5 caractères")
         @WithMockUser(roles = "TYPE2")
         void TooShortCommentary_should_throw_an_Exception() throws Exception {
             //given
@@ -509,7 +517,7 @@ class AffectationRessourceTest {
                     .contentType(MediaType.APPLICATION_JSON))
                     //then
                     .andDo(MockMvcResultHandlers.print())
-                    .andExpect(status().isConflict())
+                    .andExpect(status().isBadRequest())
                     .andReturn().getResponse().getContentAsString();
 
             //then

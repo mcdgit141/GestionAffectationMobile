@@ -25,6 +25,11 @@ public class IphoneFullDTO {
 
     }
 
+    public IphoneFullDTO(Long iphoneId, @NotNull @Pattern(regexp = "^([ A-Za-z0-9]{1,30})$") @Size(max = 30) String numeroSerie) {
+        this.iphoneId = iphoneId;
+        this.numeroSerie = numeroSerie;
+    }
+
     public Long getIphoneId() {
         return iphoneId;
     }
