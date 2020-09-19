@@ -19,10 +19,8 @@ public class CollaborateurRessource {
     @Autowired
     ICollaborateurManagement collaborateurManagement;
 
-    @GetMapping(value = "/test")
-    public String test() {
-        return "ok";
-    }
+    @Autowired
+    CollaborateurDTOMapper collaborateurDTOMapper;
 
     @Secured({"ROLE_TYPE1","ROLE_ADMIN"})
     @GetMapping(value = "/collaborateur/listeuid/{uid}" , produces = {"application/json"})
@@ -39,6 +37,20 @@ public class CollaborateurRessource {
         return new ResponseEntity<CollaborateurFullDTO>(collaborateurFullDTO, HttpStatus.OK);
 
     }
+
+    @Secured({"ROLE_TYPE1","ROLE_ADMIN"})
+    @GetMapping(value = "/V2/collaborateur/listeuid/{uid}" , produces = {"application/json"})
+    public ResponseEntity<CollaborateurDTO> rechercheCollaborateurParUidV2 (@PathVariable("uid") String uid) {
+
+        final Collaborateur collaborateur = collaborateurManagement.findByUid(uid);
+
+        final CollaborateurDTO collaborateurDTO = collaborateurDTOMapper.mapToCollaborateurDTO(collaborateur);
+
+
+        return new ResponseEntity<>(collaborateurDTO, HttpStatus.OK);
+
+    }
+
     @Secured({"ROLE_TYPE1","ROLE_ADMIN"})
     @GetMapping(value = "/collaborateur/listenumeroligne/{numeroLigne}" , produces = {"application/json"})
     public ResponseEntity<CollaborateurFullDTO> rechercheCollaborateurParNumeroLigne (@PathVariable("numeroLigne") String numeroLigne) {
