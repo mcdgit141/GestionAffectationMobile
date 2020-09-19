@@ -9,6 +9,7 @@ import com.epita.filrouge.domain.iphone.ModeleIphone;
 import com.epita.filrouge.expositions.collaborateur.CollaborateurRessource;
 import com.epita.filrouge.expositions.exception.MapperExceptionCode;
 import org.junit.jupiter.api.Disabled;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,10 +23,11 @@ import org.springframework.test.web.servlet.MockMvc;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @ExtendWith(SpringExtension.class)
-@WebMvcTest({IphoneRessource.class, MapperExceptionCode.class})
+@WebMvcTest({IphoneRessource.class, MapperExceptionCode.class, IphoneDTOMapper.class})
 //@Disabled
 public class IphoneRessourceTest {
     @Autowired
@@ -52,5 +54,34 @@ public class IphoneRessourceTest {
         // Then
         assertThat(result).isEqualTo("{\"iphoneId\":1,\"numeroSerie\":\"010203\"}");
     }
+
+
+    @Test
+    @WithMockUser(roles = {"TYPE1","TYPE2","ADMIN"})
+    @DisplayName("Pour un modele d'iphone, doit retourner une iphone DTO")
+    void AvecNoueauDTO_DoitRetournerIphone_SurSaisieNomModele () throws Exception {
+        // Given
+
+        final  String nomModele = "Iphone8";
+        final String numeroSerie = "010203A";
+        final double prix = 1400.50d;
+        final String etat = EtatIphoneEnum.DISPONIBLE.name();
+
+        ModeleIphone modeleIphone = new ModeleIphone(1L,nomModele);
+        Iphone iphoneRetour = new Iphone(1L,numeroSerie,prix,modeleIphone, EtatIphoneEnum.DISPONIBLE);
+
+        when(iPhoneManagement.rechercheIphoneParNomModele(nomModele)).thenReturn(iphoneRetour);
+
+        // When
+        mockMvc.perform(get("/gestaffectation/V2/iphone/{nommodele}", nomModele)
+                .accept(MediaType.APPLICATION_JSON))
+        // Then
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.iphoneId").isEmpty())
+                .andExpect(jsonPath("$.numeroSerie").value(numeroSerie))
+                .andExpect(jsonPath("$.etatIphone").value(EtatIphoneEnum.DISPONIBLE.name()))
+                .andExpect(jsonPath("$.modeleIphoneDTO.nomModele").value(nomModele));
+    }
+
 
 }
