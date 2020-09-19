@@ -17,15 +17,13 @@ public class UtilisateurEntityMapper extends  AbstractMapper<Utilisateur, Utilis
     @Override
     public Utilisateur mapToDomain(UtilisateurEntity utilisateurEntity) {
 
-        return new Utilisateur(utilisateurEntity.getId(), utilisateurEntity.getCollaborateurLight().getUid()
-                ,utilisateurEntity.getCollaborateurLight().getNom(), utilisateurEntity.getCollaborateurLight().getPrenom(),
-                utilisateurEntity.getLogin(), utilisateurEntity.getPassword(), utilisateurEntity.getUserRole());
+        return new Utilisateur(utilisateurEntity.getId(), utilisateurEntity.getUid(),utilisateurEntity.getNom(), utilisateurEntity.getPrenom(),
+                  utilisateurEntity.getLogin(), utilisateurEntity.getPassword(), utilisateurEntity.getUserRole());
+
     }
     @Override
     public UtilisateurEntity mapToEntity(Utilisateur utilisateur) {
-        CollaborateurLightEntity collaborateurLightEntity = new CollaborateurLightEntity(utilisateur.getUid(),utilisateur.getNom(),
-                utilisateur.getPrenom());
-        return new UtilisateurEntity(utilisateur.getId(),collaborateurLightEntity, utilisateur.getLogin(), utilisateur.getPassword()
-                ,utilisateur.getUserRole());
+        return new UtilisateurEntity(utilisateur.getId(), utilisateur.getUid(), utilisateur.getNom(), utilisateur.getPrenom(),
+                utilisateur.getLogin(), utilisateur.getPassword() ,utilisateur.getUserRole());
     }
 }

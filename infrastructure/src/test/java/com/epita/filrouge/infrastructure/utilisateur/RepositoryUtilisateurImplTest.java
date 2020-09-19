@@ -116,7 +116,7 @@ public class RepositoryUtilisateurImplTest {
                 , utilisateurEntityPersiste.getPassword(),UtilisateurRoleEnum.ROLE_ADMIN);
 
         List<UtilisateurEntity> utilisateurEntityAvant = entityManager.getEntityManager()
-                .createQuery("select u from UtilisateurEntity u where collaborateurLight.uid = 'a19390' ")
+                .createQuery("select u from UtilisateurEntity u where uid = 'a19390' ")
                 .getResultList();
 
 
@@ -126,7 +126,7 @@ public class RepositoryUtilisateurImplTest {
 
         //then
         List<UtilisateurEntity> utilisateurEntityApres = entityManager.getEntityManager()
-                .createQuery("select u from UtilisateurEntity u where collaborateurLight.uid = 'a19390' ")
+                .createQuery("select u from UtilisateurEntity u where uid = 'a19390' ")
                 .getResultList();
 
 
@@ -137,27 +137,6 @@ public class RepositoryUtilisateurImplTest {
 
         );
 
-    }
-
-    @Test
-    @DisplayName("Creation d'un UtilisateurEntity A partir d'un Utilisateur")
-    public void creerUser_should_save_an_UtilisateurEntity(){
-        //giving
-        Utilisateur monUtitlisateurACreer = new Utilisateur("b12345","DUPOND","Francois",UtilisateurRoleEnum.ROLE_ADMIN);
-        //when
-        repositoryUtilisateur.creerUser(monUtitlisateurACreer);
-
-        //then
-        UtilisateurEntity utilisateurEntityCree = (UtilisateurEntity) entityManager.getEntityManager()
-                                    .createQuery("select u from UtilisateurEntity u where uid = 'b12345' ")
-                                    .getSingleResult();
-
-        assertAll(
-                () -> assertThat(utilisateurEntityCree).isNotNull(),
-                () -> assertThat(utilisateurEntityCree.getPassword()).isEqualTo(monUtitlisateurACreer.getPassword()),
-                () -> assertThat(utilisateurEntityCree.getLogin()).isEqualTo(monUtitlisateurACreer.getLogin()),
-                () -> assertThat(utilisateurEntityCree.getUserRole()).isEqualTo(monUtitlisateurACreer.getUserRole())
-                );
     }
 
     @Test
@@ -193,16 +172,16 @@ public class RepositoryUtilisateurImplTest {
         //giving BeforeEach
 
         //when
-        Utilisateur utilisateurTrouve = repositoryUtilisateur.rechercherUser(monUtitlisateurSansId.getLogin());
+        Utilisateur utilisateurTrouve = repositoryUtilisateur.rechercherUserParLogin(monUtitlisateurSansId.getLogin());
 
         //then
         assertAll(
                 () -> assertThat(utilisateurTrouve.getUid())
-                        .isEqualTo(utilisateurEntityPersiste.getCollaborateurLight().getUid()),
+                        .isEqualTo(utilisateurEntityPersiste.getUid()),
                 () -> assertThat(utilisateurTrouve.getNom())
-                        .isEqualTo(utilisateurEntityPersiste.getCollaborateurLight().getNom()),
+                        .isEqualTo(utilisateurEntityPersiste.getNom()),
                 () -> assertThat(utilisateurTrouve.getPrenom())
-                        .isEqualTo(utilisateurEntityPersiste.getCollaborateurLight().getPrenom()),
+                        .isEqualTo(utilisateurEntityPersiste.getPrenom()),
                 () -> assertThat(utilisateurTrouve.getLogin())
                         .isEqualTo(utilisateurEntityPersiste.getLogin())
         );

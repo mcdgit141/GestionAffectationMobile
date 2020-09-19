@@ -7,6 +7,6 @@ import java.util.Optional;
 public interface IRepositoryJpaUtilisateur extends JpaRepository<UtilisateurEntity, Long> {
     Optional<UtilisateurEntity> findByLogin(String login);
 
-    Optional<UtilisateurEntity> findByCollaborateurLightUid(String uid);
+    Optional<UtilisateurEntity> findByUid(String uid);
 }
 
