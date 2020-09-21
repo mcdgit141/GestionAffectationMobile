@@ -34,30 +34,30 @@ public class AffectationRessource {
     @Secured({"ROLE_ADMIN","ROLE_TYPE2"})
     public Affectation saveAffectation(@NotNull @Valid @RequestBody final AffectationDTO affectationDTO) {
 
-        if (affectationDTO.getAffectationCommentaire() == "" && affectationDTO.getCollaborateurNumeroLigne() == "" ||
-                affectationDTO.getAffectationCommentaire() == null && affectationDTO.getCollaborateurNumeroLigne() == null) {
-            System.out.println("test couche exposition motif fin non renseigné");
-            throw new BadRequestException("Commentaire et numéro de ligne non renseignés, données à saisir impérativement");
-        }
-        if (affectationDTO.getCollaborateurNumeroLigne() == null || affectationDTO.getCollaborateurNumeroLigne() == "" ) {
-            throw new BadRequestException("numéro de ligne non renseigné, donnée à saisir impérativement");
-        }
-        if (affectationDTO.getCollaborateurNumeroLigne().length() > 10 || affectationDTO.getCollaborateurNumeroLigne().length() < 10){
-            throw new BadRequestException("numéro de ligne ne comporte pas les 10 chiffres attendus");
-        }
-        if (affectationDTO.getCollaborateurUid() == null || affectationDTO.getCollaborateurUid() == "" ) {
-            throw new BadRequestException("collaborateur id non renseigné, donnée à saisir impérativement");
-        }
-
-        if (affectationDTO.getIphoneNumeroSerie() == null || affectationDTO.getIphoneNumeroSerie() == "") {
-            throw new BadRequestException("numéro série iphone non renseigné, donnée à saisir impérativement");
-        }
-        if (affectationDTO.getAffectationCommentaire() == null || affectationDTO.getAffectationCommentaire() == "" ) {
-            throw new BadRequestException("Commentaire non renseigné, donnée à saisir impérativement");
-        }
-        if (affectationDTO.getAffectationDate().isBefore(LocalDate.now()) || affectationDTO.getAffectationDate().isAfter(LocalDate.now())){
-            throw new BadRequestException("La date d'affectation doit être à la date du jour");
-        }
+//        if (affectationDTO.getAffectationCommentaire() == "" && affectationDTO.getCollaborateurNumeroLigne() == "" ||
+//                affectationDTO.getAffectationCommentaire() == null && affectationDTO.getCollaborateurNumeroLigne() == null) {
+//            System.out.println("test couche exposition motif fin non renseigné");
+//            throw new BadRequestException("Commentaire et numéro de ligne non renseignés, données à saisir impérativement");
+//        }
+//        if (affectationDTO.getCollaborateurNumeroLigne() == null || affectationDTO.getCollaborateurNumeroLigne() == "" ) {
+//            throw new BadRequestException("numéro de ligne non renseigné, donnée à saisir impérativement");
+//        }
+//        if (affectationDTO.getCollaborateurNumeroLigne().length() > 10 || affectationDTO.getCollaborateurNumeroLigne().length() < 10){
+//            throw new BadRequestException("numéro de ligne ne comporte pas les 10 chiffres attendus");
+//        }
+//        if (affectationDTO.getCollaborateurUid() == null || affectationDTO.getCollaborateurUid() == "" ) {
+//            throw new BadRequestException("collaborateur id non renseigné, donnée à saisir impérativement");
+//        }
+//
+//        if (affectationDTO.getIphoneNumeroSerie() == null || affectationDTO.getIphoneNumeroSerie() == "") {
+//            throw new BadRequestException("numéro série iphone non renseigné, donnée à saisir impérativement");
+//        }
+//        if (affectationDTO.getAffectationCommentaire() == null || affectationDTO.getAffectationCommentaire() == "" ) {
+//            throw new BadRequestException("Commentaire non renseigné, donnée à saisir impérativement");
+//        }
+//        if (affectationDTO.getAffectationDate().isBefore(LocalDate.now()) || affectationDTO.getAffectationDate().isAfter(LocalDate.now())){
+//            throw new BadRequestException("La date d'affectation doit être à la date du jour");
+//        }
 
         return affectationManagement.creerAffectation(affectationDTO.getCollaborateurUid(),affectationDTO.getIphoneNumeroSerie(),
                 affectationDTO.getAffectationDate(),affectationDTO.getCollaborateurNumeroLigne(),
