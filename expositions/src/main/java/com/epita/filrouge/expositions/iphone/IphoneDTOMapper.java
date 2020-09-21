@@ -1,6 +1,6 @@
 package com.epita.filrouge.expositions.iphone;
 
-import com.epita.filrouge.AbstractMapper;
+//import com.epita.filrouge.AbstractMapper;
 import com.epita.filrouge.domain.iphone.Iphone;
 import com.epita.filrouge.domain.iphone.ModeleIphone;
 import org.springframework.beans.factory.annotation.Autowired;
