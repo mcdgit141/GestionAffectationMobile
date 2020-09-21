@@ -10,7 +10,7 @@ import javax.validation.constraints.Size;
 
 @ApiModel(value = "Iphone", description = "Données Iphone")
 @Validated
-public class IphoneFullDTO {
+public class IphoneFullDTO_PourPoubelle {
 
     @ApiModelProperty(example = "1L", required = true, value = "Iphone Description champ IphoneId généré en automatique par la base de données")
     private Long iphoneId;
@@ -21,11 +21,11 @@ public class IphoneFullDTO {
     @Size(max = 30)
     private String numeroSerie;
 
-    public IphoneFullDTO() {
+    public IphoneFullDTO_PourPoubelle() {
 
     }
 
-    public IphoneFullDTO(Long iphoneId, @NotNull @Pattern(regexp = "^([ A-Za-z0-9]{1,30})$") @Size(max = 30) String numeroSerie) {
+    public IphoneFullDTO_PourPoubelle(Long iphoneId, @NotNull @Pattern(regexp = "^([ A-Za-z0-9]{1,30})$") @Size(max = 30) String numeroSerie) {
         this.iphoneId = iphoneId;
         this.numeroSerie = numeroSerie;
     }

@@ -36,24 +36,24 @@ public class IphoneRessourceTest {
     @MockBean
     private IIphoneManagement iPhoneManagement; //Mockito cree cette instance, rend un objet interface
 
-    @Test
-    @WithMockUser(roles = {"TYPE1","TYPE2","ADMIN"})
-    void DoitRetournerIphone_SurSaisieNomModele () throws Exception {
-        // Given
-
-        ModeleIphone modeleIphone = new ModeleIphone(1L,"Iphone8");
-
-        Iphone iphoneRetour = new Iphone(1L,"010203",1400d,modeleIphone, EtatIphoneEnum.DISPONIBLE);
-        when(iPhoneManagement.rechercheIphoneParNomModele("Iphone8")).thenReturn(iphoneRetour);
-
-        // When
-        final String result = mockMvc.perform(get("/gestaffectation/iphone/{nommodele}", "Iphone8")
-                .accept(MediaType.APPLICATION_JSON))
-                .andExpect(status().isOk()).andReturn().getResponse().getContentAsString();
-
-        // Then
-        assertThat(result).isEqualTo("{\"iphoneId\":1,\"numeroSerie\":\"010203\"}");
-    }
+//    @Test
+//    @WithMockUser(roles = {"TYPE1","TYPE2","ADMIN"})
+//    void DoitRetournerIphone_SurSaisieNomModele () throws Exception {
+//        // Given
+//
+//        ModeleIphone modeleIphone = new ModeleIphone(1L,"Iphone8");
+//
+//        Iphone iphoneRetour = new Iphone(1L,"010203",1400d,modeleIphone, EtatIphoneEnum.DISPONIBLE);
+//        when(iPhoneManagement.rechercheIphoneParNomModele("Iphone8")).thenReturn(iphoneRetour);
+//
+//        // When
+//        final String result = mockMvc.perform(get("/gestaffectation/iphone/{nommodele}", "Iphone8")
+//                .accept(MediaType.APPLICATION_JSON))
+//                .andExpect(status().isOk()).andReturn().getResponse().getContentAsString();
+//
+//        // Then
+//        assertThat(result).isEqualTo("{\"iphoneId\":1,\"numeroSerie\":\"010203\"}");
+//    }
 
 
     @Test

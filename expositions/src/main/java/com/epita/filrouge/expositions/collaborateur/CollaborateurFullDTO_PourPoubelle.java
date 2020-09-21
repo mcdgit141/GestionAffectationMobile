@@ -12,7 +12,7 @@ import java.util.List;
 
 @ApiModel(value = "Collaborateur DTO", description = "Données du Colllaborateur")
 @Validated
-public class CollaborateurFullDTO {
+public class CollaborateurFullDTO_PourPoubelle {
 
     @ApiModelProperty(example = "405809", required = true, value = "Uid du Collaborateur")
     @NotNull

@@ -74,6 +74,9 @@ public class IphoneDTO {
         private Long modeleID;
         private String nomModele;
 
+        public ModeleIphoneDTO() {
+        }
+
         public ModeleIphoneDTO(Long modeleID, String nomModele) {
             this.modeleID = modeleID;
             this.nomModele = nomModele;

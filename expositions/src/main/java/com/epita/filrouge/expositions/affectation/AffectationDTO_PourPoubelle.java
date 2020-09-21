@@ -9,7 +9,7 @@ import java.time.LocalDate;
 
 @ApiModel(value = "Affectation DTO", description = "Données d'Affectation ")
 @Validated
-public class AffectationDTO {
+public class AffectationDTO_PourPoubelle {
 
     @ApiModelProperty(example = "256541868779997", required = true, value = "numero d'affectation généré aléatoirement")
     private Long numeroAffectation;
@@ -52,7 +52,7 @@ public class AffectationDTO {
 //    @Future
     private LocalDate dateFin;
 
-    public AffectationDTO() {
+    public AffectationDTO_PourPoubelle() {
     }
 
     public String getCollaborateurUid() {

@@ -1,12 +1,25 @@
 package com.epita.filrouge.expositions.collaborateur;
 
+import com.epita.filrouge.expositions.affectation.AffectationFullDTO;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import io.swagger.annotations.ApiModel;
+import io.swagger.annotations.ApiModelProperty;
+import org.springframework.validation.annotation.Validated;
 
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Pattern;
+import javax.validation.constraints.Size;
 import java.time.LocalDate;
 
+@Validated
+@ApiModel(value = "Collaborateur DTO", description = "Données colaborateurs")
 public class CollaborateurDTO {
 
     @JsonProperty
+    @ApiModelProperty(example = "405809", required = true, value = "Uid du Collaborateur")
+    @NotNull(message = "L'UID du collaborateur ne peut etre vide")
+    @Pattern(regexp = "^([a-zA-Z0-9]{6})$" , message = "L'UID du collaborateur n'est pas valide")
+    @Size(max = 6)
     private String uid;
 
     @JsonProperty
@@ -29,6 +42,9 @@ public class CollaborateurDTO {
         this.uo = uo;
     }
 
+    public CollaborateurDTO() {
+    }
+
     public String getUid() {
         return uid;
     }
@@ -47,6 +63,10 @@ public class CollaborateurDTO {
 
     public UoDTO getUo() {
         return uo;
+    }
+
+    public void setUid(String uid) {
+        this.uid = uid;
     }
 
     public static class UoDTO {

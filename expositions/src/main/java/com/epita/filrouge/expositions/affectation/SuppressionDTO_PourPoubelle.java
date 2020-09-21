@@ -2,19 +2,19 @@ package com.epita.filrouge.expositions.affectation;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-public class SuppressionDTO {
+public class SuppressionDTO_PourPoubelle {
     @JsonProperty
     Long numeroAffectation;
 
     @JsonProperty
     String commentaire;
 
-    public SuppressionDTO(Long numeroAffectation, String commentaire) {
+    public SuppressionDTO_PourPoubelle(Long numeroAffectation, String commentaire) {
         this.numeroAffectation = numeroAffectation;
         this.commentaire = commentaire;
     }
 
-    public SuppressionDTO() {
+    public SuppressionDTO_PourPoubelle() {
     }
 
     @Override
