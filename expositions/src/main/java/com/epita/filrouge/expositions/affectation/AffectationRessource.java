@@ -29,10 +29,13 @@ public class AffectationRessource {
     @Autowired
     private IAffectationManagement affectationManagement;
 
+    @Autowired
+    private AffectationFullDTOMapper affectationFullDTOMapper;
+
     @PostMapping(value = "/affectation/creation", consumes = { "application/json" }, produces =  { "application/json" })
     @ResponseStatus(HttpStatus.CREATED)
     @Secured({"ROLE_ADMIN","ROLE_TYPE2"})
-    public Affectation saveAffectation(@NotNull @Valid @RequestBody final AffectationDTO affectationDTO) {
+    public AffectationFullDTO saveAffectation(@NotNull @Valid @RequestBody final AffectationDTO affectationDTO) {
 
 //        if (affectationDTO.getAffectationCommentaire() == "" && affectationDTO.getCollaborateurNumeroLigne() == "" ||
 //                affectationDTO.getAffectationCommentaire() == null && affectationDTO.getCollaborateurNumeroLigne() == null) {
@@ -59,16 +62,23 @@ public class AffectationRessource {
 //            throw new BadRequestException("La date d'affectation doit être à la date du jour");
 //        }
 
-        return affectationManagement.creerAffectation(affectationDTO.getCollaborateurUid(),affectationDTO.getIphoneNumeroSerie(),
+//        return affectationManagement.creerAffectation(affectationDTO.getCollaborateurUid(),affectationDTO.getIphoneNumeroSerie(),
+//                affectationDTO.getAffectationDate(),affectationDTO.getCollaborateurNumeroLigne(),
+//                affectationDTO.getAffectationCommentaire());
+
+        Affectation affectationCree = affectationManagement.creerAffectation(affectationDTO.getCollaborateurUid(),affectationDTO.getIphoneNumeroSerie(),
                 affectationDTO.getAffectationDate(),affectationDTO.getCollaborateurNumeroLigne(),
                 affectationDTO.getAffectationCommentaire());
+        return affectationFullDTOMapper.mapToDTO(affectationCree);
     }
 
     @PostMapping(value = "/affectation/liste", consumes = { "application/json" }, produces =  { "application/json" })
     @Secured({"ROLE_ADMIN","ROLE_TYPE1","ROLE_TYPE2"})
-    public List<Affectation> afficheListeAffectations(@NotNull @RequestBody final FiltresAffectation filtresAffectation){
+    public List<AffectationFullDTO> afficheListeAffectations(@NotNull @RequestBody final FiltresAffectation filtresAffectation){
 
-        return affectationManagement.listerAffectation(filtresAffectation);
+//        return affectationManagement.listerAffectation(filtresAffectation);
+        List<Affectation> affectationList= affectationManagement.listerAffectation(filtresAffectation);
+        return affectationFullDTOMapper.mapToDTOList(affectationList);
     }
 
     @PutMapping(value = "/affectation/cloture", consumes = { "application/json" }, produces =  { "application/json" })

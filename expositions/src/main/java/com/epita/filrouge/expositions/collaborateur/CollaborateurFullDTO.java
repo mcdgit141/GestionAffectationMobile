@@ -71,4 +71,5 @@ public class CollaborateurFullDTO {
     public String getNumeroLigne() {
         return numeroLigne;
     }
+
 }
