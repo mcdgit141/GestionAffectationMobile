@@ -20,19 +20,6 @@ public class IphoneRessource {
     @Autowired
     IphoneDTOMapper iphoneDTOMapper;
 
-//    @GetMapping(value = "/iphone/{nommodele}" , produces = {"application/json"})
-//    public ResponseEntity<IphoneFullDTO> rechercheIphoneParModele (@PathVariable("nommodele") String nomModele) {
-//
-//
-//        final Iphone iphone = iphoneManagement.rechercheIphoneParNomModele(nomModele);
-//
-//        final IphoneFullDTO iphoneFullDTO = new IphoneFullDTO();
-//            iphoneFullDTO.setIphoneId(iphone.getIphoneId());
-//        iphoneFullDTO.setNumeroSerie(iphone.getNumeroSerie());
-//
-//        return new ResponseEntity<IphoneFullDTO>(iphoneFullDTO, HttpStatus.OK);
-//
-//    }
 
     @GetMapping(value = "/V2/iphone/{nommodele}" , produces = {"application/json"})
     public ResponseEntity<IphoneDTO> rechercheIphoneParModeleV2 (@PathVariable("nommodele") String nomModele) {

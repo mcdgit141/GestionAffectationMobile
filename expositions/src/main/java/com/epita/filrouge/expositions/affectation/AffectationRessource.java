@@ -15,7 +15,6 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
-import java.time.LocalDate;
 import java.util.List;
 
 
@@ -31,46 +30,6 @@ public class AffectationRessource {
 
     @Autowired
     private AffectationFullDTOMapper affectationFullDTOMapper;
-
-//    @PostMapping(value = "/affectation/creation", consumes = { "application/json" }, produces =  { "application/json" })
-//    @ResponseStatus(HttpStatus.CREATED)
-//    @Secured({"ROLE_ADMIN","ROLE_TYPE2"})
-//    public AffectationFullDTO saveAffectation(@NotNull @Valid @RequestBody final AffectationDTO affectationDTO) {
-//
-//        if (affectationDTO.getAffectationCommentaire() == "" && affectationDTO.getCollaborateurNumeroLigne() == "" ||
-//                affectationDTO.getAffectationCommentaire() == null && affectationDTO.getCollaborateurNumeroLigne() == null) {
-//            System.out.println("test couche exposition motif fin non renseigné");
-//            throw new BadRequestException("Commentaire et numéro de ligne non renseignés, données à saisir impérativement");
-//        }
-//        if (affectationDTO.getCollaborateurNumeroLigne() == null || affectationDTO.getCollaborateurNumeroLigne() == "" ) {
-//            throw new BadRequestException("numéro de ligne non renseigné, donnée à saisir impérativement");
-//        }
-//        if (affectationDTO.getCollaborateurNumeroLigne().length() > 10 || affectationDTO.getCollaborateurNumeroLigne().length() < 10){
-//            throw new BadRequestException("numéro de ligne ne comporte pas les 10 chiffres attendus");
-//        }
-//        if (affectationDTO.getCollaborateurUid() == null || affectationDTO.getCollaborateurUid() == "" ) {
-//            throw new BadRequestException("collaborateur id non renseigné, donnée à saisir impérativement");
-//        }
-//
-//        if (affectationDTO.getIphoneNumeroSerie() == null || affectationDTO.getIphoneNumeroSerie() == "") {
-//            throw new BadRequestException("numéro série iphone non renseigné, donnée à saisir impérativement");
-//        }
-//        if (affectationDTO.getAffectationCommentaire() == null || affectationDTO.getAffectationCommentaire() == "" ) {
-//            throw new BadRequestException("Commentaire non renseigné, donnée à saisir impérativement");
-//        }
-//        if (affectationDTO.getAffectationDate().isBefore(LocalDate.now()) || affectationDTO.getAffectationDate().isAfter(LocalDate.now())){
-//            throw new BadRequestException("La date d'affectation doit être à la date du jour");
-//        }
-//
-////        return affectationManagement.creerAffectation(affectationDTO.getCollaborateurUid(),affectationDTO.getIphoneNumeroSerie(),
-////                affectationDTO.getAffectationDate(),affectationDTO.getCollaborateurNumeroLigne(),
-////                affectationDTO.getAffectationCommentaire());
-//
-//        Affectation affectationCree = affectationManagement.creerAffectation(affectationDTO.getCollaborateurUid(),affectationDTO.getIphoneNumeroSerie(),
-//                affectationDTO.getAffectationDate(),affectationDTO.getCollaborateurNumeroLigne(),
-//                affectationDTO.getAffectationCommentaire());
-//        return affectationFullDTOMapper.mapToDTO(affectationCree);
-//    }
 
     @PostMapping(value = "/V2/affectation/creation", consumes = { "application/json" }, produces =  { "application/json" })
     @ResponseStatus(HttpStatus.CREATED)
@@ -131,16 +90,6 @@ public class AffectationRessource {
         return "La clôture de l'affectation s'est bien passée";
     }
 
-
-//    @DeleteMapping(value = "/affectation/suppression", consumes = { "application/json" })
-//    @ResponseStatus(HttpStatus.NO_CONTENT)
-//    @Secured({"ROLE_ADMIN", "ROLE_TYPE2"})
-//    public void supprimerAffectation(@NotNull @Valid  @RequestBody final SuppressionDTO affectationASupprimer){
-//        monLogger.debug("");
-//        String name = SecurityContextHolder.getContext().getAuthentication().getName();
-//        monLogger.info("Suppression d'affectation demandée par : {}", name);
-//        affectationManagement.supprimerAffectation(affectationASupprimer.numeroAffectation);
-//    }
 
 
     @DeleteMapping(value = "/affectation/suppression2", consumes = { "application/json" })

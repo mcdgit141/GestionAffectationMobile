@@ -1,14 +1,10 @@
 package com.epita.filrouge.expositions.iphone;
 
-import com.epita.filrouge.application.collaborateur.ICollaborateurManagement;
 import com.epita.filrouge.application.iphone.IIphoneManagement;
-import com.epita.filrouge.domain.collaborateur.Collaborateur;
 import com.epita.filrouge.domain.iphone.EtatIphoneEnum;
 import com.epita.filrouge.domain.iphone.Iphone;
 import com.epita.filrouge.domain.iphone.ModeleIphone;
-import com.epita.filrouge.expositions.collaborateur.CollaborateurRessource;
 import com.epita.filrouge.expositions.exception.MapperExceptionCode;
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -20,7 +16,6 @@ import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.web.servlet.MockMvc;
 
-import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
@@ -36,24 +31,6 @@ public class IphoneRessourceTest {
     @MockBean
     private IIphoneManagement iPhoneManagement; //Mockito cree cette instance, rend un objet interface
 
-//    @Test
-//    @WithMockUser(roles = {"TYPE1","TYPE2","ADMIN"})
-//    void DoitRetournerIphone_SurSaisieNomModele () throws Exception {
-//        // Given
-//
-//        ModeleIphone modeleIphone = new ModeleIphone(1L,"Iphone8");
-//
-//        Iphone iphoneRetour = new Iphone(1L,"010203",1400d,modeleIphone, EtatIphoneEnum.DISPONIBLE);
-//        when(iPhoneManagement.rechercheIphoneParNomModele("Iphone8")).thenReturn(iphoneRetour);
-//
-//        // When
-//        final String result = mockMvc.perform(get("/gestaffectation/iphone/{nommodele}", "Iphone8")
-//                .accept(MediaType.APPLICATION_JSON))
-//                .andExpect(status().isOk()).andReturn().getResponse().getContentAsString();
-//
-//        // Then
-//        assertThat(result).isEqualTo("{\"iphoneId\":1,\"numeroSerie\":\"010203\"}");
-//    }
 
 
     @Test
@@ -77,7 +54,6 @@ public class IphoneRessourceTest {
                 .accept(MediaType.APPLICATION_JSON))
         // Then
                 .andExpect(status().isOk())
-//                .andExpect(jsonPath("$.iphoneId").isEmpty())
                 .andExpect(jsonPath("$.numeroSerie").value(numeroSerie))
                 .andExpect(jsonPath("$.etatIphone").value(EtatIphoneEnum.DISPONIBLE.name()))
                 .andExpect(jsonPath("$.modeleIphoneDTO.nomModele").value(nomModele));

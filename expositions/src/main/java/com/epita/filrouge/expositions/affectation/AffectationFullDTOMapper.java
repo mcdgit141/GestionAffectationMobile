@@ -1,6 +1,5 @@
 package com.epita.filrouge.expositions.affectation;
 
-//import com.epita.filrouge.AbstractMapper;
 import com.epita.filrouge.domain.affectation.Affectation;
 import com.epita.filrouge.expositions.collaborateur.CollaborateurDTO;
 import com.epita.filrouge.expositions.collaborateur.CollaborateurDTOMapper;
@@ -9,7 +8,6 @@ import com.epita.filrouge.expositions.iphone.IphoneDTOMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -21,12 +19,6 @@ public class AffectationFullDTOMapper  {
     @Autowired
     IphoneDTOMapper iphoneDTOMapper;
 
-//    @Override
-    public Affectation mapToDomain(AffectationFullDTO affectationFullDTO) {
-        return null;
-    }
-
-//    @Override
     public AffectationFullDTO mapToDTO(Affectation affectation) {
         CollaborateurDTO collaborateurFullDTO = collaborateurDTOMapper.mapToCollaborateurDTO(affectation.getCollaborateur());
         IphoneDTO iphoneFullDTO = iphoneDTOMapper.mapToDTO2(affectation.getIphone());

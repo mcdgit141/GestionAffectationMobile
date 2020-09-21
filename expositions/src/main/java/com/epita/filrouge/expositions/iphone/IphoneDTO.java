@@ -1,7 +1,6 @@
 package com.epita.filrouge.expositions.iphone;
 
 import com.epita.filrouge.domain.iphone.EtatIphoneEnum;
-import com.epita.filrouge.domain.iphone.ModeleIphone;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
@@ -15,9 +14,7 @@ import javax.validation.constraints.Size;
 @Validated
 public class IphoneDTO {
 
-//    @JsonProperty
-//    @ApiModelProperty(example = "1L", required = true, value = "Iphone Description champ IphoneId généré en automatique par la base de données")
-//    private Long iphoneId;
+
 
     @JsonProperty
     @ApiModelProperty(example = "10504", required = true, value = "numéro de série de l'iphone")
@@ -39,10 +36,7 @@ public class IphoneDTO {
 
     }
 
-//    public IphoneDTO(Long iphoneId, @NotNull @Pattern(regexp = "^([ A-Za-z0-9]{1,30})$") @Size(max = 30) String numeroSerie) {
-//        this.iphoneId = iphoneId;
-//        this.numeroSerie = numeroSerie;
-//    }
+
 
     public IphoneDTO(@NotNull(message = "Le numéro de série doit être renseigné") @Pattern(regexp = "^([ A-Za-z0-9]{1,30})$") @Size(max = 30) String numeroSerie, double prixIphone, ModeleIphoneDTO modeleIphoneDTO, EtatIphoneEnum etatIphone) {
         this.numeroSerie = numeroSerie;
@@ -51,17 +45,11 @@ public class IphoneDTO {
         this.etatIphone = etatIphone;
     }
 
-//    public Long getIphoneId() {
-//        return iphoneId;
-//    }
 
     public String getNumeroSerie() {
         return numeroSerie;
     }
 
-//    public void setIphoneId(Long iphoneId) {
-//        this.iphoneId = iphoneId;
-//    }
 
     public void setNumeroSerie(String numeroSerie) {
         this.numeroSerie = numeroSerie;

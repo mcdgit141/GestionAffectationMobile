@@ -48,16 +48,6 @@ public class AffectationFullDTO {
     public AffectationFullDTO() {
     }
 
-//    public AffectationFullDTO(Long numeroAffectation, LocalDate dateAffectation, LocalDate dateRenouvellementPrevue, LocalDate dateFin, String commentaire, String motifFin, CollaborateurFullDTO collaborateurFullDTO, IphoneFullDTO iphoneFullDTO) {
-//        this.numeroAffectation = numeroAffectation;
-//        this.dateAffectation = dateAffectation;
-//        this.dateRenouvellementPrevue = dateRenouvellementPrevue;
-//        this.dateFin = dateFin;
-//        this.commentaire = commentaire;
-//        this.motifFin = motifFin;
-//        this.collaborateurFullDTO = collaborateurFullDTO;
-//        this.iphoneFullDTO = iphoneFullDTO;
-//    }
 
     public Long getNumeroAffectation() {
         return numeroAffectation;

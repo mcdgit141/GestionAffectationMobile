@@ -1,6 +1,5 @@
 package com.epita.filrouge.expositions.collaborateur;
 
-import com.epita.filrouge.expositions.affectation.AffectationFullDTO;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
