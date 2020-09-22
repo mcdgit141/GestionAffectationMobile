@@ -9,7 +9,6 @@ import org.springframework.stereotype.Component;
 public class CollaborateurDTOMapper {
 
     public CollaborateurDTO mapToCollaborateurDTO (Collaborateur collaborateur) {
-
         CollaborateurDTO.UoDTO uoDTO = mapToUoDTO(collaborateur.getUo());
 
         return  new CollaborateurDTO(collaborateur.getUid(),
@@ -21,7 +20,6 @@ public class CollaborateurDTOMapper {
 
 
     public CollaborateurDTO.UoDTO mapToUoDTO (Uo uo) {
-
         CollaborateurDTO.UoDTO uoDTO = new CollaborateurDTO.UoDTO();
 
         uoDTO.setCodeUo(uo.getCodeUo());
@@ -30,7 +28,9 @@ public class CollaborateurDTOMapper {
         uoDTO.setNomUsageUo(uo.getNomUsageUo());
         uoDTO.setNomResponsableUo(uo.getNomResponsableUo());
 
-        uoDTO.setSiteExercice(mapToSiteExecercieDTO(uo.getSiteExercice()));
+        if (uo.getSiteExercice() != null) {
+            uoDTO.setSiteExercice(mapToSiteExecercieDTO(uo.getSiteExercice()));
+        }
 
         return  uoDTO;
     }
