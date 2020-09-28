@@ -31,7 +31,7 @@ public class AffectationRessource {
     @Autowired
     private AffectationFullDTOMapper affectationFullDTOMapper;
 
-    @PostMapping(value = "affectation/creation", consumes = { "application/json" }, produces =  { "application/json" })
+    @PostMapping(value = "/affectation/creation", consumes = { "application/json" }, produces =  { "application/json" })
     @ResponseStatus(HttpStatus.CREATED)
     @Secured({"ROLE_ADMIN","ROLE_TYPE2"})
     public AffectationFullDTO saveAffectation(@NotNull @Valid @RequestBody final AffectationFullDTO affectationFullDTO) {
