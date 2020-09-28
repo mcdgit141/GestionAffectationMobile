@@ -1,10 +1,8 @@
 package com.epita.filrouge.infrastructure.uo;
 
-import com.epita.filrouge.domain.exception.NotFoundException;
 import com.epita.filrouge.domain.uo.Uo;
 import com.epita.filrouge.infrastructure.AbstractMapper;
 import com.epita.filrouge.infrastructure.site.IRepositoryJpaSiteExercice;
-import com.epita.filrouge.infrastructure.site.SiteExerciceEntity;
 import com.epita.filrouge.infrastructure.site.SiteExerciceEntityMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -39,12 +37,6 @@ public class UoEntityMapper extends AbstractMapper<Uo, UoEntity> {
             uoEntity.setSiteExercice(repositoryJpaSiteExercice.findByCodeSite(uo.getSiteExercice().getCodeSite()));
         }
 
-        // mise en commentaire du find, pour donner un siteExerciceEntity à l'UO entity
-//
-//        String codeSiteMapper = uoEntity.getSiteExercice().getCodeSite();
-//
-//        SiteExerciceEntity siteExerciceEntity = repositoryJpaSiteExercice.findByCodeSite(codeSiteMapper);
-//        uoEntity.setSiteExercice(siteExerciceEntity);
 
        return uoEntity;
     }

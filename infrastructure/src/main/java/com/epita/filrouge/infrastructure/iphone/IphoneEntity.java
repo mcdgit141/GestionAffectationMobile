@@ -1,13 +1,10 @@
 package com.epita.filrouge.infrastructure.iphone;
 
 import com.epita.filrouge.domain.iphone.EtatIphoneEnum;
-import com.epita.filrouge.infrastructure.affectation.AffectationEntity;
 
 import javax.persistence.*;
-import java.util.List;
 
 @Entity
-//@Table(name ="Iphone")
 public class IphoneEntity {
 
     @Id
@@ -22,12 +19,9 @@ public class IphoneEntity {
     @JoinColumn(name = "modeleId", nullable = false)
     private ModeleIphoneEntity modeleIphoneEntity;
 
-//    @ElementCollection
     @Enumerated(EnumType.STRING)
     private EtatIphoneEnum etatIphone;
 
-//    @OneToMany(mappedBy = "iphone" )
-//    private List<AffectationEntity> affectationIphone;
 
     public IphoneEntity () {
 
@@ -74,13 +68,7 @@ public class IphoneEntity {
         return etatIphone;
     }
 
-//    public List<AffectationEntity> getAffectationIphone() {
-//        return affectationIphone;
-//    }
-//
-//    public void setAffectationIphone(List<AffectationEntity> affectationIphone) {
-//        this.affectationIphone = affectationIphone;
-//    }
+
 
     @Override
     public String toString() {
@@ -91,7 +79,6 @@ public class IphoneEntity {
                 + "ModeleEntityIphone: " + this.getModeleIphoneEntity()  +"\n"
                 + "PrixIphone: " + this.getPrixIphone()
                 + "\n---------------\n"
-//                + "affectationIphone: " + this.getAffectationIphone()
                 ;
     }
 }

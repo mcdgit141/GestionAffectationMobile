@@ -1,15 +1,12 @@
 package com.epita.filrouge.infrastructure.collaborateur;
 
-import com.epita.filrouge.infrastructure.affectation.AffectationEntity;
-import com.epita.filrouge.infrastructure.site.SiteExerciceEntity;
+
 import com.epita.filrouge.infrastructure.uo.UoEntity;
 
 import javax.persistence.*;
-import java.util.ArrayList;
-import java.util.List;
+
 
 @Entity
-//@Table(name ="Collaborateur")
 public class CollaborateurEntity {
 
     @Id
@@ -28,12 +25,7 @@ public class CollaborateurEntity {
     @JoinColumn(name = "uoId", nullable = false)
     private UoEntity uo;
 
-    /*@ManyToOne(fetch = FetchType.LAZY  )
-    @JoinColumn(name = "siteId", nullable = false)
-    private SiteExerciceEntity siteExercice;*/  //le site a été mis au niveau de l' UO
 
-//    @OneToMany(mappedBy = "collaborateur") //permet à partir de collaborateur de consulter les affectations
-//    private List<AffectationEntity> affectationCollaborateur = new ArrayList<>();
 
     public String getNumeroLigne() {
         return numeroLigne;
@@ -87,17 +79,5 @@ public class CollaborateurEntity {
         this.uo = uo;
     }
 
-//    public List<AffectationEntity> getAffectationCollaborateur() {
-//        return affectationCollaborateur;
-//    }
-//
-//    public void setAffectationCollaborateur(List<AffectationEntity> affectationCollaborateur) {
-//        this.affectationCollaborateur = affectationCollaborateur;
-//    }
-    /* public SiteExerciceEntity getSiteExercice() {
-        return siteExercice;
-    }
-    public void setSiteExercice(SiteExerciceEntity siteExercice) {
-        this.siteExercice = siteExercice;
-    }*/
+
 }

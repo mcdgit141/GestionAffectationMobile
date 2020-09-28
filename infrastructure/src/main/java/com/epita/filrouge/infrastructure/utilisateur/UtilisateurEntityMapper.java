@@ -2,13 +2,9 @@ package com.epita.filrouge.infrastructure.utilisateur;
 
 
 
-import com.epita.filrouge.domain.utilisateur.IRepositoryUtilisateur;
 import com.epita.filrouge.domain.utilisateur.Utilisateur;
 import com.epita.filrouge.infrastructure.AbstractMapper;
-import com.epita.filrouge.infrastructure.collaborateur.CollaborateurEntity;
-import com.epita.filrouge.infrastructure.collaborateur.IRepositoryJpaCollaborateur;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 @Component

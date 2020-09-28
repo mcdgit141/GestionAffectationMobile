@@ -1,7 +1,6 @@
 package com.epita.filrouge.infrastructure.affectation;
 
 import com.epita.filrouge.domain.affectation.Affectation;
-import com.epita.filrouge.domain.exception.NotFoundException;
 import com.epita.filrouge.infrastructure.AbstractMapper;
 import com.epita.filrouge.infrastructure.collaborateur.CollaborateurEntity;
 import com.epita.filrouge.infrastructure.collaborateur.CollaborateurEntityMapper;

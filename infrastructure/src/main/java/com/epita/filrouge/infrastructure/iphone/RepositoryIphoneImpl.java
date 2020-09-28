@@ -20,7 +20,6 @@ public class RepositoryIphoneImpl implements IRepositoryIphone {
     public Iphone rechercheIphoneParNomModele(String nomModele) {
         // modification suite à ajout de la list pour ne prendre que le premier enregistrement envoyé car pas de règles métier. On prend
         // le premier iphone disponible
-        System.out.println("couche infrastructure--recherche par non modele---");
 
         List<IphoneEntity> iphoneEntityList = repositoryJpaIphone.findByModeleIphoneEntityNomModele(nomModele);
         if (iphoneEntityList != null) {

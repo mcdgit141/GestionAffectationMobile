@@ -3,7 +3,6 @@ package com.epita.filrouge.infrastructure.iphone;
 import javax.persistence.*;
 
 @Entity
-//@Table(name ="ModeleIphone")
 public class ModeleIphoneEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
