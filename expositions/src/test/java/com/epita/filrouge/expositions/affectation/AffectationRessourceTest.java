@@ -9,11 +9,12 @@ import com.epita.filrouge.domain.iphone.Iphone;
 import com.epita.filrouge.domain.iphone.ModeleIphone;
 import com.epita.filrouge.domain.site.SiteExercice;
 import com.epita.filrouge.domain.uo.Uo;
-import com.epita.filrouge.expositions.collaborateur.CollaborateurFullDTOMapper;
+import com.epita.filrouge.expositions.collaborateur.CollaborateurDTO;
+import com.epita.filrouge.expositions.collaborateur.CollaborateurDTOMapper;
 import com.epita.filrouge.expositions.exception.MapperExceptionCode;
-import com.epita.filrouge.expositions.iphone.IphoneFullDTOMapper;
+import com.epita.filrouge.expositions.iphone.IphoneDTO;
+import com.epita.filrouge.expositions.iphone.IphoneDTOMapper;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import org.junit.Ignore;
 import org.junit.jupiter.api.*;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.ArgumentCaptor;
@@ -21,7 +22,6 @@ import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
-import org.springframework.context.annotation.Import;
 import org.springframework.http.MediaType;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
@@ -43,9 +43,9 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 @ExtendWith(SpringExtension.class)
 @WebMvcTest({AffectationRessource.class, MapperExceptionCode.class
-            ,AffectationFullDTOMapper.class
-            ,IphoneFullDTOMapper.class
-            , CollaborateurFullDTOMapper.class
+            , AffectationFullDTOMapper.class
+            , IphoneDTOMapper.class
+            , CollaborateurDTOMapper.class
             })
 @DisplayName("Affectation Tests")
 class AffectationRessourceTest {
@@ -97,55 +97,48 @@ class AffectationRessourceTest {
     @Nested
     @DisplayName("Creation")
     class test_create {
+
         @Test
         @WithMockUser(roles = {"TYPE2", "ADMIN"})
         // controle de l'AUTHENTIFICATION (Spring security), l'anotation @Secured est non indispensable dans le controller
-        @DisplayName("Doit retouner une ApplicationFullDTO")
+        @DisplayName("V2 Doit retouner une ApplicationFullDTO")
         void doitRetournerUneFUllDTO() throws Exception {
 
             // Given
-            AffectationDTO affectationDTO = new AffectationDTO();
-            affectationDTO.setCollaborateurUid(COLLABORATEUR_UID);
-            affectationDTO.setIphoneNumeroSerie(IPHONE_NUMEROSERIE);
-            affectationDTO.setAffectationDate(AFFECTATION_DATE);
-            affectationDTO.setCollaborateurNumeroLigne(COLLABORATEUR_NUMEROLIGNE);
-            affectationDTO.setAffectationCommentaire(AFFECTATION_COMMENTAIRE);
+            AffectationFullDTO affectationFullDTOACreer = instancierUneAffectationFullDTO();
 
             Affectation affectationRetournee = instancierUneAffectation();
+
 
             when(affectationManagement.creerAffectation(COLLABORATEUR_UID, IPHONE_NUMEROSERIE, AFFECTATION_DATE,
                     COLLABORATEUR_NUMEROLIGNE, AFFECTATION_COMMENTAIRE)).thenReturn(affectationRetournee);
 
-            String monObjetMapper = objectMapper.writeValueAsString(affectationDTO);
-
+            String monObjetMapper = objectMapper.writeValueAsString(affectationFullDTOACreer);
 //            When
             mockMvc.perform(MockMvcRequestBuilders.post("/gestaffectation/affectation/creation")//
                     .content(monObjetMapper) //
                     .contentType(MediaType.APPLICATION_JSON))
                     // Then
-                    .andExpect(status().isCreated())    // controle de l'AUTORISATION (spring security)
+                    .andExpect(status().isCreated())
+                    .andExpect(jsonPath("$.numeroAffectation").value(AFFECTATION_NUMERO))
+                    .andExpect(jsonPath("$.commentaire").value(AFFECTATION_COMMENTAIRE))
                     .andExpect(jsonPath("$.collaborateur").isNotEmpty())
                     .andExpect(jsonPath("$.collaborateur.uid").value(COLLABORATEUR_UID))
                     .andExpect(jsonPath("$.iphone").isNotEmpty())
                     .andExpect(jsonPath("$.iphone.numeroSerie").value(IPHONE_NUMEROSERIE))
-                    .andExpect(jsonPath("$.commentaire").value(AFFECTATION_COMMENTAIRE))
             ;
         }
 
+
         @Test
         @WithMockUser(roles = {"TYPE1"})
-        @DisplayName("Interdiction pour role TYPE1")
+        @DisplayName("V2 Interdiction pour role TYPE1")
         void role_type1_ne_peux_pas_creer_affectation() throws Exception {
 
             // Given
-            AffectationDTO affectationDTO = new AffectationDTO();
-            affectationDTO.setCollaborateurUid(COLLABORATEUR_UID);
-            affectationDTO.setIphoneNumeroSerie(IPHONE_NUMEROSERIE);
-            affectationDTO.setAffectationDate(AFFECTATION_DATE);
-            affectationDTO.setCollaborateurNumeroLigne(COLLABORATEUR_NUMEROLIGNE);
-            affectationDTO.setAffectationCommentaire(AFFECTATION_COMMENTAIRE);
+            AffectationFullDTO affectationFullDTOACreer = instancierUneAffectationFullDTO();
 
-            String monObjetMapper = objectMapper.writeValueAsString(affectationDTO);
+            String monObjetMapper = objectMapper.writeValueAsString(affectationFullDTOACreer);
 
             //When
             mockMvc.perform(post("/gestaffectation/affectation/creation")//
@@ -155,19 +148,17 @@ class AffectationRessourceTest {
                     .andExpect(status().isForbidden());
         }
 
+
         @Test
-//    @Disabled
         @WithMockUser(roles = {"TYPE2", "ADMIN"})
-        @DisplayName("Badrequest si l'uid est null")
+        @DisplayName("V2 Badrequest si l'uid est null")
         void WhenUidIsNullForACreation_ShouldReturnABadRequestExceptionWithMessage() throws Exception {
             //Given
+            AffectationFullDTO affectationFullDTOACreer = instancierUneAffectationFullDTO();
+            affectationFullDTOACreer.getCollaborateur().setUid(null);
 
-            String monObjetMapper = "{\"collaborateurUid\" : null , \n" +
-                    "\"iphoneNumeroSerie\" : \"010208\" , \n" +
-                    "\"affectationDate\" : \"2020-08-21\" ,\n" +
-                    "\"collaborateurNumeroLigne\" : \"0766776677\" ,\n" +
-                    "\"affectationCommentaire\" : \"first time\"\n" +
-                    "}";
+            String monObjetMapper = objectMapper.writeValueAsString(affectationFullDTOACreer);
+
             //When
             String resultat = mockMvc.perform(post("/gestaffectation/affectation/creation")
                     .content(monObjetMapper)
@@ -180,18 +171,18 @@ class AffectationRessourceTest {
 
         }
 
+
         @Test
         @WithMockUser(roles = {"TYPE2", "ADMIN"})
-        @DisplayName("Badrequest si l'uid n'est pas sur 6 caractères")
+        @DisplayName("V2 Badrequest si l'uid n'est pas sur 6 caractères")
         void WhenLengthOfUidIsNotSix_ShouldReturnABadRequestExceptionWithMessage() throws Exception {
             //Given
 
-            String monObjetMapper = "{\"collaborateurUid\" : \"12345678\" , \n" +
-                    "\"iphoneNumeroSerie\" : \"010208\" , \n" +
-                    "\"affectationDate\" : \"2020-08-21\" ,\n" +
-                    "\"collaborateurNumeroLigne\" : \"0766776677\" ,\n" +
-                    "\"affectationCommentaire\" : \"first time\"\n" +
-                    "}";
+            AffectationFullDTO affectationFullDTOACreer = instancierUneAffectationFullDTO();
+            affectationFullDTOACreer.getCollaborateur().setUid("ABCDEFG");
+
+            String monObjetMapper = objectMapper.writeValueAsString(affectationFullDTOACreer);
+
             //When
             String resultat = mockMvc.perform(post("/gestaffectation/affectation/creation")
                     .content(monObjetMapper)
@@ -201,6 +192,8 @@ class AffectationRessourceTest {
                     .andReturn().getResponse().getContentAsString();
             assertThat(resultat).contains("L'UID du collaborateur n'est pas valide");
         }
+
+
     }
 
     @Nested
@@ -296,14 +289,9 @@ class AffectationRessourceTest {
         void role_type1_ne_peux_pas_cloturer_une_affectation() throws Exception {
 
             // Given
+            AffectationFullDTO affectationFullDTOACloturer = instancierUneAffectationFullDTO();
 
-            AffectationDTO affectationDTO = new AffectationDTO();
-            affectationDTO.setNumeroAffectation(AFFECTATION_NUMERO);
-            affectationDTO.setDateFin(AFFECTATION_DATEFIN);
-            affectationDTO.setMotifFin(AFFECTATION_MOTIFFIN);
-            affectationDTO.setAffectationCommentaire(AFFECTATION_COMMENTAIRE);
-
-            String monObjetMapper = objectMapper.writeValueAsString(affectationDTO);
+            String monObjetMapper = objectMapper.writeValueAsString(affectationFullDTOACloturer);
 
             //When
             mockMvc.perform(put("/gestaffectation/affectation/cloture")//
@@ -318,10 +306,10 @@ class AffectationRessourceTest {
         @WithMockUser(roles = "TYPE2")
         void affectationDTO_Uncomplete_should_throw_an_Exception() throws Exception {
             //given
-            AffectationDTO affectationDTO = new AffectationDTO();
-            affectationDTO.setNumeroAffectation(AFFECTATION_NUMERO);
+            AffectationFullDTO affectationFullDTO = new AffectationFullDTO();
+            affectationFullDTO.setNumeroAffectation(AFFECTATION_NUMERO);
 
-            String monObjetMapper = objectMapper.writeValueAsString(affectationDTO);
+            String monObjetMapper = objectMapper.writeValueAsString(affectationFullDTO);
 
             //when
             String resultat = mockMvc.perform(put("/gestaffectation/affectation/cloture")
@@ -335,31 +323,20 @@ class AffectationRessourceTest {
 
         @Test
         @WithMockUser(roles = {"TYPE2"})
-        // controle de l'AUTHENTIFICATION (Spring security), l'anotation @Secured est non indispensable dans le controller
+//        @Disabled("disabled le temps de la refote des DTO")
         @DisplayName("Doit appeler cloturerAffectation une seule fois")
         void role_type2_doitAppelerCloturerAffectationDeCoucheApplication() throws Exception {
 
             // Given
-            AffectationDTO affectationDTO = new AffectationDTO();
-            affectationDTO.setCollaborateurUid(COLLABORATEUR_UID);
-            affectationDTO.setIphoneNumeroSerie(IPHONE_NUMEROSERIE);
-            affectationDTO.setAffectationDate(AFFECTATION_DATE);
-            affectationDTO.setCollaborateurNumeroLigne(COLLABORATEUR_NUMEROLIGNE);
-            affectationDTO.setAffectationCommentaire(AFFECTATION_COMMENTAIRE);
 
-            Affectation affectationRetournee = instancierUneAffectation();
+            AffectationFullDTO affectationFullDTOACloturer = instancierUneAffectationFullDTO();
 
-            when(affectationManagement.creerAffectation(COLLABORATEUR_UID, IPHONE_NUMEROSERIE, AFFECTATION_DATE,
-                    COLLABORATEUR_NUMEROLIGNE, AFFECTATION_COMMENTAIRE)).thenReturn(affectationRetournee);
+            affectationFullDTOACloturer.setNumeroAffectation(AFFECTATION_NUMERO);
+            affectationFullDTOACloturer.setMotifFin(AFFECTATION_MOTIFFIN);
+            affectationFullDTOACloturer.setDateFin(AFFECTATION_DATEFIN);
 
-            AffectationDTO affectationDTOCloture = new AffectationDTO();
-            affectationDTOCloture.setNumeroAffectation(AFFECTATION_NUMERO);
-            affectationDTOCloture.setDateFin(AFFECTATION_DATEFIN);
-            affectationDTOCloture.setMotifFin(AFFECTATION_MOTIFFIN);
-            affectationDTOCloture.setAffectationCommentaire(AFFECTATION_COMMENTAIRE);
-
-            String monObjetMapper = objectMapper.writeValueAsString(affectationDTOCloture);
-
+            String monObjetMapper = objectMapper.writeValueAsString(affectationFullDTOACloturer);
+            System.out.println("monObjetMapper = " + monObjetMapper);
             //When
             mockMvc.perform(MockMvcRequestBuilders.put("/gestaffectation/affectation/cloture")
                     .content(monObjetMapper)
@@ -372,73 +349,12 @@ class AffectationRessourceTest {
         }
     }
 
-    @Nested
-    @DisplayName("Suppression avec Request Body")
-    class test_suppress_affectation {
-
-        @Test
-        @DisplayName("Interdiction pour role TYPE1")
-        @WithMockUser(roles = {"TYPE1"})
-        void role_type1_ne_peux_pas_supprimer_affectation() throws Exception {
-
-            // Given
-            Long numeroAffectation = 303L;
-            SuppressionDTO suppressionDTO = new SuppressionDTO(numeroAffectation, "pour test");
-            String monObjetMapper = objectMapper.writeValueAsString(suppressionDTO);
-
-            //When
-            mockMvc.perform(delete("/gestaffectation/affectation/suppression")//
-                    .content(monObjetMapper) //
-                    .contentType(MediaType.APPLICATION_JSON))
-                    // Then
-                    .andExpect(status().isForbidden());
-        }
-
-        @Test
-        @DisplayName("Levée d'une BadRequest exception si le body n'est pas un Long")
-        @WithMockUser(roles = "TYPE2")
-        void bodyWithWrongType_should_throw_an_Exception() throws Exception {
-            //given
-            String numeroAffection = "wrong";
-            String monObjetMapper = objectMapper.writeValueAsString(numeroAffection);
-
-            //when
-            mockMvc.perform(delete("/gestaffectation/affectation/suppression")
-                    .content(monObjetMapper)
-                    .contentType(MediaType.APPLICATION_JSON))
-                    //then
-                    .andExpect(status().isBadRequest());
-
-        }
-
-        @Test
-        @WithMockUser(roles = {"TYPE2", "ADMIN"})
-        @DisplayName("Doit transmettre la demande de suppression avec le numero d'affectation")
-        void ShouldCallWithTheNumeroAffectation_ToDelete() throws Exception {
-            //Given
-            Long numeroAffectation = 303L;
-            SuppressionDTO suppressionDTO = new SuppressionDTO(numeroAffectation, "Pour test");
-            String monObjetMapper = objectMapper.writeValueAsString(suppressionDTO);
-
-            ArgumentCaptor<Long> numeroAffectationArgumentCaptor = ArgumentCaptor.forClass(Long.class);
-            //When
-            mockMvc.perform(delete("/gestaffectation/affectation/suppression")
-                    .content(monObjetMapper)
-                    .contentType(MediaType.APPLICATION_JSON))
-            ;
-//                //Then
-            verify(affectationManagement).supprimerAffectation(numeroAffectationArgumentCaptor.capture());
-
-            assertThat(numeroAffectationArgumentCaptor.getValue()).isEqualTo(numeroAffectation);
-
-        }
-    }
 
     @Nested
     @DisplayName("Suppression avec RequestParam")
     class test_suppress_affectation_Requestparam {
 
-        private static final String URL_ROOT = "/gestaffectation/affectation/suppression2?";
+        private static final String URL_ROOT = "/gestaffectation/affectation/suppression?";
         private static final String URL_ID = "&id=";
         private static final String URL_COMMENATIRE= "&commentaire=";
         private static final long NUMERO_AFFECTATION_SUPPRESSION = 303L;
@@ -564,6 +480,39 @@ class AffectationRessourceTest {
 
     }
 
+    private AffectationFullDTO instancierUneAffectationFullDTO() {
 
+        CollaborateurDTO.SiteExerciceDTO siteExerciceDTO = new CollaborateurDTO.SiteExerciceDTO();
+        siteExerciceDTO.setCodeSite(CODE_SITE);
+        siteExerciceDTO.setNomSite(NOM_SITE);
+        siteExerciceDTO.setAdressePostale1(ADRESSE_POSTALE);
+        siteExerciceDTO.setCodePostal(CODE_POSTAL);
+        siteExerciceDTO.setVille(VILLE);
+        siteExerciceDTO.setPays(PAYS);
+        siteExerciceDTO.setDateCreation(DATE_CREATION);
+
+
+        CollaborateurDTO.UoDTO uoDTO = new CollaborateurDTO.UoDTO();
+        uoDTO.setCodeUo(CODE_UO);
+        uoDTO.setFonctionRattachement(FONCTION_RATTACHEMENT);
+        uoDTO.setCodeUoParent(CODE_UO_PARENT);
+        uoDTO.setNomUsageUo(NOM_USAGE_UO);
+        uoDTO.setNomResponsableUo(NOM_RESPONSABLE_UO);
+        uoDTO.setSiteExercice(siteExerciceDTO);
+
+        CollaborateurDTO collaborateurDTO = new CollaborateurDTO(COLLABORATEUR_UID, COLLABORATEUR_NOM, COLLABORATEUR_PRENOM, COLLABORATEUR_NUMEROLIGNE, uoDTO);
+
+
+        IphoneDTO.ModeleIphoneDTO modeleIphoneDTO = new IphoneDTO.ModeleIphoneDTO(1L, MODELE_NOMMODELE);
+        IphoneDTO iphoneDTO = new IphoneDTO(IPHONE_NUMEROSERIE, IPHONE_PRIX, modeleIphoneDTO, IPHONE_ETAT);
+
+        AffectationFullDTO affectationFullDTO = new AffectationFullDTO();
+        affectationFullDTO.setDateAffectation(AFFECTATION_DATE);
+        affectationFullDTO.setCommentaire(AFFECTATION_COMMENTAIRE);
+        affectationFullDTO.setCollaborateur(collaborateurDTO);
+        affectationFullDTO.setIphone(iphoneDTO);
+        return affectationFullDTO;
+
+    }
 }
 

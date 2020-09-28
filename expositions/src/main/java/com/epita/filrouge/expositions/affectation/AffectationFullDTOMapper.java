@@ -1,31 +1,27 @@
 package com.epita.filrouge.expositions.affectation;
 
-import com.epita.filrouge.AbstractMapper;
 import com.epita.filrouge.domain.affectation.Affectation;
-import com.epita.filrouge.expositions.collaborateur.CollaborateurFullDTO;
-import com.epita.filrouge.expositions.collaborateur.CollaborateurFullDTOMapper;
-import com.epita.filrouge.expositions.iphone.IphoneFullDTO;
-import com.epita.filrouge.expositions.iphone.IphoneFullDTOMapper;
+import com.epita.filrouge.expositions.collaborateur.CollaborateurDTO;
+import com.epita.filrouge.expositions.collaborateur.CollaborateurDTOMapper;
+import com.epita.filrouge.expositions.iphone.IphoneDTO;
+import com.epita.filrouge.expositions.iphone.IphoneDTOMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import java.util.List;
+import java.util.stream.Collectors;
+
 @Component
-public class AffectationFullDTOMapper extends AbstractMapper<Affectation, AffectationFullDTO> {
+public class AffectationFullDTOMapper  {
     @Autowired
-    CollaborateurFullDTOMapper collaborateurFullDTOMapper;
+    CollaborateurDTOMapper collaborateurDTOMapper;
 
     @Autowired
-    IphoneFullDTOMapper iphoneFullDTOMapper;
+    IphoneDTOMapper iphoneDTOMapper;
 
-    @Override
-    public Affectation mapToDomain(AffectationFullDTO affectationFullDTO) {
-        return null;
-    }
-
-    @Override
     public AffectationFullDTO mapToDTO(Affectation affectation) {
-        CollaborateurFullDTO collaborateurFullDTO = collaborateurFullDTOMapper.mapToDTO(affectation.getCollaborateur());
-        IphoneFullDTO iphoneFullDTO = iphoneFullDTOMapper.mapToDTO(affectation.getIphone());
+        CollaborateurDTO collaborateurFullDTO = collaborateurDTOMapper.mapToCollaborateurDTO(affectation.getCollaborateur());
+        IphoneDTO iphoneFullDTO = iphoneDTOMapper.mapToDTO2(affectation.getIphone());
 
         AffectationFullDTO affectationFullDTO = new AffectationFullDTO();
         affectationFullDTO.setNumeroAffectation(affectation.getNumeroAffectation());
@@ -38,5 +34,10 @@ public class AffectationFullDTOMapper extends AbstractMapper<Affectation, Affect
         affectationFullDTO.setIphone(iphoneFullDTO);
 
         return affectationFullDTO;
+    }
+
+    public List<AffectationFullDTO> mapToDTOList(List<Affectation> affectationList) {
+
+        return affectationList.stream().map(this::mapToDTO).collect(Collectors.toList());
     }
 }

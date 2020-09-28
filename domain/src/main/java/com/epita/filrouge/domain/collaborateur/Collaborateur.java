@@ -4,6 +4,8 @@ import com.epita.filrouge.domain.uo.Uo;
 
 public class Collaborateur {
 
+    private Long id;
+
     private String uid;
     private String nom;
     private String prenom;
@@ -20,6 +22,15 @@ public class Collaborateur {
         this.uo = uo;
 
 //        this.affectationCollaborateur = new ArrayList<Affectation>();
+    }
+
+    public Collaborateur(Long id, String uid, String nom, String prenom, String numeroLigne, Uo uo) {
+        this.id = id;
+        this.uid = uid;
+        this.nom = nom;
+        this.prenom = prenom;
+        this.numeroLigne = numeroLigne;
+        this.uo = uo;
     }
 
     public void setNumeroLigne(String numeroLigne) {
@@ -46,17 +57,7 @@ public class Collaborateur {
         return uo;
     }
 
-//    public List<Affectation> getAffectationCollaborateur() {
-//        return affectationCollaborateur;
-//    }
-//
-//    public void addAffectationCollaborateur(final Affectation affectation){
-//        affectationCollaborateur.add(affectation);
-//    }
 
-//    public void affecterNumeroLigne (String numeroLigne){
-//
-//    }
 
     public Collaborateur miseAJourCollaborateurSuiteClotureAffectation() {
         this.numeroLigne = null;
