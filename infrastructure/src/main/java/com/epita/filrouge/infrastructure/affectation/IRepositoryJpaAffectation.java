@@ -2,6 +2,7 @@ package com.epita.filrouge.infrastructure.affectation;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 
+import javax.persistence.PersistenceException;
 import java.util.List;
 
 public interface IRepositoryJpaAffectation extends JpaRepository<AffectationEntity , Long> {
