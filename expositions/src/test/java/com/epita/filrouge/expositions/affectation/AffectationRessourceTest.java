@@ -102,7 +102,7 @@ class AffectationRessourceTest {
         @WithMockUser(roles = {"TYPE2", "ADMIN"})
         // controle de l'AUTHENTIFICATION (Spring security), l'anotation @Secured est non indispensable dans le controller
         @DisplayName("V2 Doit retouner une ApplicationFullDTO")
-        void doitRetournerUneFUllDTO_V2() throws Exception {
+        void doitRetournerUneFUllDTO() throws Exception {
 
             // Given
             AffectationFullDTO affectationFullDTOACreer = instancierUneAffectationFullDTO();
@@ -115,7 +115,7 @@ class AffectationRessourceTest {
 
             String monObjetMapper = objectMapper.writeValueAsString(affectationFullDTOACreer);
 //            When
-            mockMvc.perform(MockMvcRequestBuilders.post("/gestaffectation/V2/affectation/creation")//
+            mockMvc.perform(MockMvcRequestBuilders.post("/gestaffectation/affectation/creation")//
                     .content(monObjetMapper) //
                     .contentType(MediaType.APPLICATION_JSON))
                     // Then
@@ -133,7 +133,7 @@ class AffectationRessourceTest {
         @Test
         @WithMockUser(roles = {"TYPE1"})
         @DisplayName("V2 Interdiction pour role TYPE1")
-        void role_type1_ne_peux_pas_creer_affectation_V2() throws Exception {
+        void role_type1_ne_peux_pas_creer_affectation() throws Exception {
 
             // Given
             AffectationFullDTO affectationFullDTOACreer = instancierUneAffectationFullDTO();
@@ -141,7 +141,7 @@ class AffectationRessourceTest {
             String monObjetMapper = objectMapper.writeValueAsString(affectationFullDTOACreer);
 
             //When
-            mockMvc.perform(post("/gestaffectation/V2/affectation/creation")//
+            mockMvc.perform(post("/gestaffectation/affectation/creation")//
                     .content(monObjetMapper) //
                     .contentType(MediaType.APPLICATION_JSON))
                     // Then
@@ -152,7 +152,7 @@ class AffectationRessourceTest {
         @Test
         @WithMockUser(roles = {"TYPE2", "ADMIN"})
         @DisplayName("V2 Badrequest si l'uid est null")
-        void WhenUidIsNullForACreation_ShouldReturnABadRequestExceptionWithMessage_V2() throws Exception {
+        void WhenUidIsNullForACreation_ShouldReturnABadRequestExceptionWithMessage() throws Exception {
             //Given
             AffectationFullDTO affectationFullDTOACreer = instancierUneAffectationFullDTO();
             affectationFullDTOACreer.getCollaborateur().setUid(null);
@@ -160,7 +160,7 @@ class AffectationRessourceTest {
             String monObjetMapper = objectMapper.writeValueAsString(affectationFullDTOACreer);
 
             //When
-            String resultat = mockMvc.perform(post("/gestaffectation/V2/affectation/creation")
+            String resultat = mockMvc.perform(post("/gestaffectation/affectation/creation")
                     .content(monObjetMapper)
                     .contentType(MediaType.APPLICATION_JSON))
                     //then
@@ -175,7 +175,7 @@ class AffectationRessourceTest {
         @Test
         @WithMockUser(roles = {"TYPE2", "ADMIN"})
         @DisplayName("V2 Badrequest si l'uid n'est pas sur 6 caractères")
-        void WhenLengthOfUidIsNotSix_ShouldReturnABadRequestExceptionWithMessage_V2() throws Exception {
+        void WhenLengthOfUidIsNotSix_ShouldReturnABadRequestExceptionWithMessage() throws Exception {
             //Given
 
             AffectationFullDTO affectationFullDTOACreer = instancierUneAffectationFullDTO();
@@ -184,7 +184,7 @@ class AffectationRessourceTest {
             String monObjetMapper = objectMapper.writeValueAsString(affectationFullDTOACreer);
 
             //When
-            String resultat = mockMvc.perform(post("/gestaffectation/V2/affectation/creation")
+            String resultat = mockMvc.perform(post("/gestaffectation/affectation/creation")
                     .content(monObjetMapper)
                     .contentType(MediaType.APPLICATION_JSON))
                     //then
@@ -354,7 +354,7 @@ class AffectationRessourceTest {
     @DisplayName("Suppression avec RequestParam")
     class test_suppress_affectation_Requestparam {
 
-        private static final String URL_ROOT = "/gestaffectation/affectation/suppression2?";
+        private static final String URL_ROOT = "/gestaffectation/affectation/suppression?";
         private static final String URL_ID = "&id=";
         private static final String URL_COMMENATIRE= "&commentaire=";
         private static final long NUMERO_AFFECTATION_SUPPRESSION = 303L;

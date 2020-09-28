@@ -24,8 +24,8 @@ public class CollaborateurRessource {
 
 
     @Secured({"ROLE_TYPE1","ROLE_ADMIN"})
-    @GetMapping(value = "/V2/collaborateur/listeuid/{uid}" , produces = {"application/json"})
-    public ResponseEntity<CollaborateurDTO> rechercheCollaborateurParUidV2 (@PathVariable("uid") String uid) {
+    @GetMapping(value = "/collaborateur/listeuid/{uid}" , produces = {"application/json"})
+    public ResponseEntity<CollaborateurDTO> rechercheCollaborateurParUid (@PathVariable("uid") String uid) {
 
         final Collaborateur collaborateur = collaborateurManagement.findByUid(uid);
 

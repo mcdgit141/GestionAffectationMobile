@@ -21,8 +21,8 @@ public class IphoneRessource {
     IphoneDTOMapper iphoneDTOMapper;
 
 
-    @GetMapping(value = "/V2/iphone/{nommodele}" , produces = {"application/json"})
-    public ResponseEntity<IphoneDTO> rechercheIphoneParModeleV2 (@PathVariable("nommodele") String nomModele) {
+    @GetMapping(value = "/iphone/{nommodele}" , produces = {"application/json"})
+    public ResponseEntity<IphoneDTO> rechercheIphoneParModele (@PathVariable("nommodele") String nomModele) {
 
 
         final Iphone iphone = iphoneManagement.rechercheIphoneParNomModele(nomModele);

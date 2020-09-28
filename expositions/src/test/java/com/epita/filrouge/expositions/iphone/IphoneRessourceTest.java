@@ -50,7 +50,7 @@ public class IphoneRessourceTest {
         when(iPhoneManagement.rechercheIphoneParNomModele(nomModele)).thenReturn(iphoneRetour);
 
         // When
-        mockMvc.perform(get("/gestaffectation/V2/iphone/{nommodele}", nomModele)
+        mockMvc.perform(get("/gestaffectation/iphone/{nommodele}", nomModele)
                 .accept(MediaType.APPLICATION_JSON))
         // Then
                 .andExpect(status().isOk())

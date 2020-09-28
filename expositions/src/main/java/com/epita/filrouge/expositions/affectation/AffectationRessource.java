@@ -31,10 +31,10 @@ public class AffectationRessource {
     @Autowired
     private AffectationFullDTOMapper affectationFullDTOMapper;
 
-    @PostMapping(value = "/V2/affectation/creation", consumes = { "application/json" }, produces =  { "application/json" })
+    @PostMapping(value = "affectation/creation", consumes = { "application/json" }, produces =  { "application/json" })
     @ResponseStatus(HttpStatus.CREATED)
     @Secured({"ROLE_ADMIN","ROLE_TYPE2"})
-    public AffectationFullDTO saveAffectationV2(@NotNull @Valid @RequestBody final AffectationFullDTO affectationFullDTO) {
+    public AffectationFullDTO saveAffectation(@NotNull @Valid @RequestBody final AffectationFullDTO affectationFullDTO) {
 
 //        if (affectationFullDTO.getAffectationDate().isBefore(LocalDate.now()) || affectationFullDTO.getAffectationDate().isAfter(LocalDate.now())){
 //            throw new BadRequestException("La date d'affectation doit être à la date du jour");
@@ -92,11 +92,11 @@ public class AffectationRessource {
 
 
 
-    @DeleteMapping(value = "/affectation/suppression2", consumes = { "application/json" })
+    @DeleteMapping(value = "/affectation/suppression", consumes = { "application/json" })
     @ResponseStatus(HttpStatus.NO_CONTENT)
     @Validated
     @Secured({"ROLE_ADMIN", "ROLE_TYPE2"})
-    public void supprimerAffectation2(@RequestParam final Long id,
+    public void supprimerAffectation(@RequestParam final Long id,
                                       @RequestParam final String commentaire){
         monLogger.debug("");
         if (id == null){

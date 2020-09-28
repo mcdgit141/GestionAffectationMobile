@@ -75,7 +75,7 @@ class CollaborateurRessourceTest {
 
 
         // When & then
-       mockMvc.perform(get("/gestaffectation/V2/collaborateur/listeuid/{uid}", "425895")
+       mockMvc.perform(get("/gestaffectation/collaborateur/listeuid/{uid}", "425895")
                 .accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().isForbidden());
     }
@@ -94,7 +94,7 @@ class CollaborateurRessourceTest {
         when(collaborateurManagement.findByUid(UID)).thenReturn(collaborateurRetour);
 
         // When
-        mockMvc.perform(get("/gestaffectation/V2/collaborateur/listeuid/{uid}", UID)
+        mockMvc.perform(get("/gestaffectation/collaborateur/listeuid/{uid}", UID)
                 .accept(MediaType.APPLICATION_JSON))
         // Then
                 .andExpect(status().isOk())
