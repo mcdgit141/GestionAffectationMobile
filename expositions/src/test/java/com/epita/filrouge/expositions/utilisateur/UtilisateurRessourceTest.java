@@ -1,10 +1,14 @@
 package com.epita.filrouge.expositions.utilisateur;
 
+import com.epita.filrouge.application.security.UserDetailServiceImpl;
 import com.epita.filrouge.application.utilisateur.IUtilisateurManagement;
 import com.epita.filrouge.domain.exception.NotFoundException;
+import com.epita.filrouge.domain.utilisateur.IRepositoryUtilisateur;
 import com.epita.filrouge.domain.utilisateur.Utilisateur;
 import com.epita.filrouge.domain.utilisateur.UtilisateurRoleEnum;
 import com.epita.filrouge.expositions.exception.MapperExceptionCode;
+import com.epita.filrouge.jwt.JwtRequestFilter;
+import com.epita.filrouge.jwt.JwtUtils;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.AfterEach;
@@ -12,6 +16,7 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
@@ -19,6 +24,7 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.test.context.support.WithMockUser;
+import org.springframework.security.test.context.support.WithUserDetails;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.web.servlet.MockMvc;
 import static org.assertj.core.api.Assertions.assertThat;
@@ -28,7 +34,7 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 @ExtendWith(SpringExtension.class)
-@WebMvcTest({UtilisateurRessource.class, MapperExceptionCode.class})
+@WebMvcTest({UtilisateurRessource.class, MapperExceptionCode.class, JwtUtils.class, JwtRequestFilter.class})
 //@Disabled
 public class UtilisateurRessourceTest {
 
@@ -37,6 +43,12 @@ public class UtilisateurRessourceTest {
 
     @MockBean
     private IUtilisateurManagement utilisateurManagement;
+
+    @MockBean
+    private IRepositoryUtilisateur repositoryUtilisateur;
+
+    @MockBean
+    private  UserDetailServiceImpl userDetailService;
 
     @Autowired
     private ObjectMapper objectMapper;
@@ -206,26 +218,26 @@ public class UtilisateurRessourceTest {
     @Nested
     @DisplayName("Supression Utilisateur")
     class test_suppression {
-        @Test
-        @DisplayName("supprimerUtilisateur: retour confirmation suppression en cas de succès")
-        @WithMockUser(username = "admin", password = "$2a$10$ix2v00b5v0E.Ro3ZM0/Vv.cK704O4N1w/.yQeNq46KIVKmDanaHBi", roles = "ADMIN")
-        public void supprimerUtilisateur_should_return_a_specific_string_when_ok() throws Exception {
-            //given
-            UtilisateurDTO utilisateurDTO = new UtilisateurDTO();
-            utilisateurDTO.setUid("a19390");
-            utilisateurDTO.setUsername("admin");
-            utilisateurDTO.setPassword("password");
-            monObjetMapper = objectMapper.writeValueAsString(utilisateurDTO);
-
-            //when
-            String resultat = mockMvc.perform(post("/gestaffectation/utilisateur/delete2")
-                    .content(monObjetMapper).contentType(MediaType.APPLICATION_JSON))
-                    .andReturn().getResponse().getContentAsString();
-//        String resultat = mockMvc.perform(get("/gestaffectation/utilisateur/delete/a19390")).andReturn().getResponse().getContentAsString();
-
-            //then
-            assertThat(resultat).isEqualTo("L'utilisateur a été supprimé");
-        }
+//        @Test
+//        @DisplayName("supprimerUtilisateur: retour confirmation suppression en cas de succès")
+//        @WithMockUser(username = "admin", password = "$2a$10$ix2v00b5v0E.Ro3ZM0/Vv.cK704O4N1w/.yQeNq46KIVKmDanaHBi", roles = "ADMIN")
+//        public void supprimerUtilisateur_should_return_a_specific_string_when_ok() throws Exception {
+//            //given
+//            UtilisateurDTO utilisateurDTO = new UtilisateurDTO();
+//            utilisateurDTO.setUid("a19390");
+//            utilisateurDTO.setUsername("admin");
+//            utilisateurDTO.setPassword("password");
+//            monObjetMapper = objectMapper.writeValueAsString(utilisateurDTO);
+//
+//            //when
+//            String resultat = mockMvc.perform(post("/gestaffectation/utilisateur/delete2")
+//                    .content(monObjetMapper).contentType(MediaType.APPLICATION_JSON))
+//                    .andReturn().getResponse().getContentAsString();
+////        String resultat = mockMvc.perform(get("/gestaffectation/utilisateur/delete/a19390")).andReturn().getResponse().getContentAsString();
+//
+//            //then
+//            assertThat(resultat).isEqualTo("L'utilisateur a été supprimé");
+//        }
 
         @Test
         @DisplayName("HHTP DELETE user: retour confirmation suppression en cas de succès")

@@ -1,6 +1,7 @@
 package com.epita.filrouge.expositions.affectation;
 
 import com.epita.filrouge.application.affectation.IAffectationManagement;
+import com.epita.filrouge.application.security.UserDetailServiceImpl;
 import com.epita.filrouge.domain.affectation.Affectation;
 import com.epita.filrouge.domain.affectation.FiltresAffectation;
 import com.epita.filrouge.domain.collaborateur.Collaborateur;
@@ -9,11 +10,14 @@ import com.epita.filrouge.domain.iphone.Iphone;
 import com.epita.filrouge.domain.iphone.ModeleIphone;
 import com.epita.filrouge.domain.site.SiteExercice;
 import com.epita.filrouge.domain.uo.Uo;
+import com.epita.filrouge.domain.utilisateur.IRepositoryUtilisateur;
 import com.epita.filrouge.expositions.collaborateur.CollaborateurDTO;
 import com.epita.filrouge.expositions.collaborateur.CollaborateurDTOMapper;
 import com.epita.filrouge.expositions.exception.MapperExceptionCode;
 import com.epita.filrouge.expositions.iphone.IphoneDTO;
 import com.epita.filrouge.expositions.iphone.IphoneDTOMapper;
+import com.epita.filrouge.jwt.JwtRequestFilter;
+import com.epita.filrouge.jwt.JwtUtils;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.*;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -46,7 +50,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
             , AffectationFullDTOMapper.class
             , IphoneDTOMapper.class
             , CollaborateurDTOMapper.class
-            })
+            , JwtUtils.class, JwtRequestFilter.class})
 @DisplayName("Affectation Tests")
 class AffectationRessourceTest {
     private static final String CODE_SITE = "V2";
@@ -79,6 +83,12 @@ class AffectationRessourceTest {
     private static final String AFFECTATION_COMMENTAIRE = "Premiere affectation";
     private static final LocalDate AFFECTATION_DATEFIN = LocalDate.now();
     private static final String AFFECTATION_MOTIFFIN = "Vole";
+
+    @MockBean
+    private IRepositoryUtilisateur repositoryUtilisateur;
+
+    @MockBean
+    private UserDetailServiceImpl userDetailService;
 
     @Autowired
     private MockMvc mockMvc;

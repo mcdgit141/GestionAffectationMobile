@@ -1,10 +1,14 @@
 package com.epita.filrouge.expositions.iphone;
 
 import com.epita.filrouge.application.iphone.IIphoneManagement;
+import com.epita.filrouge.application.security.UserDetailServiceImpl;
 import com.epita.filrouge.domain.iphone.EtatIphoneEnum;
 import com.epita.filrouge.domain.iphone.Iphone;
 import com.epita.filrouge.domain.iphone.ModeleIphone;
+import com.epita.filrouge.domain.utilisateur.IRepositoryUtilisateur;
 import com.epita.filrouge.expositions.exception.MapperExceptionCode;
+import com.epita.filrouge.jwt.JwtRequestFilter;
+import com.epita.filrouge.jwt.JwtUtils;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -22,7 +26,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @ExtendWith(SpringExtension.class)
-@WebMvcTest({IphoneRessource.class, MapperExceptionCode.class, IphoneDTOMapper.class})
+@WebMvcTest({IphoneRessource.class, MapperExceptionCode.class, IphoneDTOMapper.class, JwtUtils.class, JwtRequestFilter.class})
 //@Disabled
 public class IphoneRessourceTest {
     @Autowired
@@ -31,6 +35,11 @@ public class IphoneRessourceTest {
     @MockBean
     private IIphoneManagement iPhoneManagement; //Mockito cree cette instance, rend un objet interface
 
+    @MockBean
+    private IRepositoryUtilisateur repositoryUtilisateur;
+
+    @MockBean
+    private UserDetailServiceImpl userDetailService;
 
 
     @Test

@@ -32,10 +32,18 @@
         <jacoco-maven-plugin.version>0.7.4.201502262128</jacoco-maven-plugin.version>
         <version-springsecu>2.3.1.RELEASE</version-springsecu>
         <version-springsecutest>5.3.3.RELEASE</version-springsecutest>
+        <version-jjwt>0.9.1</version-jjwt>
     </properties>
 
     <dependencyManagement>
         <dependencies>
+            <!-- https://mvnrepository.com/artifact/io.jsonwebtoken/jjwt -->
+            <dependency>
+                <groupId>io.jsonwebtoken</groupId>
+                <artifactId>jjwt</artifactId>
+                <version>${version-jjwt}</version>
+            </dependency>
+
 
             <!-- https://mvnrepository.com/artifact/org.springframework.security/spring-security-test -->
             <dependency>

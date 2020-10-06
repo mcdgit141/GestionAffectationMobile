@@ -1,11 +1,15 @@
 package com.epita.filrouge.expositions.collaborateur;
 
 import com.epita.filrouge.application.collaborateur.ICollaborateurManagement;
+import com.epita.filrouge.application.security.UserDetailServiceImpl;
 import com.epita.filrouge.domain.collaborateur.Collaborateur;
 import com.epita.filrouge.domain.iphone.EtatIphoneEnum;
 import com.epita.filrouge.domain.site.SiteExercice;
 import com.epita.filrouge.domain.uo.Uo;
+import com.epita.filrouge.domain.utilisateur.IRepositoryUtilisateur;
 import com.epita.filrouge.expositions.exception.MapperExceptionCode;
+import com.epita.filrouge.jwt.JwtRequestFilter;
+import com.epita.filrouge.jwt.JwtUtils;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -32,7 +36,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @ExtendWith(SpringExtension.class)
-@WebMvcTest({CollaborateurRessource.class, MapperExceptionCode.class, CollaborateurDTOMapper.class})
+@WebMvcTest({CollaborateurRessource.class, MapperExceptionCode.class, CollaborateurDTOMapper.class, JwtUtils.class, JwtRequestFilter.class})
 //@Disabled
 class CollaborateurRessourceTest {
     private static final Long SITE_ID = 1L;
@@ -62,6 +66,11 @@ class CollaborateurRessourceTest {
     @MockBean
     private ICollaborateurManagement collaborateurManagement; //Mockito cree cette instance, rend un objet interface
 
+    @MockBean
+    private IRepositoryUtilisateur repositoryUtilisateur;
+
+    @MockBean
+    private UserDetailServiceImpl userDetailService;
 
     @Test
     @WithMockUser(roles = {"USER"})

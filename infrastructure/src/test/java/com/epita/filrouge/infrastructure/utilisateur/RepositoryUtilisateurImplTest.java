@@ -154,19 +154,6 @@ public class RepositoryUtilisateurImplTest {
     }
 
     @Test
-    @DisplayName("NotFoundException si l'utilisateurEntity A supprimer n'est pas trouvé")
-    @Disabled("test devenu inutile avec les modifitions induite par l'ajout de l'id dans le domaine Utilisateur")
-    public void deleteUser_should_throw_Exception_if_entity_do_not_exist(){
-        //giving BeforeEach
-        Utilisateur mauvaisUtilisateur = new Utilisateur("b12345","dupond","francois",UtilisateurRoleEnum.ROLE_ADMIN);
-
-        //when + then
-        assertThatThrownBy(
-                () -> {repositoryUtilisateur.supprimerUser(mauvaisUtilisateur);}
-                ).isInstanceOf(NotFoundException.class);
-    }
-
-    @Test
     @DisplayName("recherche d'un utilisateur par son login")
     public void rechercherUser_should_return_an_entity_giving_an_existing_login(){
         //giving BeforeEach
