@@ -26,6 +26,7 @@ import org.springframework.security.web.authentication.Http403ForbiddenEntryPoin
 import org.springframework.security.web.authentication.SimpleUrlAuthenticationSuccessHandler;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.security.web.authentication.logout.SimpleUrlLogoutSuccessHandler;
+import org.springframework.web.cors.CorsConfiguration;
 
 import javax.servlet.Filter;
 import javax.servlet.ServletException;
@@ -65,6 +66,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers("/gestaffectation/**").authenticated()
 //                .anyRequest().authenticated()   //Authentification necessaire pour toutes les autres url
                 .and().sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
+
+        http.cors().configurationSource(request -> new CorsConfiguration().applyPermitDefaultValues());
 
     }
 
