@@ -21,7 +21,6 @@ import java.util.Collection;
 import java.util.HashSet;
 
 @RestController
-@RequestMapping("/gestaffectation")
 public class AuthenticationRessource {
 
     @Autowired
