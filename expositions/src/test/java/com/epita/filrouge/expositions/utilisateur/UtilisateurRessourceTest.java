@@ -162,7 +162,7 @@ public class UtilisateurRessourceTest {
 
             UtilisateurDTO utilisateurDTO = new UtilisateurDTO();
             utilisateurDTO.setUid("");
-            utilisateurDTO.setMdp("mdpDeTest");
+            utilisateurDTO.setPassword("mdpDeTest");
             monObjetMapper = objectMapper.writeValueAsString(utilisateurDTO);
             //when
             String resultat = mockMvc.perform(put("/gestaffectation/utilisateur/update")
@@ -180,10 +180,10 @@ public class UtilisateurRessourceTest {
 
             UtilisateurDTO utilisateurDTO = new UtilisateurDTO();
             utilisateurDTO.setUid("a19390");
-            utilisateurDTO.setMdp("mdpDeTest");
+            utilisateurDTO.setPassword("mdpDeTest");
             monObjetMapper = objectMapper.writeValueAsString(utilisateurDTO);
 
-            Mockito.doNothing().when(utilisateurManagement).modifierMdpUtilisateur(utilisateurDTO.getUid(), utilisateurDTO.getMdp());
+            Mockito.doNothing().when(utilisateurManagement).modifierMdpUtilisateur(utilisateurDTO.getUid(), utilisateurDTO.getPassword());
 
 
             //when
@@ -202,10 +202,10 @@ public class UtilisateurRessourceTest {
 
             UtilisateurDTO utilisateurDTO = new UtilisateurDTO();
             utilisateurDTO.setUid("a19390");
-            utilisateurDTO.setMdp("mdpDeTest");
+            utilisateurDTO.setPassword("mdpDeTest");
             monObjetMapper = objectMapper.writeValueAsString(utilisateurDTO);
 
-            Mockito.doNothing().when(utilisateurManagement).modifierMdpUtilisateur(utilisateurDTO.getUid(), utilisateurDTO.getMdp());
+            Mockito.doNothing().when(utilisateurManagement).modifierMdpUtilisateur(utilisateurDTO.getUid(), utilisateurDTO.getPassword());
 
 
             //when + then

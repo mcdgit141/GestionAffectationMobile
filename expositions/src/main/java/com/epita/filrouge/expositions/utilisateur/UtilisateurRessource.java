@@ -65,8 +65,8 @@ public class UtilisateurRessource {
     @Secured("ROLE_ADMIN")
     public String modifierMdp(@NotNull @RequestBody UtilisateurDTO utilisateurDTO){
         if ((utilisateurDTO.getUid() != null) &  (utilisateurDTO.getUid() != "") &
-                (utilisateurDTO.getMdp() != null) & (utilisateurDTO.getMdp() != "")) {
-            utilisateurManagement.modifierMdpUtilisateur(utilisateurDTO.getUid(), utilisateurDTO.getMdp());
+                (utilisateurDTO.getPassword() != null) & (utilisateurDTO.getPassword() != "")) {
+            utilisateurManagement.modifierMdpUtilisateur(utilisateurDTO.getUid(), utilisateurDTO.getPassword());
             return "Le mot de passe de l'utilisateur est modifié";
         } else {
             throw new BadRequestException("Information(s) manquante(s) pour la mise à jour du Mdp");
