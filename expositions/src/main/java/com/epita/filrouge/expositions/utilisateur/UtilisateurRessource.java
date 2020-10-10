@@ -43,9 +43,10 @@ public class UtilisateurRessource {
     }
 
     @DeleteMapping(value = "/delete")
-    @ResponseStatus(HttpStatus.OK)
+    @ResponseStatus(HttpStatus.NO_CONTENT)
     @Secured("ROLE_ADMIN")
     public String supprimerUtilisateur(@NotNull @RequestParam("uid") String uid){
+        System.out.println("**** je suis dans la suppression de l'utilisateur ******");
         Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         UserDetails utilisateurEnSesion = (UserDetails) principal;
 
