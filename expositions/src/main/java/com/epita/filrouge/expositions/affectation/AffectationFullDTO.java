@@ -31,7 +31,6 @@ public class AffectationFullDTO {
     @JsonProperty
     @ApiModelProperty(example = "Attribution d'un iphone pour les astreintes", required = true, value = "commentaire à préciser lors d'une affectation")
     @NotNull(message = "Le commentaire est obligatoire")
-    @Pattern(regexp = "^([ a-zA-Z0-9]{1,200})$")
     @Size(max = 200)
     private String commentaire;
     @JsonProperty
