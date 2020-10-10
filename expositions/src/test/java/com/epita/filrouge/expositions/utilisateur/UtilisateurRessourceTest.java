@@ -45,6 +45,9 @@ public class UtilisateurRessourceTest {
     private IUtilisateurManagement utilisateurManagement;
 
     @MockBean
+    private UtilisateurDtoMapper utilisateurDtoMapper;
+
+    @MockBean
     private IRepositoryUtilisateur repositoryUtilisateur;
 
     @MockBean
@@ -162,7 +165,7 @@ public class UtilisateurRessourceTest {
 
             UtilisateurDTO utilisateurDTO = new UtilisateurDTO();
             utilisateurDTO.setUid("");
-            utilisateurDTO.setMdp("mdpDeTest");
+            utilisateurDTO.setPassword("mdpDeTest");
             monObjetMapper = objectMapper.writeValueAsString(utilisateurDTO);
             //when
             String resultat = mockMvc.perform(put("/gestaffectation/utilisateur/update")
@@ -180,10 +183,10 @@ public class UtilisateurRessourceTest {
 
             UtilisateurDTO utilisateurDTO = new UtilisateurDTO();
             utilisateurDTO.setUid("a19390");
-            utilisateurDTO.setMdp("mdpDeTest");
+            utilisateurDTO.setPassword("mdpDeTest");
             monObjetMapper = objectMapper.writeValueAsString(utilisateurDTO);
 
-            Mockito.doNothing().when(utilisateurManagement).modifierMdpUtilisateur(utilisateurDTO.getUid(), utilisateurDTO.getMdp());
+            Mockito.doNothing().when(utilisateurManagement).modifierMdpUtilisateur(utilisateurDTO.getUid(), utilisateurDTO.getPassword());
 
 
             //when
@@ -202,10 +205,10 @@ public class UtilisateurRessourceTest {
 
             UtilisateurDTO utilisateurDTO = new UtilisateurDTO();
             utilisateurDTO.setUid("a19390");
-            utilisateurDTO.setMdp("mdpDeTest");
+            utilisateurDTO.setPassword("mdpDeTest");
             monObjetMapper = objectMapper.writeValueAsString(utilisateurDTO);
 
-            Mockito.doNothing().when(utilisateurManagement).modifierMdpUtilisateur(utilisateurDTO.getUid(), utilisateurDTO.getMdp());
+            Mockito.doNothing().when(utilisateurManagement).modifierMdpUtilisateur(utilisateurDTO.getUid(), utilisateurDTO.getPassword());
 
 
             //when + then
@@ -305,14 +308,22 @@ public class UtilisateurRessourceTest {
         public void retrieve_should_return_an_utilisateur() throws Exception {
             //given
             Utilisateur monUtilisateur = new Utilisateur("a19390","KAMDEM","leopold", UtilisateurRoleEnum.ROLE_ADMIN);
+            UtilisateurDTO monUtilisateurDto = new UtilisateurDTO();
+            monUtilisateurDto.setUid("a19390");
+            monUtilisateurDto.setNom("KAMDEM");
+            monUtilisateurDto.setPrenom("leopold");
+            monUtilisateurDto.setRoleUtilisateur(UtilisateurRoleEnum.ROLE_ADMIN.toString());
 
             Mockito.when(utilisateurManagement.rechercherUtilisateur("a19390")).thenReturn(monUtilisateur);
+            Mockito.when(utilisateurDtoMapper.mapToDto(any(Utilisateur.class))).thenReturn(monUtilisateurDto);
 
-            monObjetMapper = objectMapper.writeValueAsString(monUtilisateur);
+            monObjetMapper = objectMapper.writeValueAsString(utilisateurDtoMapper.mapToDto(monUtilisateur));
             //when
             String resultat = mockMvc.perform(get("/gestaffectation/utilisateur/retrieve/a19390"))
                     .andReturn().getResponse().getContentAsString();
 
+            System.out.println(resultat.getClass());
+            System.out.println(monObjetMapper);
             //then
             assertThat(resultat).isEqualTo(monObjetMapper);
 

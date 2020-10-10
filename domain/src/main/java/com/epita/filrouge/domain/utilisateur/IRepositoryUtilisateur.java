@@ -12,6 +12,6 @@ public interface IRepositoryUtilisateur {
 
     Utilisateur rechercherUserParUid(String uid);
 
-    void enregistrerUtilisateur(Utilisateur utilisateur);
+    Utilisateur enregistrerUtilisateur(Utilisateur utilisateur);
 }
 

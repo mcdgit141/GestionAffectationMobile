@@ -34,7 +34,7 @@ public class UtilisateurManagementImpl implements IUtilisateurManagement{
     }
 
     @Override
-    public void enregistrerUtilisateur(String uid, String profil) {
+    public Utilisateur enregistrerUtilisateur(String uid, String profil) {
         Collaborateur monCollaborateur = monCollaborateurManagement.findByUid(uid);
         UtilisateurRoleEnum roleUtilisateurACreer;
         switch (profil.toUpperCase()){
@@ -55,11 +55,9 @@ public class UtilisateurManagementImpl implements IUtilisateurManagement{
                 , monCollaborateur.getPrenom(), roleUtilisateurACreer);
         try {
             Utilisateur utilisateurExistant = repositoryUtilisateur.rechercherUserParUid(uid);
-            if (utilisateurExistant != null) {
-                throw new AllReadyExistException("Un Utilisateur existe déjà avec l'uid : " + uid);
-            }
+            throw new AllReadyExistException("Un Utilisateur existe déjà avec l'uid : " + uid);
         } catch (NotFoundException ex) {
-            repositoryUtilisateur.enregistrerUtilisateur(utilisateurACreer);
+            return repositoryUtilisateur.enregistrerUtilisateur(utilisateurACreer);
         }
 
 
