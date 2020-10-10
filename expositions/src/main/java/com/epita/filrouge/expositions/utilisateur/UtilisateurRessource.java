@@ -22,6 +22,9 @@ public class UtilisateurRessource {
     @Autowired
     private IUtilisateurManagement utilisateurManagement;
 
+    @Autowired
+    private UtilisateurDtoMapper utilisateurDtoMapper;
+
     BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
 
     private Logger monLogger = LoggerFactory.getLogger(UtilisateurRessource.class);
@@ -29,10 +32,11 @@ public class UtilisateurRessource {
     @PostMapping(value = "/create")
     @ResponseStatus(HttpStatus.CREATED)
     @Secured("ROLE_ADMIN")
-    public void creerUtilisateur(@NotNull @RequestBody final UtilisateurDTO utilisateurDTO) {
-
+    public UtilisateurDTO creerUtilisateur(@NotNull @RequestBody final UtilisateurDTO utilisateurDTO) {
+        Utilisateur utilisateurEnregistre;
         if (utilisateurDTO.getUid() != null & utilisateurDTO.getRoleUtilisateur() != null){
-            utilisateurManagement.enregistrerUtilisateur(utilisateurDTO.getUid(),utilisateurDTO.getRoleUtilisateur());
+            utilisateurEnregistre = utilisateurManagement.enregistrerUtilisateur(utilisateurDTO.getUid(),utilisateurDTO.getRoleUtilisateur());
+            return utilisateurDtoMapper.mapToDto(utilisateurEnregistre);
         } else {
             throw new BadRequestException("Information(s) manquante(s) pour l'utilisateur à créer");
         }
@@ -55,9 +59,9 @@ public class UtilisateurRessource {
     @GetMapping(value = "/retrieve/{uid}")
     @ResponseStatus(HttpStatus.OK)
     @Secured("ROLE_ADMIN")
-    public Utilisateur rechercherUtilisateur(@NotNull @PathVariable("uid") String uid) {
+    public UtilisateurDTO rechercherUtilisateur(@NotNull @PathVariable("uid") String uid) {
         Utilisateur utilisateur = utilisateurManagement.rechercherUtilisateur(uid);
-        return utilisateur;
+        return utilisateurDtoMapper.mapToDto(utilisateur);
     }
 
     @PutMapping(value = "/update")

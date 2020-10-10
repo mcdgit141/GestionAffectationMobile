@@ -23,8 +23,9 @@ public class RepositoryUtilisateurImpl implements IRepositoryUtilisateur {
     }
 
     @Override
-    public void enregistrerUtilisateur(Utilisateur utilisateur) {
-        userJpaRepository.save(utilisateurEntityMapper.mapToEntity(utilisateur));
+    public Utilisateur enregistrerUtilisateur(Utilisateur utilisateur) {
+        UtilisateurEntity utilisateurEntityEnregistre = userJpaRepository.save(utilisateurEntityMapper.mapToEntity(utilisateur));
+        return utilisateurEntityMapper.mapToDomain(utilisateurEntityEnregistre);
     }
 
     @Override

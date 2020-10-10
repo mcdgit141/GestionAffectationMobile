@@ -118,34 +118,6 @@ public class UtilisateurManagementImplTest {
     }
 
     @Test
-    @DisplayName("nombre d'appel de CollaborateurManagement")
-    public void enregistrerUtilisateur_should_call_collaborateurManagement_once(){
-        //giving
-        String uid = "a19390";
-        String nom = "DUPOND";
-        String prenom = "Francois";
-        String numeroLigne = "0102030405";
-        String roleRecu = "type1";
-        UtilisateurRoleEnum roleDomaine = UtilisateurRoleEnum.ROLE_TYPE1;
-
-
-        SiteExercice siteExercice = new SiteExercice(CODE_SITE,NOM_SITE,ADRESSE_POSTALE,CODE_POSTAL,VILLE,PAYS,DATE_CREATION);
-        Uo monUo = new Uo(CODE_UO,FONCTION_RATTACHEMENT,CODE_UO_PARENT,NOM_USAGE_UO,NOM_RESPONSABLE_UO);
-        monUo.setSiteExercice(siteExercice);
-        Collaborateur monCollaborateur = new Collaborateur(uid,nom, prenom,numeroLigne,monUo);
-
-        Mockito.when(collaborateurManagement.findByUid(uid)).thenReturn(monCollaborateur);
-
-
-        //when
-        utilisateurManagement.enregistrerUtilisateur(uid,roleRecu);
-
-        //then
-        Mockito.verify(collaborateurManagement, Mockito.times(1)).findByUid(uid);
-
-    }
-
-    @Test
     @DisplayName("Ordre d'appel des services")
     public void enregistrerUtilisateur_should_call_collaborateurManagement_first(){
         //giving
