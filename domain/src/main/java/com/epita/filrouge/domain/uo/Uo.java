@@ -19,6 +19,15 @@ public class Uo {
         this.nomResponsableUo = nomResponsableUo;
     }
 
+    public Uo(String codeUo, String fonctionRattachement, String codeUoParent, String nomUsageUo, String nomResponsableUo, SiteExercice siteExercice) {
+        this.codeUo = codeUo;
+        this.fonctionRattachement = fonctionRattachement;
+        this.codeUoParent = codeUoParent;
+        this.nomUsageUo = nomUsageUo;
+        this.nomResponsableUo = nomResponsableUo;
+        this.siteExercice = siteExercice;
+    }
+
     public String getCodeUo() {
         return codeUo;
     }
