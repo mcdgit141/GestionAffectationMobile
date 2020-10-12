@@ -51,7 +51,7 @@ class AffectationTest {
 
     private static final String AFFECTATION_COMMENTAIRE_CLOTURE = "Cloture de l'affectation suite au vol du portable";
     private static final String AFFECTATION_MOTIFFIN = "VOLE";
-    private static final LocalDate DATE_FIN = null;
+    private static final LocalDate DATE_FIN =  null;
 
     private static final String MOTIFFIN_SUPPRIME = "SUPPRIME";
 

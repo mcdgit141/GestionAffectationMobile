@@ -22,12 +22,17 @@ public class CollaborateurDTO {
     private String uid;
 
     @JsonProperty
+    @ApiModelProperty(example = "DUPOND", required = true, value = "Nom du Collaborateur")
     private String nom;
 
     @JsonProperty
+    @ApiModelProperty(example = "Françoise", required = true, value = "Prénom du Collaborateur")
     private String prenom;
 
     @JsonProperty
+    @ApiModelProperty(example = "0601020304", required = true, value = "Numéro Ligne utilisateur")
+    @Size(max = 10)
+    @Size(min = 10)
     private String numeroLigne;
 
     @JsonProperty
@@ -203,3 +208,4 @@ public class CollaborateurDTO {
         }
     }
 }
+

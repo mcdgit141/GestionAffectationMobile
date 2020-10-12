@@ -85,7 +85,6 @@ public class Affectation {
 
     public Affectation reglesAppliqueesPourCloturerAffectation(Collaborateur collaborateur, Iphone iphone, String affectationCommentaire,String motifFin,LocalDate dateFin) throws AllReadyClotureeException{
 
-        System.out.println("valeur datefin du this-----dans domain Affectation--" + this.dateFin);
         if (this.dateFin != null){
             throw new AllReadyClotureeException("L'affectation avec le numéro suivant est déjà clôturée " + this.numeroAffectation);
         }
@@ -120,6 +119,10 @@ public class Affectation {
     }
 
     public Affectation reglesAppliqueesPourLaCreation(Collaborateur collaborateur, Iphone iphone, String numeroLigne, List<Affectation> affectationDejaCree ) throws AllReadyClotureeException{
+
+        if (this.getDateAffectation().compareTo(LocalDate.now()) < 0)  {
+            throw new AllReadyClotureeException("La date d'affectation a une date antérieure à celle de ce jour. L'affectation ne peut pas être créée.");
+        }
 
         if (affectationDejaCree != null) {
            //faire la boucle for pour test de la date de fin. Si la date de fin est à NULL, l'affectation existe déjà donc refuser la création
