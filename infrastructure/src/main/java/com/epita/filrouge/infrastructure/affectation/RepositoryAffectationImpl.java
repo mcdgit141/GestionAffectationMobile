@@ -179,8 +179,10 @@ public class RepositoryAffectationImpl implements IRepositoryAffectation {
         }
 
 
+        String sensDuTri;
+        String critereDeTri;
         if (filtresAffectation.getCritereDeTri() != null) {
-            String critereDeTri;
+//            String critereDeTri;
             switch (filtresAffectation.getCritereDeTri()) {
                 //A completer avec les différents critère de tri envisagés
                 case "UID":
@@ -194,16 +196,21 @@ public class RepositoryAffectationImpl implements IRepositoryAffectation {
                     break;
             }
 
-            String sensDuTri;
+//            String sensDuTri;
             if (filtresAffectation.getSensduTri() != null && filtresAffectation.getSensduTri().equals("D")) {
                 sensDuTri = "DESC";
             } else {
                 sensDuTri = "ASC";
             }
-            if (critereDeTri != null && !critereDeTri.isEmpty()) {
-                query.append("ORDER BY " + critereDeTri + " " + sensDuTri);
-            }
+//            if (critereDeTri != null && !critereDeTri.isEmpty()) {
+//                query.append("ORDER BY " + critereDeTri + " " + sensDuTri);
+//            }
+        } else {
+            critereDeTri = "a.dateAffectation";
+            sensDuTri = "DESC";
         }
+
+        query.append("ORDER BY " + critereDeTri + " " + sensDuTri);
 
 
         String maRequeteConstruite = query.toString();
