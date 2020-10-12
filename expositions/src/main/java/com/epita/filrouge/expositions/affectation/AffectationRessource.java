@@ -86,7 +86,7 @@ public class AffectationRessource {
         if (affectationFullDTO.getNumeroAffectation() != null & affectationFullDTO.getCommentaire() != null
            & affectationFullDTO.getMotifFin() != null & affectationFullDTO.getDateFin() != null
            & affectationFullDTO.getCommentaire() != "" & affectationFullDTO.getMotifFin() != ""
-          // & affectationFullDTO.getDateFin().compareTo(LocalDate.now()) <0
+
           ){
             affectationManagement.cloturerAffectation(Long.parseLong(affectationFullDTO.getNumeroAffectation()),affectationFullDTO.getCommentaire()
                     ,affectationFullDTO.getMotifFin(),affectationFullDTO.getDateFin());
@@ -98,7 +98,7 @@ public class AffectationRessource {
 
     }
 
-    @DeleteMapping(value = "/affectation/suppression", consumes = { "application/json" })
+    @DeleteMapping(value = "/affectation/suppression")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     @Validated
     @Secured({"ROLE_ADMIN", "ROLE_TYPE2"})

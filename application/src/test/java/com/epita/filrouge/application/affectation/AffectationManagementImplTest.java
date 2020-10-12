@@ -224,6 +224,7 @@ public class AffectationManagementImplTest {
         ArgumentCaptor<Affectation> valueCapture = ArgumentCaptor.forClass(Affectation.class);
         //when
         affectationManagementImpl.cloturerAffectation(affectationEnCours.getNumeroAffectation(),affectationEnCours.getCommentaire(),AFFECTATION_MOTIFFIN,affectationEnCours.getDateFin());
+        System.out.println("dans les tests application --affectationEnCours.getDateFin() " + affectationEnCours.getDateFin());
         //then
         Mockito.verify(repositoryAffectation).miseAjourAffectation(valueCapture.capture());
         assertAll(
