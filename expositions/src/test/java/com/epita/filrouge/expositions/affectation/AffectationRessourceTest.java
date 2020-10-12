@@ -49,7 +49,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @ExtendWith(SpringExtension.class)
 @WebMvcTest({AffectationRessource.class, MapperExceptionCode.class
             , AffectationFullDTOMapper.class
-            , AffectationFullDTOMappertest.class
+//            , AffectationFullDTOMappertest.class
             , IphoneDTOMapper.class
             , CollaborateurDTOMapper.class
             , JwtUtils.class, JwtRequestFilter.class, JwtAuthenticationEntryPoint.class})

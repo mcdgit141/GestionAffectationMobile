@@ -32,8 +32,8 @@ public class AffectationRessource {
     @Autowired
     private AffectationFullDTOMapper affectationFullDTOMapper;
 
-    @Autowired
-    private AffectationFullDTOMappertest affectationFullDTOMappertest;
+//    @Autowired
+//    private AffectationFullDTOMappertest affectationFullDTOMappertest;
 
     @PostMapping(value = "/affectation/creation", consumes = { "application/json" }, produces =  { "application/json" })
     @ResponseStatus(HttpStatus.CREATED)
@@ -67,14 +67,14 @@ public class AffectationRessource {
         return affectationFullDTOMapper.mapToDTOList(affectationList);
     }
 
-    @PostMapping(value = "/affectation/liste2", consumes = { "application/json" }, produces =  { "application/json" })
-    @Secured({"ROLE_ADMIN","ROLE_TYPE1","ROLE_TYPE2"})
-    public List<AffectationFullDTOtest> afficheListeAffectations2(@NotNull @RequestBody final FiltresAffectation filtresAffectation){
-
-//        return affectationManagement.listerAffectation(filtresAffectation);
-        List<Affectation> affectationList= affectationManagement.listerAffectation(filtresAffectation);
-        return affectationFullDTOMappertest.mapToDTOList(affectationList);
-    }
+//    @PostMapping(value = "/affectation/liste2", consumes = { "application/json" }, produces =  { "application/json" })
+//    @Secured({"ROLE_ADMIN","ROLE_TYPE1","ROLE_TYPE2"})
+//    public List<AffectationFullDTOtest> afficheListeAffectations2(@NotNull @RequestBody final FiltresAffectation filtresAffectation){
+//
+////        return affectationManagement.listerAffectation(filtresAffectation);
+//        List<Affectation> affectationList= affectationManagement.listerAffectation(filtresAffectation);
+//        return affectationFullDTOMappertest.mapToDTOList(affectationList);
+//    }
 
 
 
