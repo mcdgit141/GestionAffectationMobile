@@ -16,6 +16,7 @@ import com.epita.filrouge.expositions.collaborateur.CollaborateurDTOMapper;
 import com.epita.filrouge.expositions.exception.MapperExceptionCode;
 import com.epita.filrouge.expositions.iphone.IphoneDTO;
 import com.epita.filrouge.expositions.iphone.IphoneDTOMapper;
+import com.epita.filrouge.jwt.JwtAuthenticationEntryPoint;
 import com.epita.filrouge.jwt.JwtRequestFilter;
 import com.epita.filrouge.jwt.JwtUtils;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -50,7 +51,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
             , AffectationFullDTOMapper.class
             , IphoneDTOMapper.class
             , CollaborateurDTOMapper.class
-            , JwtUtils.class, JwtRequestFilter.class})
+            , JwtUtils.class, JwtRequestFilter.class, JwtAuthenticationEntryPoint.class})
 @DisplayName("Affectation Tests")
 class AffectationRessourceTest {
     private static final String CODE_SITE = "V2";
