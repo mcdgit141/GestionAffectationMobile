@@ -39,14 +39,14 @@ public class JwtRequestFilter extends OncePerRequestFilter implements Filter {
 
         if (requestHeaders != null && requestHeaders.startsWith("Bearer ")) {
             tokenRecu = requestHeaders.substring(7);
-            username=jwtUtils.getUsernameFromToken(tokenRecu);
+            username=jwtUtils.getUsernameFromToken(tokenRecu, request);
         }
 
         if (username != null && SecurityContextHolder.getContext().getAuthentication() == null) {
 
             UserDetails userDetails = this.userDetailService.loadUserByUsername(username);
 
-            if (jwtUtils.validateToken(tokenRecu,userDetails)) {
+            if (jwtUtils.validateToken(tokenRecu,userDetails, request)) {
                 UsernamePasswordAuthenticationToken usernamePasswordAuthenticationToken =
                         new UsernamePasswordAuthenticationToken(userDetails,null,userDetails.getAuthorities());
                 usernamePasswordAuthenticationToken.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));

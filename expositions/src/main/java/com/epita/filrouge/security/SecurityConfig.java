@@ -1,5 +1,6 @@
 package com.epita.filrouge.security;
 
+import com.epita.filrouge.jwt.JwtAuthenticationEntryPoint;
 import com.epita.filrouge.jwt.JwtRequestFilter;
 import com.fasterxml.jackson.core.json.UTF8JsonGenerator;
 import org.slf4j.Logger;
@@ -51,6 +52,9 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     @Autowired
     private JwtRequestFilter jwtRequestFilter;
 
+    @Autowired
+    private JwtAuthenticationEntryPoint jwtAuthenticationEntryPoint;
+
 
     @Override
     protected void configure(AuthenticationManagerBuilder auth) throws Exception {
@@ -71,6 +75,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers("/gestaffectation/authenticate").permitAll()   // autorisation à l'authentification pour tout le monde
                 .antMatchers("/gestaffectation/**").authenticated()
 //                .anyRequest().authenticated()   //Authentification necessaire pour toutes les autres url
+                .and().exceptionHandling().authenticationEntryPoint(jwtAuthenticationEntryPoint)
                 .and().sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
 
 //        http.cors().configurationSource(request -> new CorsConfiguration().applyPermitDefaultValues());

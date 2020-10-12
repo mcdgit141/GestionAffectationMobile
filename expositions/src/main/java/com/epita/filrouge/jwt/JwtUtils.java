@@ -1,11 +1,13 @@
 package com.epita.filrouge.jwt;
 
 import io.jsonwebtoken.Claims;
+import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
 
+import javax.servlet.http.HttpServletRequest;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
@@ -22,8 +24,13 @@ public class JwtUtils {
 
 
     // retrieve username from jwt token
-    public String getUsernameFromToken(final String token) {
-        return getClaimFromToken(token, Claims::getSubject);
+    public String getUsernameFromToken(final String token, HttpServletRequest request) {
+        try {
+            return getClaimFromToken(token, Claims::getSubject);
+        } catch (ExpiredJwtException e) {
+            request.setAttribute("Expired","token expire");
+            return null;
+        }
     }
 
     // retrieve expiration date from jwt token
@@ -71,8 +78,8 @@ public class JwtUtils {
     }
 
     // validate token
-    public Boolean validateToken(final String token, final UserDetails userDetails) {
-        final String username = getUsernameFromToken(token);
+    public Boolean validateToken(final String token, final UserDetails userDetails, HttpServletRequest request) {
+        final String username = getUsernameFromToken(token, request);
         return username.equals(userDetails.getUsername()) && !isTokenExpired(token);
     }
 }

@@ -8,6 +8,7 @@ import com.epita.filrouge.domain.site.SiteExercice;
 import com.epita.filrouge.domain.uo.Uo;
 import com.epita.filrouge.domain.utilisateur.IRepositoryUtilisateur;
 import com.epita.filrouge.expositions.exception.MapperExceptionCode;
+import com.epita.filrouge.jwt.JwtAuthenticationEntryPoint;
 import com.epita.filrouge.jwt.JwtRequestFilter;
 import com.epita.filrouge.jwt.JwtUtils;
 import org.junit.jupiter.api.Disabled;
@@ -36,7 +37,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @ExtendWith(SpringExtension.class)
-@WebMvcTest({CollaborateurRessource.class, MapperExceptionCode.class, CollaborateurDTOMapper.class, JwtUtils.class, JwtRequestFilter.class})
+@WebMvcTest({CollaborateurRessource.class, MapperExceptionCode.class, CollaborateurDTOMapper.class, JwtUtils.class, JwtRequestFilter.class, JwtAuthenticationEntryPoint.class})
 //@Disabled
 class CollaborateurRessourceTest {
     private static final Long SITE_ID = 1L;
