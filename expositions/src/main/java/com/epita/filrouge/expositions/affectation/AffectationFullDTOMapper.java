@@ -24,7 +24,7 @@ public class AffectationFullDTOMapper  {
         IphoneDTO iphoneFullDTO = iphoneDTOMapper.mapToDTO2(affectation.getIphone());
 
         AffectationFullDTO affectationFullDTO = new AffectationFullDTO();
-        affectationFullDTO.setNumeroAffectation(affectation.getNumeroAffectation());
+        affectationFullDTO.setNumeroAffectation(affectation.getNumeroAffectation().toString());
         affectationFullDTO.setDateAffectation(affectation.getDateAffectation());
         affectationFullDTO.setDateRenouvellementPrevue(affectation.getDateRenouvellementPrevue());
         affectationFullDTO.setDateFin(affectation.getDateFin());

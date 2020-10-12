@@ -32,6 +32,9 @@ public class AffectationRessource {
     @Autowired
     private AffectationFullDTOMapper affectationFullDTOMapper;
 
+    @Autowired
+    private AffectationFullDTOMappertest affectationFullDTOMappertest;
+
     @PostMapping(value = "/affectation/creation", consumes = { "application/json" }, produces =  { "application/json" })
     @ResponseStatus(HttpStatus.CREATED)
     @Secured({"ROLE_ADMIN","ROLE_TYPE2"})
@@ -64,6 +67,17 @@ public class AffectationRessource {
         return affectationFullDTOMapper.mapToDTOList(affectationList);
     }
 
+    @PostMapping(value = "/affectation/liste2", consumes = { "application/json" }, produces =  { "application/json" })
+    @Secured({"ROLE_ADMIN","ROLE_TYPE1","ROLE_TYPE2"})
+    public List<AffectationFullDTOtest> afficheListeAffectations2(@NotNull @RequestBody final FiltresAffectation filtresAffectation){
+
+//        return affectationManagement.listerAffectation(filtresAffectation);
+        List<Affectation> affectationList= affectationManagement.listerAffectation(filtresAffectation);
+        return affectationFullDTOMappertest.mapToDTOList(affectationList);
+    }
+
+
+
     @PutMapping(value = "/affectation/cloture", consumes = { "application/json" }, produces =  { "application/json" })
     @ResponseStatus(HttpStatus.OK)
     @Secured({"ROLE_ADMIN","ROLE_TYPE2"})
@@ -74,7 +88,7 @@ public class AffectationRessource {
            & affectationFullDTO.getCommentaire() != "" & affectationFullDTO.getMotifFin() != ""
           // & affectationFullDTO.getDateFin().compareTo(LocalDate.now()) <0
           ){
-            affectationManagement.cloturerAffectation(affectationFullDTO.getNumeroAffectation(),affectationFullDTO.getCommentaire()
+            affectationManagement.cloturerAffectation(Long.parseLong(affectationFullDTO.getNumeroAffectation()),affectationFullDTO.getCommentaire()
                     ,affectationFullDTO.getMotifFin(),affectationFullDTO.getDateFin());
             return "La clôture de l'affectation s'est bien passée";
         } else {

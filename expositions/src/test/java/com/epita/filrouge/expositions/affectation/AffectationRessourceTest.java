@@ -49,6 +49,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @ExtendWith(SpringExtension.class)
 @WebMvcTest({AffectationRessource.class, MapperExceptionCode.class
             , AffectationFullDTOMapper.class
+            , AffectationFullDTOMappertest.class
             , IphoneDTOMapper.class
             , CollaborateurDTOMapper.class
             , JwtUtils.class, JwtRequestFilter.class, JwtAuthenticationEntryPoint.class})
@@ -80,6 +81,7 @@ class AffectationRessourceTest {
     private static final EtatIphoneEnum IPHONE_ETAT = EtatIphoneEnum.DISPONIBLE;
 
     private static final Long AFFECTATION_NUMERO = 1L;
+    private static final String AFFECTATION_NUMERO_STRING = "1";
     private static final LocalDate AFFECTATION_DATE = LocalDate.now();
     private static final String AFFECTATION_COMMENTAIRE = "Premiere affectation";
     private static final LocalDate AFFECTATION_DATEFIN = LocalDate.now();
@@ -318,7 +320,7 @@ class AffectationRessourceTest {
         void affectationDTO_Uncomplete_should_throw_an_Exception() throws Exception {
             //given
             AffectationFullDTO affectationFullDTO = new AffectationFullDTO();
-            affectationFullDTO.setNumeroAffectation(AFFECTATION_NUMERO);
+            affectationFullDTO.setNumeroAffectation(AFFECTATION_NUMERO_STRING);
 
             String monObjetMapper = objectMapper.writeValueAsString(affectationFullDTO);
 
@@ -342,7 +344,7 @@ class AffectationRessourceTest {
 
             AffectationFullDTO affectationFullDTOACloturer = instancierUneAffectationFullDTO();
 
-            affectationFullDTOACloturer.setNumeroAffectation(AFFECTATION_NUMERO);
+            affectationFullDTOACloturer.setNumeroAffectation(AFFECTATION_NUMERO_STRING);
             affectationFullDTOACloturer.setMotifFin(AFFECTATION_MOTIFFIN);
             affectationFullDTOACloturer.setDateFin(AFFECTATION_DATEFIN);
 
