@@ -84,7 +84,7 @@ public class AffectationRessource {
 
     }
 
-    @DeleteMapping(value = "/affectation/suppression", consumes = { "application/json" })
+    @DeleteMapping(value = "/affectation/suppression")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     @Validated
     @Secured({"ROLE_ADMIN", "ROLE_TYPE2"})
