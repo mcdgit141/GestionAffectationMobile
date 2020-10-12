@@ -7,6 +7,7 @@ import com.epita.filrouge.domain.iphone.Iphone;
 import com.epita.filrouge.domain.iphone.ModeleIphone;
 import com.epita.filrouge.domain.utilisateur.IRepositoryUtilisateur;
 import com.epita.filrouge.expositions.exception.MapperExceptionCode;
+import com.epita.filrouge.jwt.JwtAuthenticationEntryPoint;
 import com.epita.filrouge.jwt.JwtRequestFilter;
 import com.epita.filrouge.jwt.JwtUtils;
 import org.junit.jupiter.api.DisplayName;
@@ -26,7 +27,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @ExtendWith(SpringExtension.class)
-@WebMvcTest({IphoneRessource.class, MapperExceptionCode.class, IphoneDTOMapper.class, JwtUtils.class, JwtRequestFilter.class})
+@WebMvcTest({IphoneRessource.class, MapperExceptionCode.class, IphoneDTOMapper.class, JwtUtils.class, JwtRequestFilter.class, JwtAuthenticationEntryPoint.class})
 //@Disabled
 public class IphoneRessourceTest {
     @Autowired

@@ -7,6 +7,7 @@ import com.epita.filrouge.domain.utilisateur.IRepositoryUtilisateur;
 import com.epita.filrouge.domain.utilisateur.Utilisateur;
 import com.epita.filrouge.domain.utilisateur.UtilisateurRoleEnum;
 import com.epita.filrouge.expositions.exception.MapperExceptionCode;
+import com.epita.filrouge.jwt.JwtAuthenticationEntryPoint;
 import com.epita.filrouge.jwt.JwtRequestFilter;
 import com.epita.filrouge.jwt.JwtUtils;
 import com.fasterxml.jackson.core.JsonProcessingException;
@@ -34,7 +35,7 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 @ExtendWith(SpringExtension.class)
-@WebMvcTest({UtilisateurRessource.class, MapperExceptionCode.class, JwtUtils.class, JwtRequestFilter.class})
+@WebMvcTest({UtilisateurRessource.class, MapperExceptionCode.class, JwtUtils.class, JwtRequestFilter.class, JwtAuthenticationEntryPoint.class})
 //@Disabled
 public class UtilisateurRessourceTest {
 
