@@ -90,7 +90,10 @@ public class Affectation {
         }
 
         if (dateFin != null)
-            {this.dateFin=dateFin;}
+            if (dateFin.compareTo(LocalDate.now()) <0) {
+                throw new AllReadyClotureeException("La date de fin de clôture a une date d'affectation antérieure à aujourd'hui. Elle ne peut donc pas être clôturée.");
+            } else
+                {this.dateFin=dateFin;}
         else
             {this.dateFin=LocalDate.now();}
 

@@ -72,7 +72,7 @@ public class AffectationRessource {
         if (affectationFullDTO.getNumeroAffectation() != null & affectationFullDTO.getCommentaire() != null
            & affectationFullDTO.getMotifFin() != null & affectationFullDTO.getDateFin() != null
            & affectationFullDTO.getCommentaire() != "" & affectationFullDTO.getMotifFin() != ""
-          // & affectationFullDTO.getDateFin().compareTo(LocalDate.now()) <0
+
           ){
             affectationManagement.cloturerAffectation(affectationFullDTO.getNumeroAffectation(),affectationFullDTO.getCommentaire()
                     ,affectationFullDTO.getMotifFin(),affectationFullDTO.getDateFin());
