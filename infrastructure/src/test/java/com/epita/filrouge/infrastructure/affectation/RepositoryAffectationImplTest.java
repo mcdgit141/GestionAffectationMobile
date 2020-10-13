@@ -27,7 +27,9 @@ import org.springframework.boot.test.autoconfigure.orm.jpa.TestEntityManager;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 import java.time.LocalDate;
+import java.util.AbstractMap;
 import java.util.List;
+import java.util.Map;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
@@ -645,6 +647,30 @@ class RepositoryAffectationImplTest {
                         .getResultList().size()
                 ).isEqualTo(5)
         );
+    }
+
+    @Test
+    @DisplayName("rechercheAffectationSansFiltre : restitution du nombre d'enregistrement total")
+    public void rechercheAffectationAvecFiltre_retourne_dix(){
+        //given
+        enrichirDbDeTest();
+        FiltresAffectation monFiltre = new FiltresAffectation();
+//        monFiltre.setTaillePage(5);
+//        monFiltre.setCritereDeTri("UID");
+//        monFiltre.setNumeroDePage(2);
+
+        //when
+        AbstractMap.Entry<List<Integer>, List<Affectation>> result = repositoryAffectation.rechercheAffectationAvecFiltres2(monFiltre);
+        List<Integer> meta = result.getKey();
+        List<Affectation> affectationList = result.getValue();
+
+        //then
+        assertThat(meta.get(0)).isEqualTo(11);  // nombre enregt total
+        assertThat(meta.get(1)).isEqualTo(2);   // nombre de pages
+        assertThat(meta.get(2)).isEqualTo(1);   // page retournée
+        assertThat(meta.get(3)).isEqualTo(10);   // nombre d'enregt par page
+        assertThat(affectationList.size()).isEqualTo(10);
+
     }
 
     private IphoneEntity persisteIphone(String numeroSerie, Double iphonePrix,

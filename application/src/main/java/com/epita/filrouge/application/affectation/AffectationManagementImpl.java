@@ -20,6 +20,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.AbstractMap;
 import java.util.List;
 import java.util.Random;
 
@@ -119,5 +120,13 @@ public class AffectationManagementImpl implements IAffectationManagement {
         return repositoryAffectation.rechercheAffectationAvecFiltres(filtresAffectation);
 
         }
+
+    @Override
+    public AbstractMap.Entry<List<Integer>, List<Affectation>> listerAffectation2(FiltresAffectation filtresAffectation) {
+
+
+        return repositoryAffectation.rechercheAffectationAvecFiltres2(filtresAffectation);
+
+    }
     }
 

@@ -14,8 +14,7 @@ import org.springframework.stereotype.Repository;
 
 import javax.persistence.EntityManager;
 import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 
 @Repository
 public class RepositoryAffectationImpl implements IRepositoryAffectation {
@@ -46,19 +45,20 @@ public class RepositoryAffectationImpl implements IRepositoryAffectation {
     @Override
     public void affecter(Affectation affectationACreer) {
 
-        monLogger.debug("affectationACreer = {}" , affectationACreer);
+        monLogger.debug("affectationACreer = {}", affectationACreer);
 
         AffectationEntity affectationEntity = affectationEntityMapper.mapToEntity(affectationACreer);
 
         iRepositoryJpaAffectation.save(affectationEntity);
     }
+
     @Override
     public Affectation chercheAffectationParNumeroAffectation(Long numeroAffectation) {
 
         AffectationEntity affectationEntity = iRepositoryJpaAffectation.findByNumeroAffectation(numeroAffectation);
-        if (affectationEntity != null){
-            return affectationMapper.mapToDomain(affectationEntity);}
-        else {
+        if (affectationEntity != null) {
+            return affectationMapper.mapToDomain(affectationEntity);
+        } else {
             monLogger.debug("couche infra chercheAffectationParNumeroAffectation, affectationEntity non trouvée en base  = {}", numeroAffectation);
             throw new NotFoundException("L'affectation avec le numéro suivant n'existe pas " + numeroAffectation);
         }
@@ -70,14 +70,13 @@ public class RepositoryAffectationImpl implements IRepositoryAffectation {
         AffectationEntity affectationEntity = iRepositoryJpaAffectation.findByNumeroAffectation(affectation.getNumeroAffectation());
         monLogger.debug("couche infra miseAjourAffectation---");
 
-        if (affectationEntity != null){
+        if (affectationEntity != null) {
 
-             AffectationEntity affectationEntityRetourMapper = affectationEntityMapper.mapToEntity(affectation);
+            AffectationEntity affectationEntityRetourMapper = affectationEntityMapper.mapToEntity(affectation);
 
-             affectationEntityRetourMapper.setId(affectationEntity.getId());
-             iRepositoryJpaAffectation.save(affectationEntityRetourMapper);
-        }
-        else {
+            affectationEntityRetourMapper.setId(affectationEntity.getId());
+            iRepositoryJpaAffectation.save(affectationEntityRetourMapper);
+        } else {
             monLogger.debug("couche infra miseAjourAffectation, affectationEntity non trouvée en base  = {}", affectation.getNumeroAffectation());
             throw new NotFoundException("L'affectation avec le numéro suivant n'existe pas " + affectation.getNumeroAffectation());
         }
@@ -95,8 +94,7 @@ public class RepositoryAffectationImpl implements IRepositoryAffectation {
             affectationEntityASupprimer.getIphone().setIphoneId(affectationEntityEnTable.getIphone().getIphoneId());
             affectationEntityASupprimer.setId(affectationEntityEnTable.getId());
             iRepositoryJpaAffectation.delete(affectationEntityASupprimer);
-        }
-        else {
+        } else {
             throw new NotFoundException("L'affectation avec le numéro suivant n'existe pas " + affectationEntityASupprimer.getNumeroAffectation());
         }
         return affectationASupprimer;
@@ -110,6 +108,60 @@ public class RepositoryAffectationImpl implements IRepositoryAffectation {
         return affectationMapper.mapToDomainList(affectationsList);
     }
 
+    public AbstractMap.Entry<List<Integer>, List<Affectation>> rechercheAffectationAvecFiltres2(FiltresAffectation filtresAffectation) {
+//    }
+//    public Integer rechercheAffectationAvecFiltres2(FiltresAffectation filtresAffectation) {
+
+        Integer nombreEnregistrementsTotal = this.rechercheNombreEnregistrements(filtresAffectation);
+
+        if (filtresAffectation.getNumeroDePage() == 0) {
+            filtresAffectation.setNumeroDePage(1);
+        }
+        if (filtresAffectation.getTaillePage() == 0) {
+            filtresAffectation.setTaillePage(10);
+        }
+
+        int nombreDePages = nombreEnregistrementsTotal / filtresAffectation.getTaillePage() +
+                            (nombreEnregistrementsTotal % filtresAffectation.getTaillePage() == 0 ? 0 : 1);
+        List<Integer> listeMeta = new ArrayList<>();
+        listeMeta.add(nombreEnregistrementsTotal);
+//        listeMeta.add(nombreEnregistrementsTotal / filtresAffectation.getTaillePage());
+        listeMeta.add(nombreDePages);
+        listeMeta.add(filtresAffectation.getNumeroDePage());
+        listeMeta.add(filtresAffectation.getTaillePage());
+
+
+
+        List<Affectation> affectationList = this.rechercheAffectationAvecFiltres(filtresAffectation);
+
+
+        AbstractMap.Entry<List<Integer>, List<Affectation>> mapMetaEtData2=new AbstractMap.SimpleEntry<>(listeMeta, affectationList);
+
+        Map<List<Integer>, List<Affectation>> mapMetaEtData = new HashMap<>();
+        mapMetaEtData.put(listeMeta, affectationList);
+
+
+//        return nombreEnregistrementsTotal;
+        return mapMetaEtData2;
+    }
+
+
+
+    private Integer rechercheNombreEnregistrements(FiltresAffectation filtresAffectation) {
+        StringBuilder queryCount = new StringBuilder();
+        queryCount.append("select count(a) from AffectationEntity a where 1=1 ");
+
+        String where = this.buildDeLaPartieWhere(filtresAffectation);
+        queryCount.append(where);
+
+        String maRequeteConstruite = queryCount.toString();
+        Integer nombreEnregistrement = (int) (long) monEntityManager.createQuery(maRequeteConstruite)
+                .getSingleResult();
+
+        return nombreEnregistrement;
+    }
+
+//    private
 
     @Override
     public List<Affectation> rechercheAffectationAvecFiltres(FiltresAffectation filtresAffectation) {
@@ -131,58 +183,58 @@ public class RepositoryAffectationImpl implements IRepositoryAffectation {
         StringBuilder query = new StringBuilder();
         query.append("select a from AffectationEntity a where 1=1 ");
 
-        String uid = filtresAffectation.getUid();
-        if (uid != null && !uid.isEmpty()){
-            query.append(String.format("AND a.collaborateur.uid = '%s' ", uid ));
-//            sortQueryDesc.append(String.format(uid ,"desc"));
-        }
-
-        String nom = filtresAffectation.getNom();
-        if (nom != null && !nom.isEmpty()){
-            query.append(String.format("AND a.collaborateur.nom = '%s' ", nom ));
-        }
-
-        String codeUo = filtresAffectation.getCodeUo();
-        if (codeUo != null && !codeUo.isEmpty()){
-            query.append(String.format("AND a.collaborateur.uo.codeUo = '%s' ",  codeUo));
-        }
-
-        String nomUsageUo = filtresAffectation.getNomUsageUo();
-        if (nomUsageUo != null && !nomUsageUo.isEmpty()){
-            query.append(String.format("AND a.collaborateur.uo.nomUsageUo = '%s' ", nomUsageUo));
-
-        }
-
-        String nomSite = filtresAffectation.getNomSite();
-        if (nomSite != null && !nomSite.isEmpty()){
-            query.append(String.format("AND a.collaborateur.uo.siteExercice.nomSite = '%s' ", nomSite ));
-        }
-
-        String numeroLigneCollaborateur = filtresAffectation.getNumeroLigneCollaborateur();
-        if (numeroLigneCollaborateur != null && !numeroLigneCollaborateur.isEmpty()){
-            query.append(String.format("AND a.collaborateur.numeroLigne = '%s' ", numeroLigneCollaborateur));
-
-        }
-        String nomModeleIphone = filtresAffectation.getNomModeleIphone();
-        if (nomModeleIphone != null && !nomModeleIphone.isEmpty()){
-            query.append(String.format("AND a.iphone.modeleIphoneEntity.nomModele = '%s' ", nomModeleIphone));
-        }
-
-        LocalDate dateRenouvMin = filtresAffectation.getDateRenouvMin();
-        if (dateRenouvMin != null){
-            query.append("AND a.dateRenouvellementPrevue > '" + dateRenouvMin + "' ");
-        }
-
-        LocalDate dateRenouvMax = filtresAffectation.getDateRenouvMax();
-        if (dateRenouvMax != null){
-            query.append("AND a.dateRenouvellementPrevue < '" + dateRenouvMax + "' ");
-        }
+        String where = this.buildDeLaPartieWhere(filtresAffectation);
+        query.append(where);
+//        String uid = filtresAffectation.getUid();
+//        if (uid != null && !uid.isEmpty()){
+//            query.append(String.format("AND a.collaborateur.uid = '%s' ", uid ));
+//        }
+//
+//        String nom = filtresAffectation.getNom();
+//        if (nom != null && !nom.isEmpty()){
+//            query.append(String.format("AND a.collaborateur.nom = '%s' ", nom ));
+//        }
+//
+//        String codeUo = filtresAffectation.getCodeUo();
+//        if (codeUo != null && !codeUo.isEmpty()){
+//            query.append(String.format("AND a.collaborateur.uo.codeUo = '%s' ",  codeUo));
+//        }
+//
+//        String nomUsageUo = filtresAffectation.getNomUsageUo();
+//        if (nomUsageUo != null && !nomUsageUo.isEmpty()){
+//            query.append(String.format("AND a.collaborateur.uo.nomUsageUo = '%s' ", nomUsageUo));
+//
+//        }
+//
+//        String nomSite = filtresAffectation.getNomSite();
+//        if (nomSite != null && !nomSite.isEmpty()){
+//            query.append(String.format("AND a.collaborateur.uo.siteExercice.nomSite = '%s' ", nomSite ));
+//        }
+//
+//        String numeroLigneCollaborateur = filtresAffectation.getNumeroLigneCollaborateur();
+//        if (numeroLigneCollaborateur != null && !numeroLigneCollaborateur.isEmpty()){
+//            query.append(String.format("AND a.collaborateur.numeroLigne = '%s' ", numeroLigneCollaborateur));
+//
+//        }
+//        String nomModeleIphone = filtresAffectation.getNomModeleIphone();
+//        if (nomModeleIphone != null && !nomModeleIphone.isEmpty()){
+//            query.append(String.format("AND a.iphone.modeleIphoneEntity.nomModele = '%s' ", nomModeleIphone));
+//        }
+//
+//        LocalDate dateRenouvMin = filtresAffectation.getDateRenouvMin();
+//        if (dateRenouvMin != null){
+//            query.append("AND a.dateRenouvellementPrevue > '" + dateRenouvMin + "' ");
+//        }
+//
+//        LocalDate dateRenouvMax = filtresAffectation.getDateRenouvMax();
+//        if (dateRenouvMax != null){
+//            query.append("AND a.dateRenouvellementPrevue < '" + dateRenouvMax + "' ");
+//        }
 
 
         String sensDuTri;
         String critereDeTri;
         if (filtresAffectation.getCritereDeTri() != null) {
-//            String critereDeTri;
             switch (filtresAffectation.getCritereDeTri()) {
                 //A completer avec les différents critère de tri envisagés
                 case "UID":
@@ -196,15 +248,11 @@ public class RepositoryAffectationImpl implements IRepositoryAffectation {
                     break;
             }
 
-//            String sensDuTri;
             if (filtresAffectation.getSensduTri() != null && filtresAffectation.getSensduTri().equals("D")) {
                 sensDuTri = "DESC";
             } else {
                 sensDuTri = "ASC";
             }
-//            if (critereDeTri != null && !critereDeTri.isEmpty()) {
-//                query.append("ORDER BY " + critereDeTri + " " + sensDuTri);
-//            }
         } else {
             critereDeTri = "a.dateAffectation";
             sensDuTri = "DESC";
@@ -224,8 +272,67 @@ public class RepositoryAffectationImpl implements IRepositoryAffectation {
         for (AffectationEntity affectationEntity : maListEntity) {
             maList.add(affectationMapper.mapToDomain(affectationEntity));
         }
+
+        Map<List<Integer>, List<Affectation>> maMap = new HashMap<>();
+        List<Integer> truc = new ArrayList<>();
+        truc.add(10);
+        truc.add(20);
+        maMap.put(truc, maList);
+        System.out.println("maMap = " + maMap);
+
         return maList;
     }
 
+    private String buildDeLaPartieWhere (FiltresAffectation filtresAffectation) {
 
+        StringBuilder where = new StringBuilder();
+
+        String uid = filtresAffectation.getUid();
+        if (uid != null && !uid.isEmpty()){
+            where.append(String.format("AND a.collaborateur.uid = '%s' ", uid ));
+        }
+
+        String nom = filtresAffectation.getNom();
+        if (nom != null && !nom.isEmpty()){
+            where.append(String.format("AND a.collaborateur.nom = '%s' ", nom ));
+        }
+
+        String codeUo = filtresAffectation.getCodeUo();
+        if (codeUo != null && !codeUo.isEmpty()){
+            where.append(String.format("AND a.collaborateur.uo.codeUo = '%s' ",  codeUo));
+        }
+
+        String nomUsageUo = filtresAffectation.getNomUsageUo();
+        if (nomUsageUo != null && !nomUsageUo.isEmpty()){
+            where.append(String.format("AND a.collaborateur.uo.nomUsageUo = '%s' ", nomUsageUo));
+
+        }
+
+        String nomSite = filtresAffectation.getNomSite();
+        if (nomSite != null && !nomSite.isEmpty()){
+            where.append(String.format("AND a.collaborateur.uo.siteExercice.nomSite = '%s' ", nomSite ));
+        }
+
+        String numeroLigneCollaborateur = filtresAffectation.getNumeroLigneCollaborateur();
+        if (numeroLigneCollaborateur != null && !numeroLigneCollaborateur.isEmpty()){
+            where.append(String.format("AND a.collaborateur.numeroLigne = '%s' ", numeroLigneCollaborateur));
+
+        }
+        String nomModeleIphone = filtresAffectation.getNomModeleIphone();
+        if (nomModeleIphone != null && !nomModeleIphone.isEmpty()){
+            where.append(String.format("AND a.iphone.modeleIphoneEntity.nomModele = '%s' ", nomModeleIphone));
+        }
+
+        LocalDate dateRenouvMin = filtresAffectation.getDateRenouvMin();
+        if (dateRenouvMin != null){
+            where.append("AND a.dateRenouvellementPrevue > '" + dateRenouvMin + "' ");
+        }
+
+        LocalDate dateRenouvMax = filtresAffectation.getDateRenouvMax();
+        if (dateRenouvMax != null){
+            where.append("AND a.dateRenouvellementPrevue < '" + dateRenouvMax + "' ");
+        }
+
+        return where.toString();
+    }
 }

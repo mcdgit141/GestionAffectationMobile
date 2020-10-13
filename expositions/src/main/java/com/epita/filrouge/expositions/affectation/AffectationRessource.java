@@ -15,7 +15,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
-import java.time.LocalDate;
+import java.util.AbstractMap;
 import java.util.List;
 
 
@@ -67,14 +67,29 @@ public class AffectationRessource {
         return affectationFullDTOMapper.mapToDTOList(affectationList);
     }
 
-//    @PostMapping(value = "/affectation/liste2", consumes = { "application/json" }, produces =  { "application/json" })
-//    @Secured({"ROLE_ADMIN","ROLE_TYPE1","ROLE_TYPE2"})
-//    public List<AffectationFullDTOtest> afficheListeAffectations2(@NotNull @RequestBody final FiltresAffectation filtresAffectation){
-//
-////        return affectationManagement.listerAffectation(filtresAffectation);
-//        List<Affectation> affectationList= affectationManagement.listerAffectation(filtresAffectation);
-//        return affectationFullDTOMappertest.mapToDTOList(affectationList);
-//    }
+    @PostMapping(value = "/affectation/liste2", consumes = { "application/json" }, produces =  { "application/json" })
+    @Secured({"ROLE_ADMIN","ROLE_TYPE1","ROLE_TYPE2"})
+    public MetaAffectationDTO afficheListeAffectations2(@NotNull @RequestBody final FiltresAffectation filtresAffectation){
+
+//        return affectationManagement.listerAffectation(filtresAffectation);
+        AbstractMap.Entry<List<Integer>, List<Affectation>> metaEtData= affectationManagement.listerAffectation2(filtresAffectation);
+
+        List<Affectation> affectationList = metaEtData.getValue();
+        List<Integer> metaData = metaEtData.getKey();
+
+        MetaAffectationDTO.MetaDTO metaDTO = new MetaAffectationDTO.MetaDTO();
+        metaDTO.setNombreTotalDEnregistrements(metaData.get(0));
+        metaDTO.setNombreDePages(metaData.get(1));
+        metaDTO.setNumeroDeLaPageRetournee(metaData.get(2));
+        metaDTO.setNombreEnregistrementParPage(metaData.get(3));
+
+        MetaAffectationDTO retour = new MetaAffectationDTO();
+        retour.setMetadata(metaDTO);
+        retour.setDatas(affectationFullDTOMapper.mapToDTOList(affectationList));
+//        System.out.println("affectationFullDTOMapper.mapToDTOList(affectationList) = " + affectationFullDTOMapper.mapToDTOList(affectationList));
+//        return affectationFullDTOMapper.mapToDTOList(affectationList);
+        return retour;
+    }
 
 
 
