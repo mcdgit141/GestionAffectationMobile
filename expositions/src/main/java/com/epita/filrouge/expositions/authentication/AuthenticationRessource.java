@@ -7,6 +7,7 @@ import com.epita.filrouge.jwt.TokenContainer;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -38,7 +39,7 @@ public class AuthenticationRessource {
         try {
             authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(paramsIn.getUsername(),paramsIn.getPassword()));
         } catch (BadCredentialsException e) {
-            throw new Exception("Incorrect username or password",e);
+            throw new AccessDeniedException("Incorrect username or password",e);
         }
 
         final UserDetails myUser = myUserDetailService.loadUserByUsername(paramsIn.getUsername());
