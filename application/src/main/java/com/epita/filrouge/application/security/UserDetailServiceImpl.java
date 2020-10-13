@@ -27,10 +27,6 @@ public class UserDetailServiceImpl implements UserDetailsService {
             throw new UsernameNotFoundException("login non trouvé " + login );
         } else {
             User monUser = new User(myUtilisateur.getLogin(), myUtilisateur.getPassword(), getAuthorities(myUtilisateur));
-            System.out.println("****** PROFIL AUTHENTIFIER ******");
-            System.out.println("login : " + monUser.getUsername());
-            System.out.println("mdp : " + monUser.getPassword());
-            System.out.println("profil : " + monUser.getAuthorities());
             return monUser;
         }
     }
