@@ -108,9 +108,8 @@ public class RepositoryAffectationImpl implements IRepositoryAffectation {
         return affectationMapper.mapToDomainList(affectationsList);
     }
 
+    @Override
     public AbstractMap.Entry<List<Integer>, List<Affectation>> rechercheAffectationAvecFiltres2(FiltresAffectation filtresAffectation) {
-//    }
-//    public Integer rechercheAffectationAvecFiltres2(FiltresAffectation filtresAffectation) {
 
         Integer nombreEnregistrementsTotal = this.rechercheNombreEnregistrements(filtresAffectation);
 
@@ -125,7 +124,6 @@ public class RepositoryAffectationImpl implements IRepositoryAffectation {
                             (nombreEnregistrementsTotal % filtresAffectation.getTaillePage() == 0 ? 0 : 1);
         List<Integer> listeMeta = new ArrayList<>();
         listeMeta.add(nombreEnregistrementsTotal);
-//        listeMeta.add(nombreEnregistrementsTotal / filtresAffectation.getTaillePage());
         listeMeta.add(nombreDePages);
         listeMeta.add(filtresAffectation.getNumeroDePage());
         listeMeta.add(filtresAffectation.getTaillePage());
@@ -135,14 +133,11 @@ public class RepositoryAffectationImpl implements IRepositoryAffectation {
         List<Affectation> affectationList = this.rechercheAffectationAvecFiltres(filtresAffectation);
 
 
-        AbstractMap.Entry<List<Integer>, List<Affectation>> mapMetaEtData2=new AbstractMap.SimpleEntry<>(listeMeta, affectationList);
-
-        Map<List<Integer>, List<Affectation>> mapMetaEtData = new HashMap<>();
-        mapMetaEtData.put(listeMeta, affectationList);
+        AbstractMap.Entry<List<Integer>, List<Affectation>> mapMetaEtData=new AbstractMap.SimpleEntry<>(listeMeta, affectationList);
 
 
-//        return nombreEnregistrementsTotal;
-        return mapMetaEtData2;
+
+        return mapMetaEtData;
     }
 
 
@@ -155,15 +150,14 @@ public class RepositoryAffectationImpl implements IRepositoryAffectation {
         queryCount.append(where);
 
         String maRequeteConstruite = queryCount.toString();
-        Integer nombreEnregistrement = (int) (long) monEntityManager.createQuery(maRequeteConstruite)
+        return (int) (long) monEntityManager.createQuery(maRequeteConstruite)
                 .getSingleResult();
 
-        return nombreEnregistrement;
+
     }
 
-//    private
 
-    @Override
+
     public List<Affectation> rechercheAffectationAvecFiltres(FiltresAffectation filtresAffectation) {
         int numeroPageDemande;
         int taillePage;
@@ -185,51 +179,7 @@ public class RepositoryAffectationImpl implements IRepositoryAffectation {
 
         String where = this.buildDeLaPartieWhere(filtresAffectation);
         query.append(where);
-//        String uid = filtresAffectation.getUid();
-//        if (uid != null && !uid.isEmpty()){
-//            query.append(String.format("AND a.collaborateur.uid = '%s' ", uid ));
-//        }
-//
-//        String nom = filtresAffectation.getNom();
-//        if (nom != null && !nom.isEmpty()){
-//            query.append(String.format("AND a.collaborateur.nom = '%s' ", nom ));
-//        }
-//
-//        String codeUo = filtresAffectation.getCodeUo();
-//        if (codeUo != null && !codeUo.isEmpty()){
-//            query.append(String.format("AND a.collaborateur.uo.codeUo = '%s' ",  codeUo));
-//        }
-//
-//        String nomUsageUo = filtresAffectation.getNomUsageUo();
-//        if (nomUsageUo != null && !nomUsageUo.isEmpty()){
-//            query.append(String.format("AND a.collaborateur.uo.nomUsageUo = '%s' ", nomUsageUo));
-//
-//        }
-//
-//        String nomSite = filtresAffectation.getNomSite();
-//        if (nomSite != null && !nomSite.isEmpty()){
-//            query.append(String.format("AND a.collaborateur.uo.siteExercice.nomSite = '%s' ", nomSite ));
-//        }
-//
-//        String numeroLigneCollaborateur = filtresAffectation.getNumeroLigneCollaborateur();
-//        if (numeroLigneCollaborateur != null && !numeroLigneCollaborateur.isEmpty()){
-//            query.append(String.format("AND a.collaborateur.numeroLigne = '%s' ", numeroLigneCollaborateur));
-//
-//        }
-//        String nomModeleIphone = filtresAffectation.getNomModeleIphone();
-//        if (nomModeleIphone != null && !nomModeleIphone.isEmpty()){
-//            query.append(String.format("AND a.iphone.modeleIphoneEntity.nomModele = '%s' ", nomModeleIphone));
-//        }
-//
-//        LocalDate dateRenouvMin = filtresAffectation.getDateRenouvMin();
-//        if (dateRenouvMin != null){
-//            query.append("AND a.dateRenouvellementPrevue > '" + dateRenouvMin + "' ");
-//        }
-//
-//        LocalDate dateRenouvMax = filtresAffectation.getDateRenouvMax();
-//        if (dateRenouvMax != null){
-//            query.append("AND a.dateRenouvellementPrevue < '" + dateRenouvMax + "' ");
-//        }
+
 
 
         String sensDuTri;
