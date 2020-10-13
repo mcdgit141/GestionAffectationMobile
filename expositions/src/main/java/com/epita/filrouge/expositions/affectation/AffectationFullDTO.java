@@ -17,7 +17,7 @@ import java.time.LocalDate;
 @Validated
 public class AffectationFullDTO {
     @JsonProperty
-    private Long numeroAffectation;
+    private String numeroAffectation;
 
     @JsonProperty
     @ApiModelProperty(example = "2020-08-18", required = true, value = "Date de l'affectation")
@@ -48,11 +48,11 @@ public class AffectationFullDTO {
     }
 
 
-    public Long getNumeroAffectation() {
+    public String getNumeroAffectation() {
         return numeroAffectation;
     }
 
-    public void setNumeroAffectation(Long numeroAffectation) {
+    public void setNumeroAffectation(String numeroAffectation) {
         this.numeroAffectation = numeroAffectation;
     }
 

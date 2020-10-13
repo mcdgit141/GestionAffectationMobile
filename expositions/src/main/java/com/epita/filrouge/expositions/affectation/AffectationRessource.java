@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
+import java.time.LocalDate;
 import java.util.List;
 
 
@@ -31,22 +32,30 @@ public class AffectationRessource {
     @Autowired
     private AffectationFullDTOMapper affectationFullDTOMapper;
 
+//    @Autowired
+//    private AffectationFullDTOMappertest affectationFullDTOMappertest;
+
     @PostMapping(value = "/affectation/creation", consumes = { "application/json" }, produces =  { "application/json" })
     @ResponseStatus(HttpStatus.CREATED)
     @Secured({"ROLE_ADMIN","ROLE_TYPE2"})
     public AffectationFullDTO saveAffectation(@NotNull @Valid @RequestBody final AffectationFullDTO affectationFullDTO) {
 
-//        if (affectationFullDTO.getAffectationDate().isBefore(LocalDate.now()) || affectationFullDTO.getAffectationDate().isAfter(LocalDate.now())){
-//            throw new BadRequestException("La date d'affectation doit être à la date du jour");
-//        }
+        if (affectationFullDTO.getCollaborateur().getUid() != null & affectationFullDTO.getIphone().getNumeroSerie() != null
+            & affectationFullDTO.getDateAffectation() != null & affectationFullDTO.getCollaborateur().getNumeroLigne() != null
+            & affectationFullDTO.getCommentaire() != null & affectationFullDTO.getCollaborateur().getUid() != ""
+            & affectationFullDTO.getIphone().getNumeroSerie() != "" & affectationFullDTO.getCollaborateur().getNumeroLigne() != ""
+            & affectationFullDTO.getCommentaire() != "" )
+        {
 
-
-        Affectation affectationCree = affectationManagement.creerAffectation(affectationFullDTO.getCollaborateur().getUid(),
-                                                                             affectationFullDTO.getIphone().getNumeroSerie(),
-                                                                             affectationFullDTO.getDateAffectation(),
-                                                                             affectationFullDTO.getCollaborateur().getNumeroLigne(),
-                                                                             affectationFullDTO.getCommentaire());
-        return affectationFullDTOMapper.mapToDTO(affectationCree);
+            Affectation affectationCree = affectationManagement.creerAffectation(affectationFullDTO.getCollaborateur().getUid(),
+                    affectationFullDTO.getIphone().getNumeroSerie(),
+                    affectationFullDTO.getDateAffectation(),
+                    affectationFullDTO.getCollaborateur().getNumeroLigne(),
+                    affectationFullDTO.getCommentaire());
+            return affectationFullDTOMapper.mapToDTO(affectationCree);
+        } else {
+            throw new BadRequestException("Information(s) manquante(s) pour la création de l'affectation");
+        }
     }
 
     @PostMapping(value = "/affectation/liste", consumes = { "application/json" }, produces =  { "application/json" })
@@ -58,41 +67,38 @@ public class AffectationRessource {
         return affectationFullDTOMapper.mapToDTOList(affectationList);
     }
 
+//    @PostMapping(value = "/affectation/liste2", consumes = { "application/json" }, produces =  { "application/json" })
+//    @Secured({"ROLE_ADMIN","ROLE_TYPE1","ROLE_TYPE2"})
+//    public List<AffectationFullDTOtest> afficheListeAffectations2(@NotNull @RequestBody final FiltresAffectation filtresAffectation){
+//
+////        return affectationManagement.listerAffectation(filtresAffectation);
+//        List<Affectation> affectationList= affectationManagement.listerAffectation(filtresAffectation);
+//        return affectationFullDTOMappertest.mapToDTOList(affectationList);
+//    }
+
+
+
     @PutMapping(value = "/affectation/cloture", consumes = { "application/json" }, produces =  { "application/json" })
     @ResponseStatus(HttpStatus.OK)
     @Secured({"ROLE_ADMIN","ROLE_TYPE2"})
     public String clotureAffectation(@NotNull @RequestBody final AffectationFullDTO affectationFullDTO) {
 
-       if (affectationFullDTO.getNumeroAffectation() == null){
-           throw new BadRequestException("numéro affectation non renseigné, donnée à saisir impérativement");
-       }
-        if (affectationFullDTO.getCommentaire() == "" && affectationFullDTO.getMotifFin() =="") {
-            System.out.println("test couche exposition motif fin non renseigné");
-            throw new BadRequestException("Motif de fin et Commentaire non renseignés, données à saisir impérativement");
-        }
-        if (affectationFullDTO.getMotifFin() == null && affectationFullDTO.getCommentaire() == null)
-        {
-            System.out.println("test couche exposition motif fin non renseigné");
-            throw new BadRequestException("Motif de fin et Commentaire non renseignés, données à saisir impérativement");
-        }
-        if (affectationFullDTO.getCommentaire() == null || affectationFullDTO.getCommentaire() == "") {
-            System.out.println("test couche exposition commentaire non renseigné");
-            throw new BadRequestException("commentaire non renseigné, donnée à saisir impérativement");
+        if (affectationFullDTO.getNumeroAffectation() != null & affectationFullDTO.getCommentaire() != null
+           & affectationFullDTO.getMotifFin() != null & affectationFullDTO.getDateFin() != null
+           & affectationFullDTO.getCommentaire() != "" & affectationFullDTO.getMotifFin() != ""
+
+          ){
+            affectationManagement.cloturerAffectation(Long.parseLong(affectationFullDTO.getNumeroAffectation()),affectationFullDTO.getCommentaire()
+                    ,affectationFullDTO.getMotifFin(),affectationFullDTO.getDateFin());
+            return "La clôture de l'affectation s'est bien passée";
+        } else {
+
+            throw new BadRequestException("Information(s) manquante(s) pour la clôture de l'affectation");
         }
 
-        if (affectationFullDTO.getMotifFin() == null || affectationFullDTO.getMotifFin() == "") {
-            System.out.println("test couche exposition motif fin non renseigné");
-            throw new BadRequestException("Motif de fin non renseigné, donnée à saisir impérativement");
-        }
-
-        affectationManagement.cloturerAffectation(affectationFullDTO.getNumeroAffectation(),affectationFullDTO.getCommentaire()
-                ,affectationFullDTO.getMotifFin(),affectationFullDTO.getDateFin());
-        return "La clôture de l'affectation s'est bien passée";
     }
 
-
-
-    @DeleteMapping(value = "/affectation/suppression", consumes = { "application/json" })
+    @DeleteMapping(value = "/affectation/suppression")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     @Validated
     @Secured({"ROLE_ADMIN", "ROLE_TYPE2"})
