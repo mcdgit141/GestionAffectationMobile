@@ -41,7 +41,7 @@
 
 <!--     LOG "com.epita.filrouge.expositions.affectation" at TRACE level-->
 <!--    <logger name="com.epita.filrouge.expositions.affectation" level="warn" additivity="false">-->
-    <logger name="com.epita.filrouge.expositions.affectation" additivity="false">
+    <logger name="com.epita.filrouge" additivity="false">
         <appender-ref ref="RollingFile" />
         <appender-ref ref="Console" />
     </logger>
