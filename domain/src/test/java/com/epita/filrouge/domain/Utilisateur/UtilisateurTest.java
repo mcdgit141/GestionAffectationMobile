@@ -9,11 +9,11 @@ import org.junit.jupiter.api.Test;
 import static org.assertj.core.api.Assertions.as;
 import static org.assertj.core.api.Assertions.assertThat;
 
-public class UtilisateurTest {
+class UtilisateurTest {
 
     @Test
     @DisplayName("création d'un Utilisateur avec un mdp par defaut")
-    public void utilisateur_should_be_created_with_default_password(){
+    void utilisateur_should_be_created_with_default_password(){
         //giving
         String uid = "a19390";
         String nom = "DUPOND";
@@ -30,7 +30,7 @@ public class UtilisateurTest {
 
     @Test
     @DisplayName("Construction d'un login à la création d'un Utilisateur")
-    public void utilisateur_should_be_created_with_a_login(){
+    void utilisateur_should_be_created_with_a_login(){
         //giving
         String uid = "a19390";
         String nom = "DUPOND";

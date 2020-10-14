@@ -55,7 +55,7 @@ public class UtilisateurManagementImplTest {
 
     @Test
     @DisplayName("Rejet création d'un utilisateur avec un uid déjà utilisé")
-    public void enregistrerUtilisateur_should_fail_with_already_existing_uid(){
+    void enregistrerUtilisateur_should_fail_with_already_existing_uid(){
         //giving
         String uid = "a19390";
         String nom = "DUPOND";
@@ -81,7 +81,7 @@ public class UtilisateurManagementImplTest {
 
     @Test
     @DisplayName("Construction d'un Utilisateur, à partir d'un uid et d'un profil")
-    public void enregistrerUtilisateur_should_call_repo_with_a_full_Utilisateur(){
+    void enregistrerUtilisateur_should_call_repo_with_a_full_Utilisateur(){
         //giving
         String uid = "a19390";
         String nom = "DUPOND";
@@ -119,7 +119,7 @@ public class UtilisateurManagementImplTest {
 
     @Test
     @DisplayName("Ordre d'appel des services")
-    public void enregistrerUtilisateur_should_call_collaborateurManagement_first(){
+    void enregistrerUtilisateur_should_call_collaborateurManagement_first(){
         //giving
         String uid = "a19390";
         String nom = "DUPOND";
@@ -150,7 +150,7 @@ public class UtilisateurManagementImplTest {
 
     @Test
     @DisplayName("Rejet profil Utilisateur inconnu")
-    public void wrong_profilUtilisateur_should_throw_badRequestException(){
+    void wrong_profilUtilisateur_should_throw_badRequestException(){
         //giving
         String uid = "a19390";
         String roleRecu = "type3";
@@ -165,7 +165,7 @@ public class UtilisateurManagementImplTest {
 
     @Test
     @DisplayName("NotFoundException sur la suppression d'un utilisateur inconnu")
-    public void supprimerUtilisateur_should_throw_Exception_if_user_dont_exists(){
+    void supprimerUtilisateur_should_throw_Exception_if_user_dont_exists(){
         //giving
         String uid = "monUid";
 
@@ -179,7 +179,7 @@ public class UtilisateurManagementImplTest {
     }
 
     @Test
-    public void supprimerUtilisateur_should_call_repo_giving_an_existing_uid(){
+    void supprimerUtilisateur_should_call_repo_giving_an_existing_uid(){
         //giving
         String uid = "a19390";
         String nom = "KAMDEM";
@@ -206,7 +206,7 @@ public class UtilisateurManagementImplTest {
 
     @Test
     @DisplayName("modifierUtilisateur : Appel du repo avec le mdp chiffré")
-    public void modifierUtilisateur_should_call_repo_with_an_encrypted_password(){
+    void modifierUtilisateur_should_call_repo_with_an_encrypted_password(){
         //given
         String uid = "a19390";
         String mdp = "monMotDePasse";
@@ -231,7 +231,7 @@ public class UtilisateurManagementImplTest {
 
     @Test
     @DisplayName("modifierMdp: rejet nouveau mdp = password")
-    public void password_as_new_password_should_throw_BadRequestException(){
+    void password_as_new_password_should_throw_BadRequestException(){
         //giving
         String uid = "a19390";
         String mdp = "password";
@@ -245,7 +245,7 @@ public class UtilisateurManagementImplTest {
 
     @Test
     @DisplayName("rechercheUtilisateur : NotFoundException si utilisateur inexistant")
-    public void rechercheUtilisateur_should_throws_NotFound_Exception_if_uid_dont_exists(){
+    void rechercheUtilisateur_should_throws_NotFound_Exception_if_uid_dont_exists(){
         //given
 
         Mockito.when(repositoryUtilisateur.rechercherUserParUid(any(String.class))).thenThrow(new NotFoundException("message de test"));

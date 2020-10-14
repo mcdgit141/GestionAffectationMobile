@@ -24,7 +24,7 @@ import static org.mockito.ArgumentMatchers.any;
 
 @ExtendWith(SpringExtension.class)
 @SpringBootTest(classes = { CollaborateurManagementImpl.class } )
-public class CollaborateurManagementImplTest {
+class CollaborateurManagementImplTest {
     
     @MockBean
     IRepositoryCollaborateur repositoryCollaborateur;
@@ -34,7 +34,7 @@ public class CollaborateurManagementImplTest {
     
     @Test
     @DisplayName("recherche d'un collaborateur à partir d'un uid existant")
-    public void findByUid_should_return_a_Collaborateur_giving_an_existing_uid(){
+    void findByUid_should_return_a_Collaborateur_giving_an_existing_uid(){
         //giving
         String uid = "a19390";
         String nom = "DUPOND";
@@ -65,7 +65,7 @@ public class CollaborateurManagementImplTest {
     
     @Test
     @DisplayName("NotFoutExeption si uid inexistant")
-    public void findByUid_should_fail_with_an_unknown_uid(){
+    void findByUid_should_fail_with_an_unknown_uid(){
         //giving
         String uid = "a19390";
         String wrongUid = "b12345";

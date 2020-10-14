@@ -106,7 +106,7 @@ class AffectationTest {
 
         //then
         assertThat(affectationACloturerFinal.getDateFin()).isEqualTo(LocalDate.now());
-        assertThat(affectationACloturerFinal.getCollaborateur().getNumeroLigne()).isEqualTo(null);
+        assertThat(affectationACloturerFinal.getCollaborateur().getNumeroLigne()).isNull();
         assertThat(affectationACloturerFinal.getIphone().getEtatIphone()).isEqualTo(EtatIphoneEnum.VOLE);
     }
     @Test

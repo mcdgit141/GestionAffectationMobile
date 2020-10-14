@@ -13,7 +13,6 @@ public class Iphone {
 
     private EtatIphoneEnum etatIphone;
 
-//    private List<Affectation> affectationIphone;
 
     public Iphone(Long iphoneId, String numeroSerie, double prixIphone, ModeleIphone modeleIphone, EtatIphoneEnum etatIphone) {
         this.iphoneId = iphoneId;
@@ -21,7 +20,6 @@ public class Iphone {
         this.prixIphone = prixIphone;
         this.modeleIphone = modeleIphone;
         this.etatIphone = etatIphone;
-//        this.affectationIphone = new ArrayList<Affectation>();
     }
 
     public Iphone() {
@@ -39,9 +37,6 @@ public class Iphone {
         return etatIphone;
     }
 
-//    public List<Affectation> getAffectationIphone() {
-//        return affectationIphone;
-//    }
 
     public double getPrixIphone() {
         return prixIphone;
@@ -51,9 +46,7 @@ public class Iphone {
         return modeleIphone;
     }
 
-//    public void addAffectation(final Affectation affectation){
-//        affectationIphone.add(affectation);
-//            }
+
 
     public void setEtatIphone(EtatIphoneEnum etatIphone) {
         this.etatIphone = etatIphone;
@@ -62,17 +55,17 @@ public class Iphone {
     public Iphone miseAJourIphoneSuiteClotureAffectation(String motifFin) {
 
         if (this.etatIphone == EtatIphoneEnum.AFFECTE) {
-            if (motifFin == "RESTITUE" || motifFin == "SUPPRIME") {
+            if (motifFin.equals("RESTITUE") || motifFin.equals("SUPPRIME")) {
                 this.etatIphone = EtatIphoneEnum.DISPONIBLE;
             }
 
-            if (motifFin == "VOLE") {
+            if (motifFin.equals("VOLE")) {
                 this.etatIphone = EtatIphoneEnum.VOLE;
             }
-            if (motifFin == "CASSE") {
+            if (motifFin.equals("CASSE")) {
                 this.etatIphone = EtatIphoneEnum.CASSE;
             }
-            if (motifFin == "PERDU") {
+            if (motifFin.equals("PERDU")) {
                 this.etatIphone = EtatIphoneEnum.PERDU;
             }
         }

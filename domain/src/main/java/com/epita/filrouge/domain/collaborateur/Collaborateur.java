@@ -12,7 +12,6 @@ public class Collaborateur {
     private String numeroLigne;
     private Uo uo;
 
-//    private List<Affectation> affectationCollaborateur;
 
     public Collaborateur(String uid, String nom, String prenom, String numeroLigne, Uo uo) {
         this.uid = uid;
@@ -21,7 +20,6 @@ public class Collaborateur {
         this.numeroLigne = numeroLigne;
         this.uo = uo;
 
-//        this.affectationCollaborateur = new ArrayList<Affectation>();
     }
 
     public Collaborateur(Long id, String uid, String nom, String prenom, String numeroLigne, Uo uo) {

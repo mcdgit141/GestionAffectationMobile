@@ -1,9 +1,7 @@
 package com.epita.filrouge.domain.affectation;
 
-import java.time.LocalDate;
 import java.util.AbstractMap;
 import java.util.List;
-import java.util.Map;
 
 public interface IRepositoryAffectation {
 
