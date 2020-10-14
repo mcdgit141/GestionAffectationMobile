@@ -1,6 +1,5 @@
 package com.epita.filrouge.expositions.utilisateur;
 
-import com.epita.filrouge.domain.utilisateur.UtilisateurRoleEnum;
 
 public class UtilisateurDTO {
 

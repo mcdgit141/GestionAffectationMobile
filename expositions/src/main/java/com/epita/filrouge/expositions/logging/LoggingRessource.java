@@ -21,7 +21,6 @@ public class LoggingRessource {
         System.out.println(entry.get("erreur"));
         System.out.println(entry.get("url"));
 
-//        System.out.println("Erreur : "+entry.get("erreur") + " sur l'url : "+ entry.get("url"));
         monLogger.info("Erreur Angular : "+entry.get("erreur") + " sur l'url : "+ entry.get("url"));
 
     }

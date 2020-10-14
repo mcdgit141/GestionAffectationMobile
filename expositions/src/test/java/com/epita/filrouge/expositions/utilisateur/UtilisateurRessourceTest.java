@@ -70,7 +70,7 @@ public class UtilisateurRessourceTest {
         @Test
         @DisplayName("creerUtilisateur : Autorisé pour le profil ADMIN")
         @WithMockUser(roles = "ADMIN")
-        public void role_admin_peut_creer_des_utilisateurs() throws Exception {
+        void role_admin_peut_creer_des_utilisateurs() throws Exception {
 
             // Given
             UtilisateurDTO utilisateurDTO = new UtilisateurDTO();
@@ -91,7 +91,7 @@ public class UtilisateurRessourceTest {
         @Test
         @DisplayName("creerUtilisateur : Interdiction aux profil autre que ADMIN")
         @WithMockUser(roles = {"TYPE1","TYPE2"})
-        public void role_autre_que_admin_ne_peut_pas_creer_des_utilisateurs() throws Exception {
+        void role_autre_que_admin_ne_peut_pas_creer_des_utilisateurs() throws Exception {
 
             // Given
             UtilisateurDTO utilisateurDTO = new UtilisateurDTO();
@@ -115,7 +115,7 @@ public class UtilisateurRessourceTest {
         @Test
         @DisplayName("creerUtilisateur :  Passage de paramètre entre le Body de la requete Http et le service de création")
         @WithMockUser(roles = "ADMIN")
-        public void creerUtilisateur_should_call_UtilisateurManegement_Once() throws Exception {
+        void creerUtilisateur_should_call_UtilisateurManegement_Once() throws Exception {
             //given
             UtilisateurDTO utilisateurDTO = new UtilisateurDTO();
             utilisateurDTO.setUid("a19390");
@@ -135,7 +135,7 @@ public class UtilisateurRessourceTest {
         @Test
         @DisplayName("creerUtilisateur: Levée d'une BadRequest exception si le body de la requête est incomplet")
         @WithMockUser(roles = "ADMIN")
-        public void utilisateurDTO_Uncomplete_should_throw_an_Exception() throws Exception {
+        void utilisateurDTO_Uncomplete_should_throw_an_Exception() throws Exception {
             //given
             UtilisateurDTO utilisateurDTO = new UtilisateurDTO();
             utilisateurDTO.setUid("a19390");
@@ -161,7 +161,7 @@ public class UtilisateurRessourceTest {
         @Test
         @DisplayName("ModifierMdp: Controle présence donnée obligatoire : uid + mdp")
         @WithMockUser(roles = "ADMIN")
-        public void modifierMDP_should_fail_with_uid_or_mdp_empty() throws Exception {
+        void modifierMDP_should_fail_with_uid_or_mdp_empty() throws Exception {
             //given
 
             UtilisateurDTO utilisateurDTO = new UtilisateurDTO();
@@ -179,7 +179,7 @@ public class UtilisateurRessourceTest {
         @Test
         @DisplayName("modifierMDP : retour confirmation en mise à jour en cas de succès")
         @WithMockUser(roles = "ADMIN")
-        public void modifierMDP_should_return_a_string_when_ok() throws Exception {
+        void modifierMDP_should_return_a_string_when_ok() throws Exception {
             //given
 
             UtilisateurDTO utilisateurDTO = new UtilisateurDTO();
@@ -201,7 +201,7 @@ public class UtilisateurRessourceTest {
         @Test
         @DisplayName("ModifierMDP : Interdiction aux roles autre que ADMIN")
         @WithMockUser(roles = "TYPE1")
-        public void modifierMdp_should_fait_with_roleType_other_than_admin() throws Exception {
+        void modifierMdp_should_fait_with_roleType_other_than_admin() throws Exception {
             //given
 
             UtilisateurDTO utilisateurDTO = new UtilisateurDTO();
@@ -222,31 +222,12 @@ public class UtilisateurRessourceTest {
     @Nested
     @DisplayName("Supression Utilisateur")
     class test_suppression {
-//        @Test
-//        @DisplayName("supprimerUtilisateur: retour confirmation suppression en cas de succès")
-//        @WithMockUser(username = "admin", password = "$2a$10$ix2v00b5v0E.Ro3ZM0/Vv.cK704O4N1w/.yQeNq46KIVKmDanaHBi", roles = "ADMIN")
-//        public void supprimerUtilisateur_should_return_a_specific_string_when_ok() throws Exception {
-//            //given
-//            UtilisateurDTO utilisateurDTO = new UtilisateurDTO();
-//            utilisateurDTO.setUid("a19390");
-//            utilisateurDTO.setUsername("admin");
-//            utilisateurDTO.setPassword("password");
-//            monObjetMapper = objectMapper.writeValueAsString(utilisateurDTO);
-//
-//            //when
-//            String resultat = mockMvc.perform(post("/gestaffectation/utilisateur/delete2")
-//                    .content(monObjetMapper).contentType(MediaType.APPLICATION_JSON))
-//                    .andReturn().getResponse().getContentAsString();
-////        String resultat = mockMvc.perform(get("/gestaffectation/utilisateur/delete/a19390")).andReturn().getResponse().getContentAsString();
-//
-//            //then
-//            assertThat(resultat).isEqualTo("L'utilisateur a été supprimé");
-//        }
+
 
         @Test
         @DisplayName("HHTP DELETE user: retour confirmation suppression en cas de succès")
         @WithMockUser(roles = "ADMIN")
-        public void supprimerUtilisateur_par_http_delete() throws Exception {
+        void supprimerUtilisateur_par_http_delete() throws Exception {
             //given
             Mockito.doNothing().when(utilisateurManagement).supprimerUtilisateur(any(String.class));
 
@@ -262,7 +243,7 @@ public class UtilisateurRessourceTest {
         @Test
         @DisplayName("HHTP DELETE user: NotFoundException si l'Utilisateur a supprimer n'existe pas")
         @WithMockUser(roles = "ADMIN")
-        public void supprimerUtilisateur_par_http_delete2() throws Exception {
+        void supprimerUtilisateur_par_http_delete2() throws Exception {
             //given
             Mockito.doThrow(new NotFoundException("l'utilisateur n'existe pas"))
                     .when(utilisateurManagement).supprimerUtilisateur(any(String.class));
@@ -277,27 +258,6 @@ public class UtilisateurRessourceTest {
             assertThat(resultat).isInstanceOf(NotFoundException.class);
         }
 
-
-//        @Test
-//        @DisplayName("supprimerUtilisateur: retour message si les informations de confirmation sont KO")
-//        @WithMockUser(username = "admin", password = "password", roles = "ADMIN")
-//        public void supprimerUtilisateur_should_return_a_specific_string_when_KO() throws Exception {
-//            //given
-//            UtilisateurDTO utilisateurDTO = new UtilisateurDTO();
-//            utilisateurDTO.setUid("a19390");
-//            utilisateurDTO.setUsername("admin");
-//            utilisateurDTO.setPassword("passwordFaux");
-//            monObjetMapper = objectMapper.writeValueAsString(utilisateurDTO);
-//
-//            //when
-//            String resultat = mockMvc.perform(post("/gestaffectation/utilisateur/delete2")
-//                    .content(monObjetMapper).contentType(MediaType.APPLICATION_JSON))
-//                    .andReturn().getResponse().getContentAsString();
-////        String resultat = mockMvc.perform(get("/gestaffectation/utilisateur/delete/a19390")).andReturn().getResponse().getContentAsString();
-//
-//            //then
-//            assertThat(resultat).isEqualTo("Les informations saisies ne correspondent pas à la session active");
-//        }
     }
 
     @Nested
@@ -306,7 +266,7 @@ public class UtilisateurRessourceTest {
         @Test
         @DisplayName("retrieve : récupération d'un Utilisateur")
         @WithMockUser(roles = "ADMIN")
-        public void retrieve_should_return_an_utilisateur() throws Exception {
+        void retrieve_should_return_an_utilisateur() throws Exception {
             //given
             Utilisateur monUtilisateur = new Utilisateur("a19390","KAMDEM","leopold", UtilisateurRoleEnum.ROLE_ADMIN);
             UtilisateurDTO monUtilisateurDto = new UtilisateurDTO();
@@ -333,7 +293,7 @@ public class UtilisateurRessourceTest {
         @Test
         @DisplayName("retrieve : NotFoundException si uid inexistant")
         @WithMockUser(roles = "ADMIN")
-        public void retrieve_should_throw_NotFoundExistsException_when_uid_dont_exist() throws Exception {
+        void retrieve_should_throw_NotFoundExistsException_when_uid_dont_exist() throws Exception {
             //given
             Utilisateur monUtilisateur = new Utilisateur("a19390","KAMDEM","leopold", UtilisateurRoleEnum.ROLE_ADMIN);
 

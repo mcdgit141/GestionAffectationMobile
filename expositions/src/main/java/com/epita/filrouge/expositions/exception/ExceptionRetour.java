@@ -1,6 +1,5 @@
 package com.epita.filrouge.expositions.exception;
 
-import com.epita.filrouge.domain.exception.BadRequestException;
 import com.epita.filrouge.domain.exception.BusinessException;
 import com.fasterxml.jackson.databind.exc.ValueInstantiationException;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,7 +13,6 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 
-import javax.validation.ConstraintViolationException;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.LinkedHashMap;

@@ -34,7 +34,7 @@ public class UtilisateurRessource {
     @Secured("ROLE_ADMIN")
     public UtilisateurDTO creerUtilisateur(@NotNull @RequestBody final UtilisateurDTO utilisateurDTO) {
         Utilisateur utilisateurEnregistre;
-        if (utilisateurDTO.getUid() != null & utilisateurDTO.getRoleUtilisateur() != null){
+        if (utilisateurDTO.getUid() != null && utilisateurDTO.getRoleUtilisateur() != null){
             utilisateurEnregistre = utilisateurManagement.enregistrerUtilisateur(utilisateurDTO.getUid(),utilisateurDTO.getRoleUtilisateur());
             return utilisateurDtoMapper.mapToDto(utilisateurEnregistre);
         } else {
@@ -46,13 +46,12 @@ public class UtilisateurRessource {
     @ResponseStatus(HttpStatus.NO_CONTENT)
     @Secured("ROLE_ADMIN")
     public String supprimerUtilisateur(@NotNull @RequestParam("uid") String uid){
-        System.out.println("**** je suis dans la suppression de l'utilisateur ******");
         Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         UserDetails utilisateurEnSesion = (UserDetails) principal;
 
         utilisateurManagement.supprimerUtilisateur(uid);
-        monLogger.warn("******** SUPPRESSION DE L'UTILISATEUR : " + uid + " *********");
-        monLogger.warn("PAR : " + utilisateurEnSesion.getUsername());
+        monLogger.warn("******** SUPPRESSION DE L'UTILISATEUR : {} *********", uid);
+        monLogger.warn("PAR : {}", utilisateurEnSesion.getUsername());
         return "L'utilisateur a été supprimé";
 
     }
@@ -69,8 +68,8 @@ public class UtilisateurRessource {
     @ResponseStatus(HttpStatus.OK)
     @Secured("ROLE_ADMIN")
     public String modifierMdp(@NotNull @RequestBody UtilisateurDTO utilisateurDTO){
-        if ((utilisateurDTO.getUid() != null) &  (utilisateurDTO.getUid() != "") &
-                (utilisateurDTO.getPassword() != null) & (utilisateurDTO.getPassword() != "")) {
+        if ((utilisateurDTO.getUid() != null) &&  (utilisateurDTO.getUid() != "") &&
+                (utilisateurDTO.getPassword() != null) && (utilisateurDTO.getPassword() != "")) {
             utilisateurManagement.modifierMdpUtilisateur(utilisateurDTO.getUid(), utilisateurDTO.getPassword());
             return "Le mot de passe de l'utilisateur est modifié";
         } else {

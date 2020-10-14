@@ -1,7 +1,6 @@
 package com.epita.filrouge.expositions.exception;
 
 import com.epita.filrouge.domain.exception.BusinessException;
-import org.springframework.context.annotation.Bean;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Component;
 

@@ -133,11 +133,7 @@ public class RepositoryAffectationImpl implements IRepositoryAffectation {
         List<Affectation> affectationList = this.rechercheAffectationAvecFiltres(filtresAffectation);
 
 
-        AbstractMap.Entry<List<Integer>, List<Affectation>> mapMetaEtData=new AbstractMap.SimpleEntry<>(listeMeta, affectationList);
-
-
-
-        return mapMetaEtData;
+        return new AbstractMap.SimpleEntry<>(listeMeta, affectationList);
     }
 
 
@@ -227,13 +223,6 @@ public class RepositoryAffectationImpl implements IRepositoryAffectation {
         for (AffectationEntity affectationEntity : maListEntity) {
             maList.add(affectationMapper.mapToDomain(affectationEntity));
         }
-
-        Map<List<Integer>, List<Affectation>> maMap = new HashMap<>();
-        List<Integer> truc = new ArrayList<>();
-        truc.add(10);
-        truc.add(20);
-        maMap.put(truc, maList);
-        System.out.println("maMap = " + maMap);
 
         return maList;
     }

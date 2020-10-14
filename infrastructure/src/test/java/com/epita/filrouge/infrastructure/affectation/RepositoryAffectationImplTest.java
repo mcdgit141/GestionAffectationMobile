@@ -297,7 +297,7 @@ class RepositoryAffectationImplTest {
     }
     @Test
     @DisplayName("Cloture Affectation: NotFoundException si l'affectation à cloturer n'est pas trouvée")
-    public void CloseAffectation_Should_Throw_Exception_If_Affectation_Do_Not_Exist(){
+    void CloseAffectation_Should_Throw_Exception_If_Affectation_Do_Not_Exist(){
         //giving BeforeEach
         persisteAffectation(monCollaborateurEntityPersiste, monIphoneEntityPersiste,
                 AFFECTATION_DATE, AFFECTATION_COMMENTAIRE, AFFECTATION_NUMERO);
@@ -530,7 +530,7 @@ class RepositoryAffectationImplTest {
 
     @Test
     @DisplayName("rechercheAffectationAvecFiltres :  taille par défaut de la page fixé à 10")
-    public void rechercheAffectationAvecFiltres_should_return_10_rows_when_no_pageSize_given(){
+    void rechercheAffectationAvecFiltres_should_return_10_rows_when_no_pageSize_given(){
         //given
         enrichirDbDeTest();
         FiltresAffectation monFiltre = new FiltresAffectation();
@@ -544,7 +544,7 @@ class RepositoryAffectationImplTest {
 
     @Test
     @DisplayName("rechercheAffectationAvecFiltre : restitution d'un nombre de ligne correspondant à la taille de la page")
-    public void rechercheAffectationAvecFiltre_should_return_rows_corresponding_to_the_pageSize(){
+    void rechercheAffectationAvecFiltre_should_return_rows_corresponding_to_the_pageSize(){
         //given
         enrichirDbDeTest();
         FiltresAffectation monFiltre = new FiltresAffectation();
@@ -559,7 +559,7 @@ class RepositoryAffectationImplTest {
 
     @Test
     @DisplayName("rechercheAffectationAvecFiltres : respects des critères de tri fournis")
-    public void rechercheAffectationAvecFiltres_should_sort_results_accorging_to_given_criterias(){
+    void rechercheAffectationAvecFiltres_should_sort_results_accorging_to_given_criterias(){
         //given
         enrichirDbDeTest();
         FiltresAffectation monFiltre = new FiltresAffectation();
@@ -583,7 +583,7 @@ class RepositoryAffectationImplTest {
 
     @Test
     @DisplayName("rechercheAffectationAvecFiltre : tri ascendant par defaut")
-    public void rechercheAffectationAvecFiltres_should_sort_ascending_by_default(){
+    void rechercheAffectationAvecFiltres_should_sort_ascending_by_default(){
         //given
         enrichirDbDeTest();
         FiltresAffectation monFiltre = new FiltresAffectation();
@@ -606,7 +606,7 @@ class RepositoryAffectationImplTest {
 
     @Test
     @DisplayName("rechercheAffectationAvecFiltres : restitution de la première page, si aucune page spécifique demandé")
-    public void rechercheAffectationAvecFiltres_should_return_first_page_if_none_asked(){
+    void rechercheAffectationAvecFiltres_should_return_first_page_if_none_asked(){
         //given
         enrichirDbDeTest();
         FiltresAffectation monFiltre = new FiltresAffectation();
@@ -622,13 +622,13 @@ class RepositoryAffectationImplTest {
                 () -> assertThat(result.get(0).getCollaborateur().getUid()).isEqualTo("000000"),
                 () ->assertThat(entityManager.getEntityManager().createQuery("select a from AffectationEntity a where a.collaborateur.uid < '000000'")
                 .getResultList().size()
-                                ).isEqualTo(0)
+                                ).isZero()
         );
     }
 
     @Test
     @DisplayName("rechercheAffectationAvecFiltre : restitution de la page demandée")
-    public void rechercheAffectationAvecFiltre_should_return_the_page_asked(){
+    void rechercheAffectationAvecFiltre_should_return_the_page_asked(){
         //given
         enrichirDbDeTest();
         FiltresAffectation monFiltre = new FiltresAffectation();
@@ -651,13 +651,11 @@ class RepositoryAffectationImplTest {
 
     @Test
     @DisplayName("rechercheAffectationSansFiltre : restitution du nombre d'enregistrement total")
-    public void rechercheAffectationAvecFiltre_retourne_dix(){
+    void rechercheAffectationAvecFiltre_retourne_dix(){
         //given
         enrichirDbDeTest();
         FiltresAffectation monFiltre = new FiltresAffectation();
-//        monFiltre.setTaillePage(5);
-//        monFiltre.setCritereDeTri("UID");
-//        monFiltre.setNumeroDePage(2);
+
 
         //when
         AbstractMap.Entry<List<Integer>, List<Affectation>> result = repositoryAffectation.rechercheAffectationAvecFiltres2(monFiltre);
