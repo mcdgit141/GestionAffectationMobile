@@ -244,28 +244,28 @@ public class RepositoryAffectationImpl implements IRepositoryAffectation {
 
         String uid = filtresAffectation.getUid();
         if (uid != null && !uid.isEmpty()){
-            where.append(String.format("AND a.collaborateur.uid = '%s' ", uid ));
+            where.append(String.format("AND upper(a.collaborateur.uid) = '%s' ", uid.toUpperCase() ));
         }
 
         String nom = filtresAffectation.getNom();
         if (nom != null && !nom.isEmpty()){
-            where.append(String.format("AND a.collaborateur.nom = '%s' ", nom ));
+            where.append(String.format("AND upper(a.collaborateur.nom) = '%s' ", nom.toUpperCase() ));
         }
 
         String codeUo = filtresAffectation.getCodeUo();
         if (codeUo != null && !codeUo.isEmpty()){
-            where.append(String.format("AND a.collaborateur.uo.codeUo = '%s' ",  codeUo));
+            where.append(String.format("AND upper(a.collaborateur.uo.codeUo) = '%s' ",  codeUo.toUpperCase()));
         }
 
         String nomUsageUo = filtresAffectation.getNomUsageUo();
         if (nomUsageUo != null && !nomUsageUo.isEmpty()){
-            where.append(String.format("AND a.collaborateur.uo.nomUsageUo = '%s' ", nomUsageUo));
+            where.append(String.format("AND upper(a.collaborateur.uo.nomUsageUo) = '%s' ", nomUsageUo.toUpperCase()));
 
         }
 
         String nomSite = filtresAffectation.getNomSite();
         if (nomSite != null && !nomSite.isEmpty()){
-            where.append(String.format("AND a.collaborateur.uo.siteExercice.nomSite = '%s' ", nomSite ));
+            where.append(String.format("AND upper(a.collaborateur.uo.siteExercice.nomSite) = '%s' ", nomSite.toUpperCase() ));
         }
 
         String numeroLigneCollaborateur = filtresAffectation.getNumeroLigneCollaborateur();
@@ -275,7 +275,7 @@ public class RepositoryAffectationImpl implements IRepositoryAffectation {
         }
         String nomModeleIphone = filtresAffectation.getNomModeleIphone();
         if (nomModeleIphone != null && !nomModeleIphone.isEmpty()){
-            where.append(String.format("AND a.iphone.modeleIphoneEntity.nomModele = '%s' ", nomModeleIphone));
+            where.append(String.format("AND upper(a.iphone.modeleIphoneEntity.nomModele) = '%s' ", nomModeleIphone.toUpperCase()));
         }
 
         LocalDate dateRenouvMin = filtresAffectation.getDateRenouvMin();
