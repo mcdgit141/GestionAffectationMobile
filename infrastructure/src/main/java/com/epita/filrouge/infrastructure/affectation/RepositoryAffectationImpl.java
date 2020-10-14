@@ -208,7 +208,12 @@ public class RepositoryAffectationImpl implements IRepositoryAffectation {
             sensDuTri = "DESC";
         }
 
-        query.append("ORDER BY " + critereDeTri + " " + sensDuTri);
+        String triNumeroAffectation = " , a.numeroAffectation ASC";
+        query.append("ORDER BY ")
+                .append(critereDeTri)
+                .append(" ")
+                .append(sensDuTri)
+                .append(triNumeroAffectation);
 
 
         String maRequeteConstruite = query.toString();
