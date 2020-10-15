@@ -203,27 +203,6 @@ public class UtilisateurRessourceTest {
     @Nested
     @DisplayName("Supression Utilisateur")
     class test_suppression {
-//        @Test
-//        @DisplayName("supprimerUtilisateur: retour confirmation suppression en cas de succès")
-//        @WithMockUser(username = "admin", password = "$2a$10$ix2v00b5v0E.Ro3ZM0/Vv.cK704O4N1w/.yQeNq46KIVKmDanaHBi", roles = "ADMIN")
-//        public void supprimerUtilisateur_should_return_a_specific_string_when_ok() throws Exception {
-//            //given
-//            UtilisateurDTO utilisateurDTO = new UtilisateurDTO();
-//            utilisateurDTO.setUid("a19390");
-//            utilisateurDTO.setUsername("admin");
-//            utilisateurDTO.setPassword("password");
-//            monObjetMapper = objectMapper.writeValueAsString(utilisateurDTO);
-//
-//            //when
-//            String resultat = mockMvc.perform(post("/gestaffectation/utilisateur/delete2")
-//                    .content(monObjetMapper).contentType(MediaType.APPLICATION_JSON))
-//                    .andReturn().getResponse().getContentAsString();
-////        String resultat = mockMvc.perform(get("/gestaffectation/utilisateur/delete/a19390")).andReturn().getResponse().getContentAsString();
-//
-//            //then
-//            assertThat(resultat).isEqualTo("L'utilisateur a été supprimé");
-//        }
-
         @Test
         @DisplayName("HHTP DELETE user: retour confirmation suppression en cas de succès")
         @WithMockUser(roles = "ADMIN")
@@ -257,28 +236,6 @@ public class UtilisateurRessourceTest {
             //then
             assertThat(resultat).isInstanceOf(NotFoundException.class);
         }
-
-
-//        @Test
-//        @DisplayName("supprimerUtilisateur: retour message si les informations de confirmation sont KO")
-//        @WithMockUser(username = "admin", password = "password", roles = "ADMIN")
-//        public void supprimerUtilisateur_should_return_a_specific_string_when_KO() throws Exception {
-//            //given
-//            UtilisateurDTO utilisateurDTO = new UtilisateurDTO();
-//            utilisateurDTO.setUid("a19390");
-//            utilisateurDTO.setUsername("admin");
-//            utilisateurDTO.setPassword("passwordFaux");
-//            monObjetMapper = objectMapper.writeValueAsString(utilisateurDTO);
-//
-//            //when
-//            String resultat = mockMvc.perform(post("/gestaffectation/utilisateur/delete2")
-//                    .content(monObjetMapper).contentType(MediaType.APPLICATION_JSON))
-//                    .andReturn().getResponse().getContentAsString();
-////        String resultat = mockMvc.perform(get("/gestaffectation/utilisateur/delete/a19390")).andReturn().getResponse().getContentAsString();
-//
-//            //then
-//            assertThat(resultat).isEqualTo("Les informations saisies ne correspondent pas à la session active");
-//        }
     }
 
     @Nested
