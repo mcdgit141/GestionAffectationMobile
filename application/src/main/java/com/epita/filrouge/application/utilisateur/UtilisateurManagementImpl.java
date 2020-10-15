@@ -9,8 +9,6 @@ import com.epita.filrouge.domain.utilisateur.IRepositoryUtilisateur;
 import com.epita.filrouge.domain.utilisateur.Utilisateur;
 import com.epita.filrouge.domain.utilisateur.UtilisateurRoleEnum;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Bean;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -23,7 +21,6 @@ public class UtilisateurManagementImpl implements IUtilisateurManagement{
     @Autowired
     private IRepositoryUtilisateur repositoryUtilisateur;
 
-//    BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
     @Autowired
     private PasswordEncoder passwordEncoder;
 

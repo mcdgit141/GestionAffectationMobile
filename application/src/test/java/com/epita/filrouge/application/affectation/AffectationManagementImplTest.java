@@ -38,7 +38,7 @@ import static org.mockito.Mockito.when;
 
 @ExtendWith(SpringExtension.class)
 @SpringBootTest(classes = {AffectationManagementImpl.class})
-public class AffectationManagementImplTest {
+class AffectationManagementImplTest {
 
     private static final String CODE_SITE = "V2";
     private static final String NOM_SITE = "Valmy2";

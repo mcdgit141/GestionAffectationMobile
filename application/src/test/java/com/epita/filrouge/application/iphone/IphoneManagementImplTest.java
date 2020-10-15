@@ -39,7 +39,7 @@ public class IphoneManagementImplTest {
 
     @Test
     @DisplayName("Iphone: Recherche par nom modèle")
-    public void shouldCall_FindByNomModele(){
+    void shouldCall_FindByNomModele(){
 
         // Given
 

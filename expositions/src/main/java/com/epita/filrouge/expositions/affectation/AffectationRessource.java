@@ -32,19 +32,18 @@ public class AffectationRessource {
     @Autowired
     private AffectationFullDTOMapper affectationFullDTOMapper;
 
-//    @Autowired
-//    private AffectationFullDTOMappertest affectationFullDTOMappertest;
+
 
     @PostMapping(value = "/affectation/creation", consumes = { "application/json" }, produces =  { "application/json" })
     @ResponseStatus(HttpStatus.CREATED)
     @Secured({"ROLE_ADMIN","ROLE_TYPE2"})
     public AffectationFullDTO saveAffectation(@NotNull @Valid @RequestBody final AffectationFullDTO affectationFullDTO) {
 
-        if (affectationFullDTO.getCollaborateur().getUid() != null & affectationFullDTO.getIphone().getNumeroSerie() != null
-            & affectationFullDTO.getDateAffectation() != null & affectationFullDTO.getCollaborateur().getNumeroLigne() != null
-            & affectationFullDTO.getCommentaire() != null & affectationFullDTO.getCollaborateur().getUid() != ""
-            & affectationFullDTO.getIphone().getNumeroSerie() != "" & affectationFullDTO.getCollaborateur().getNumeroLigne() != ""
-            & affectationFullDTO.getCommentaire() != "" )
+        if (affectationFullDTO.getCollaborateur().getUid() != null && affectationFullDTO.getIphone().getNumeroSerie() != null
+            && affectationFullDTO.getDateAffectation() != null && affectationFullDTO.getCollaborateur().getNumeroLigne() != null
+            && affectationFullDTO.getCommentaire() != null && affectationFullDTO.getCollaborateur().getUid() != ""
+            && affectationFullDTO.getIphone().getNumeroSerie() != "" && affectationFullDTO.getCollaborateur().getNumeroLigne() != ""
+            && affectationFullDTO.getCommentaire() != "" )
         {
 
             Affectation affectationCree = affectationManagement.creerAffectation(affectationFullDTO.getCollaborateur().getUid(),
@@ -62,7 +61,6 @@ public class AffectationRessource {
     @Secured({"ROLE_ADMIN","ROLE_TYPE1","ROLE_TYPE2"})
     public List<AffectationFullDTO> afficheListeAffectations(@NotNull @RequestBody final FiltresAffectation filtresAffectation){
 
-//        return affectationManagement.listerAffectation(filtresAffectation);
         List<Affectation> affectationList= affectationManagement.listerAffectation(filtresAffectation);
         return affectationFullDTOMapper.mapToDTOList(affectationList);
     }
@@ -71,7 +69,6 @@ public class AffectationRessource {
     @Secured({"ROLE_ADMIN","ROLE_TYPE1","ROLE_TYPE2"})
     public MetaAffectationDTO afficheListeAffectations2(@NotNull @RequestBody final FiltresAffectation filtresAffectation){
 
-//        return affectationManagement.listerAffectation(filtresAffectation);
         AbstractMap.Entry<List<Integer>, List<Affectation>> metaEtData= affectationManagement.listerAffectation2(filtresAffectation);
 
         List<Affectation> affectationList = metaEtData.getValue();
@@ -86,8 +83,6 @@ public class AffectationRessource {
         MetaAffectationDTO retour = new MetaAffectationDTO();
         retour.setMetadata(metaDTO);
         retour.setDatas(affectationFullDTOMapper.mapToDTOList(affectationList));
-//        System.out.println("affectationFullDTOMapper.mapToDTOList(affectationList) = " + affectationFullDTOMapper.mapToDTOList(affectationList));
-//        return affectationFullDTOMapper.mapToDTOList(affectationList);
         return retour;
     }
 
@@ -98,9 +93,9 @@ public class AffectationRessource {
     @Secured({"ROLE_ADMIN","ROLE_TYPE2"})
     public String clotureAffectation(@NotNull @RequestBody final AffectationFullDTO affectationFullDTO) {
 
-        if (affectationFullDTO.getNumeroAffectation() != null & affectationFullDTO.getCommentaire() != null
-           & affectationFullDTO.getMotifFin() != null & affectationFullDTO.getDateFin() != null
-           & affectationFullDTO.getCommentaire() != "" & affectationFullDTO.getMotifFin() != ""
+        if (affectationFullDTO.getNumeroAffectation() != null && affectationFullDTO.getCommentaire() != null
+           && affectationFullDTO.getMotifFin() != null && affectationFullDTO.getDateFin() != null
+           && affectationFullDTO.getCommentaire() != "" && affectationFullDTO.getMotifFin() != ""
 
           ){
             affectationManagement.cloturerAffectation(Long.parseLong(affectationFullDTO.getNumeroAffectation()),affectationFullDTO.getCommentaire()

@@ -29,7 +29,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @ExtendWith(SpringExtension.class)
 @WebMvcTest({IphoneRessource.class, MapperExceptionCode.class, IphoneDTOMapper.class, JwtUtils.class, JwtRequestFilter.class, JwtAuthenticationEntryPoint.class})
 //@Disabled
-public class IphoneRessourceTest {
+class IphoneRessourceTest {
     @Autowired
     private MockMvc mockMvc;
 

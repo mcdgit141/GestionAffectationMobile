@@ -16,11 +16,9 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.Collection;
-import java.util.HashSet;
 
 @RestController
 public class AuthenticationRessource {
@@ -49,7 +47,6 @@ public class AuthenticationRessource {
 
         final String jwt = jwtUtils.generateToken(myUser);
         final Collection<? extends GrantedAuthority> roles = myUser.getAuthorities();
-        System.out.println(paramsIn.getPassword().toLowerCase());
         if (paramsIn.getPassword().toLowerCase().equals("password")) {
             defaultPassword = true;
         }

@@ -22,7 +22,6 @@ public class IphoneManagementImpl implements IIphoneManagement{
             throw new NotFoundException("L'iphone par la recherche du nom modèle est non trouvé = " + nomModele);
         }
 
-//        return repositoryIphone.rechercheIphoneParNomModele(nomModele);
     }
 
 }
