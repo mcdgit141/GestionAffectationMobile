@@ -183,11 +183,11 @@ public class UtilisateurRessourceTest {
             //given
 
             UtilisateurDTO utilisateurDTO = new UtilisateurDTO();
-            utilisateurDTO.setUid("a19390");
+            utilisateurDTO.setLogin("login@corp.fr");
             utilisateurDTO.setPassword("mdpDeTest");
             monObjetMapper = objectMapper.writeValueAsString(utilisateurDTO);
 
-            Mockito.doNothing().when(utilisateurManagement).modifierMdpUtilisateur(utilisateurDTO.getUid(), utilisateurDTO.getPassword());
+            Mockito.doNothing().when(utilisateurManagement).modifierMdpUtilisateur(any(String.class), any(String.class));
 
 
             //when
@@ -198,25 +198,6 @@ public class UtilisateurRessourceTest {
             assertThat(resultat).isEqualTo("Le mot de passe de l'utilisateur est modifié");
         }
 
-        @Test
-        @DisplayName("ModifierMDP : Interdiction aux roles autre que ADMIN")
-        @WithMockUser(roles = "TYPE1")
-        public void modifierMdp_should_fait_with_roleType_other_than_admin() throws Exception {
-            //given
-
-            UtilisateurDTO utilisateurDTO = new UtilisateurDTO();
-            utilisateurDTO.setUid("a19390");
-            utilisateurDTO.setPassword("mdpDeTest");
-            monObjetMapper = objectMapper.writeValueAsString(utilisateurDTO);
-
-            Mockito.doNothing().when(utilisateurManagement).modifierMdpUtilisateur(utilisateurDTO.getUid(), utilisateurDTO.getPassword());
-
-
-            //when + then
-            mockMvc.perform(put("/gestaffectation/utilisateur/update")
-                    .content(monObjetMapper).contentType(MediaType.APPLICATION_JSON)).andExpect(status().isForbidden());
-
-        }
     }
 
     @Nested

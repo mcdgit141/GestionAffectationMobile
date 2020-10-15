@@ -355,7 +355,7 @@ class AffectationRessourceTest {
                     .content(monObjetMapper)
                     .contentType(MediaType.APPLICATION_JSON))
                     // Then
-                    .andExpect(status().isOk())
+                    .andExpect(status().isNoContent())
             ;
             verify(affectationManagement, Mockito.times(1)).cloturerAffectation(AFFECTATION_NUMERO, AFFECTATION_COMMENTAIRE, AFFECTATION_MOTIFFIN, AFFECTATION_DATEFIN);
 

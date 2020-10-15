@@ -94,7 +94,7 @@ public class AffectationRessource {
 
 
     @PutMapping(value = "/affectation/cloture", consumes = { "application/json" }, produces =  { "application/json" })
-    @ResponseStatus(HttpStatus.OK)
+    @ResponseStatus(HttpStatus.NO_CONTENT)
     @Secured({"ROLE_ADMIN","ROLE_TYPE2"})
     public String clotureAffectation(@NotNull @RequestBody final AffectationFullDTO affectationFullDTO) {
 

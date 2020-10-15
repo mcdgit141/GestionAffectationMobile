@@ -65,13 +65,26 @@ public class UtilisateurRessource {
         return utilisateurDtoMapper.mapToDto(utilisateur);
     }
 
+//    @PutMapping(value = "/update")
+//    @ResponseStatus(HttpStatus.OK)
+//    @Secured("ROLE_ADMIN")
+//    public String modifierMdp2(@NotNull @RequestBody UtilisateurDTO utilisateurDTO){
+//        if ((utilisateurDTO.getUid() != null) &  (utilisateurDTO.getUid() != "") &
+//                (utilisateurDTO.getPassword() != null) & (utilisateurDTO.getPassword() != "")) {
+//            utilisateurManagement.modifierMdpUtilisateur(utilisateurDTO.getUid(), utilisateurDTO.getPassword());
+//            return "Le mot de passe de l'utilisateur est modifié";
+//        } else {
+//            throw new BadRequestException("Information(s) manquante(s) pour la mise à jour du Mdp");
+//        }
+//    }
+
     @PutMapping(value = "/update")
-    @ResponseStatus(HttpStatus.OK)
-    @Secured("ROLE_ADMIN")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    @Secured({"ROLE_ADMIN","ROLE_TYPE1", "ROLE_TYPE2"})
     public String modifierMdp(@NotNull @RequestBody UtilisateurDTO utilisateurDTO){
-        if ((utilisateurDTO.getUid() != null) &  (utilisateurDTO.getUid() != "") &
+        if ((utilisateurDTO.getLogin() != null) &  (utilisateurDTO.getLogin() != "") &
                 (utilisateurDTO.getPassword() != null) & (utilisateurDTO.getPassword() != "")) {
-            utilisateurManagement.modifierMdpUtilisateur(utilisateurDTO.getUid(), utilisateurDTO.getPassword());
+            utilisateurManagement.modifierMdpUtilisateur(utilisateurDTO.getLogin(), utilisateurDTO.getPassword());
             return "Le mot de passe de l'utilisateur est modifié";
         } else {
             throw new BadRequestException("Information(s) manquante(s) pour la mise à jour du Mdp");

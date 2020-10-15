@@ -9,7 +9,7 @@ public interface IUtilisateurManagement {
 
     void supprimerUtilisateur(String uid) throws NotFoundException;
 
-    void modifierMdpUtilisateur(String uid, String mdp);
+    void modifierMdpUtilisateur(String login, String mdp);
 
     Utilisateur rechercherUtilisateur(String uid) throws NotFoundException;
 }

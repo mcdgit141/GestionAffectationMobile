@@ -215,7 +215,7 @@ public class UtilisateurManagementImplTest {
         UtilisateurRoleEnum roleUser = UtilisateurRoleEnum.ROLE_TYPE1;
 
         Utilisateur utilisateurTrouve = new Utilisateur(uid,nom,prenom,roleUser);
-        Mockito.when(repositoryUtilisateur.rechercherUserParUid(uid)).thenReturn(utilisateurTrouve);
+        Mockito.when(repositoryUtilisateur.rechercherUserParLogin(any(String.class))).thenReturn(utilisateurTrouve);
 
         ArgumentCaptor<Utilisateur> valueCapture = ArgumentCaptor.forClass(Utilisateur.class);
 

@@ -64,11 +64,11 @@ public class UtilisateurManagementImpl implements IUtilisateurManagement{
     }
 
     @Override
-    public void modifierMdpUtilisateur(String uid, String mdp) throws NotFoundException  {
+    public void modifierMdpUtilisateur(String login, String mdp) throws NotFoundException  {
         if (mdp.equals("password")){
             throw new BadRequestException("Merci de saisir un mdp différent du mdp par défaut");
         } else{
-            Utilisateur utilisateurAModifier = repositoryUtilisateur.rechercherUserParUid(uid);
+            Utilisateur utilisateurAModifier = repositoryUtilisateur.rechercherUserParLogin(login);
             utilisateurAModifier.modifierMdpUtilisateur(passwordEncoder.encode(mdp));
             repositoryUtilisateur.enregistrerUtilisateur(utilisateurAModifier);
         }
